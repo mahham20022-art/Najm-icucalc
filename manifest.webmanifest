@@ -1,0 +1,13 @@
+{
+  "name": "Najm ICUCalc",
+  "short_name": "ICUCalc",
+  "description": "ICU drug dosing and clinical calculators",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b1220",
+  "theme_color": "#0284c7",
+  "icons": [
+    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
