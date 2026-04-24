@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MedEvidence · Clinical Decision Support</title>
+    <meta name="description" content="Evidence-grounded clinical decision support with live PubMed RAG and deterministic safety guardrails." />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              clinical: {
+                bg: "#0a0f14",
+                surface: "#121821",
+                panel: "#1a2230",
+                border: "#243041",
+                accent: "#38bdf8",
+                success: "#34d399",
+                warning: "#f59e0b",
+                danger: "#ef4444",
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      html, body, #root { height: 100%; }
+      body { background: #0a0f14; color: #e5e7eb; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+      ::-webkit-scrollbar { width: 10px; height: 10px; }
+      ::-webkit-scrollbar-track { background: #0a0f14; }
+      ::-webkit-scrollbar-thumb { background: #243041; border-radius: 6px; }
+      ::-webkit-scrollbar-thumb:hover { background: #38bdf8; }
+      .fade-in { animation: fade .2s ease-out; }
+      @keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+      .pulse-rec { animation: pulseRec 1s infinite; }
+      @keyframes pulseRec { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+    </style>
+  </head>
+  <body class="dark">
+    <div id="root"></div>
+    <script type="text/babel" data-presets="react">
+      const { useState, useEffect, useMemo, useRef, useCallback } = React;
+
+      const API_BASE = (() => {
+        const fromWindow = typeof window !== "undefined" && window.__MEDEVIDENCE_API__;
+        return fromWindow || localStorage.getItem("medevidence.apiBase") || "/api";
+      })();
+
+      const MODES = [
+        { id: "general",   label: "General",    icon: "🩺", blurb: "Balanced internal medicine" },
+        { id: "neurology", label: "Neurology",  icon: "🧠", blurb: "Stroke, status, localization" },
+        { id: "icu",       label: "ICU",        icon: "💉", blurb: "Critical care, vent, shock" },
+        { id: "emergency", label: "Emergency",  icon: "🚑", blurb: "Time-critical decisions" },
+      ];
+
+      const GRADE_COLORS = {
+        "1a": "bg-emerald-500/20 text-emerald-300 border-emerald-500/40",
+        "1b": "bg-emerald-500/15 text-emerald-200 border-emerald-500/30",
+        "2a": "bg-sky-500/20 text-sky-300 border-sky-500/40",
+        "2b": "bg-sky-500/15 text-sky-200 border-sky-500/30",
+        "3a": "bg-amber-500/20 text-amber-300 border-amber-500/40",
+        "3b": "bg-amber-500/15 text-amber-200 border-amber-500/30",
+        "4":  "bg-orange-500/20 text-orange-300 border-orange-500/40",
+        "5":  "bg-rose-500/20 text-rose-300 border-rose-500/40",
+      };
+
+      function classNames(...xs) { return xs.filter(Boolean).join(" "); }
+
+      async function api(path, { method = "GET", body, token, isForm = false } = {}) {
+        const headers = {};
+        if (!isForm) headers["Content-Type"] = "application/json";
+        if (token) headers["Authorization"] = `Bearer ${token}`;
+        const res = await fetch(`${API_BASE}${path}`, {
+          method,
+          headers,
+          body: body ? (isForm ? body : JSON.stringify(body)) : undefined,
+        });
+        const text = await res.text();
+        let data;
+        try { data = text ? JSON.parse(text) : null; } catch { data = text; }
+        if (!res.ok) {
+          const err = new Error((data && data.detail) || res.statusText || "Request failed");
+          err.status = res.status;
+          err.data = data;
+          throw err;
+        }
+        return data;
+      }
+
+      function useAuth() {
+        const [token, setToken] = useState(() => localStorage.getItem("medevidence.token") || "");
+        const [user, setUser] = useState(() => {
+          try { return JSON.parse(localStorage.getItem("medevidence.user") || "null"); } catch { return null; }
+        });
+        const signIn = useCallback((tok, u) => {
+          localStorage.setItem("medevidence.token", tok);
+          localStorage.setItem("medevidence.user", JSON.stringify(u));
+          setToken(tok); setUser(u);
+        }, []);
+        const signOut = useCallback(() => {
+          localStorage.removeItem("medevidence.token");
+          localStorage.removeItem("medevidence.user");
+          setToken(""); setUser(null);
+        }, []);
+        return { token, user, signIn, signOut };
+      }
+
+      function AuthScreen({ onAuthed }) {
+        const [mode, setMode] = useState("login");
+        const [email, setEmail] = useState("");
+        const [password, setPassword] = useState("");
+        const [fullName, setFullName] = useState("");
+        const [role, setRole] = useState("clinician");
+        const [busy, setBusy] = useState(false);
+        const [err, setErr] = useState("");
+
+        async function submit(e) {
+          e.preventDefault();
+          setBusy(true); setErr("");
+          try {
+            const path = mode === "login" ? "/auth/login" : "/auth/register";
+            const body = mode === "login"
+              ? { email, password }
+              : { email, password, full_name: fullName || null, role };
+            const data = await api(path, { method: "POST", body });
+            onAuthed(data.access_token, data.user);
+          } catch (e) {
+            setErr(e.data?.detail || e.message);
+          } finally { setBusy(false); }
+        }
+
+        return (
+          <div className="min-h-full grid place-items-center p-6">
+            <div className="w-full max-w-md bg-clinical-surface border border-clinical-border rounded-2xl p-8 shadow-xl">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-lg bg-clinical-accent/20 border border-clinical-accent/40 grid place-items-center text-xl">⚕️</div>
+                <div>
+                  <div className="text-xl font-semibold">MedEvidence</div>
+                  <div className="text-xs text-slate-400">Evidence-grounded clinical decision support</div>
+                </div>
+              </div>
+
+              <div className="flex gap-2 mb-5 text-sm">
+                <button onClick={() => setMode("login")} className={classNames(
+                  "flex-1 py-2 rounded-lg border",
+                  mode === "login" ? "bg-clinical-accent/20 border-clinical-accent/40 text-clinical-accent" : "border-clinical-border text-slate-400 hover:text-slate-200"
+                )}>Sign in</button>
+                <button onClick={() => setMode("register")} className={classNames(
+                  "flex-1 py-2 rounded-lg border",
+                  mode === "register" ? "bg-clinical-accent/20 border-clinical-accent/40 text-clinical-accent" : "border-clinical-border text-slate-400 hover:text-slate-200"
+                )}>Register</button>
+              </div>
+
+              <form onSubmit={submit} className="space-y-3">
+                <input value={email} onChange={e => setEmail(e.target.value)} type="email" required placeholder="clinician@hospital.org"
+                  className="w-full bg-clinical-panel border border-clinical-border rounded-lg px-3 py-2 focus:outline-none focus:border-clinical-accent" />
+                <input value={password} onChange={e => setPassword(e.target.value)} type="password" required minLength={8} placeholder="Password (8+ characters)"
+                  className="w-full bg-clinical-panel border border-clinical-border rounded-lg px-3 py-2 focus:outline-none focus:border-clinical-accent" />
+                {mode === "register" && (
+                  <>
+                    <input value={fullName} onChange={e => setFullName(e.target.value)} placeholder="Full name"
+                      className="w-full bg-clinical-panel border border-clinical-border rounded-lg px-3 py-2 focus:outline-none focus:border-clinical-accent" />
+                    <select value={role} onChange={e => setRole(e.target.value)}
+                      className="w-full bg-clinical-panel border border-clinical-border rounded-lg px-3 py-2 focus:outline-none focus:border-clinical-accent">
+                      <option value="clinician">Clinician</option>
+                      <option value="attending">Attending</option>
+                      <option value="resident">Resident</option>
+                      <option value="pharmacist">Pharmacist</option>
+                      <option value="admin">Admin</option>
+                    </select>
+                  </>
+                )}
+                {err && <div className="text-sm text-rose-400 border border-rose-500/30 bg-rose-500/10 rounded-lg p-2">{err}</div>}
+                <button disabled={busy} className="w-full bg-clinical-accent text-slate-900 font-semibold rounded-lg py-2 disabled:opacity-50">
+                  {busy ? "Working…" : (mode === "login" ? "Sign in" : "Create account")}
+                </button>
+              </form>
+
+              <div className="mt-5 text-[11px] text-slate-500 leading-relaxed">
+                Decision support only. Not a substitute for clinical judgment. All queries are logged to an immutable audit trail.
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      function ModeSelector({ value, onChange }) {
+        return (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            {MODES.map(m => (
+              <button key={m.id} onClick={() => onChange(m.id)} className={classNames(
+                "text-left rounded-xl border px-3 py-3 transition",
+                value === m.id
+                  ? "bg-clinical-accent/15 border-clinical-accent/50 text-slate-100"
+                  : "bg-clinical-surface border-clinical-border text-slate-300 hover:border-slate-500"
+              )}>
+                <div className="flex items-center gap-2 text-sm font-semibold"><span className="text-lg">{m.icon}</span>{m.label}</div>
+                <div className="text-[11px] text-slate-400 mt-1">{m.blurb}</div>
+              </button>
+            ))}
+          </div>
+        );
+      }
+
+      function ConfidenceMeter({ value }) {
+        const pct = Math.round((value || 0) * 100);
+        const color = pct >= 80 ? "bg-emerald-400" : pct >= 50 ? "bg-sky-400" : pct >= 25 ? "bg-amber-400" : "bg-rose-400";
+        return (
+          <div className="w-full">
+            <div className="flex justify-between text-[11px] text-slate-400 mb-1">
+              <span>Confidence</span><span>{pct}%</span>
+            </div>
+            <div className="h-2 rounded-full bg-clinical-panel border border-clinical-border overflow-hidden">
+              <div className={classNames("h-full transition-all", color)} style={{ width: `${pct}%` }} />
+            </div>
+          </div>
+        );
+      }
+
+      function GradeBadge({ grade }) {
+        const cls = GRADE_COLORS[grade] || GRADE_COLORS["5"];
+        return (
+          <span className={classNames("inline-flex items-center gap-1 px-2 py-1 text-[11px] rounded-md border", cls)}>
+            <span className="uppercase tracking-wider">Oxford CEBM</span><b>{grade}</b>
+          </span>
+        );
+      }
+
+      function SafetyBanner({ safety, emergency }) {
+        if (!safety) return null;
+        const isEm = emergency || safety.level === "EMERGENCY";
+        const tone = isEm
+          ? "bg-rose-500/15 border-rose-500/50 text-rose-200"
+          : "bg-amber-500/10 border-amber-500/50 text-amber-200";
+        const title = isEm ? "EMERGENCY PATHWAY ACTIVATED" : "Time-sensitive condition flagged";
+        return (
+          <div className={classNames("rounded-xl border p-3 fade-in", tone)}>
+            <div className="flex items-center gap-2 font-semibold text-sm">
+              <span>{isEm ? "🚨" : "⚠️"}</span>{title}
+            </div>
+            {safety.category && <div className="text-xs mt-1 opacity-80">Category: {safety.category}</div>}
+            {safety.message && <div className="text-sm mt-2">{safety.message}</div>}
+            {Array.isArray(safety.matched_terms) && safety.matched_terms.length > 0 && (
+              <div className="text-[11px] mt-2 opacity-70">Matched: {safety.matched_terms.join(", ")}</div>
+            )}
+          </div>
+        );
+      }
+
+      function Section({ title, children, tone = "default" }) {
+        const toneCls = tone === "danger"
+          ? "border-rose-500/30"
+          : tone === "warning"
+            ? "border-amber-500/30"
+            : "border-clinical-border";
+        return (
+          <section className={classNames("rounded-xl border bg-clinical-surface p-4 fade-in", toneCls)}>
+            <div className="text-xs uppercase tracking-wider text-slate-400 mb-2">{title}</div>
+            <div className="space-y-2">{children}</div>
+          </section>
+        );
+      }
+
+      function BulletList({ items }) {
+        if (!items || items.length === 0) return <div className="text-sm text-slate-500">—</div>;
+        return (
+          <ul className="list-disc pl-5 space-y-1 text-sm text-slate-200">
+            {items.map((it, i) => <li key={i}>{typeof it === "string" ? it : JSON.stringify(it)}</li>)}
+          </ul>
+        );
+      }
+
+      function ReferenceList({ items }) {
+        if (!items || items.length === 0) return <div className="text-sm text-slate-500">No references cited.</div>;
+        return (
+          <ol className="list-decimal pl-5 space-y-1 text-sm">
+            {items.map((r, i) => {
+              if (typeof r === "string") return <li key={i} className="text-slate-200">{r}</li>;
+              const label = r.title || r.pmid || r.doi || r.url || "reference";
+              const href = r.url || (r.pmid ? `https://pubmed.ncbi.nlm.nih.gov/${r.pmid}/` : (r.doi ? `https://doi.org/${r.doi}` : null));
+              return (
+                <li key={i} className="text-slate-200">
+                  {href ? <a className="text-clinical-accent underline break-words" target="_blank" rel="noreferrer" href={href}>{label}</a> : label}
+                  {r.grade ? <span className="ml-2 text-[10px] text-slate-400 uppercase">Grade {r.grade}</span> : null}
+                </li>
+              );
+            })}
+          </ol>
+        );
+      }
+
+      function ResponseView({ data }) {
+        if (!data) return null;
+        return (
+          <div className="space-y-4">
+            <SafetyBanner safety={data.safety} emergency={data.emergency} />
+
+            <div className="rounded-xl border border-clinical-border bg-clinical-surface p-4 fade-in">
+              <div className="flex items-center justify-between gap-3 mb-3 flex-wrap">
+                <div className="text-xs uppercase tracking-wider text-slate-400">Answer</div>
+                <div className="flex items-center gap-2">
+                  {data.evidence_grade && <GradeBadge grade={data.evidence_grade} />}
+                  {data.model && <span className="text-[10px] text-slate-500">{data.model}</span>}
+                  {typeof data.latency_ms === "number" && <span className="text-[10px] text-slate-500">{data.latency_ms} ms</span>}
+                </div>
+              </div>
+              <div className="text-slate-100 whitespace-pre-wrap leading-relaxed">{data.answer}</div>
+              <div className="mt-4"><ConfidenceMeter value={data.confidence_level} /></div>
+              {data.insufficient_evidence && (
+                <div className="mt-3 text-xs text-amber-300 border border-amber-500/30 bg-amber-500/10 rounded-lg p-2">
+                  Insufficient evidence threshold hit — LLM was intentionally skipped.
+                </div>
+              )}
+            </div>
+
+            <Section title="Red Flags" tone="danger">
+              <BulletList items={data.red_flags} />
+            </Section>
+
+            <Section title="Clinical Reasoning">
+              <div className="text-sm text-slate-200 whitespace-pre-wrap leading-relaxed">{data.reasoning}</div>
+            </Section>
+
+            <Section title="Differential Diagnosis">
+              <BulletList items={data.differential} />
+            </Section>
+
+            <Section title="Management Plan">
+              <BulletList items={data.management_plan} />
+            </Section>
+
+            <Section title="Explainability">
+              <div className="text-sm text-slate-300 whitespace-pre-wrap">{data.explainability}</div>
+              {data.rag && (
+                <div className="text-[11px] text-slate-500 mt-2">
+                  RAG score {data.rag.aggregate_score} · best grade {data.rag.best_grade} · vector:{String(data.rag.used_vector_store)} · pubmed:{String(data.rag.used_pubmed)}
+                </div>
+              )}
+            </Section>
+
+            <Section title="References">
+              <ReferenceList items={data.references} />
+            </Section>
+          </div>
+        );
+      }
+
+      function HistorySidebar({ token, onPick, refreshKey }) {
+        const [items, setItems] = useState([]);
+        const [err, setErr] = useState("");
+        useEffect(() => {
+          let cancelled = false;
+          (async () => {
+            try {
+              const data = await api("/clinical/history?limit=50", { token });
+              if (!cancelled) setItems(data || []);
+            } catch (e) { if (!cancelled) setErr(e.message); }
+          })();
+          return () => { cancelled = true; };
+        }, [token, refreshKey]);
+
+        return (
+          <aside className="w-72 shrink-0 border-r border-clinical-border bg-clinical-bg hidden lg:flex flex-col">
+            <div className="p-4 border-b border-clinical-border">
+              <div className="text-xs uppercase tracking-wider text-slate-400">History</div>
+              <div className="text-[11px] text-slate-500 mt-1">Your last {items.length} queries</div>
+            </div>
+            <div className="flex-1 overflow-y-auto">
+              {err && <div className="p-3 text-xs text-rose-400">{err}</div>}
+              {items.length === 0 && !err && <div className="p-4 text-xs text-slate-500">No queries yet.</div>}
+              {items.map(it => (
+                <button key={it.id} onClick={() => onPick(it)}
+                  className="w-full text-left px-4 py-3 hover:bg-clinical-surface border-b border-clinical-border/60">
+                  <div className="text-[10px] text-slate-500 flex items-center gap-2">
+                    <span>{new Date(it.created_at).toLocaleString()}</span>
+                    <span className="px-1.5 py-0.5 rounded bg-clinical-panel border border-clinical-border uppercase">{it.mode}</span>
+                    {it.safety_triggered && <span className="text-rose-400">⚠</span>}
+                  </div>
+                  <div className="text-sm text-slate-200 line-clamp-2 mt-1">{it.query}</div>
+                  {it.response_summary && <div className="text-[11px] text-slate-500 line-clamp-2 mt-1">{it.response_summary}</div>}
+                </button>
+              ))}
+            </div>
+          </aside>
+        );
+      }
+
+      function VoiceButton({ onTranscribed, disabled, token, mode }) {
+        const [recording, setRecording] = useState(false);
+        const [busy, setBusy] = useState(false);
+        const [err, setErr] = useState("");
+        const mediaRef = useRef(null);
+        const chunksRef = useRef([]);
+
+        async function start() {
+          setErr("");
+          try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const rec = new MediaRecorder(stream, { mimeType: "audio/webm" });
+            chunksRef.current = [];
+            rec.ondataavailable = e => { if (e.data.size) chunksRef.current.push(e.data); };
+            rec.onstop = async () => {
+              stream.getTracks().forEach(t => t.stop());
+              const blob = new Blob(chunksRef.current, { type: "audio/webm" });
+              setBusy(true);
+              try {
+                const fd = new FormData();
+                fd.append("audio", blob, "recording.webm");
+                const res = await fetch(`${API_BASE}/clinical/voice?mode=${encodeURIComponent(mode)}`, {
+                  method: "POST",
+                  headers: { Authorization: `Bearer ${token}` },
+                  body: fd,
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.detail || "Voice query failed");
+                onTranscribed(data);
+              } catch (e) { setErr(e.message); }
+              finally { setBusy(false); }
+            };
+            rec.start();
+            mediaRef.current = rec;
+            setRecording(true);
+          } catch (e) { setErr(e.message); }
+        }
+
+        function stop() {
+          if (mediaRef.current) { mediaRef.current.stop(); mediaRef.current = null; }
+          setRecording(false);
+        }
+
+        return (
+          <div className="flex items-center gap-2">
+            <button type="button" disabled={disabled || busy}
+              onClick={recording ? stop : start}
+              className={classNames(
+                "px-3 py-2 rounded-lg border text-sm",
+                recording ? "bg-rose-500/20 border-rose-500/50 text-rose-200 pulse-rec" : "bg-clinical-panel border-clinical-border text-slate-200 hover:border-slate-500",
+                (disabled || busy) && "opacity-50 cursor-not-allowed"
+              )}>
+              {recording ? "⏺ Stop" : (busy ? "Transcribing…" : "🎙️ Voice")}
+            </button>
+            {err && <span className="text-xs text-rose-400">{err}</span>}
+          </div>
+        );
+      }
+
+      function ConsoleApp({ auth }) {
+        const [mode, setMode] = useState("general");
+        const [query, setQuery] = useState("");
+        const [busy, setBusy] = useState(false);
+        const [err, setErr] = useState("");
+        const [response, setResponse] = useState(null);
+        const [historyKey, setHistoryKey] = useState(0);
+        const taRef = useRef(null);
+
+        const submit = useCallback(async () => {
+          const q = query.trim();
+          if (!q) return;
+          setBusy(true); setErr(""); setResponse(null);
+          try {
+            const data = await api("/clinical/query", {
+              method: "POST", token: auth.token,
+              body: { query: q, mode },
+            });
+            setResponse(data);
+            setHistoryKey(k => k + 1);
+          } catch (e) { setErr(e.data?.detail || e.message); }
+          finally { setBusy(false); }
+        }, [query, mode, auth.token]);
+
+        useEffect(() => {
+          function onKey(e) {
+            if ((e.metaKey || e.ctrlKey) && e.key === "Enter") { e.preventDefault(); submit(); }
+          }
+          window.addEventListener("keydown", onKey);
+          return () => window.removeEventListener("keydown", onKey);
+        }, [submit]);
+
+        function handleVoice(data) {
+          setResponse(data);
+          setQuery("");
+          setHistoryKey(k => k + 1);
+        }
+
+        function handlePickHistory(item) {
+          setQuery(item.query);
+          setMode(item.mode || "general");
+          taRef.current?.focus();
+        }
+
+        return (
+          <div className="h-full flex">
+            <HistorySidebar token={auth.token} onPick={handlePickHistory} refreshKey={historyKey} />
+
+            <main className="flex-1 flex flex-col overflow-hidden">
+              <header className="flex items-center justify-between px-6 py-4 border-b border-clinical-border bg-clinical-bg">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-lg bg-clinical-accent/20 border border-clinical-accent/40 grid place-items-center">⚕️</div>
+                  <div>
+                    <div className="font-semibold">MedEvidence Console</div>
+                    <div className="text-[11px] text-slate-500">Decision support — not a substitute for clinical judgment.</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 text-sm">
+                  <div className="text-slate-300 hidden md:block">{auth.user?.full_name || auth.user?.email}</div>
+                  <div className="text-[10px] uppercase tracking-wider text-slate-500 px-2 py-1 rounded border border-clinical-border">{auth.user?.role || "clinician"}</div>
+                  <button onClick={auth.signOut} className="text-slate-400 hover:text-slate-200 text-sm">Sign out</button>
+                </div>
+              </header>
+
+              <div className="px-6 py-4 border-b border-clinical-border bg-clinical-bg">
+                <ModeSelector value={mode} onChange={setMode} />
+              </div>
+
+              <div className="px-6 py-4 border-b border-clinical-border bg-clinical-bg">
+                <div className="flex gap-3 items-end">
+                  <textarea ref={taRef} value={query} onChange={e => setQuery(e.target.value)}
+                    rows={3} placeholder={"Describe the clinical scenario...  (Cmd/Ctrl + Enter to submit)"}
+                    className="flex-1 bg-clinical-surface border border-clinical-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-clinical-accent resize-y min-h-[90px]" />
+                  <div className="flex flex-col gap-2 shrink-0">
+                    <button onClick={submit} disabled={busy || !query.trim()}
+                      className="px-4 py-2 rounded-lg bg-clinical-accent text-slate-900 font-semibold disabled:opacity-50">
+                      {busy ? "Reasoning…" : "Submit"}
+                    </button>
+                    <VoiceButton onTranscribed={handleVoice} disabled={busy} token={auth.token} mode={mode} />
+                  </div>
+                </div>
+                {err && <div className="mt-2 text-xs text-rose-400">{err}</div>}
+              </div>
+
+              <div className="flex-1 overflow-y-auto px-6 py-6">
+                {!response && !busy && (
+                  <div className="text-center text-slate-500 mt-20">
+                    <div className="text-5xl mb-3">📋</div>
+                    <div className="text-sm">Enter a clinical question to begin.</div>
+                    <div className="text-[11px] mt-2 text-slate-600">Every query is safety-screened, RAG-grounded against PubMed, and audit-logged.</div>
+                  </div>
+                )}
+                {busy && (
+                  <div className="flex items-center gap-3 text-slate-300 text-sm">
+                    <div className="w-4 h-4 rounded-full border-2 border-clinical-accent border-t-transparent animate-spin" />
+                    Searching evidence and reasoning...
+                  </div>
+                )}
+                {response && <ResponseView data={response} />}
+              </div>
+
+              <footer className="px-6 py-2 border-t border-clinical-border text-[11px] text-slate-600 flex justify-between">
+                <span>© MedEvidence · All queries logged for audit</span>
+                <span>API: <code>{API_BASE}</code></span>
+              </footer>
+            </main>
+          </div>
+        );
+      }
+
+      function App() {
+        const auth = useAuth();
+        if (!auth.token || !auth.user) return <AuthScreen onAuthed={auth.signIn} />;
+        return <ConsoleApp auth={auth} />;
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+  </body>
+</html>

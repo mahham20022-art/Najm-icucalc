@@ -1,0 +1,118 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: medevidence-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: medevidence
+      POSTGRES_USER: medevidence
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-medevidence}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U medevidence -d medevidence"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - medevidence
+
+  redis:
+    image: redis:7-alpine
+    container_name: medevidence-redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory", "256mb", "--maxmemory-policy", "allkeys-lru"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - medevidence
+
+  weaviate:
+    image: cr.weaviate.io/semitechnologies/weaviate:1.26.4
+    container_name: medevidence-weaviate
+    restart: unless-stopped
+    environment:
+      QUERY_DEFAULTS_LIMIT: "25"
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: "true"
+      PERSISTENCE_DATA_PATH: "/var/lib/weaviate"
+      DEFAULT_VECTORIZER_MODULE: "none"
+      ENABLE_MODULES: ""
+      CLUSTER_HOSTNAME: "node1"
+    volumes:
+      - weaviate_data:/var/lib/weaviate
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/v1/.well-known/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+    networks:
+      - medevidence
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: medevidence-api
+    restart: unless-stopped
+    environment:
+      ENV: ${ENV:-production}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      ANTHROPIC_MODEL: ${ANTHROPIC_MODEL:-claude-sonnet-4-20250514}
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-text-embedding-3-large}
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg2://medevidence:medevidence@postgres:5432/medevidence}
+      WEAVIATE_URL: ${WEAVIATE_URL:-http://weaviate:8080}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+      SECRET_KEY: ${SECRET_KEY:-change-me-in-production}
+      PUBMED_EMAIL: ${PUBMED_EMAIL:-admin@medevidence.local}
+      PUBMED_API_KEY: ${PUBMED_API_KEY:-}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      weaviate:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/health"]
+      interval: 20s
+      timeout: 10s
+      retries: 6
+      start_period: 40s
+    networks:
+      - medevidence
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: medevidence-nginx
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./frontend:/usr/share/nginx/html:ro
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost/health"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+    networks:
+      - medevidence
+
+volumes:
+  postgres_data:
+  redis_data:
+  weaviate_data:
+
+networks:
+  medevidence:
+    driver: bridge
