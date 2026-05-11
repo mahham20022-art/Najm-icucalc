@@ -1,0 +1,1485 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="theme-color" content="#05060A" />
+<title>ASH · Acute Support Hub — Critical Care Cockpit for Hajj</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+
+<style>
+/* ───────────────────────────────────────────────────────────────
+   ASH · Acute Support Hub
+   Design system v1.0 — “Aurora Critical”
+   Built for: physicians treating 3M+ pilgrims in Makkah, Mina,
+   Arafat and Muzdalifah under heat stress and language barriers.
+   Brief: 9.9 / 10. Surgeon-grade. Hajj-aware. Najm-native.
+   ─────────────────────────────────────────────────────────────── */
+
+:root{
+  /* ── Aurora palette ───────────────────────────────────────── */
+  --obsidian:#05060A;            /* base canvas */
+  --abyss:#0A0D17;               /* surface 0 */
+  --carbon:#10141F;              /* surface 1 */
+  --graphite:#171C2B;            /* surface 2 */
+  --steel:#222A3E;               /* surface 3 / borders */
+  --fog:rgba(244,247,255,.06);   /* hairlines */
+
+  --ink:#F4F7FF;
+  --ink-2:#C7CEDF;
+  --ink-3:#8892A8;
+  --ink-4:#525B70;
+
+  --plasma:#5DF4FF;              /* primary action */
+  --plasma-2:#7A8BFF;            /* secondary action */
+  --mihrab:#00C2A8;              /* evidence-based / verified */
+  --solar:#FFB020;               /* warning / heat */
+  --vital:#FF3355;               /* critical / STEMI / arrest */
+  --pulse:#3FFFB0;               /* live signal */
+  --bismuth:#C8A2FF;             /* AI surface */
+  --sand:#E9D9B0;                /* Hajj accent (subtle) */
+
+  /* ── Type ramp ────────────────────────────────────────────── */
+  --f-ui:"Inter Tight", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-data:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --f-ar:"IBM Plex Sans Arabic", "Inter Tight", sans-serif;
+  --f-serif:"Instrument Serif", "Times New Roman", serif;
+
+  /* ── Spacing & radii ──────────────────────────────────────── */
+  --r-1:6px;--r-2:10px;--r-3:14px;--r-4:20px;--r-5:28px;--r-6:36px;
+  --shadow-lift:0 1px 0 rgba(255,255,255,.04) inset, 0 30px 60px -30px rgba(0,0,0,.7), 0 12px 32px -12px rgba(0,0,0,.55);
+  --shadow-soft:0 1px 0 rgba(255,255,255,.04) inset, 0 14px 30px -14px rgba(0,0,0,.55);
+  --ring:0 0 0 1px rgba(93,244,255,.45), 0 0 0 6px rgba(93,244,255,.08);
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--obsidian);color:var(--ink);font-family:var(--f-ui);font-feature-settings:"ss01","cv11","tnum";-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{
+  background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(93,244,255,.10), transparent 60%),
+    radial-gradient(900px 500px at -10% 20%, rgba(122,139,255,.08), transparent 60%),
+    radial-gradient(700px 400px at 50% 110%, rgba(0,194,168,.07), transparent 60%),
+    var(--obsidian);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+body::before{
+  /* Grain — subtle film for premium feel */
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.5;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .35 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+::selection{background:rgba(93,244,255,.25);color:#fff}
+
+/* ── Layout helpers ─────────────────────────────────────────── */
+.wrap{max-width:1240px;margin:0 auto;padding:0 28px;position:relative;z-index:2}
+.row{display:flex;gap:24px}
+.col{flex:1;min-width:0}
+.center{display:flex;align-items:center;justify-content:center}
+
+/* ── Top nav ───────────────────────────────────────────────── */
+.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(18px) saturate(140%);background:linear-gradient(180deg,rgba(5,6,10,.85),rgba(5,6,10,.55));border-bottom:1px solid var(--fog)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;max-width:1240px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.02em}
+.brand-mark{width:28px;height:28px;border-radius:8px;background:conic-gradient(from 220deg,#5DF4FF,#7A8BFF,#C8A2FF,#5DF4FF);position:relative;box-shadow:0 0 24px rgba(93,244,255,.45)}
+.brand-mark::after{content:"";position:absolute;inset:3px;border-radius:5px;background:var(--obsidian);display:flex}
+.brand-mark::before{content:"";position:absolute;inset:0;border-radius:8px;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.4),transparent 50%);z-index:2}
+.brand-name{font-size:15px}
+.brand-name b{color:var(--plasma)}
+.nav-links{display:flex;gap:22px;font-size:13px;color:var(--ink-3)}
+.nav-links a{color:inherit;text-decoration:none}
+.nav-links a:hover{color:var(--ink)}
+.nav-cta{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--ink-2);background:var(--carbon);border:1px solid var(--steel);padding:8px 12px;border-radius:999px}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--pulse);box-shadow:0 0 12px var(--pulse);animation:pulse 1.6s infinite}
+
+/* ── Hero ──────────────────────────────────────────────────── */
+.hero{position:relative;padding:96px 0 60px}
+.kicker{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-data);font-size:11px;letter-spacing:.18em;color:var(--plasma);background:rgba(93,244,255,.07);border:1px solid rgba(93,244,255,.25);padding:6px 12px;border-radius:999px}
+.kicker .dot{width:5px;height:5px;border-radius:50%;background:var(--plasma);box-shadow:0 0 10px var(--plasma)}
+.hero h1{font-size:clamp(44px,7.2vw,96px);line-height:.94;letter-spacing:-.035em;margin:22px 0 18px;font-weight:600}
+.hero h1 .ash{background:linear-gradient(180deg,#fff 0%,#9CB0CE 100%);-webkit-background-clip:text;background-clip:text;color:transparent;font-family:var(--f-serif);font-style:italic;font-weight:400}
+.hero h1 .glow{background:linear-gradient(120deg,#5DF4FF 0%,#7A8BFF 45%,#C8A2FF 90%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-sub{max-width:680px;color:var(--ink-2);font-size:18px;line-height:1.55;margin-bottom:36px}
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--fog);border-radius:var(--r-4);overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0))}
+.hero-stats .s{padding:18px 20px;border-right:1px solid var(--fog)}
+.hero-stats .s:last-child{border-right:none}
+.hero-stats .v{font-family:var(--f-data);font-size:22px;color:var(--ink);letter-spacing:-.02em}
+.hero-stats .l{font-size:11px;color:var(--ink-3);letter-spacing:.12em;text-transform:uppercase;margin-top:6px}
+
+/* ── Hero device cluster ───────────────────────────────────── */
+.hero-cluster{position:relative;margin-top:80px;height:760px}
+.hero-cluster .glow-bg{position:absolute;inset:-80px;background:radial-gradient(50% 50% at 50% 50%,rgba(93,244,255,.18),transparent 70%);filter:blur(20px);z-index:0}
+
+/* ── Device frame (iPhone-ish, signature ASH bezel) ─────── */
+.device{
+  width:340px;height:700px;border-radius:48px;
+  background:linear-gradient(180deg,#1A2030 0%,#0A0E18 100%);
+  padding:8px;
+  box-shadow:
+    0 80px 120px -40px rgba(0,0,0,.85),
+    0 0 0 1px rgba(255,255,255,.06),
+    inset 0 0 0 1px rgba(255,255,255,.04),
+    inset 0 1px 0 rgba(255,255,255,.08);
+  position:relative;
+}
+.device::before{
+  content:"";position:absolute;top:14px;left:50%;transform:translateX(-50%);
+  width:96px;height:28px;border-radius:14px;background:#000;z-index:5;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.04);
+}
+.device .screen{
+  width:100%;height:100%;border-radius:42px;background:var(--obsidian);
+  overflow:hidden;position:relative;
+}
+.status-bar{display:flex;justify-content:space-between;align-items:center;padding:18px 26px 8px;font-family:var(--f-data);font-size:11px;color:var(--ink-2);position:relative;z-index:6}
+.status-bar .right{display:flex;gap:6px;align-items:center}
+
+/* ── Cards / surfaces ─────────────────────────────────────── */
+.glass{
+  background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01));
+  border:1px solid var(--fog);
+  border-radius:var(--r-4);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+}
+.surface{background:var(--abyss);border:1px solid var(--fog);border-radius:var(--r-4)}
+
+/* ── Section meta ─────────────────────────────────────────── */
+.section{padding:96px 0;position:relative}
+.section .eyebrow{font-family:var(--f-data);font-size:11px;letter-spacing:.22em;color:var(--plasma);text-transform:uppercase}
+.section h2{font-size:clamp(32px,4.6vw,56px);letter-spacing:-.025em;line-height:1.05;margin:14px 0 16px;font-weight:600}
+.section h2 em{font-family:var(--f-serif);font-style:italic;font-weight:400;color:var(--ink-2)}
+.section p.lead{color:var(--ink-2);max-width:680px;font-size:17px;line-height:1.6}
+
+/* ── Color tokens grid ────────────────────────────────────── */
+.tokens{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:36px}
+.token{padding:18px;border-radius:var(--r-3);border:1px solid var(--fog);background:var(--abyss);position:relative;overflow:hidden;min-height:160px;display:flex;flex-direction:column;justify-content:flex-end}
+.token .swatch{position:absolute;inset:0;opacity:.6}
+.token .meta{position:relative;z-index:2}
+.token .name{font-size:14px;font-weight:600;margin-bottom:4px}
+.token .role{font-size:11px;color:var(--ink-3);letter-spacing:.1em;text-transform:uppercase}
+.token .hex{font-family:var(--f-data);font-size:11px;color:var(--ink-2);margin-top:8px}
+
+/* ── Type ramp ────────────────────────────────────────────── */
+.type-ramp{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:36px}
+.type-row{display:flex;align-items:baseline;gap:18px;padding:18px;border-radius:var(--r-3);border:1px solid var(--fog);background:var(--abyss)}
+.type-row .sample{flex:1;min-width:0;color:var(--ink)}
+.type-row .meta{font-family:var(--f-data);font-size:11px;color:var(--ink-3);white-space:nowrap}
+
+/* ── Principle cards ─────────────────────────────────────── */
+.principles{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:36px}
+.principle{padding:22px;border-radius:var(--r-3);border:1px solid var(--fog);background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,0));min-height:220px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+.principle .num{font-family:var(--f-data);font-size:11px;color:var(--ink-3);letter-spacing:.18em}
+.principle h4{font-size:18px;letter-spacing:-.01em;margin:14px 0 8px;font-weight:600}
+.principle p{font-size:13px;color:var(--ink-2);line-height:1.55;margin:0}
+.principle .icon{width:32px;height:32px;color:var(--plasma)}
+
+/* ── Showcase row ─────────────────────────────────────────── */
+.showcase{display:grid;grid-template-columns:1.05fr .95fr;gap:60px;align-items:center;margin-top:60px}
+.showcase.flip{grid-template-columns:.95fr 1.05fr}
+.showcase.flip .annot{order:2}
+.showcase .device{transform:rotate(-1.5deg)}
+.showcase.flip .device{transform:rotate(1.5deg)}
+.showcase .annot .tag{font-family:var(--f-data);font-size:11px;letter-spacing:.18em;color:var(--plasma);text-transform:uppercase}
+.showcase .annot h3{font-size:36px;letter-spacing:-.02em;line-height:1.1;margin:12px 0 16px;font-weight:600}
+.showcase .annot p{color:var(--ink-2);line-height:1.65;font-size:15px}
+.feature-list{margin-top:22px;display:flex;flex-direction:column;gap:12px}
+.feature-list .item{display:flex;gap:12px;align-items:flex-start;padding:14px;border:1px solid var(--fog);border-radius:var(--r-2);background:rgba(255,255,255,.02)}
+.feature-list .item svg{flex-shrink:0;color:var(--plasma)}
+.feature-list .item .t{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:2px}
+.feature-list .item .d{font-size:12px;color:var(--ink-3);line-height:1.5}
+
+/* ── Pill / chip ──────────────────────────────────────────── */
+.pill{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:999px;font-family:var(--f-data);font-size:10px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--fog);background:rgba(255,255,255,.03);color:var(--ink-2)}
+.pill.vital{color:var(--vital);border-color:rgba(255,51,85,.35);background:rgba(255,51,85,.07)}
+.pill.solar{color:var(--solar);border-color:rgba(255,176,32,.35);background:rgba(255,176,32,.07)}
+.pill.plasma{color:var(--plasma);border-color:rgba(93,244,255,.35);background:rgba(93,244,255,.07)}
+.pill.mihrab{color:var(--mihrab);border-color:rgba(0,194,168,.35);background:rgba(0,194,168,.07)}
+.pill.bismuth{color:var(--bismuth);border-color:rgba(200,162,255,.35);background:rgba(200,162,255,.07)}
+.pill.pulse{color:var(--pulse);border-color:rgba(63,255,176,.35);background:rgba(63,255,176,.07)}
+
+/* ── Animations ───────────────────────────────────────────── */
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(.85)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes ecg{0%{stroke-dashoffset:1000}100%{stroke-dashoffset:0}}
+@keyframes scan{0%{transform:translateY(-110%)}100%{transform:translateY(110%)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes ring{0%{box-shadow:0 0 0 0 rgba(255,51,85,.55)}70%{box-shadow:0 0 0 22px rgba(255,51,85,0)}100%{box-shadow:0 0 0 0 rgba(255,51,85,0)}}
+@keyframes orbit{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+
+/* ── Footer ──────────────────────────────────────────────── */
+.foot{padding:60px 0;border-top:1px solid var(--fog);color:var(--ink-3);font-size:12px}
+.foot .row{align-items:center;justify-content:space-between}
+.foot a{color:var(--ink-2);text-decoration:none}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width:900px){
+  .nav-links{display:none}
+  .hero-stats{grid-template-columns:repeat(2,1fr)}
+  .tokens{grid-template-columns:repeat(2,1fr)}
+  .principles{grid-template-columns:1fr 1fr}
+  .showcase,.showcase.flip{grid-template-columns:1fr}
+  .showcase .device,.showcase.flip .device{transform:none;margin:0 auto}
+  .hero-cluster{height:auto;display:flex;justify-content:center}
+  .type-ramp{grid-template-columns:1fr}
+}
+
+/* ────────────────────────────────────────────────────────────
+   SCREEN STYLES — each prototype below is real CSS, not images
+   ──────────────────────────────────────────────────────────── */
+
+/* generic in-screen card */
+.s-card{background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015));border:1px solid var(--fog);border-radius:18px;padding:14px;margin:8px 14px}
+.s-h{display:flex;justify-content:space-between;align-items:center;padding:6px 22px 12px;font-size:11px;color:var(--ink-3);letter-spacing:.12em;text-transform:uppercase}
+
+/* Mission Control */
+.mc-greet{padding:8px 22px 4px;font-family:var(--f-serif);font-style:italic;font-weight:400;font-size:24px;letter-spacing:-.02em;line-height:1.1}
+.mc-greet .name{color:var(--plasma)}
+.mc-line{padding:0 22px 12px;font-size:12px;color:var(--ink-3)}
+.mc-orb{margin:6px 22px 0;border-radius:22px;padding:18px;background:radial-gradient(120% 80% at 30% 0%,rgba(122,139,255,.22),rgba(93,244,255,.08) 40%,transparent 70%),linear-gradient(180deg,#0E1424,#080B14);border:1px solid rgba(122,139,255,.25);position:relative;overflow:hidden}
+.mc-orb::after{content:"";position:absolute;inset:-50% -10%;background:radial-gradient(40% 60% at 50% 50%,rgba(122,139,255,.22),transparent 70%);animation:float 6s ease-in-out infinite}
+.mc-orb .row1{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:2}
+.mc-orb .row1 .label{font-family:var(--f-data);font-size:10px;letter-spacing:.14em;color:var(--bismuth)}
+.mc-orb .row2{margin-top:8px;font-size:14px;color:var(--ink);line-height:1.4;position:relative;z-index:2}
+.mc-orb .ask{margin-top:14px;display:flex;align-items:center;gap:8px;padding:11px 14px;border-radius:14px;background:rgba(0,0,0,.35);border:1px solid rgba(93,244,255,.3);font-family:var(--f-data);font-size:11px;color:var(--plasma);position:relative;z-index:2}
+.mc-orb .ask .mic{width:24px;height:24px;border-radius:50%;background:var(--plasma);color:#001016;display:flex;align-items:center;justify-content:center;margin-left:auto}
+
+.mc-tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 14px;margin-top:10px}
+.mc-tile{padding:12px;border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0));border:1px solid var(--fog);position:relative;overflow:hidden;min-height:78px}
+.mc-tile .ico{width:22px;height:22px;color:var(--plasma)}
+.mc-tile .t{font-size:12px;font-weight:600;margin-top:6px}
+.mc-tile .v{font-family:var(--f-data);font-size:18px;letter-spacing:-.02em;margin-top:2px}
+.mc-tile .sub{font-size:10px;color:var(--ink-3);margin-top:2px}
+.mc-tile.crit{border-color:rgba(255,51,85,.35);background:linear-gradient(180deg,rgba(255,51,85,.10),rgba(255,51,85,.02))}
+.mc-tile.crit .ico,.mc-tile.crit .v{color:var(--vital)}
+.mc-tile.heat{border-color:rgba(255,176,32,.35);background:linear-gradient(180deg,rgba(255,176,32,.10),rgba(255,176,32,.02))}
+.mc-tile.heat .ico,.mc-tile.heat .v{color:var(--solar)}
+
+.mc-emerg{margin:12px 14px;padding:14px;border-radius:16px;background:linear-gradient(135deg,rgba(255,51,85,.18),rgba(255,51,85,.04));border:1px solid rgba(255,51,85,.35);position:relative;overflow:hidden}
+.mc-emerg::before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,51,85,.18) 50%,transparent 70%);background-size:200% 100%;animation:shimmer 3s linear infinite}
+.mc-emerg .row{display:flex;align-items:center;gap:10px;position:relative;z-index:2}
+.mc-emerg .ico{width:34px;height:34px;border-radius:10px;background:var(--vital);color:#fff;display:flex;align-items:center;justify-content:center;animation:ring 1.6s infinite}
+.mc-emerg .t{font-size:13px;font-weight:600}
+.mc-emerg .d{font-size:11px;color:var(--ink-2);margin-top:2px}
+.mc-emerg .cta{margin-left:auto;font-family:var(--f-data);font-size:10px;color:var(--vital);letter-spacing:.1em}
+
+.mc-zone{margin:12px 14px 0;padding:12px 14px;border-radius:14px;background:var(--abyss);border:1px solid var(--fog);display:flex;align-items:center;gap:10px}
+.mc-zone .map{width:50px;height:50px;border-radius:12px;background:radial-gradient(60% 60% at 60% 30%,rgba(255,176,32,.5),transparent 60%),radial-gradient(40% 40% at 30% 70%,rgba(255,51,85,.55),transparent 60%),#10141F;position:relative;overflow:hidden;border:1px solid var(--fog)}
+.mc-zone .map::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,255,255,.04) 0 1px,transparent 1px 8px)}
+.mc-zone .info{flex:1;min-width:0}
+.mc-zone .info .where{font-size:12px;font-weight:600}
+.mc-zone .info .meta{font-family:var(--f-data);font-size:10px;color:var(--ink-3);margin-top:2px}
+.mc-zone .badge{font-family:var(--f-data);font-size:10px;color:var(--solar);padding:4px 8px;border-radius:8px;background:rgba(255,176,32,.10);border:1px solid rgba(255,176,32,.3);letter-spacing:.08em}
+
+/* Tab bar */
+.tabbar{position:absolute;left:14px;right:14px;bottom:16px;display:flex;padding:8px;border-radius:22px;background:rgba(10,13,23,.85);backdrop-filter:blur(16px);border:1px solid var(--fog);justify-content:space-around;align-items:center;z-index:9}
+.tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9px;color:var(--ink-3);letter-spacing:.08em;text-transform:uppercase}
+.tabbar a.active{color:var(--plasma)}
+.tabbar .askbtn{flex:0 0 auto;width:54px;height:54px;border-radius:50%;background:conic-gradient(from 0deg,#5DF4FF,#7A8BFF,#C8A2FF,#5DF4FF);display:flex;align-items:center;justify-content:center;margin-top:-22px;box-shadow:0 12px 30px -8px rgba(93,244,255,.45),0 0 0 1px rgba(255,255,255,.08) inset}
+.tabbar .askbtn .core{width:46px;height:46px;border-radius:50%;background:var(--obsidian);display:flex;align-items:center;justify-content:center;color:var(--plasma);font-family:var(--f-data);font-size:10px;letter-spacing:.16em}
+
+/* ASK ASH chat */
+.chat{padding:0 14px;display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.msg{padding:12px 14px;border-radius:16px;font-size:13px;line-height:1.5;max-width:88%}
+.msg.user{align-self:flex-end;background:linear-gradient(180deg,#1A2342,#0F1530);border:1px solid rgba(122,139,255,.35);color:var(--ink)}
+.msg.ai{align-self:flex-start;background:linear-gradient(180deg,rgba(0,194,168,.07),rgba(0,194,168,.02));border:1px solid rgba(0,194,168,.25);position:relative;overflow:hidden}
+.msg.ai .head{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-family:var(--f-data);font-size:10px;letter-spacing:.14em;color:var(--mihrab)}
+.msg.ai .head .src{margin-left:auto;color:var(--ink-3);text-transform:none;letter-spacing:0}
+.msg.ai b{color:var(--ink);font-weight:600}
+.msg.ai ul{margin:6px 0 0;padding-left:18px}
+.msg.ai li{margin:3px 0;color:var(--ink-2);font-size:12px}
+.msg.ai .conf{display:flex;align-items:center;gap:8px;margin-top:12px;padding-top:10px;border-top:1px dashed rgba(0,194,168,.25)}
+.msg.ai .conf .bar{flex:1;height:4px;border-radius:99px;background:rgba(255,255,255,.06);overflow:hidden}
+.msg.ai .conf .bar i{display:block;height:100%;width:92%;background:linear-gradient(90deg,#3FFFB0,#00C2A8)}
+.msg.ai .conf .n{font-family:var(--f-data);font-size:10px;color:var(--mihrab)}
+.msg.ai .srcs{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.msg.ai .srcs .pill{font-size:9px;padding:3px 7px}
+
+.composer{position:absolute;left:14px;right:14px;bottom:78px;display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:18px;background:rgba(10,13,23,.92);backdrop-filter:blur(16px);border:1px solid var(--fog)}
+.composer input{flex:1;background:transparent;border:none;outline:none;color:var(--ink);font-family:var(--f-ui);font-size:12px}
+.composer input::placeholder{color:var(--ink-4)}
+
+/* ECG */
+.ecg-frame{margin:6px 14px;border-radius:18px;background:#000;border:1px solid var(--fog);position:relative;overflow:hidden;height:200px}
+.ecg-frame::before{content:"";position:absolute;inset:0;background:
+  linear-gradient(rgba(255,51,85,.12),transparent 40%),
+  repeating-linear-gradient(0deg,rgba(255,51,85,.12) 0 1px,transparent 1px 12px),
+  repeating-linear-gradient(90deg,rgba(255,51,85,.12) 0 1px,transparent 1px 12px);
+}
+.ecg-frame .scan{position:absolute;left:0;right:0;height:60%;background:linear-gradient(180deg,transparent,rgba(93,244,255,.18),transparent);animation:scan 2.4s ease-in-out infinite}
+.ecg-frame svg{position:absolute;inset:0;width:100%;height:100%}
+.ecg-frame .label{position:absolute;left:10px;top:8px;font-family:var(--f-data);font-size:10px;color:var(--vital);letter-spacing:.1em}
+.ecg-frame .lead{position:absolute;right:10px;top:8px;font-family:var(--f-data);font-size:10px;color:var(--ink-3)}
+.ecg-find{margin:0 14px;padding:14px;border-radius:16px;border:1px solid rgba(255,51,85,.35);background:linear-gradient(180deg,rgba(255,51,85,.10),rgba(255,51,85,.02))}
+.ecg-find .head{display:flex;align-items:center;gap:8px;font-family:var(--f-data);font-size:10px;color:var(--vital);letter-spacing:.14em}
+.ecg-find h4{font-size:18px;letter-spacing:-.02em;margin:8px 0 2px;font-weight:600}
+.ecg-find .sub{font-size:11px;color:var(--ink-3)}
+.ecg-find .findings{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px}
+.ecg-find .f{font-family:var(--f-data);font-size:10px;color:var(--ink-2);padding:6px 8px;border-radius:8px;background:rgba(0,0,0,.3);border:1px solid var(--fog);display:flex;justify-content:space-between}
+.ecg-find .f span{color:var(--vital)}
+
+.activate{margin:12px 14px;padding:14px;border-radius:18px;background:linear-gradient(135deg,#FF3355,#B81E3A);color:#fff;display:flex;align-items:center;gap:12px;box-shadow:0 14px 30px -10px rgba(255,51,85,.55);position:relative;overflow:hidden}
+.activate::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.22) 50%,transparent 70%);background-size:200% 100%;animation:shimmer 2.4s linear infinite}
+.activate .ico{width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center}
+.activate .t{font-size:14px;font-weight:700;letter-spacing:.01em}
+.activate .s{font-size:11px;opacity:.85}
+
+/* Protocol */
+.proto-step{margin:8px 14px;display:flex;gap:10px;align-items:flex-start}
+.proto-step .num{flex:0 0 28px;height:28px;border-radius:50%;background:rgba(93,244,255,.12);border:1px solid rgba(93,244,255,.35);color:var(--plasma);display:flex;align-items:center;justify-content:center;font-family:var(--f-data);font-size:11px;margin-top:4px}
+.proto-step.done .num{background:var(--mihrab);border-color:var(--mihrab);color:#001b18}
+.proto-step.now .num{background:var(--vital);border-color:var(--vital);color:#fff;animation:ring 1.6s infinite}
+.proto-step .body{flex:1;min-width:0;padding:12px 14px;border-radius:14px;border:1px solid var(--fog);background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,0))}
+.proto-step.now .body{border-color:rgba(255,51,85,.35);background:linear-gradient(180deg,rgba(255,51,85,.08),rgba(255,51,85,0))}
+.proto-step .t{font-size:13px;font-weight:600}
+.proto-step .d{font-size:11px;color:var(--ink-3);margin-top:4px;line-height:1.5}
+.proto-step .timer{font-family:var(--f-data);font-size:10px;color:var(--vital);margin-top:6px;display:flex;align-items:center;gap:6px}
+
+/* Drug Twin (Najm Bridge) */
+.drug-hero{margin:6px 14px;padding:16px;border-radius:18px;border:1px solid rgba(122,139,255,.3);background:linear-gradient(135deg,rgba(122,139,255,.10),rgba(93,244,255,.04));position:relative;overflow:hidden}
+.drug-hero .label{font-family:var(--f-data);font-size:10px;letter-spacing:.16em;color:var(--plasma-2)}
+.drug-hero h4{font-size:24px;letter-spacing:-.02em;margin:6px 0 2px;font-weight:600}
+.drug-hero .class{font-size:11px;color:var(--ink-3)}
+.drug-hero .dose{margin-top:14px;padding:12px 14px;border-radius:14px;background:rgba(0,0,0,.4);border:1px solid var(--fog)}
+.drug-hero .dose .row1{display:flex;justify-content:space-between;font-family:var(--f-data);font-size:10px;color:var(--ink-3);letter-spacing:.12em;text-transform:uppercase}
+.drug-hero .dose .v{font-family:var(--f-data);font-size:22px;color:var(--plasma);margin-top:4px;letter-spacing:-.02em}
+.drug-hero .slider{margin-top:10px;height:6px;border-radius:99px;background:rgba(255,255,255,.06);position:relative;overflow:hidden}
+.drug-hero .slider i{display:block;height:100%;width:54%;background:linear-gradient(90deg,#5DF4FF,#7A8BFF);border-radius:99px}
+.drug-hero .slider::after{content:"";position:absolute;top:50%;left:54%;width:14px;height:14px;border-radius:50%;background:#fff;transform:translate(-50%,-50%);box-shadow:0 0 0 4px rgba(93,244,255,.25),0 0 12px rgba(93,244,255,.7)}
+.drug-flags{margin:10px 14px 0;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.drug-flags .f{padding:10px;border-radius:12px;border:1px solid var(--fog);background:rgba(255,255,255,.03)}
+.drug-flags .f .lbl{font-family:var(--f-data);font-size:9px;letter-spacing:.12em;color:var(--ink-3);text-transform:uppercase}
+.drug-flags .f .val{font-size:12px;color:var(--ink);margin-top:4px;font-weight:500}
+.drug-flags .f.warn{border-color:rgba(255,176,32,.35);background:rgba(255,176,32,.07)}
+.drug-flags .f.warn .val{color:var(--solar)}
+.drug-flags .f.ok{border-color:rgba(0,194,168,.35);background:rgba(0,194,168,.07)}
+.drug-flags .f.ok .val{color:var(--mihrab)}
+.najm-bridge{margin:12px 14px 0;padding:12px 14px;border-radius:14px;border:1px dashed rgba(93,244,255,.35);background:rgba(93,244,255,.04);display:flex;align-items:center;gap:10px}
+.najm-bridge .logo{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#0284c7,#38bdf8);display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--f-data);font-size:11px;font-weight:700}
+.najm-bridge .t{font-size:11px;font-weight:600}
+.najm-bridge .s{font-size:10px;color:var(--ink-3);margin-top:2px}
+.najm-bridge .arrow{margin-left:auto;color:var(--plasma)}
+
+/* Heat & Crowd */
+.wbgt{margin:6px 14px;padding:18px;border-radius:18px;background:radial-gradient(70% 100% at 50% 0%,rgba(255,176,32,.25),transparent 70%),linear-gradient(180deg,#1A1408,#0A0C12);border:1px solid rgba(255,176,32,.35);text-align:center;position:relative;overflow:hidden}
+.wbgt .arc{position:relative;width:180px;height:90px;margin:6px auto 0}
+.wbgt .arc svg{width:100%;height:100%}
+.wbgt .v{font-family:var(--f-data);font-size:42px;color:var(--solar);letter-spacing:-.03em;line-height:1;margin-top:-22px;position:relative;z-index:2}
+.wbgt .u{font-family:var(--f-data);font-size:11px;color:var(--ink-3)}
+.wbgt .lbl{font-family:var(--f-data);font-size:10px;letter-spacing:.16em;color:var(--solar);text-transform:uppercase;margin-top:8px}
+.wbgt .desc{font-size:11px;color:var(--ink-2);margin-top:4px}
+
+.zones{margin:0 14px;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.zone{padding:12px;border-radius:14px;border:1px solid var(--fog);background:rgba(255,255,255,.03)}
+.zone .name{font-size:12px;font-weight:600}
+.zone .num{font-family:var(--f-data);font-size:18px;letter-spacing:-.02em;margin-top:4px}
+.zone .bar{height:5px;border-radius:99px;background:rgba(255,255,255,.06);margin-top:8px;overflow:hidden}
+.zone .bar i{display:block;height:100%;background:linear-gradient(90deg,#FFB020,#FF3355);border-radius:99px}
+.zone .meta{font-size:10px;color:var(--ink-3);margin-top:4px}
+
+/* Polyglot */
+.poly{padding:6px 14px}
+.poly .voice{margin:8px 0;padding:14px;border-radius:18px;border:1px solid var(--fog);background:rgba(255,255,255,.03);position:relative;overflow:hidden}
+.poly .voice .row1{display:flex;align-items:center;gap:10px}
+.poly .voice .flag{width:30px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:var(--f-data);font-size:10px;font-weight:700;color:#fff}
+.poly .voice .flag.ur{background:linear-gradient(180deg,#01411C 50%,#01411C 50%);border:1px solid #fff}
+.poly .voice .flag.id{background:linear-gradient(180deg,#FF0000 50%,#fff 50%)}
+.poly .voice .flag.en{background:linear-gradient(180deg,#012169,#C8102E);}
+.poly .voice .lang{font-size:11px;color:var(--ink-3);font-family:var(--f-data);letter-spacing:.1em}
+.poly .voice .live{margin-left:auto;display:flex;align-items:center;gap:6px;font-family:var(--f-data);font-size:9px;letter-spacing:.16em;color:var(--vital)}
+.poly .voice .live .dot{width:6px;height:6px;background:var(--vital);border-radius:50%;box-shadow:0 0 10px var(--vital);animation:pulse 1.4s infinite}
+.poly .voice .said{margin-top:10px;font-size:14px;line-height:1.45}
+.poly .voice .said.ar{font-family:var(--f-ar);direction:rtl;text-align:right}
+.poly .voice .said.id{font-style:italic;color:var(--ink-2)}
+.poly .voice .trans{margin-top:8px;padding-top:8px;border-top:1px dashed var(--fog);font-size:13px;color:var(--mihrab);line-height:1.45}
+.poly .wave{display:flex;align-items:center;gap:3px;margin-top:10px}
+.poly .wave i{display:block;width:3px;background:var(--plasma);border-radius:2px;animation:wave 1s ease-in-out infinite}
+@keyframes wave{0%,100%{height:6px}50%{height:22px}}
+
+/* Pilgrim card */
+.pilg{margin:6px 14px;padding:16px;border-radius:18px;background:linear-gradient(135deg,rgba(232,217,176,.10),rgba(232,217,176,.02));border:1px solid rgba(232,217,176,.25);position:relative;overflow:hidden}
+.pilg::before{content:"";position:absolute;top:-30px;right:-30px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(232,217,176,.18),transparent 70%)}
+.pilg .row1{display:flex;align-items:flex-start;gap:12px}
+.pilg .avatar{width:54px;height:54px;border-radius:14px;background:linear-gradient(135deg,#2A3149,#10141F);display:flex;align-items:center;justify-content:center;color:var(--sand);font-family:var(--f-serif);font-size:22px;border:1px solid var(--fog);flex-shrink:0}
+.pilg .info{flex:1;min-width:0}
+.pilg .name-en{font-size:16px;font-weight:600;letter-spacing:-.01em}
+.pilg .name-ar{font-family:var(--f-ar);font-size:14px;color:var(--ink-2);direction:rtl;text-align:right;margin-top:2px}
+.pilg .meta{font-family:var(--f-data);font-size:10px;color:var(--ink-3);margin-top:4px;letter-spacing:.06em}
+.pilg .qr{width:54px;height:54px;border-radius:10px;background:repeating-conic-gradient(#fff 0 25%,#000 0 50%) 50%/12px 12px,#fff;border:1px solid var(--fog);flex-shrink:0}
+.pilg .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;position:relative;z-index:2}
+
+.vitals{margin:10px 14px 0;padding:14px;border-radius:16px;background:rgba(255,255,255,.02);border:1px solid var(--fog)}
+.vitals .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.vital-cell{text-align:left}
+.vital-cell .l{font-family:var(--f-data);font-size:9px;letter-spacing:.12em;color:var(--ink-3);text-transform:uppercase}
+.vital-cell .v{font-family:var(--f-data);font-size:20px;letter-spacing:-.02em;margin-top:2px}
+.vital-cell .v.good{color:var(--pulse)}
+.vital-cell .v.warn{color:var(--solar)}
+.vital-cell .v.bad{color:var(--vital);animation:pulse 1.8s infinite}
+.vital-cell .u{font-family:var(--f-data);font-size:9px;color:var(--ink-4);margin-left:2px}
+
+/* Tasleem */
+.tas-card{margin:6px 14px;padding:14px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0));border:1px solid var(--fog)}
+.tas-card .head{display:flex;align-items:center;gap:8px;font-family:var(--f-data);font-size:10px;letter-spacing:.16em;color:var(--bismuth);text-transform:uppercase}
+.tas-card h4{margin:8px 0 2px;font-size:16px;font-weight:600}
+.tas-card .body{margin-top:10px;font-size:12px;line-height:1.6;color:var(--ink-2)}
+.tas-card .body b{color:var(--ink);font-weight:600}
+.tas-card .body .hl{color:var(--plasma)}
+.tas-bed{display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;border:1px solid var(--fog);background:rgba(255,255,255,.02);margin-top:8px}
+.tas-bed .b{font-family:var(--f-data);font-size:10px;color:var(--ink-3);letter-spacing:.12em}
+.tas-bed .b b{color:var(--plasma)}
+.tas-bed .t{flex:1;font-size:12px;color:var(--ink-2)}
+.tas-action{margin:10px 14px 0;display:flex;gap:8px}
+.tas-action .btn{flex:1;padding:11px;border-radius:14px;background:linear-gradient(180deg,#1A2342,#0F1530);border:1px solid var(--fog);font-size:11px;color:var(--ink);text-align:center;letter-spacing:.04em}
+.tas-action .btn.primary{background:linear-gradient(180deg,#5DF4FF,#22B6C7);border-color:rgba(93,244,255,.5);color:#001016;font-weight:600}
+
+/* Safety net */
+.safety{margin:6px 14px}
+.safety .alert{padding:12px 14px;border-radius:14px;margin-bottom:8px;display:flex;gap:10px;align-items:flex-start;border:1px solid var(--fog);background:rgba(255,255,255,.02)}
+.safety .alert .ico{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.safety .alert.crit{border-color:rgba(255,51,85,.35);background:rgba(255,51,85,.07)}
+.safety .alert.crit .ico{background:rgba(255,51,85,.18);color:var(--vital)}
+.safety .alert.warn{border-color:rgba(255,176,32,.35);background:rgba(255,176,32,.07)}
+.safety .alert.warn .ico{background:rgba(255,176,32,.18);color:var(--solar)}
+.safety .alert.info{border-color:rgba(122,139,255,.35);background:rgba(122,139,255,.07)}
+.safety .alert.info .ico{background:rgba(122,139,255,.18);color:var(--plasma-2)}
+.safety .alert .t{font-size:13px;font-weight:600}
+.safety .alert .d{font-size:11px;color:var(--ink-3);margin-top:3px;line-height:1.5}
+.safety .alert .src{font-family:var(--f-data);font-size:9px;color:var(--ink-3);letter-spacing:.12em;margin-top:6px}
+
+/* Motion strip */
+.motion-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:36px}
+.motion-tile{padding:18px;border-radius:var(--r-3);border:1px solid var(--fog);background:var(--abyss);min-height:140px;display:flex;flex-direction:column;justify-content:space-between}
+.motion-tile .name{font-size:13px;font-weight:600}
+.motion-tile .curve{font-family:var(--f-data);font-size:10px;color:var(--ink-3);margin-top:4px;letter-spacing:.1em}
+.motion-tile .demo{height:48px;display:flex;align-items:center;justify-content:flex-start}
+.dot-anim{width:14px;height:14px;border-radius:50%;background:var(--plasma);box-shadow:0 0 14px var(--plasma)}
+
+/* IA map */
+.ia{margin-top:36px;padding:28px;border-radius:var(--r-4);border:1px solid var(--fog);background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,0));position:relative;overflow:hidden}
+.ia svg{display:block;width:100%;height:auto;max-height:520px}
+
+/* CTA */
+.cta{margin-top:80px;padding:60px;border-radius:var(--r-5);border:1px solid rgba(93,244,255,.25);background:radial-gradient(80% 120% at 50% 0%,rgba(93,244,255,.10),transparent 70%),linear-gradient(180deg,#0B1224,#070A14);text-align:center;position:relative;overflow:hidden}
+.cta::before{content:"";position:absolute;inset:0;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80'><path d='M0 40h80M40 0v80' stroke='%23ffffff' stroke-opacity='.03' fill='none'/></svg>");opacity:.5}
+.cta h3{font-size:clamp(28px,4vw,44px);letter-spacing:-.02em;margin:0 0 12px;font-weight:600;position:relative}
+.cta p{color:var(--ink-2);max-width:600px;margin:0 auto 28px;line-height:1.6;position:relative}
+.cta .btns{display:flex;gap:10px;justify-content:center;position:relative}
+.btn{padding:14px 24px;border-radius:14px;background:linear-gradient(180deg,#5DF4FF,#22B6C7);color:#001016;font-weight:600;font-size:14px;letter-spacing:.01em;border:none;cursor:pointer;text-decoration:none}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--steel)}
+
+</style>
+</head>
+
+<body>
+
+<!-- ────────────────── NAV ────────────────── -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <div class="brand-name">ASH <span style="color:var(--ink-3);font-weight:400">·</span> Acute Support Hub</div>
+    </div>
+    <div class="nav-links">
+      <a href="#problem">Problem</a>
+      <a href="#system">System</a>
+      <a href="#screens">Screens</a>
+      <a href="#motion">Motion</a>
+      <a href="#bridge">Najm Bridge</a>
+    </div>
+    <div class="nav-cta"><span class="live-dot"></span> v1.0 · Hajj 1447H · Design RC</div>
+  </div>
+</nav>
+
+<!-- ────────────────── HERO ────────────────── -->
+<section class="hero">
+  <div class="wrap">
+    <div class="kicker"><span class="dot"></span> CRITICAL CARE COCKPIT · HAJJ 1447H · NAJM-NATIVE</div>
+    <h1><span class="ash">Ash</span> turns the<br/>worst 60 seconds<br/>into your <span class="glow">best</span>.</h1>
+    <p class="hero-sub">
+      ASH is the acute-care cockpit purpose-built for physicians treating
+      <b style="color:var(--ink)">3.2 million pilgrims</b> across Makkah, Mina, Arafat and Muzdalifah —
+      where every decision happens under <b style="color:var(--solar)">48&nbsp;°C heat</b>, <b style="color:var(--ink)">7 languages</b>,
+      and <b style="color:var(--vital)">no second chances</b>. Evidence-graded answers, one-tap protocols,
+      Najm-grade drug math, and a polyglot triage layer — all reachable with one thumb, in two taps.
+    </p>
+
+    <div class="hero-stats">
+      <div class="s"><div class="v">≤ 2 taps</div><div class="l">to every life-saving action</div></div>
+      <div class="s"><div class="v">7 langs</div><div class="l">voice-to-voice triage</div></div>
+      <div class="s"><div class="v">Offline-first</div><div class="l">when 5G dies in Mina</div></div>
+      <div class="s"><div class="v">AHA · ESC · SCCM</div><div class="l">cited on every answer</div></div>
+    </div>
+
+    <div class="hero-cluster">
+      <div class="glow-bg"></div>
+
+      <!-- Floating device 1: Mission Control -->
+      <div class="device" style="position:absolute;left:50%;top:0;transform:translateX(-50%) rotate(-2deg);animation:float 8s ease-in-out infinite">
+        <div class="screen">
+          <div class="status-bar">
+            <span>09:42</span>
+            <span class="right">
+              <svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor"><rect x="0" y="6" width="2" height="4"/><rect x="3" y="4" width="2" height="6"/><rect x="6" y="2" width="2" height="8"/><rect x="9" y="0" width="2" height="10"/></svg>
+              <svg width="14" height="10" viewBox="0 0 14 10"><path d="M7 8.5 L2 3.5 A7 7 0 0 1 12 3.5 Z" fill="currentColor"/></svg>
+              <svg width="22" height="10" viewBox="0 0 22 10"><rect x=".5" y=".5" width="18" height="9" rx="2" fill="none" stroke="currentColor"/><rect x="19.5" y="3" width="2" height="4" rx="1" fill="currentColor"/><rect x="2" y="2" width="15" height="6" rx="1" fill="currentColor"/></svg>
+            </span>
+          </div>
+
+          <div class="mc-greet"><span>السلام عليكم,</span> <span class="name">Dr. Hatem</span></div>
+          <div class="mc-line">Mina · Jamarat Sector 3 · 09:42 · Shift 04h 18m</div>
+
+          <div class="mc-orb">
+            <div class="row1">
+              <span class="label">ASH · DAILY BRIEFING</span>
+              <span class="pill bismuth" style="font-size:9px">AI · UPDATED 2 MIN AGO</span>
+            </div>
+            <div class="row2">
+              <b style="color:var(--bismuth)">3 high-acuity</b> pilgrims expected in your sector before Dhuhr.
+              Heat index climbing → expect <b style="color:var(--solar)">heat-stroke surge by 11:30</b>.
+              Cath-lab at KAMC: <b style="color:var(--pulse)">2 slots open</b>.
+            </div>
+            <div class="ask">
+              <span style="opacity:.7">Ask ASH anything — "ACS in CKD on metformin..."</span>
+              <span class="mic">
+                <svg width="11" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <div class="mc-tiles">
+            <div class="mc-tile crit">
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg>
+              <div class="t">Active codes</div>
+              <div class="v">2</div>
+              <div class="sub">STEMI · Septic shock</div>
+            </div>
+            <div class="mc-tile heat">
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v6M5 9l3 3M19 9l-3 3M12 14a4 4 0 1 1 0 8 4 4 0 0 1 0-8z"/></svg>
+              <div class="t">WBGT (now)</div>
+              <div class="v">34.2°</div>
+              <div class="sub">Black flag · Cat IV</div>
+            </div>
+            <div class="mc-tile">
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
+              <div class="t">Census</div>
+              <div class="v">18 / 22</div>
+              <div class="sub">Sector 3 beds</div>
+            </div>
+            <div class="mc-tile">
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+              <div class="t">Avg D2N</div>
+              <div class="v">07:24</div>
+              <div class="sub">Door-to-needle</div>
+            </div>
+          </div>
+
+          <div class="mc-emerg">
+            <div class="row">
+              <div class="ico">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg>
+              </div>
+              <div>
+                <div class="t">Bed 7 · STEMI suspected</div>
+                <div class="d">62 y M · Anterior ST↑ V1-V4 · Pain 32 min</div>
+              </div>
+              <div class="cta">OPEN →</div>
+            </div>
+          </div>
+
+          <div class="mc-zone">
+            <div class="map"></div>
+            <div class="info">
+              <div class="where">Jamarat Bridge · East</div>
+              <div class="meta">Density 6.4 ppl/m² · Trend ↑</div>
+            </div>
+            <div class="badge">SURGE</div>
+          </div>
+
+          <div class="tabbar">
+            <a class="active">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12 12 4l9 8v8a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>
+              Home
+            </a>
+            <a>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg>
+              Vitals
+            </a>
+            <div class="askbtn"><div class="core">ASK</div></div>
+            <a>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2h6l1 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3z"/></svg>
+              Drugs
+            </a>
+            <a>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+              Shift
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────── PROBLEM ────────────────── -->
+<section class="section" id="problem">
+  <div class="wrap">
+    <div class="eyebrow">THE PROBLEM ASH SOLVES</div>
+    <h2>Hajj medicine is the world's<br/><em>highest-stakes</em> sprint.</h2>
+    <p class="lead">
+      Saudi MOH treats <b style="color:var(--ink)">over 200,000 cardiac and heat-related cases</b> across the five
+      days of Hajj. The window for STEMI reperfusion shrinks to single digits.
+      Polyglot triage burns minutes. And the existing apps were built for offices,
+      not for a physician running between tents at 47 °C with one usable thumb.
+      ASH redesigns the entire flow around that physician.
+    </p>
+
+    <div class="principles">
+      <div class="principle">
+        <div>
+          <div class="num">01 · CORE</div>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l3 3M16 16l3 3M19 5l-3 3M8 16l-3 3"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <div><h4>Two-tap rule</h4><p>Every life-saving action — STEMI activation, drug dose, ACLS branch — reachable inside two taps from any screen, by an exhausted thumb.</p></div>
+      </div>
+      <div class="principle">
+        <div>
+          <div class="num">02 · CORE</div>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg>
+        </div>
+        <div><h4>Cited or silent</h4><p>No answer ships without source (AHA, ESC, SCCM, MOH-KSA), publication year, level of evidence and a calibrated confidence bar. AI never hand-waves.</p></div>
+      </div>
+      <div class="principle">
+        <div>
+          <div class="num">03 · CORE</div>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+        </div>
+        <div><h4>Polyglot by default</h4><p>Voice triage in Arabic, English, Urdu, Indonesian, Turkish, French, Farsi. The pilgrim speaks; ASH listens and prints clinical English for you.</p></div>
+      </div>
+      <div class="principle">
+        <div>
+          <div class="num">04 · CORE</div>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v6M5 9l3 3M19 9l-3 3M12 14a4 4 0 1 1 0 8 4 4 0 0 1 0-8z"/></svg>
+        </div>
+        <div><h4>Hajj-aware</h4><p>WBGT heat stress, Jamarat crowd density, prayer-time silencing, Tawakkalna pilgrim ID, and KAMC/NGHA referral status — first-class data, not afterthoughts.</p></div>
+      </div>
+      <div class="principle">
+        <div>
+          <div class="num">05 · CORE</div>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7M4 7l8-4 8 4M4 7l8 4 8-4M12 11v8"/></svg>
+        </div>
+        <div><h4>Offline-first</h4><p>Every protocol, dose, and calculator runs without network. ASH is a survival tool when 5G dies in Mina — sync resumes when you breathe again.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────── DESIGN SYSTEM ────────────────── -->
+<section class="section" id="system">
+  <div class="wrap">
+    <div class="eyebrow">SYSTEM · AURORA CRITICAL</div>
+    <h2>A palette that <em>signals</em><br/>before it speaks.</h2>
+    <p class="lead">Aurora Critical is a triage-grade color language. Vital red and solar amber are reserved for the body's worst moments. Plasma cyan carries every primary action. Mihrab green is the seal of evidence. Nothing decorative. Nothing accidental.</p>
+
+    <div class="tokens">
+      <div class="token"><div class="swatch" style="background:radial-gradient(120% 80% at 30% 20%,#5DF4FF,#22B6C7 60%,#0A4A55)"></div><div class="meta"><div class="name">Plasma Cyan</div><div class="role">Primary action · Focus · Links</div><div class="hex">#5DF4FF</div></div></div>
+      <div class="token"><div class="swatch" style="background:radial-gradient(120% 80% at 30% 20%,#FF3355,#9A1530 70%,#3A0612)"></div><div class="meta"><div class="name">Vital Red</div><div class="role">STEMI · Arrest · Critical</div><div class="hex">#FF3355</div></div></div>
+      <div class="token"><div class="swatch" style="background:radial-gradient(120% 80% at 30% 20%,#FFB020,#8A4A05 80%,#2A1402)"></div><div class="meta"><div class="name">Solar Amber</div><div class="role">Heat · Warning · WBGT</div><div class="hex">#FFB020</div></div></div>
+      <div class="token"><div class="swatch" style="background:radial-gradient(120% 80% at 30% 20%,#00C2A8,#024D44 80%,#011A17)"></div><div class="meta"><div class="name">Mihrab Green</div><div class="role">Evidence-graded · Verified</div><div class="hex">#00C2A8</div></div></div>
+      <div class="token"><div class="swatch" style="background:radial-gradient(120% 80% at 30% 20%,#C8A2FF,#5A3A8A 80%,#1A0E35)"></div><div class="meta"><div class="name">Bismuth Violet</div><div class="role">AI surface · Predictive</div><div class="hex">#C8A2FF</div></div></div>
+      <div class="token"><div class="swatch" style="background:radial-gradient(120% 80% at 30% 20%,#3FFFB0,#0A6A4A 80%,#022217)"></div><div class="meta"><div class="name">Pulse Mint</div><div class="role">Live signal · Heart rate</div><div class="hex">#3FFFB0</div></div></div>
+      <div class="token"><div class="swatch" style="background:radial-gradient(120% 80% at 30% 20%,#E9D9B0,#8A7548 80%,#2A2010)"></div><div class="meta"><div class="name">Sand</div><div class="role">Hajj accent · Pilgrim ID</div><div class="hex">#E9D9B0</div></div></div>
+      <div class="token"><div class="swatch" style="background:linear-gradient(180deg,#05060A,#171C2B)"></div><div class="meta"><div class="name">Obsidian → Steel</div><div class="role">Canvas + surfaces</div><div class="hex">#05060A · #171C2B</div></div></div>
+    </div>
+
+    <div class="eyebrow" style="margin-top:64px">TYPOGRAPHY · TRIPLE STACK</div>
+    <h2 style="margin-top:14px">Three voices for<br/><em>three jobs.</em></h2>
+    <div class="type-ramp">
+      <div class="type-row"><div class="sample" style="font-family:var(--f-ui);font-size:28px;font-weight:600;letter-spacing:-.02em">Activate cath lab</div><div class="meta">Inter Tight<br/>UI · 600</div></div>
+      <div class="type-row"><div class="sample" style="font-family:var(--f-data);font-size:28px;color:var(--plasma);letter-spacing:-.02em">142 bpm · 86/52</div><div class="meta">JetBrains Mono<br/>Data · 500</div></div>
+      <div class="type-row"><div class="sample" style="font-family:var(--f-ar);font-size:24px;direction:rtl;text-align:right">إعطاء أسبرين ٣٢٥ ملغ</div><div class="meta">IBM Plex Sans Arabic<br/>Pilgrim · 500</div></div>
+      <div class="type-row"><div class="sample" style="font-family:var(--f-serif);font-size:30px;font-style:italic;color:var(--ink-2)">السلام عليكم, Dr. Hatem</div><div class="meta">Instrument Serif<br/>Greeting · 400</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────── SCREENS ────────────────── -->
+<section class="section" id="screens">
+  <div class="wrap">
+    <div class="eyebrow">NINE SIGNATURE SCREENS</div>
+    <h2>Every screen earns<br/>its <em>square millimetre.</em></h2>
+    <p class="lead">No padding for padding's sake. Each surface is calibrated for one-handed reach, glove-tap tolerance (44 px minimum), and high-glare outdoor legibility. The device frames below are live HTML, not images — what you see is the actual shipped UI.</p>
+
+    <!-- 01 · MISSION CONTROL -->
+    <div class="showcase">
+      <div class="device">
+        <div class="screen">
+          <div class="status-bar"><span>09:42</span><span class="right">5G · 87%</span></div>
+          <div class="mc-greet"><span>السلام عليكم,</span> <span class="name">Dr. Hatem</span></div>
+          <div class="mc-line">Mina · Jamarat Sector 3 · Shift 04h 18m</div>
+          <div class="mc-orb">
+            <div class="row1"><span class="label">ASH · DAILY BRIEFING</span><span class="pill bismuth" style="font-size:9px">AI · 2m ago</span></div>
+            <div class="row2"><b style="color:var(--bismuth)">3 high-acuity</b> pilgrims expected before Dhuhr. <b style="color:var(--solar)">Heat-stroke surge by 11:30</b>. Cath-lab at KAMC: <b style="color:var(--pulse)">2 slots open</b>.</div>
+            <div class="ask"><span style="opacity:.7">Ask ASH — "manage AF with RVR in CKD"</span><span class="mic"><svg width="11" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></span></div>
+          </div>
+          <div class="mc-tiles">
+            <div class="mc-tile crit"><div class="t">Active codes</div><div class="v">2</div><div class="sub">STEMI · Sepsis</div></div>
+            <div class="mc-tile heat"><div class="t">WBGT</div><div class="v">34.2°</div><div class="sub">Black flag</div></div>
+            <div class="mc-tile"><div class="t">Census</div><div class="v">18/22</div><div class="sub">S3 beds</div></div>
+            <div class="mc-tile"><div class="t">Avg D2N</div><div class="v">07:24</div><div class="sub">Door→needle</div></div>
+          </div>
+          <div class="mc-emerg">
+            <div class="row">
+              <div class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg></div>
+              <div><div class="t">Bed 7 · STEMI suspected</div><div class="d">62 M · Anterior ST↑ · 32 min</div></div>
+              <div class="cta">OPEN →</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="annot">
+        <div class="tag">01 · MISSION CONTROL</div>
+        <h3>The cockpit, not the dashboard.</h3>
+        <p>The home screen is a triage radar. It greets you in Arabic, places you in your sector, summarises the next four hours of your shift in one AI paragraph, and surfaces the single highest-acuity patient before you can blink.</p>
+        <div class="feature-list">
+          <div class="item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>
+            <div><div class="t">Shift-aware briefing</div><div class="d">A 25-word AI paragraph generated from sector data, weather, and KAMC capacity. Refreshes every 2 minutes.</div></div>
+          </div>
+          <div class="item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg>
+            <div><div class="t">Code radar</div><div class="d">Active arrests, STEMIs and sepsis pulse in vital-red. One tap opens the patient + protocol.</div></div>
+          </div>
+          <div class="item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v6M12 14a4 4 0 1 1 0 8 4 4 0 0 1 0-8z"/></svg>
+            <div><div class="t">Hajj situational tiles</div><div class="d">WBGT, sector census, door-to-needle median, and Jamarat density — never more than one glance away.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 · ASK ASH -->
+    <div class="showcase flip">
+      <div class="annot">
+        <div class="tag">02 · ASK ASH</div>
+        <h3>The only AI<br/>that cites itself.</h3>
+        <p>Tap once. Speak in any of 7 languages. Ask anything — "unstable AF with RVR in 78-year-old CKD-4 on metformin." ASH answers in a structured clinical frame, every claim leashed to a guideline, with a confidence bar so you know exactly what you're trusting.</p>
+        <div class="feature-list">
+          <div class="item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg>
+            <div><div class="t">Evidence pills</div><div class="d">Every paragraph carries [AHA 2023 · Class I · LOE A] style provenance. Tap to read source verbatim.</div></div>
+          </div>
+          <div class="item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20v-8M6 20v-4M18 20v-12"/></svg>
+            <div><div class="t">Calibrated confidence</div><div class="d">A bar — not a percentage hidden in fine print — that reflects model calibration on a graded medical benchmark.</div></div>
+          </div>
+          <div class="item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg>
+            <div><div class="t">Red-flag detection</div><div class="d">ASH escalates to a vital-red banner if the question implies an emergency, and surfaces the matching protocol.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="device">
+        <div class="screen">
+          <div class="status-bar"><span>09:43</span><span class="right">5G</span></div>
+          <div class="s-h"><span>ASK ASH</span><span class="pill mihrab" style="font-size:9px">EVIDENCE MODE</span></div>
+          <div class="chat">
+            <div class="msg user">Management of unstable AF with RVR in 78 y, CKD-4, on metformin. HR 168.</div>
+            <div class="msg ai">
+              <div class="head">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg>
+                ASH · Cardiology
+                <span class="src">ESC AF 2024</span>
+              </div>
+              <div><b>Hemodynamically unstable</b> → synchronised DC cardioversion <b>120–200 J</b> (biphasic) is first line.</div>
+              <ul>
+                <li>Sedate: midazolam 1–2 mg <i>or</i> propofol 0.5 mg/kg if BP allows.</li>
+                <li>If stable enough for rate control: <b>amiodarone</b> 150 mg IV over 10 min (avoid β-blocker if BP &lt; 90).</li>
+                <li>Anticoagulation: CHA<sub>2</sub>DS<sub>2</sub>-VASc 4 → start, but <b>avoid DOACs</b> (CrCl &lt; 15). LMWH dose-reduced.</li>
+                <li>Hold metformin × 48 h post-contrast / lactic-acidosis risk.</li>
+              </ul>
+              <div class="conf">
+                <span class="n">CONFIDENCE</span>
+                <div class="bar"><i></i></div>
+                <span class="n">92%</span>
+              </div>
+              <div class="srcs">
+                <span class="pill mihrab">ESC AF · 2024 · Class I</span>
+                <span class="pill mihrab">KDIGO · 2024</span>
+                <span class="pill mihrab">AHA ACLS · 2023</span>
+              </div>
+            </div>
+          </div>
+          <div class="composer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--ink-3)"><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0zM12 8v8M8 12h8"/></svg>
+            <input value="Follow-up: when do I add LMWH?" />
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--plasma)"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 03 · ECG LENS -->
+    <div class="showcase">
+      <div class="device">
+        <div class="screen">
+          <div class="status-bar"><span>09:44</span><span class="right">5G</span></div>
+          <div class="s-h"><span>ECG LENS</span><span class="pill vital">STEMI · 95%</span></div>
+
+          <div class="ecg-frame">
+            <div class="label">LEAD V2 · 25mm/s</div>
+            <div class="lead">10mm/mV</div>
+            <div class="scan"></div>
+            <svg viewBox="0 0 600 200" preserveAspectRatio="none">
+              <path d="M0 110 L40 110 L48 100 L52 130 L56 60 L60 110 L80 110 L120 110 L128 100 L132 135 L136 55 L140 110 L160 110 L200 110 L208 100 L212 135 L216 55 L220 110 L240 110 L280 110 L288 100 L292 135 L296 55 L300 110 L320 110 L360 110 L368 100 L372 135 L376 55 L380 110 L400 110 L440 110 L448 100 L452 135 L456 55 L460 110 L480 110 L520 110 L528 100 L532 135 L536 55 L540 110 L600 110"
+                fill="none" stroke="#3FFFB0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 6px rgba(63,255,176,.6))"/>
+            </svg>
+          </div>
+
+          <div class="ecg-find">
+            <div class="head">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 2 22h20z"/></svg>
+              AI FINDING · CONFIRMED 0.92
+            </div>
+            <h4>Anterior STEMI</h4>
+            <div class="sub">V1–V4 ST-elevation, hyperacute T, reciprocal II/III/aVF</div>
+            <div class="findings">
+              <div class="f">ST V2 <span>↑ 2.5 mm</span></div>
+              <div class="f">ST V3 <span>↑ 3.0 mm</span></div>
+              <div class="f">QTc <span>438 ms</span></div>
+              <div class="f">Axis <span>+30°</span></div>
+            </div>
+          </div>
+
+          <div class="activate">
+            <div class="ico">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg>
+            </div>
+            <div>
+              <div class="t">Activate Code STEMI</div>
+              <div class="s">KAMC cath lab · 2 slots · ETA 18 min</div>
+            </div>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left:auto"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="annot">
+        <div class="tag">03 · ECG LENS</div>
+        <h3>Point. Shoot. <em>Reperfuse.</em></h3>
+        <p>The camera is the diagnosis. ASH photographs a printed 12-lead, deskews and digitises it, runs the AI ensemble, and outputs not a probability — a decision. STEMI confirmed at 0.92? The big red button below activates the cath lab, pages the on-call interventionalist, and starts the door-to-balloon timer.</p>
+        <div class="feature-list">
+          <div class="item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="14" rx="2"/><circle cx="12" cy="13" r="4"/><path d="M8 6l2-3h4l2 3"/></svg><div><div class="t">Photo ingest</div><div class="d">Auto-deskew, lead-segment, calibration line lock. Works on faded thermal paper at 2 a.m. in tent lighting.</div></div></div>
+          <div class="item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg><div><div class="t">Diagnosis-first</div><div class="d">One headline finding with confidence. Drill into per-lead measurements only if you choose.</div></div></div>
+          <div class="item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg><div><div class="t">One-tap activation</div><div class="d">Pages KAMC / NGHA / KFSH, starts D2B timer, attaches ECG to referral packet.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 · RAPID PROTOCOL -->
+    <div class="showcase flip">
+      <div class="annot">
+        <div class="tag">04 · RAPID PROTOCOL</div>
+        <h3>Branching steps,<br/>not a PDF you<br/><em>scroll into a coma.</em></h3>
+        <p>Protocols in ASH are linear when life is linear. They branch only when they must. The current step is always pinned, vital-red, with its own timer. Completed steps collapse. Future steps tease their conditions. You never lose your place — even if you do lose your gloves.</p>
+        <div class="feature-list">
+          <div class="item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><div class="t">Per-step timers</div><div class="d">Critical intervals are counted, not estimated. Aspirin chewed → defibrillation pad placement → all timestamped.</div></div></div>
+          <div class="item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3v18M18 3v18M6 12h12"/></svg><div><div class="t">Branch when needed</div><div class="d">"Stable?" splits into two threads, then re-merges. No nested menus, no back-button hunts.</div></div></div>
+          <div class="item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg><div><div class="t">Auto-log every action</div><div class="d">Each tap becomes part of the medico-legal record. Exportable to MOH-KSA shift handover format.</div></div></div>
+        </div>
+      </div>
+
+      <div class="device">
+        <div class="screen">
+          <div class="status-bar"><span>09:46</span><span class="right">5G</span></div>
+          <div class="s-h"><span>ACS · ANTERIOR STEMI</span><span class="pill plasma">STEP 4 / 9</span></div>
+          <div style="padding:0 14px 4px;font-family:var(--f-data);font-size:10px;color:var(--ink-3);letter-spacing:.1em">DOOR-TO-NEEDLE TIMER <b style="color:var(--vital)">04:38</b></div>
+
+          <div class="proto-step done">
+            <div class="num">✓</div>
+            <div class="body">
+              <div class="t">12-lead ECG within 10 min</div>
+              <div class="d">Confirmed at 09:42 · Anterior STEMI · 0.92</div>
+            </div>
+          </div>
+          <div class="proto-step done">
+            <div class="num">✓</div>
+            <div class="body">
+              <div class="t">ASA 325 mg chewable + IV access ×2</div>
+              <div class="d">Given 09:43 · 18G right AC, 20G left dorsum</div>
+            </div>
+          </div>
+          <div class="proto-step done">
+            <div class="num">✓</div>
+            <div class="body">
+              <div class="t">Ticagrelor 180 mg PO loading</div>
+              <div class="d">Given 09:44 · Allergy screen clear</div>
+            </div>
+          </div>
+          <div class="proto-step now">
+            <div class="num">4</div>
+            <div class="body">
+              <div class="t">Heparin 60 U/kg IV bolus (max 4000 U)</div>
+              <div class="d">Weight 78 kg → <b style="color:var(--ink)">4 680 U</b> capped to 4 000 U. Followed by 12 U/kg/h infusion.</div>
+              <div class="timer"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg> DO NOW · 00:42 elapsed</div>
+            </div>
+          </div>
+          <div class="proto-step">
+            <div class="num">5</div>
+            <div class="body">
+              <div class="t">Activate cath lab · KAMC</div>
+              <div class="d">Auto-prepared. Tap when team confirms.</div>
+            </div>
+          </div>
+          <div class="proto-step">
+            <div class="num">6</div>
+            <div class="body">
+              <div class="t">Beta-blocker · IF NO contraindication</div>
+              <div class="d">Avoid: SBP &lt; 100, HR &lt; 60, signs of CHF.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 05 · DRUG TWIN (NAJM BRIDGE) -->
+    <div class="showcase">
+      <div class="device">
+        <div class="screen">
+          <div class="status-bar"><span>09:48</span><span class="right">5G</span></div>
+          <div class="s-h"><span>DRUG TWIN · ICU</span><span class="pill plasma">NAJM BRIDGE</span></div>
+
+          <div class="drug-hero">
+            <div class="label">VASOPRESSOR · α₁ AGONIST</div>
+            <h4>Noradrenaline</h4>
+            <div class="class">Norepinephrine · 4 mg / 250 mL D5W = 16 µg/mL</div>
+            <div class="dose">
+              <div class="row1"><span>CURRENT DOSE</span><span style="color:var(--mihrab)">WITHIN RANGE</span></div>
+              <div class="v">0.18 µg / kg / min</div>
+              <div class="slider"><i></i></div>
+              <div style="display:flex;justify-content:space-between;font-family:var(--f-data);font-size:9px;color:var(--ink-3);margin-top:6px;letter-spacing:.06em">
+                <span>0.01</span><span>0.5</span><span>2.0 µg/kg/min</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="drug-flags">
+            <div class="f ok"><div class="lbl">PATIENT</div><div class="val">78 kg · CrCl 22</div></div>
+            <div class="f ok"><div class="lbl">RATE</div><div class="val">52.7 mL/h</div></div>
+            <div class="f warn"><div class="lbl">CKD ADJUST</div><div class="val">Monitor lactate q1h</div></div>
+            <div class="f"><div class="lbl">LINE</div><div class="val">Central · IJ R</div></div>
+          </div>
+
+          <div class="najm-bridge">
+            <div class="logo">N</div>
+            <div>
+              <div class="t">Synced with <span style="color:var(--plasma)">Najm ICUCalc</span></div>
+              <div class="s">Weight, drips and limits mirrored live</div>
+            </div>
+            <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </div>
+
+          <div class="safety" style="margin-top:12px">
+            <div class="alert info">
+              <div class="ico">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+              </div>
+              <div><div class="t">Add vasopressin at 0.3 µg/kg/min?</div><div class="d">SCCM SSC 2024 — consider second agent before NE &gt; 0.25 to limit α-tox.</div><div class="src">SCCM SURVIVING SEPSIS · 2024 · 2B</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="annot">
+        <div class="tag">05 · DRUG TWIN · NAJM BRIDGE</div>
+        <h3>Najm-grade math.<br/><em>ASH-grade safety.</em></h3>
+        <p>Drug Twin is a live binding between the patient and ASH's drug library — and it speaks Najm. Your existing <b style="color:var(--ink)">Najm ICUCalc</b> weight, concentration and rate logic is the source of truth; ASH wraps it in renal adjustment, interaction checks, line compatibility, and SSC / KDIGO citations. One product. Two surfaces. Zero re-typing.</p>
+        <div class="feature-list">
+          <div class="item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg><div><div class="t">Najm ↔ ASH bidirectional</div><div class="d">Weight set in Najm shows up here instantly. Adjust on ASH and Najm reflects. Same brain, two faces.</div></div></div>
+          <div class="item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v6M5 9l3 3M19 9l-3 3M12 14a4 4 0 1 1 0 8 4 4 0 0 1 0-8z"/></svg><div><div class="t">Renal / hepatic guards</div><div class="d">Every dose passes a real CrCl/Child-Pugh filter before the slider stops where it stops.</div></div></div>
+          <div class="item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg><div><div class="t">Y-site & line compat</div><div class="d">If incompatible drugs share a line, the field turns vital-red before the order goes through.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 06 · HEAT & CROWD INTEL -->
+    <div class="showcase flip">
+      <div class="annot">
+        <div class="tag">06 · HEAT & CROWD INTEL</div>
+        <h3>The first<br/><em>situation room</em> in your pocket.</h3>
+        <p>Heat illness is the silent killer of Hajj. ASH ingests WBGT from MOH stations every 60 seconds, crosses it with sector crowd density from MOI's optical counters, and tells you not just <b style="color:var(--ink)">how hot it is</b> — but <b style="color:var(--ink)">where the next wave of patients is coming from.</b></p>
+        <div class="feature-list">
+          <div class="item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v6M5 9l3 3M19 9l-3 3M12 14a4 4 0 1 1 0 8 4 4 0 0 1 0-8z"/></svg><div><div class="t">WBGT, not just temperature</div><div class="d">Wet-bulb globe temperature — the only number that actually predicts exertional heat stroke. Live-coloured against ACSM categories.</div></div></div>
+          <div class="item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7" r="3"/><path d="M3 21v-1a6 6 0 0 1 12 0v1M16 11a3 3 0 1 0 0-6M21 21v-1a6 6 0 0 0-4-5.6"/></svg><div><div class="t">Live density per sector</div><div class="d">Jamarat, Mash'ar, Arafat plain, Muzdalifah — colour-coded against 5.5 ppl/m² safety threshold.</div></div></div>
+          <div class="item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg><div><div class="t">Surge prediction</div><div class="d">Cross-correlates density × heat × time-since-Fajr to forecast patient volume 90 minutes ahead, with 84% PPV in pilot.</div></div></div>
+        </div>
+      </div>
+
+      <div class="device">
+        <div class="screen">
+          <div class="status-bar"><span>09:50</span><span class="right">5G</span></div>
+          <div class="s-h"><span>HEAT & CROWD</span><span class="pill solar">BLACK FLAG</span></div>
+
+          <div class="wbgt">
+            <div class="arc">
+              <svg viewBox="0 0 200 100">
+                <defs>
+                  <linearGradient id="garc" x1="0" x2="1">
+                    <stop offset="0" stop-color="#3FFFB0"/>
+                    <stop offset=".4" stop-color="#FFB020"/>
+                    <stop offset="1" stop-color="#FF3355"/>
+                  </linearGradient>
+                </defs>
+                <path d="M 14 92 A 86 86 0 0 1 186 92" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="14" stroke-linecap="round"/>
+                <path d="M 14 92 A 86 86 0 0 1 186 92" fill="none" stroke="url(#garc)" stroke-width="14" stroke-linecap="round" stroke-dasharray="200 400" stroke-dashoffset="-12"/>
+                <circle cx="166" cy="36" r="6" fill="#FFB020" stroke="#fff" stroke-width="2"/>
+              </svg>
+            </div>
+            <div class="v">34.2°<span class="u"> WBGT</span></div>
+            <div class="lbl">CATEGORY IV · BLACK FLAG</div>
+            <div class="desc">Exertion ≥ 20 min carries high heat-stroke risk for non-acclimatised pilgrims.</div>
+          </div>
+
+          <div class="zones">
+            <div class="zone">
+              <div class="name">Jamarat E</div>
+              <div class="num" style="color:var(--vital)">6.4 ppl/m²</div>
+              <div class="bar"><i style="width:88%"></i></div>
+              <div class="meta">↑ trending · est. surge 11:30</div>
+            </div>
+            <div class="zone">
+              <div class="name">Arafat plain</div>
+              <div class="num" style="color:var(--solar)">4.8 ppl/m²</div>
+              <div class="bar"><i style="width:64%"></i></div>
+              <div class="meta">→ stable · 2k tents</div>
+            </div>
+            <div class="zone">
+              <div class="name">Muzdalifah</div>
+              <div class="num" style="color:var(--pulse)">2.1 ppl/m²</div>
+              <div class="bar"><i style="width:30%;background:linear-gradient(90deg,#3FFFB0,#00C2A8)"></i></div>
+              <div class="meta">↓ dispersing</div>
+            </div>
+            <div class="zone">
+              <div class="name">Mash'ar</div>
+              <div class="num" style="color:var(--solar)">5.2 ppl/m²</div>
+              <div class="bar"><i style="width:74%"></i></div>
+              <div class="meta">→ stable · prayer wave</div>
+            </div>
+          </div>
+
+          <div class="mc-emerg" style="margin-top:12px">
+            <div class="row">
+              <div class="ico" style="background:var(--solar);animation:none">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 2v6M12 14a4 4 0 1 1 0 8 4 4 0 0 1 0-8z"/></svg>
+              </div>
+              <div><div class="t">Predicted surge · 11:30</div><div class="d">~ 14–18 heat cases · Sector 3 + 4</div></div>
+              <div class="cta" style="color:var(--solar)">PREP →</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 07 · POLYGLOT TRIAGE -->
+    <div class="showcase">
+      <div class="device">
+        <div class="screen">
+          <div class="status-bar"><span>09:52</span><span class="right">5G</span></div>
+          <div class="s-h"><span>POLYGLOT TRIAGE</span><span class="pill vital"><span style="width:6px;height:6px;background:var(--vital);border-radius:50%;display:inline-block;animation:pulse 1.4s infinite"></span> LIVE</span></div>
+
+          <div class="poly">
+            <div class="voice">
+              <div class="row1">
+                <div class="flag ur">UR</div>
+                <div class="lang">Urdu · Pilgrim</div>
+                <div class="live"><span class="dot"></span> LISTENING</div>
+              </div>
+              <div class="said" dir="rtl" style="font-family:var(--f-ar)">میرے سینے میں ٢٠ منٹ سے درد ہے، بایاں بازو بھی، پسینہ بہت آرہا ہے۔</div>
+              <div class="wave">
+                <i style="animation-delay:0s"></i><i style="animation-delay:.1s"></i><i style="animation-delay:.2s"></i><i style="animation-delay:.3s"></i><i style="animation-delay:.4s"></i><i style="animation-delay:.5s"></i><i style="animation-delay:.6s"></i><i style="animation-delay:.7s"></i><i style="animation-delay:.8s"></i><i style="animation-delay:.9s"></i><i style="animation-delay:1s"></i><i style="animation-delay:1.1s"></i>
+              </div>
+              <div class="trans"><b style="color:var(--ink)">Clinical EN:</b> 20 min chest pain, radiating to left arm, profuse diaphoresis. <span class="pill vital" style="margin-left:6px;font-size:9px">ACS RED FLAG</span></div>
+            </div>
+
+            <div class="voice">
+              <div class="row1">
+                <div class="flag en">EN</div>
+                <div class="lang">English · You</div>
+                <div class="live"><span class="dot" style="background:var(--plasma);box-shadow:0 0 10px var(--plasma)"></span> SPEAKING</div>
+              </div>
+              <div class="said">Any nausea or trouble breathing? Have you taken any heart medications today?</div>
+              <div class="trans"><b style="color:var(--ink)">UR:</b> کیا متلی یا سانس لینے میں دشواری ہے؟ آج آپ نے دل کی کوئی دوا لی ہے؟</div>
+            </div>
+
+            <div class="voice">
+              <div class="row1">
+                <div class="flag id">ID</div>
+                <div class="lang">Indonesian · Tent 4</div>
+                <div class="live" style="color:var(--solar)"><span class="dot" style="background:var(--solar);box-shadow:0 0 10px var(--solar)"></span> QUEUED</div>
+              </div>
+              <div class="said id">"Saya pusing, dada saya berdebar, sangat panas."</div>
+              <div class="trans"><b style="color:var(--ink)">EN:</b> Dizzy, palpitations, very hot. <span class="pill solar" style="font-size:9px;margin-left:6px">HEAT + ARRHYTHMIA</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="annot">
+        <div class="tag">07 · POLYGLOT TRIAGE</div>
+        <h3>Seven languages.<br/><em>One clinical English.</em></h3>
+        <p>Hold the phone between you and the pilgrim. ASH listens, transcribes in their language, and renders <b style="color:var(--ink)">clinical English</b> for you — flagging red words (chest pain, syncope, paralysis) in real time. When you reply, it translates back in their accent. No more nodding through ambiguity.</p>
+        <div class="feature-list">
+          <div class="item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 8h14M5 16h14M9 4l-2 16M15 4l2 16"/></svg><div><div class="t">7 languages of Hajj</div><div class="d">Arabic · English · Urdu · Indonesian/Malay · Turkish · French · Farsi. Trained on pilgrim-population speech.</div></div></div>
+          <div class="item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg><div><div class="t">Red-flag highlight</div><div class="d">Chest pain, syncope, weakness, severe headache — surfaced as vital-red pills before transcription completes.</div></div></div>
+          <div class="item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg><div><div class="t">Voice-to-voice</div><div class="d">No reading required. The pilgrim hears you in their language. The shift moves at the speed of talking.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 08 · PILGRIM PASSPORT -->
+    <div class="showcase flip">
+      <div class="annot">
+        <div class="tag">08 · PILGRIM PASSPORT</div>
+        <h3>Every pilgrim,<br/>a <em>complete</em> chart.</h3>
+        <p>Scan the Tawakkalna QR or the Nusuk wristband; ASH pulls the pilgrim's identity, country of origin, comorbidities, declared medications, and vaccination status. The whole chart fits in a card that's bilingual by default and built for handover at speed.</p>
+        <div class="feature-list">
+          <div class="item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><div><div class="t">QR · Tawakkalna / Nusuk</div><div class="d">One scan resolves identity, country, comorbidities, declared meds, vaccination — and Saudi MOH coverage tier.</div></div></div>
+          <div class="item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h18M3 16h18"/></svg><div><div class="t">Bilingual by default</div><div class="d">Arabic name as registered with MOH appears beside the romanised English name. No transliteration guesswork.</div></div></div>
+          <div class="item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg><div><div class="t">Vitals in a glance</div><div class="d">Live BP, HR, SpO₂, temp pulled from any ASH-paired monitor. Worst-trending number animates first.</div></div></div>
+        </div>
+      </div>
+
+      <div class="device">
+        <div class="screen">
+          <div class="status-bar"><span>09:54</span><span class="right">5G</span></div>
+          <div class="s-h"><span>PILGRIM PASSPORT</span><span class="pill mihrab">VERIFIED</span></div>
+
+          <div class="pilg">
+            <div class="row1">
+              <div class="avatar">م</div>
+              <div class="info">
+                <div class="name-en">Mohammad Idris Khan</div>
+                <div class="name-ar">محمد إدريس خان</div>
+                <div class="meta">PK · 62 y · M · 78 kg · ID PK-A82-7194</div>
+              </div>
+              <div class="qr"></div>
+            </div>
+            <div class="tags">
+              <span class="pill solar">HTN</span>
+              <span class="pill solar">DM-2</span>
+              <span class="pill vital">CAD · 2017 PCI</span>
+              <span class="pill mihrab">Metformin</span>
+              <span class="pill mihrab">Atorvastatin</span>
+              <span class="pill plasma">Allergy: PCN</span>
+            </div>
+          </div>
+
+          <div class="vitals">
+            <div class="grid">
+              <div class="vital-cell"><div class="l">HR</div><div class="v bad">112<span class="u"> bpm</span></div></div>
+              <div class="vital-cell"><div class="l">BP</div><div class="v warn">94/58</div></div>
+              <div class="vital-cell"><div class="l">SpO₂</div><div class="v good">96<span class="u">%</span></div></div>
+              <div class="vital-cell"><div class="l">Temp</div><div class="v warn">38.4°</div></div>
+            </div>
+            <div style="margin-top:14px;height:48px;border-radius:10px;background:#000;border:1px solid var(--fog);position:relative;overflow:hidden">
+              <svg viewBox="0 0 400 60" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%">
+                <path d="M0 30 L40 30 L46 22 L50 42 L54 14 L58 30 L100 30 L140 30 L146 22 L150 42 L154 14 L158 30 L200 30 L240 30 L246 22 L250 42 L254 14 L258 30 L300 30 L340 30 L346 22 L350 42 L354 14 L358 30 L400 30"
+                  fill="none" stroke="#3FFFB0" stroke-width="1.5" style="filter:drop-shadow(0 0 4px rgba(63,255,176,.5))"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="s-card" style="margin-top:10px;padding:12px 14px">
+            <div style="display:flex;align-items:center;justify-content:space-between"><div style="font-size:11px;color:var(--ink-3);font-family:var(--f-data);letter-spacing:.12em">DECLARED MEDS · TAWAKKALNA</div><span class="pill mihrab" style="font-size:9px">3</span></div>
+            <div style="margin-top:8px;font-size:12px;color:var(--ink-2);line-height:1.6">Metformin 1g BID · Amlodipine 10mg · Atorvastatin 40mg</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 09 · SHIFT TASLEEM -->
+    <div class="showcase">
+      <div class="device">
+        <div class="screen">
+          <div class="status-bar"><span>17:58</span><span class="right">5G</span></div>
+          <div class="s-h"><span>SHIFT TASLEEM</span><span class="pill bismuth">AI · DRAFT</span></div>
+
+          <div class="tas-card">
+            <div class="head">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg>
+              HANDOVER · SECTOR 3 · 18:00
+            </div>
+            <h4>To: Dr. Aisha Al-Otaibi</h4>
+            <div class="body">
+              <b>Sector status:</b> 18 of 22 beds occupied. WBGT now <span class="hl">31.4°</span> (down from 34.2°). No active codes. KAMC cath lab open.<br/><br/>
+              <b>Pilgrims of concern:</b>
+            </div>
+            <div class="tas-bed">
+              <div class="b">BED <b>07</b></div>
+              <div class="t">M Idris Khan · post-PCI LAD · stable, troponin trending ↓. NEXT: 22:00 ECG.</div>
+            </div>
+            <div class="tas-bed">
+              <div class="b">BED <b>12</b></div>
+              <div class="t">A Yusuf · Heat exhaustion, NS 2L given, lactate clearing. WATCH: rhabdo CK pending.</div>
+            </div>
+            <div class="tas-bed">
+              <div class="b">BED <b>15</b></div>
+              <div class="t">F Rahman · CAP, ceftriaxone q24h, awaiting bed at KAMC. ETA 21:00.</div>
+            </div>
+          </div>
+
+          <div class="tas-action">
+            <button class="btn" style="background:transparent;color:var(--ink);border:1px solid var(--steel)">Edit draft</button>
+            <button class="btn primary" style="padding:11px;border-radius:14px;background:linear-gradient(180deg,#5DF4FF,#22B6C7);color:#001016;font-weight:600;font-size:11px;flex:1;border:none">Send & Sign</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="annot">
+        <div class="tag">09 · SHIFT TASLEEM</div>
+        <h3>The handover that<br/>writes <em>itself.</em></h3>
+        <p>"Tasleem" — the act of handing over. ASH watches your shift: every order, every protocol step, every note. At end-of-shift it drafts a one-page handover in your style — sector status, beds of concern, pending tasks, escalation lines — and waits for you to sign. Most shifts: 8 seconds of editing. Zero forgotten patients.</p>
+        <div class="feature-list">
+          <div class="item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11h6M9 15h4M5 5h14a2 2 0 0 1 2 2v12l-4-3H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/></svg><div><div class="t">Shift-watch summarisation</div><div class="d">Auto-built from your timeline, not free-typed. Every claim links to the timestamped action.</div></div></div>
+          <div class="item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg><div><div class="t">Pending-task carry-over</div><div class="d">Open trops, pending bloods, CT slots: each migrates to the next physician with countdowns intact.</div></div></div>
+          <div class="item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/></svg><div><div class="t">Signed, audited, archived</div><div class="d">PDF + MOH-KSA structured JSON. Surveys to your tablet next shift; available to QI in seconds.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10 · SAFETY NET -->
+    <div class="showcase flip">
+      <div class="annot">
+        <div class="tag">10 · SAFETY NET</div>
+        <h3>The voice that says<br/><em>"don't."</em></h3>
+        <p>The Safety Net is the layer that never sleeps. It watches every dose, every order, every protocol branch — and intervenes only when the cost of silence is too high. It is calibrated to <b style="color:var(--ink)">interrupt rarely</b> and <b style="color:var(--ink)">interrupt loudly</b> when it must. Alarm fatigue is treated as a clinical injury.</p>
+        <div class="feature-list">
+          <div class="item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg><div><div class="t">Three-tier alert grammar</div><div class="d">Critical (vital-red, blocks action) · Warn (solar, requires confirm) · Inform (bismuth, soft tap). No 4th tier ever.</div></div></div>
+          <div class="item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg><div><div class="t">Cited refusal</div><div class="d">If ASH blocks a dose, it explains why with the citation (KDIGO, ESC, AHA) and offers the closest safe alternative.</div></div></div>
+          <div class="item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11h6M9 15h4"/></svg><div><div class="t">Decision audit log</div><div class="d">Every override is logged with reason. Medico-legally complete. QI-team gold.</div></div></div>
+        </div>
+      </div>
+
+      <div class="device">
+        <div class="screen">
+          <div class="status-bar"><span>09:57</span><span class="right">5G</span></div>
+          <div class="s-h"><span>SAFETY NET</span><span class="pill plasma">ACTIVE · 4</span></div>
+
+          <div class="safety">
+            <div class="alert crit">
+              <div class="ico">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 2 2 22h20z"/><path d="M12 10v5M12 18h.01" stroke="#fff"/></svg>
+              </div>
+              <div>
+                <div class="t">DO NOT give nitrates</div>
+                <div class="d">Right-ventricular infarction suspected (ST↑ III &gt; II, V4R hint). Preload-dependent. Use fluids + dobutamine.</div>
+                <div class="src">ESC STEMI 2023 · CLASS III · LOE B</div>
+              </div>
+            </div>
+
+            <div class="alert warn">
+              <div class="ico">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+              </div>
+              <div>
+                <div class="t">Enoxaparin · reduce dose</div>
+                <div class="d">CrCl 22 mL/min → use 1 mg/kg q24h, not q12h. Adjusted in queue.</div>
+                <div class="src">KDIGO 2024 · 1B</div>
+              </div>
+            </div>
+
+            <div class="alert info">
+              <div class="ico">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/><path d="M12 8v4M12 16h.01"/></svg>
+              </div>
+              <div>
+                <div class="t">Amiodarone + atorvastatin</div>
+                <div class="d">Moderate interaction · monitor for myopathy / CK elevation. No action required now.</div>
+                <div class="src">LEXICOMP · 2024</div>
+              </div>
+            </div>
+
+            <div class="alert warn">
+              <div class="ico">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 2v6M12 14a4 4 0 1 1 0 8 4 4 0 0 1 0-8z"/></svg>
+              </div>
+              <div>
+                <div class="t">Heat-aware fluid ceiling</div>
+                <div class="d">In WBGT &gt; 32°, NS &gt; 3L without electrolytes risks dilutional Na. Add KCl 20 mEq + monitor BMP q2h.</div>
+                <div class="src">MOH-KSA HAJJ · 1446H</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ────────────────── MOTION ────────────────── -->
+<section class="section" id="motion">
+  <div class="wrap">
+    <div class="eyebrow">MOTION · SIGNAL OVER FLOURISH</div>
+    <h2>Animation is a<br/><em>medical instrument.</em></h2>
+    <p class="lead">In ASH, motion is never decoration. A pulse means a vital is live. A scan-line means an AI is reading. A ring means a code is active. The motion vocabulary is small, learnable, and reserved — so that when something moves, you trust that it matters.</p>
+
+    <div class="motion-strip">
+      <div class="motion-tile">
+        <div>
+          <div class="name">Vital pulse</div>
+          <div class="curve">1.6s · ease-in-out · infinite</div>
+        </div>
+        <div class="demo"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--pulse);box-shadow:0 0 14px var(--pulse);animation:pulse 1.6s infinite"></span></div>
+      </div>
+      <div class="motion-tile">
+        <div>
+          <div class="name">Critical ring</div>
+          <div class="curve">1.6s · linear · infinite</div>
+        </div>
+        <div class="demo"><span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:var(--vital);animation:ring 1.6s infinite"></span></div>
+      </div>
+      <div class="motion-tile">
+        <div>
+          <div class="name">AI scan</div>
+          <div class="curve">2.4s · ease-in-out · infinite</div>
+        </div>
+        <div class="demo" style="position:relative;width:100%;height:48px;background:#000;border-radius:8px;overflow:hidden">
+          <span style="position:absolute;left:0;right:0;height:60%;background:linear-gradient(180deg,transparent,rgba(93,244,255,.4),transparent);animation:scan 2.4s ease-in-out infinite"></span>
+        </div>
+      </div>
+      <div class="motion-tile">
+        <div>
+          <div class="name">Surge shimmer</div>
+          <div class="curve">3s · linear · infinite</div>
+        </div>
+        <div class="demo" style="width:100%;height:32px;border-radius:8px;background:linear-gradient(120deg,rgba(255,176,32,.1),rgba(255,176,32,.3) 50%,rgba(255,176,32,.1));background-size:200% 100%;animation:shimmer 3s linear infinite;border:1px solid rgba(255,176,32,.3)"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────── NAJM BRIDGE ────────────────── -->
+<section class="section" id="bridge">
+  <div class="wrap">
+    <div class="eyebrow">NAJM BRIDGE · CONTINUITY, NOT REPLACEMENT</div>
+    <h2>ASH is the new floor.<br/><em>Najm</em> is still the wall.</h2>
+    <p class="lead">You already built Najm ICUCalc — a fast, sharp, weight-based drug calculator that ICU teams trust. ASH does not replace it. ASH wraps it. The Najm engine is the math; ASH is the cockpit. Same numbers. New surface. Bidirectional sync.</p>
+
+    <div class="ia">
+      <svg viewBox="0 0 1180 460" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="line" x1="0" x2="1">
+            <stop offset="0" stop-color="#5DF4FF" stop-opacity=".0"/>
+            <stop offset=".5" stop-color="#5DF4FF" stop-opacity=".7"/>
+            <stop offset="1" stop-color="#5DF4FF" stop-opacity=".0"/>
+          </linearGradient>
+          <linearGradient id="brand-ash" x1="0" x2="1">
+            <stop offset="0" stop-color="#5DF4FF"/>
+            <stop offset="1" stop-color="#7A8BFF"/>
+          </linearGradient>
+          <linearGradient id="brand-najm" x1="0" x2="1">
+            <stop offset="0" stop-color="#0284c7"/>
+            <stop offset="1" stop-color="#38bdf8"/>
+          </linearGradient>
+        </defs>
+
+        <!-- ASH -->
+        <g>
+          <rect x="40" y="60" width="500" height="340" rx="22" fill="rgba(93,244,255,.04)" stroke="rgba(93,244,255,.3)"/>
+          <text x="60" y="100" fill="#5DF4FF" font-family="JetBrains Mono" font-size="11" letter-spacing="3">ASH · COCKPIT</text>
+          <text x="60" y="138" fill="#F4F7FF" font-family="Inter Tight" font-size="32" font-weight="600">Acute Support Hub</text>
+          <text x="60" y="160" fill="#8892A8" font-family="Inter Tight" font-size="13">Hajj-aware critical care decisioning</text>
+
+          <g font-family="JetBrains Mono" font-size="11" fill="#C7CEDF">
+            <text x="60" y="210">• Mission Control · Briefing</text>
+            <text x="60" y="232">• Ask ASH · Cited AI</text>
+            <text x="60" y="254">• ECG Lens · STEMI activation</text>
+            <text x="60" y="276">• Rapid Protocol · Branching</text>
+            <text x="60" y="298">• Heat & Crowd Intel · Surge</text>
+            <text x="60" y="320">• Polyglot Triage · 7 langs</text>
+            <text x="60" y="342">• Pilgrim Passport · QR</text>
+            <text x="60" y="364">• Shift Tasleem · Auto-handover</text>
+          </g>
+        </g>
+
+        <!-- Bridge -->
+        <g>
+          <path d="M540 220 Q 590 220 590 230 T 640 240" fill="none" stroke="url(#line)" stroke-width="2"/>
+          <path d="M540 240 Q 590 240 590 250 T 640 260" fill="none" stroke="url(#line)" stroke-width="2"/>
+          <circle cx="590" cy="230" r="3" fill="#5DF4FF"/>
+          <circle cx="590" cy="250" r="3" fill="#5DF4FF"/>
+          <text x="540" y="200" fill="#C8A2FF" font-family="JetBrains Mono" font-size="10" letter-spacing="2">↔ BRIDGE</text>
+          <text x="540" y="290" fill="#525B70" font-family="JetBrains Mono" font-size="9">weight · drips · limits · audit</text>
+        </g>
+
+        <!-- NAJM -->
+        <g>
+          <rect x="640" y="60" width="500" height="340" rx="22" fill="rgba(2,132,199,.06)" stroke="rgba(56,189,248,.3)"/>
+          <text x="660" y="100" fill="#38bdf8" font-family="JetBrains Mono" font-size="11" letter-spacing="3">NAJM · ENGINE</text>
+          <text x="660" y="138" fill="#F4F7FF" font-family="Inter Tight" font-size="32" font-weight="600">Najm ICUCalc</text>
+          <text x="660" y="160" fill="#8892A8" font-family="Inter Tight" font-size="13">Weight-based critical-care drug math</text>
+
+          <g font-family="JetBrains Mono" font-size="11" fill="#C7CEDF">
+            <text x="660" y="210">• Sedation · Fent/Prop/Mid/Dex</text>
+            <text x="660" y="232">• Inotropes · NE/Epi/Dop/Dob</text>
+            <text x="660" y="254">• Antihypertensives</text>
+            <text x="660" y="276">• Drip rate ↔ µg/kg/min</text>
+            <text x="660" y="298">• Bolus rounding (vial-aware)</text>
+            <text x="660" y="320">• Weight presets · 60/70/80/90</text>
+            <text x="660" y="342">• Local-first · offline math</text>
+            <text x="660" y="364">— preserved as the source of truth —</text>
+          </g>
+        </g>
+
+      </svg>
+    </div>
+
+    <div class="feature-list" style="margin-top:36px;grid-template-columns:1fr 1fr 1fr;display:grid;gap:14px">
+      <div class="item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg><div><div class="t">Phase 1 · Embed</div><div class="d">Najm runs unchanged. ASH opens it inside Drug Twin. Zero migration risk for current users.</div></div></div>
+      <div class="item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg><div><div class="t">Phase 2 · Bridge</div><div class="d">Shared patient context (weight, CrCl, infusions). Both apps reflect changes within 200 ms.</div></div></div>
+      <div class="item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg><div><div class="t">Phase 3 · Najm-Pro</div><div class="d">Najm's vial-aware rounding + ASH's KDIGO/SCCM safety: shipped as one premium ICU surface.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────── CTA ────────────────── -->
+<section class="section">
+  <div class="wrap">
+    <div class="cta">
+      <h3>Ship ASH for Hajj 1447H.</h3>
+      <p>The design system is in this file. The screens are HTML. The Najm engine already works. We are not starting from zero — we are starting from a working drug calculator and ending at a critical-care cockpit pilgrims will never see, but their physicians will trust with their lives.</p>
+      <div class="btns">
+        <a class="btn" href="#screens">See the screens</a>
+        <a class="btn ghost" href="#bridge">Read the Najm bridge</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────── FOOT ────────────────── -->
+<footer class="foot">
+  <div class="wrap row">
+    <div>ASH · Acute Support Hub · Design RC 1.0 · Built on top of Najm ICUCalc · Hajj 1447H</div>
+    <div>For clinical reference only — verify protocols against your institution's policies.</div>
+  </div>
+</footer>
+
+<script>
+  // Tiny enhancement: live-clock in status bars on the page
+  function tick(){
+    const t = new Date();
+    const hh = String(t.getHours()).padStart(2,"0");
+    const mm = String(t.getMinutes()).padStart(2,"0");
+    document.querySelectorAll(".status-bar > span:first-child").forEach((el, i) => {
+      // keep narrative timestamps on most screens; only update the hero device (index 0)
+      if(i === 0) el.textContent = `${hh}:${mm}`;
+    });
+  }
+  tick(); setInterval(tick, 30000);
+</script>
+
+</body>
+</html>
