@@ -1,0 +1,26 @@
+{
+  "name": "Najm ICUCalc",
+  "short_name": "ICUCalc",
+  "description": "Weight-based ICU drug dose calculator for sedation, vasopressors, inotropes, antihypertensives and antiarrhythmics.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#07101f",
+  "theme_color": "#0284c7",
+  "categories": ["medical", "health", "utilities"],
+  "icons": [
+    {
+      "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='40' fill='%230284c7'/><path d='M18 102h36l12-30 24 66 18-42 12 18h54' stroke='white' stroke-width='12' fill='none' stroke-linejoin='round' stroke-linecap='round'/></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='110' fill='%230284c7'/><path d='M48 272h96l32-80 64 176 48-112 32 48h144' stroke='white' stroke-width='32' fill='none' stroke-linejoin='round' stroke-linecap='round'/></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
