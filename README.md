@@ -1,54 +1,46 @@
 # Najm ICUCalc
 
-Weight-based ICU drug dose calculator — fast, offline-ready, and built for the bedside.
+A bedside personal assistant for ICU/CCU clinicians. Set the patient once, and
+every module — infusions, hemodynamics, ventilator, ABG, electrolytes, renal,
+scores, notes — reacts live. All data stays on the device.
 
-Najm ICUCalc gives critical-care clinicians instant min–max infusion ranges
-for sedation, vasopressors, inotropes, antihypertensives, and antiarrhythmics,
-adjusted live as patient weight is entered.
+## Modules
 
-## Features
+| Tab | What it does |
+|-----|--------------|
+| **Infusions** | 23 weight-based ICU drips (sedation, vasopressors, inotropes, antihypertensives, antiarrhythmics, insulin, heparin). Shows standard range, absolute dose for the patient, and **mL/hr** from the configured concentration. |
+| **Hemodynamics** | MAP, pulse pressure, shock index, modified SI, CPP (MAP − ICP), and **norepi-equivalent vasopressor load**. |
+| **Ventilator** | Predicted body weight (Devine), TV targets at 4/6/8 mL/kg, **Berlin ARDS classification** from P/F, SpO₂/FiO₂ ratio, driving pressure, static compliance. |
+| **ABG** | Primary acid-base disorder, expected compensation (Winters etc.), anion gap, albumin-corrected AG, **Δ-Δ ratio interpretation**, A-a gradient with age-expected. |
+| **Electrolytes** | Corrected calcium, sodium-for-glucose, calculated osmolality + **osmolar gap**, **free water deficit**, K⁺ replacement guide. |
+| **Renal / Fluids** | Cockcroft–Gault CrCl with renal-dosing alert, urine output mL/kg/hr with oliguria thresholds, sepsis 30 mL/kg bolus, **4-2-1 maintenance**. |
+| **Scores** | GCS, qSOFA, SOFA, CHA₂DS₂-VASc, HAS-BLED, Wells (PE), RASS — live scoring with color-coded interpretation. |
+| **Notes** | Plain-text scratchpad with copy/export/clear. Saved to `localStorage`. |
 
-- **Live calculation** — every drug recalculates as you type the weight.
-- **Working navigation** — smooth-scroll anchor links (`#calculator`, `#drugs`, `#features`, `#faq`, `#cta`) with an active-section indicator.
-- **Drug search & filter** — by name, generic class, or category.
-- **Safety-coded ranges** — color hints for narrow vs. wide therapeutic windows.
-- **Pulse / ECG UI** — animated heart-rate and waveform indicators for an at-a-glance "alive" feel.
-- **Installable PWA** — works offline once loaded, installable on phones, tablets and desktops.
-- **Native share / copy-link** — share the calculator from the CTA bar.
-- **Respects reduced-motion** preferences.
+## Patient bar (sticky)
+
+Enter once, used everywhere:
+- Weight · Height · Age · Sex · Creatinine
+- Auto-computed: **IBW** (Devine), **BSA** (Mosteller), **CrCl** (Cockcroft–Gault)
+
+## Privacy
+
+Every input is stored in your browser's `localStorage` only. Nothing is sent
+to any server. To wipe everything, clear site data in your browser settings
+or use **Clear patient** / **Clear** in Notes.
 
 ## Running locally
 
-It's a single static page. Open `index.html` directly in any modern browser, or serve the folder:
-
 ```bash
 python3 -m http.server 8080
-# then open http://localhost:8080/
+# open http://localhost:8080/
 ```
 
-## File layout
-
-```
-index.html              # the full app (markup, styles, drug database, behavior)
-manifest.webmanifest    # PWA metadata (name, icons, theme color, offline scope)
-README.md               # this file
-```
-
-## Drug coverage
-
-| Category          | Drugs                                                                      |
-|-------------------|----------------------------------------------------------------------------|
-| Sedation          | Fentanyl, Propofol, Midazolam, Dexmedetomidine, Ketamine, Morphine         |
-| Vasopressors      | Norepinephrine, Epinephrine, Phenylephrine, Vasopressin                    |
-| Inotropes         | Dopamine, Dobutamine, Milrinone                                            |
-| Antihypertensives | Esmolol, Nicardipine, Labetalol, Nitroglycerin, Sodium nitroprusside       |
-| Antiarrhythmics   | Amiodarone, Lidocaine, Diltiazem                                           |
-
-Ranges are encoded in `index.html` in the `DRUGS` array — edit there to adjust.
+Or open `index.html` directly in any modern browser. The app is installable
+as a PWA (Add to Home Screen) and works fully offline once loaded.
 
 ## Disclaimer
 
-Najm ICUCalc is provided for clinical reference only. Doses must be verified
-against institutional protocols, drug labels, and the patient's clinical
-condition. The authors assume no liability for clinical decisions made with
-this tool.
+Reference aid only. Verify every dose, score, and interpretation against
+institutional protocols, drug labels, and the patient's clinical context.
+The authors assume no liability for clinical decisions made with this tool.
