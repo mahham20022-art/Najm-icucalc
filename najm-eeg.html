@@ -1,0 +1,2516 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="NAJM EEG">
+<meta name="theme-color" content="#05080f">
+<meta name="format-detection" content="telephone=no">
+<title>NAJM EEG — دليل تخطيط الدماغ التفاعلي</title>
+
+<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%2300d4ff'/><stop offset='1' stop-color='%237b5cff'/></linearGradient></defs><rect width='180' height='180' rx='40' fill='%23050810'/><path d='M20 95 L50 95 L55 70 L65 130 L75 60 L85 130 L95 95 L120 95 L125 80 L135 110 L145 95 L160 95' stroke='url(%23g)' stroke-width='5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+
+<link rel="manifest" href='data:application/manifest+json,{"name":"NAJM EEG Guide","short_name":"NAJM EEG","start_url":".","display":"standalone","background_color":"%23050810","theme_color":"%2305080f","orientation":"portrait","lang":"ar","dir":"rtl"}'>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root{
+  --bg:#05080f;
+  --bg-2:#0a0f1c;
+  --surface:#0e1525;
+  --surface-2:#141d33;
+  --surface-3:#1a2540;
+  --border:rgba(255,255,255,.06);
+  --border-2:rgba(255,255,255,.1);
+  --text:#eef2ff;
+  --text-2:#a9b3cf;
+  --text-3:#6b7693;
+  --accent:#00d4ff;
+  --accent-2:#7b5cff;
+  --accent-3:#ffb547;
+  --success:#34d399;
+  --danger:#ff5b6b;
+  --warning:#ffb547;
+  --info:#60a5fa;
+  --critical:#ff2d6a;
+  --radius:18px;
+  --radius-sm:12px;
+  --radius-lg:24px;
+  --shadow:0 8px 30px rgba(0,0,0,.4);
+  --glow:0 0 40px rgba(0,212,255,.15);
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;font-family:'Tajawal',-apple-system,system-ui,sans-serif;}
+*:focus{outline:none}
+.mono{font-family:'IBM Plex Mono',monospace;letter-spacing:-.02em}
+
+html,body{
+  background:var(--bg);
+  color:var(--text);
+  overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  min-height:100vh;
+  font-size:16px;
+  text-rendering:optimizeLegibility;
+  -webkit-font-smoothing:antialiased;
+}
+body{
+  background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(123,92,255,.12), transparent 60%),
+    radial-gradient(1000px 500px at -10% 30%, rgba(0,212,255,.08), transparent 60%),
+    var(--bg);
+  background-attachment:fixed;
+}
+
+::-webkit-scrollbar{width:0;height:0}
+
+/* ======================================
+   SPLASH
+====================================== */
+#splash{
+  position:fixed;inset:0;z-index:9999;
+  background:radial-gradient(ellipse at center, #0a1428 0%, #05080f 70%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity .6s ease, transform .6s ease;
+}
+#splash.gone{opacity:0;transform:scale(1.05);pointer-events:none}
+.splash-logo{
+  width:96px;height:96px;border-radius:26px;
+  background:linear-gradient(135deg,#00d4ff,#7b5cff);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 30px 80px rgba(123,92,255,.45), 0 0 0 1px rgba(255,255,255,.08) inset;
+  position:relative;overflow:hidden;
+}
+.splash-logo svg{width:60px;height:60px}
+.splash-logo::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 30%,rgba(255,255,255,.15));}
+.splash-title{
+  margin-top:22px;font-size:1.7rem;font-weight:900;letter-spacing:1.5px;
+  background:linear-gradient(135deg,#fff,#a9b3cf);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.splash-sub{margin-top:6px;color:var(--text-3);font-size:.85rem;font-weight:400}
+.splash-bar{
+  margin-top:32px;width:160px;height:3px;border-radius:3px;
+  background:rgba(255,255,255,.06);overflow:hidden;
+}
+.splash-bar::after{
+  content:'';display:block;height:100%;width:40%;
+  background:linear-gradient(90deg,transparent,#00d4ff,transparent);
+  animation:loader 1.4s infinite;
+}
+@keyframes loader{0%{transform:translateX(-100%)}100%{transform:translateX(400%)}}
+
+/* ======================================
+   APP SHELL
+====================================== */
+.app{
+  max-width:480px;margin:0 auto;min-height:100vh;
+  position:relative;padding-bottom:calc(80px + var(--safe-bottom));
+}
+
+.topbar{
+  position:sticky;top:0;z-index:50;
+  padding:calc(14px + var(--safe-top)) 18px 14px;
+  background:linear-gradient(180deg, rgba(5,8,15,.92) 60%, transparent);
+  backdrop-filter:blur(20px) saturate(140%);
+  -webkit-backdrop-filter:blur(20px) saturate(140%);
+}
+.topbar-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-mark{
+  width:38px;height:38px;border-radius:11px;
+  background:linear-gradient(135deg,#00d4ff,#7b5cff);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 20px rgba(123,92,255,.35);
+}
+.brand-mark svg{width:24px;height:24px}
+.brand-text{display:flex;flex-direction:column;line-height:1}
+.brand-title{font-size:1.05rem;font-weight:900;letter-spacing:.5px}
+.brand-sub{font-size:.7rem;color:var(--text-3);margin-top:2px;font-weight:400}
+
+.icon-btn{
+  width:38px;height:38px;border-radius:11px;
+  background:var(--surface);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text-2);cursor:pointer;transition:all .2s;
+}
+.icon-btn:active{transform:scale(.92);background:var(--surface-2)}
+.icon-btn svg{width:18px;height:18px}
+
+.topbar-actions{display:flex;gap:8px}
+
+/* Tabs */
+.tabs{
+  display:flex;gap:6px;padding:14px 18px 4px;overflow-x:auto;
+  scrollbar-width:none;
+}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  flex-shrink:0;padding:9px 16px;border-radius:99px;
+  background:var(--surface);border:1px solid var(--border);
+  color:var(--text-2);font-size:.85rem;font-weight:700;
+  cursor:pointer;transition:all .2s;white-space:nowrap;
+  display:inline-flex;align-items:center;gap:6px;
+}
+.tab svg{width:14px;height:14px}
+.tab.active{
+  background:linear-gradient(135deg,#00d4ff,#7b5cff);
+  color:#05080f;border-color:transparent;
+  box-shadow:0 6px 18px rgba(0,212,255,.25);
+}
+
+/* Content */
+.view{display:none;padding:18px;animation:fade .35s ease}
+.view.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ======================================
+   HOME / DASHBOARD
+====================================== */
+.hero{
+  position:relative;border-radius:var(--radius-lg);
+  padding:22px;margin-bottom:18px;overflow:hidden;
+  background:linear-gradient(135deg, rgba(0,212,255,.12), rgba(123,92,255,.1));
+  border:1px solid var(--border-2);
+}
+.hero::before{
+  content:'';position:absolute;inset:-1px;border-radius:inherit;
+  background:linear-gradient(135deg,rgba(0,212,255,.3),transparent 40%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  padding:1px;pointer-events:none;
+}
+.hero-bg{position:absolute;inset:0;opacity:.35;pointer-events:none}
+.hero-bg svg{width:100%;height:100%}
+.hero-content{position:relative}
+.hero-eyebrow{font-size:.72rem;color:var(--accent);font-weight:800;letter-spacing:1.5px;text-transform:uppercase}
+.hero-title{font-size:1.55rem;font-weight:900;margin-top:8px;line-height:1.25}
+.hero-sub{color:var(--text-2);margin-top:8px;font-size:.9rem;line-height:1.6}
+
+.ring-wrap{display:flex;align-items:center;gap:16px;margin-top:18px}
+.ring{position:relative;width:78px;height:78px;flex-shrink:0}
+.ring svg{transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:7;stroke-linecap:round}
+.ring .track{stroke:rgba(255,255,255,.07)}
+.ring .bar{stroke:url(#ringGrad);transition:stroke-dasharray .8s ease}
+.ring-label{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;font-weight:900;
+}
+.ring-label .pct{font-size:1.1rem}
+.ring-label .lbl{font-size:.55rem;color:var(--text-3);margin-top:-2px}
+
+.ring-info{flex:1}
+.ring-info .h{font-size:.95rem;font-weight:800}
+.ring-info .s{font-size:.78rem;color:var(--text-2);margin-top:4px;line-height:1.5}
+
+/* Stats grid */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.stat{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:14px 12px;text-align:center;
+}
+.stat-value{font-size:1.4rem;font-weight:900;background:linear-gradient(135deg,#00d4ff,#7b5cff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat-label{font-size:.7rem;color:var(--text-3);margin-top:4px;font-weight:600}
+
+/* Quick tiles */
+.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px}
+.tile{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:16px;cursor:pointer;
+  transition:all .25s;position:relative;overflow:hidden;
+}
+.tile:active{transform:scale(.97)}
+.tile-icon{
+  width:38px;height:38px;border-radius:11px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:12px;
+}
+.tile-icon svg{width:20px;height:20px}
+.tile-1 .tile-icon{background:rgba(0,212,255,.15);color:#00d4ff}
+.tile-2 .tile-icon{background:rgba(123,92,255,.15);color:#7b5cff}
+.tile-3 .tile-icon{background:rgba(255,181,71,.15);color:#ffb547}
+.tile-4 .tile-icon{background:rgba(255,91,107,.15);color:#ff5b6b}
+.tile h4{font-size:.95rem;font-weight:800;margin-bottom:2px}
+.tile p{font-size:.72rem;color:var(--text-3);font-weight:500}
+
+.section-h{
+  display:flex;align-items:center;justify-content:space-between;
+  margin:6px 0 12px;
+}
+.section-h h2{font-size:1.05rem;font-weight:900;display:flex;align-items:center;gap:8px}
+.section-h h2 svg{width:18px;height:18px;color:var(--accent)}
+.section-h .more{font-size:.78rem;color:var(--accent);font-weight:700;cursor:pointer}
+
+/* Pattern of the day */
+.pod{
+  background:linear-gradient(135deg, rgba(255,45,106,.08), rgba(123,92,255,.08));
+  border:1px solid var(--border-2);border-radius:var(--radius-lg);
+  padding:18px;margin-bottom:22px;position:relative;overflow:hidden;
+}
+.pod-eyebrow{font-size:.7rem;color:var(--critical);font-weight:800;letter-spacing:1.2px}
+.pod h3{font-size:1.15rem;font-weight:900;margin:6px 0}
+.pod-desc{font-size:.82rem;color:var(--text-2);line-height:1.6;margin-bottom:12px}
+
+/* ======================================
+   LESSONS
+====================================== */
+.lesson-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:18px;margin-bottom:12px;
+  cursor:pointer;transition:all .25s;position:relative;
+  display:flex;gap:14px;align-items:flex-start;
+}
+.lesson-card:active{transform:scale(.98)}
+.lesson-card.done{border-color:rgba(52,211,153,.3);background:linear-gradient(135deg,rgba(52,211,153,.04),var(--surface))}
+.lesson-num{
+  width:46px;height:46px;border-radius:14px;flex-shrink:0;
+  background:var(--surface-2);display:flex;align-items:center;justify-content:center;
+  font-weight:900;color:var(--accent);font-size:1rem;
+  border:1px solid var(--border);
+}
+.lesson-card.done .lesson-num{
+  background:linear-gradient(135deg,#34d399,#10b981);color:#062417;border-color:transparent;
+}
+.lesson-info{flex:1;min-width:0}
+.lesson-title{font-size:1rem;font-weight:800;margin-bottom:4px;line-height:1.3}
+.lesson-desc{font-size:.8rem;color:var(--text-2);line-height:1.55}
+.lesson-meta{display:flex;gap:14px;margin-top:10px;color:var(--text-3);font-size:.7rem}
+.lesson-meta span{display:flex;align-items:center;gap:4px}
+.lesson-meta svg{width:12px;height:12px}
+
+/* Reading view */
+.reader{
+  position:fixed;inset:0;z-index:200;background:var(--bg);
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  transform:translateY(100%);transition:transform .35s cubic-bezier(.2,.8,.2,1);
+}
+.reader.open{transform:translateY(0)}
+.reader-header{
+  position:sticky;top:0;z-index:10;
+  padding:calc(12px + var(--safe-top)) 16px 12px;
+  background:rgba(5,8,15,.92);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:12px;
+}
+.reader-title{flex:1;min-width:0}
+.reader-title .t{font-size:.95rem;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.reader-title .s{font-size:.7rem;color:var(--text-3);margin-top:2px}
+.reader-progress{height:2px;background:rgba(255,255,255,.06);position:relative;overflow:hidden}
+.reader-progress::after{content:'';position:absolute;inset:0 100% 0 0;background:linear-gradient(90deg,#00d4ff,#7b5cff);transition:right .15s}
+.reader-progress[data-p]::after{right:calc(100% - var(--p, 0%))}
+.reader-body{
+  max-width:480px;margin:0 auto;padding:24px 20px 120px;
+}
+.reader-body h3{
+  font-size:1.15rem;font-weight:900;color:var(--text);
+  margin:28px 0 12px;padding-right:14px;
+  border-right:3px solid var(--accent);
+}
+.reader-body h4{font-size:1rem;font-weight:800;color:var(--accent);margin:20px 0 10px}
+.reader-body p{font-size:.93rem;line-height:1.85;color:var(--text);margin-bottom:14px;text-align:justify}
+.reader-body strong{color:var(--accent-3);font-weight:700}
+.reader-body ul{list-style:none;padding:0;margin:0 0 14px}
+.reader-body li{
+  padding:6px 22px 6px 0;position:relative;font-size:.9rem;
+  line-height:1.7;color:var(--text);
+}
+.reader-body li::before{
+  content:'';position:absolute;right:6px;top:14px;
+  width:6px;height:6px;border-radius:50%;
+  background:linear-gradient(135deg,#00d4ff,#7b5cff);
+}
+
+.callout{
+  border-radius:var(--radius);padding:14px 16px;margin:18px 0;
+  font-size:.88rem;line-height:1.7;border:1px solid;
+  display:flex;gap:12px;align-items:flex-start;
+}
+.callout svg{width:18px;height:18px;flex-shrink:0;margin-top:2px}
+.callout p{margin:0;font-size:.88rem;line-height:1.7}
+.callout.tip{background:rgba(0,212,255,.06);border-color:rgba(0,212,255,.25);color:#cdeeff}
+.callout.tip svg{color:var(--accent)}
+.callout.warn{background:rgba(255,181,71,.06);border-color:rgba(255,181,71,.25);color:#ffe6b8}
+.callout.warn svg{color:var(--warning)}
+.callout.danger{background:rgba(255,45,106,.06);border-color:rgba(255,45,106,.25);color:#ffc3d0}
+.callout.danger svg{color:var(--critical)}
+.callout.info{background:rgba(96,165,250,.06);border-color:rgba(96,165,250,.25);color:#d0e2ff}
+.callout.info svg{color:var(--info)}
+.callout.gold{background:rgba(255,181,71,.06);border-color:rgba(255,181,71,.3);color:#ffe6b8}
+.callout.gold svg{color:var(--accent-3)}
+
+.kv-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:14px 0;
+}
+.kv{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:12px 14px;
+}
+.kv-k{font-size:.7rem;color:var(--text-3);font-weight:600;margin-bottom:2px}
+.kv-v{font-size:1.05rem;font-weight:900;color:var(--accent)}
+.kv-v.mono{font-family:'IBM Plex Mono',monospace}
+
+.cmp-table{
+  width:100%;border-collapse:separate;border-spacing:0;
+  margin:16px 0;font-size:.83rem;background:var(--surface);
+  border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);
+}
+.cmp-table th{
+  background:var(--surface-2);padding:10px 12px;text-align:right;
+  color:var(--accent);font-weight:800;font-size:.78rem;
+  border-bottom:1px solid var(--border);
+}
+.cmp-table td{
+  padding:10px 12px;border-bottom:1px solid var(--border);
+  color:var(--text);line-height:1.5;
+}
+.cmp-table tr:last-child td{border-bottom:none}
+
+.next-btn{
+  margin-top:30px;padding:16px;border-radius:var(--radius);
+  background:linear-gradient(135deg,#00d4ff,#7b5cff);
+  color:#05080f;font-weight:900;font-size:1rem;
+  border:none;cursor:pointer;width:100%;
+  box-shadow:0 12px 30px rgba(0,212,255,.25);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:transform .15s;
+}
+.next-btn:active{transform:scale(.98)}
+.next-btn svg{width:18px;height:18px}
+
+/* ======================================
+   WAVEFORM CANVAS
+====================================== */
+.wave-card{
+  background:#000;border-radius:var(--radius);
+  margin:18px 0;border:1px solid rgba(0,212,255,.15);
+  position:relative;overflow:hidden;
+}
+.wave-label{
+  position:absolute;top:8px;right:10px;z-index:2;
+  font-family:'IBM Plex Mono',monospace;font-size:.65rem;
+  color:#7af3a8;background:rgba(0,0,0,.6);
+  padding:2px 8px;border-radius:6px;border:1px solid rgba(122,243,168,.2);
+}
+.wave-label.ch{right:auto;left:10px}
+.wave-card canvas{display:block;width:100%}
+
+/* ======================================
+   PATTERNS
+====================================== */
+.search-box{
+  display:flex;align-items:center;gap:10px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:11px 14px;margin-bottom:14px;
+}
+.search-box svg{width:16px;height:16px;color:var(--text-3)}
+.search-box input{
+  flex:1;background:transparent;border:none;
+  color:var(--text);font-size:.92rem;
+}
+.search-box input::placeholder{color:var(--text-3)}
+
+.chips{display:flex;gap:8px;overflow-x:auto;margin-bottom:14px;padding-bottom:4px}
+.chips::-webkit-scrollbar{display:none}
+.chip{
+  flex-shrink:0;padding:7px 13px;border-radius:99px;
+  background:var(--surface);border:1px solid var(--border);
+  color:var(--text-2);font-size:.78rem;font-weight:700;
+  cursor:pointer;white-space:nowrap;transition:all .2s;
+}
+.chip.active{background:var(--accent);color:#05080f;border-color:transparent}
+
+.pattern-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-lg);overflow:hidden;margin-bottom:14px;
+  transition:all .25s;
+}
+.pattern-card:active{transform:scale(.98)}
+.pattern-head{padding:16px 18px;cursor:pointer;display:flex;align-items:center;gap:12px}
+.pattern-mark{
+  width:42px;height:42px;border-radius:12px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:.7rem;
+}
+.pattern-mark svg{width:20px;height:20px}
+.mark-crit{background:rgba(255,45,106,.15);color:#ff5b6b}
+.mark-warn{background:rgba(255,181,71,.15);color:#ffb547}
+.mark-good{background:rgba(52,211,153,.15);color:#34d399}
+.mark-info{background:rgba(96,165,250,.15);color:#60a5fa}
+
+.pattern-name{font-size:1rem;font-weight:900;margin-bottom:2px}
+.pattern-fullname{font-size:.74rem;color:var(--text-3);font-weight:500}
+.pattern-chev{color:var(--text-3);transition:transform .25s}
+.pattern-card.open .pattern-chev{transform:rotate(180deg)}
+.pattern-body{
+  max-height:0;overflow:hidden;
+  transition:max-height .35s ease;
+}
+.pattern-card.open .pattern-body{max-height:2000px}
+.pattern-body-inner{padding:0 18px 18px}
+.pattern-body p{font-size:.88rem;line-height:1.7;color:var(--text);margin-bottom:10px}
+
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.tag{
+  padding:3px 9px;border-radius:99px;font-size:.7rem;font-weight:700;
+}
+.tag.crit{background:rgba(255,45,106,.15);color:#ff5b6b}
+.tag.warn{background:rgba(255,181,71,.15);color:#ffb547}
+.tag.good{background:rgba(52,211,153,.15);color:#34d399}
+.tag.info{background:rgba(96,165,250,.15);color:#60a5fa}
+.tag.neut{background:var(--surface-2);color:var(--text-2)}
+
+.clinical-box{
+  background:var(--surface-2);border-radius:var(--radius);
+  padding:12px 14px;margin-top:12px;border-right:3px solid var(--accent-3);
+}
+.clinical-box .lbl{
+  font-size:.7rem;color:var(--accent-3);font-weight:800;
+  text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;
+}
+.clinical-box p{font-size:.83rem;color:var(--text-2);line-height:1.65;margin:0}
+
+/* ======================================
+   VIEWER (Interactive EEG)
+====================================== */
+.viewer-frame{
+  background:#000;border-radius:var(--radius-lg);
+  border:1px solid rgba(0,212,255,.2);overflow:hidden;
+  position:relative;margin-bottom:14px;
+  box-shadow:0 0 60px rgba(0,212,255,.08);
+}
+.viewer-header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 14px;font-family:'IBM Plex Mono',monospace;
+  font-size:.7rem;color:#7af3a8;
+  border-bottom:1px solid rgba(122,243,168,.15);
+}
+.viewer-header .live{display:flex;align-items:center;gap:6px}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#ff5b6b;animation:blink 1.2s infinite}
+@keyframes blink{50%{opacity:.2}}
+.viewer-canvas-wrap{position:relative}
+.viewer-canvas-wrap canvas{display:block;width:100%}
+.channel-labels{
+  position:absolute;inset:0;pointer-events:none;
+  display:flex;flex-direction:column;justify-content:space-around;
+  padding:8px 8px;
+}
+.ch-label{
+  font-family:'IBM Plex Mono',monospace;font-size:.62rem;
+  color:rgba(122,243,168,.6);align-self:flex-start;
+}
+
+.viewer-controls{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:14px;margin-bottom:12px;
+}
+.ctrl-row{display:flex;gap:8px;margin-bottom:10px;overflow-x:auto;padding-bottom:4px}
+.ctrl-row::-webkit-scrollbar{display:none}
+.ctrl-row:last-child{margin-bottom:0}
+
+.pat-btn{
+  flex-shrink:0;padding:8px 12px;border-radius:10px;
+  background:var(--surface-2);border:1px solid var(--border);
+  color:var(--text-2);font-size:.78rem;font-weight:700;
+  cursor:pointer;white-space:nowrap;
+}
+.pat-btn.active{
+  background:linear-gradient(135deg,#00d4ff,#7b5cff);
+  color:#05080f;border-color:transparent;
+}
+
+.knobs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.knob{
+  background:var(--surface-2);border:1px solid var(--border);
+  border-radius:12px;padding:10px 12px;
+}
+.knob .lbl{font-size:.68rem;color:var(--text-3);font-weight:700;margin-bottom:6px;display:flex;justify-content:space-between}
+.knob .lbl b{color:var(--accent);font-family:'IBM Plex Mono',monospace}
+.knob input[type=range]{
+  -webkit-appearance:none;width:100%;height:4px;border-radius:2px;
+  background:linear-gradient(90deg,#00d4ff,#7b5cff);
+}
+.knob input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:16px;height:16px;border-radius:50%;
+  background:#fff;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.4);
+}
+
+.play-bar{
+  display:flex;align-items:center;gap:10px;margin-top:12px;
+  background:var(--surface-2);padding:8px 12px;border-radius:12px;
+  border:1px solid var(--border);
+}
+.play-btn{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,#00d4ff,#7b5cff);
+  border:none;color:#05080f;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+.play-btn svg{width:16px;height:16px}
+.play-info{flex:1;font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--text-2)}
+.play-info b{color:var(--accent)}
+
+.diagnosis-card{
+  background:linear-gradient(135deg, rgba(255,181,71,.08), rgba(255,45,106,.05));
+  border:1px solid rgba(255,181,71,.25);
+  border-radius:var(--radius);padding:14px;
+}
+.diagnosis-card .lbl{font-size:.7rem;color:var(--accent-3);font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+.diagnosis-card h4{font-size:1rem;font-weight:900;margin-bottom:6px}
+.diagnosis-card p{font-size:.83rem;color:var(--text-2);line-height:1.65}
+
+/* ======================================
+   QUIZ
+====================================== */
+.quiz-cat{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.qcat{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:16px;cursor:pointer;
+}
+.qcat:active{transform:scale(.97)}
+.qcat-icon{
+  width:36px;height:36px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:10px;
+}
+.qcat-icon svg{width:18px;height:18px}
+.qcat h4{font-size:.9rem;font-weight:800;margin-bottom:2px}
+.qcat p{font-size:.7rem;color:var(--text-3)}
+
+.q-progress{
+  display:flex;align-items:center;gap:10px;margin-bottom:14px;
+  font-size:.78rem;color:var(--text-2);font-weight:600;
+}
+.q-progress-bar{
+  flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,.06);
+  overflow:hidden;
+}
+.q-progress-bar div{
+  height:100%;background:linear-gradient(90deg,#00d4ff,#7b5cff);
+  transition:width .4s;
+}
+
+.q-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:20px;margin-bottom:14px;
+}
+.q-num{
+  font-family:'IBM Plex Mono',monospace;font-size:.72rem;
+  color:var(--accent);margin-bottom:10px;font-weight:700;
+}
+.q-text{font-size:1.02rem;font-weight:700;line-height:1.65;margin-bottom:18px}
+.q-image{
+  background:#000;border-radius:var(--radius);
+  margin-bottom:16px;border:1px solid rgba(0,212,255,.15);
+  overflow:hidden;
+}
+.q-opts{display:flex;flex-direction:column;gap:8px}
+.q-opt{
+  background:var(--surface-2);border:1px solid var(--border);
+  border-radius:12px;padding:13px 14px;font-size:.9rem;
+  color:var(--text);cursor:pointer;text-align:right;
+  transition:all .2s;display:flex;align-items:center;gap:10px;
+}
+.q-opt:active{transform:scale(.98)}
+.q-opt .o-marker{
+  width:24px;height:24px;border-radius:50%;
+  background:var(--surface-3);font-size:.75rem;font-weight:800;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  color:var(--text-2);
+}
+.q-opt.correct{background:rgba(52,211,153,.12);border-color:#34d399;color:#34d399}
+.q-opt.correct .o-marker{background:#34d399;color:#062417}
+.q-opt.wrong{background:rgba(255,45,106,.12);border-color:#ff5b6b;color:#ff5b6b}
+.q-opt.wrong .o-marker{background:#ff5b6b;color:#fff}
+.q-opt.disabled{pointer-events:none;opacity:.55}
+.q-explain{
+  margin-top:16px;padding:14px;background:var(--surface-2);
+  border-radius:12px;font-size:.85rem;line-height:1.7;color:var(--text-2);
+  display:none;border-right:3px solid var(--accent-3);
+}
+.q-explain.show{display:block;animation:fade .3s}
+.q-explain b{color:var(--accent-3)}
+
+.score-screen{
+  background:linear-gradient(135deg, rgba(0,212,255,.1), rgba(123,92,255,.08));
+  border:1px solid var(--border-2);border-radius:var(--radius-lg);
+  padding:30px 20px;text-align:center;
+}
+.score-screen .big{font-size:3rem;font-weight:900;background:linear-gradient(135deg,#00d4ff,#7b5cff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.score-screen p{color:var(--text-2);margin:8px 0 18px;font-size:.95rem}
+.score-screen .stars{font-size:1.5rem;margin:10px 0;letter-spacing:6px}
+
+/* ======================================
+   GLOSSARY
+====================================== */
+.gloss-list{display:flex;flex-direction:column;gap:8px}
+.gloss-item{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:14px 16px;
+}
+.gloss-term{font-size:.95rem;font-weight:800;color:var(--accent);margin-bottom:4px}
+.gloss-ar{font-size:.78rem;color:var(--text-3);margin-bottom:6px}
+.gloss-def{font-size:.85rem;color:var(--text);line-height:1.65}
+
+/* ======================================
+   BOTTOM NAV
+====================================== */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:60;
+  max-width:480px;margin:0 auto;
+  padding:10px 16px calc(10px + var(--safe-bottom));
+  background:rgba(5,8,15,.85);
+  backdrop-filter:blur(24px) saturate(160%);
+  -webkit-backdrop-filter:blur(24px) saturate(160%);
+  border-top:1px solid var(--border);
+  display:flex;justify-content:space-around;
+}
+.nav-item{
+  background:none;border:none;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  color:var(--text-3);font-size:.65rem;font-weight:700;
+  padding:6px 10px;border-radius:10px;flex:1;
+}
+.nav-item svg{width:22px;height:22px;transition:transform .2s}
+.nav-item.active{color:var(--accent)}
+.nav-item.active svg{transform:scale(1.1)}
+
+/* Toast */
+.toast{
+  position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(120%);
+  background:linear-gradient(135deg,#00d4ff,#7b5cff);color:#05080f;
+  padding:12px 20px;border-radius:99px;font-weight:800;font-size:.85rem;
+  z-index:1000;box-shadow:0 12px 30px rgba(0,212,255,.3);
+  transition:transform .4s cubic-bezier(.3,1.5,.5,1);
+  display:flex;align-items:center;gap:8px;
+}
+.toast svg{width:16px;height:16px}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* iPhone install hint */
+.install-hint{
+  background:linear-gradient(135deg,rgba(0,212,255,.08),rgba(123,92,255,.06));
+  border:1px solid var(--border-2);border-radius:var(--radius);
+  padding:14px 16px;margin-bottom:14px;font-size:.83rem;
+  display:flex;gap:12px;align-items:flex-start;
+  color:var(--text-2);line-height:1.6;
+}
+.install-hint svg{width:20px;height:20px;color:var(--accent);flex-shrink:0;margin-top:1px}
+.install-hint b{color:var(--accent)}
+.install-hint .close-x{
+  margin-right:auto;padding:0 6px;color:var(--text-3);cursor:pointer;font-size:1.2rem;
+}
+
+/* Settings rows */
+.settings-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:14px}
+.set-row{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border);font-size:.9rem}
+.set-row:last-child{border-bottom:none}
+.set-row .lbl{font-weight:600}
+.set-row .val{color:var(--text-3);font-size:.82rem}
+.btn-ghost{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:6px 12px;color:var(--text);font-size:.78rem;font-weight:700;cursor:pointer}
+.btn-ghost:active{transform:scale(.95)}
+
+/* responsive */
+@media (min-width:520px){
+  .app{padding:0 12px calc(80px + var(--safe-bottom))}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== SPLASH ===================== -->
+<div id="splash">
+  <div class="splash-logo">
+    <svg viewBox="0 0 60 60" fill="none">
+      <path d="M5 30 L15 30 L18 18 L24 42 L30 12 L36 48 L42 30 L55 30" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <div class="splash-title">NAJM EEG</div>
+  <div class="splash-sub">دليل تخطيط الدماغ التفاعلي</div>
+  <div class="splash-bar"></div>
+</div>
+
+<!-- ===================== APP ===================== -->
+<div class="app">
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-row">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 60 60" fill="none">
+          <path d="M5 30 L15 30 L18 18 L24 42 L30 12 L36 48 L42 30 L55 30" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <div class="brand-title">NAJM EEG</div>
+        <div class="brand-sub">دليلك للاحتراف</div>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <button class="icon-btn" onclick="openSearch()" aria-label="بحث">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      </button>
+      <button class="icon-btn" onclick="switchView('more')" aria-label="إعدادات">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs" id="tabs">
+  <button class="tab active" data-view="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>الرئيسية</button>
+  <button class="tab" data-view="lessons"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>الدروس</button>
+  <button class="tab" data-view="patterns"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m13 2-3 7h4l-3 13 9-14h-5l3-6z"/></svg>الأنماط</button>
+  <button class="tab" data-view="viewer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12h3l3-9 4 18 3-9h5"/></svg>EEG حي</button>
+  <button class="tab" data-view="quiz"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg>اختبار</button>
+  <button class="tab" data-view="more"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>المزيد</button>
+</div>
+
+<!-- ============ HOME ============ -->
+<div class="view active" id="view-home">
+  <div class="install-hint" id="installHint">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>
+    <div>
+      <b>أضفه لشاشة الـ iPhone</b><br>
+      اضغط زر المشاركة <svg style="display:inline;width:14px;height:14px;vertical-align:-2px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg> في Safari ثم <b>Add to Home Screen</b> ليفتح كتطبيق native.
+    </div>
+    <span class="close-x" onclick="document.getElementById('installHint').style.display='none'">×</span>
+  </div>
+
+  <div class="hero">
+    <div class="hero-bg">
+      <svg viewBox="0 0 400 200" preserveAspectRatio="none">
+        <defs><linearGradient id="hg" x1="0" x2="1"><stop offset="0" stop-color="#00d4ff" stop-opacity=".5"/><stop offset="1" stop-color="#7b5cff" stop-opacity=".5"/></linearGradient></defs>
+        <path id="heroWave" d="M0 100 L400 100" stroke="url(#hg)" stroke-width="2" fill="none"/>
+      </svg>
+    </div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">دليلك للاحتراف</div>
+      <div class="hero-title">من الصفر إلى قراءة EEG الـ ICU بثقة</div>
+      <div class="hero-sub">سبع وحدات تفاعلية، عشرون نمطاً بصرياً، شاشة EEG حية بمحاكاة حقيقية، واختبارات سريرية مصممة لك.</div>
+      <div class="ring-wrap">
+        <div class="ring">
+          <svg width="78" height="78" viewBox="0 0 78 78">
+            <defs>
+              <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#00d4ff"/><stop offset="1" stop-color="#7b5cff"/>
+              </linearGradient>
+            </defs>
+            <circle class="track" cx="39" cy="39" r="32"/>
+            <circle class="bar" id="ringBar" cx="39" cy="39" r="32" stroke-dasharray="0 201" pathLength="201"/>
+          </svg>
+          <div class="ring-label"><span class="pct" id="ringPct">0%</span><span class="lbl">إنجاز</span></div>
+        </div>
+        <div class="ring-info">
+          <div class="h" id="ringH">ابدأ رحلتك الآن</div>
+          <div class="s" id="ringS">اضغط على أي درس لتبدأ التعلم</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-value" id="sLessons">0/7</div><div class="stat-label">دروس مكتملة</div></div>
+    <div class="stat"><div class="stat-value" id="sPatterns">20</div><div class="stat-label">نمط مرجعي</div></div>
+    <div class="stat"><div class="stat-value" id="sAcc">—</div><div class="stat-label">دقة الاختبار</div></div>
+  </div>
+
+  <div class="quick-grid">
+    <div class="tile tile-1" onclick="switchView('viewer')">
+      <div class="tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12h3l3-9 4 18 3-9h5"/></svg></div>
+      <h4>شاشة EEG حية</h4><p>محاكاة تفاعلية مباشرة</p>
+    </div>
+    <div class="tile tile-2" onclick="switchView('patterns')">
+      <div class="tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m13 2-3 7h4l-3 13 9-14h-5l3-6z"/></svg></div>
+      <h4>مكتبة الأنماط</h4><p>٢٠ نمط بصور وأمثلة</p>
+    </div>
+    <div class="tile tile-3" onclick="switchView('quiz')">
+      <div class="tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+      <h4>اختبر نفسك</h4><p>سيناريوهات سريرية</p>
+    </div>
+    <div class="tile tile-4" onclick="openLesson(7)">
+      <div class="tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <h4>ICU Patterns</h4><p>الأنماط الحرجة</p>
+    </div>
+  </div>
+
+  <div class="section-h"><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>نمط اليوم</h2></div>
+  <div class="pod">
+    <div class="pod-eyebrow">⚡ PATTERN OF THE DAY</div>
+    <h3 id="podName">PLEDs</h3>
+    <p class="pod-desc" id="podDesc">موجات حادة دورية من نصف كرة دماغية واحدة — العلامة التي لا تنام في الـ ICU.</p>
+    <canvas id="podCanvas" width="400" height="80" style="width:100%;background:#000;border-radius:12px;border:1px solid rgba(0,212,255,.15)"></canvas>
+    <button class="next-btn" style="margin-top:14px" onclick="switchView('patterns')">
+      <span>استكشف باقي الأنماط</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ============ LESSONS ============ -->
+<div class="view" id="view-lessons">
+  <div class="section-h"><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>مسار التعلم</h2></div>
+  <div id="lessonsList"></div>
+</div>
+
+<!-- ============ PATTERNS ============ -->
+<div class="view" id="view-patterns">
+  <div class="search-box">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+    <input type="text" id="patSearch" placeholder="ابحث عن نمط، أو اكتب باللغة العربية...">
+  </div>
+  <div class="chips" id="patChips">
+    <div class="chip active" data-cat="all">الكل</div>
+    <div class="chip" data-cat="normal">طبيعي</div>
+    <div class="chip" data-cat="benign">حميد</div>
+    <div class="chip" data-cat="epileptiform">صرعي</div>
+    <div class="chip" data-cat="periodic">دوري</div>
+    <div class="chip" data-cat="icu">ICU</div>
+    <div class="chip" data-cat="coma">غيبوبة</div>
+  </div>
+  <div id="patternsList"></div>
+</div>
+
+<!-- ============ VIEWER ============ -->
+<div class="view" id="view-viewer">
+  <div class="section-h"><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12h3l3-9 4 18 3-9h5"/></svg>شاشة EEG التفاعلية</h2></div>
+
+  <div class="viewer-frame">
+    <div class="viewer-header">
+      <span class="live"><span class="live-dot"></span>LIVE · <span id="vPattern">Alpha Normal</span></span>
+      <span><span id="vGain">7</span> µV/mm · <span id="vSpeed">30</span> mm/s</span>
+    </div>
+    <div class="viewer-canvas-wrap">
+      <canvas id="liveCanvas" width="800" height="320"></canvas>
+    </div>
+  </div>
+
+  <div class="viewer-controls">
+    <div class="ctrl-row" id="patSelector"></div>
+    <div class="knobs">
+      <div class="knob">
+        <div class="lbl">Sensitivity <b id="kGain">7 µV/mm</b></div>
+        <input type="range" min="2" max="20" value="7" id="rGain">
+      </div>
+      <div class="knob">
+        <div class="lbl">Speed <b id="kSpeed">30 mm/s</b></div>
+        <input type="range" min="10" max="60" value="30" id="rSpeed">
+      </div>
+      <div class="knob">
+        <div class="lbl">Low-Pass <b id="kLP">70 Hz</b></div>
+        <input type="range" min="15" max="100" value="70" id="rLP">
+      </div>
+      <div class="knob">
+        <div class="lbl">High-Pass <b id="kHP">0.5 Hz</b></div>
+        <input type="range" min="1" max="50" step="1" value="5" id="rHP">
+      </div>
+    </div>
+    <div class="play-bar">
+      <button class="play-btn" id="playBtn">
+        <svg id="playIcon" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+      </button>
+      <div class="play-info">CH: <b>8</b> · Page: <b id="pageInfo">10s</b> · FS: <b>256 Hz</b></div>
+    </div>
+  </div>
+
+  <div class="diagnosis-card" id="diagCard">
+    <div class="lbl">⚡ تفسير سريري</div>
+    <h4 id="diagTitle">Alpha Normal</h4>
+    <p id="diagDesc">إيقاع ألفا طبيعي عند الاسترخاء وإغماض العينين.</p>
+  </div>
+</div>
+
+<!-- ============ QUIZ ============ -->
+<div class="view" id="view-quiz">
+  <div id="quizHome">
+    <div class="section-h"><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg>اختبر معلوماتك</h2></div>
+    <div class="quiz-cat">
+      <div class="qcat" onclick="startQuiz('patterns')">
+        <div class="qcat-icon" style="background:rgba(0,212,255,.15);color:#00d4ff"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m13 2-3 7h4l-3 13 9-14h-5l3-6z"/></svg></div>
+        <h4>تحديد الأنماط</h4><p>صور EEG حقيقية</p>
+      </div>
+      <div class="qcat" onclick="startQuiz('clinical')">
+        <div class="qcat-icon" style="background:rgba(255,45,106,.15);color:#ff5b6b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <h4>سيناريوهات سريرية</h4><p>حالات ICU وأقسام الطوارئ</p>
+      </div>
+      <div class="qcat" onclick="startQuiz('technical')">
+        <div class="qcat-icon" style="background:rgba(123,92,255,.15);color:#7b5cff"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33"/></svg></div>
+        <h4>تقنية وفلاتر</h4><p>Montage, filters, artifacts</p>
+      </div>
+      <div class="qcat" onclick="startQuiz('mixed')">
+        <div class="qcat-icon" style="background:rgba(255,181,71,.15);color:#ffb547"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 15 8.5 22 9.3 17 14 18.2 21 12 17.8 5.8 21 7 14 2 9.3 9 8.5 12 2"/></svg></div>
+        <h4>تحدي شامل</h4><p>كل المواضيع مختلطة</p>
+      </div>
+    </div>
+  </div>
+  <div id="quizPlay" style="display:none"></div>
+</div>
+
+<!-- ============ MORE ============ -->
+<div class="view" id="view-more">
+  <div class="section-h"><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>المعجم الطبي</h2></div>
+  <div class="search-box">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+    <input type="text" id="glossSearch" placeholder="ابحث عن مصطلح...">
+  </div>
+  <div class="gloss-list" id="glossList"></div>
+
+  <div class="section-h" style="margin-top:24px"><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33"/></svg>إعدادات</h2></div>
+  <div class="settings-card">
+    <div class="set-row">
+      <div><div class="lbl">المظهر</div><div class="val">داكن (افتراضي)</div></div>
+      <div class="val">🌙</div>
+    </div>
+    <div class="set-row">
+      <div><div class="lbl">تقدمك</div><div class="val" id="progNote">—</div></div>
+      <button class="btn-ghost" onclick="resetProgress()">إعادة تعيين</button>
+    </div>
+    <div class="set-row">
+      <div><div class="lbl">الإصدار</div><div class="val">2.0 · 2026</div></div>
+    </div>
+  </div>
+
+  <div style="text-align:center;color:var(--text-3);font-size:.75rem;margin-top:24px;line-height:1.7">
+    <div style="font-weight:800;color:var(--text-2);margin-bottom:4px">NAJM EEG GUIDE</div>
+    مرجع تعليمي للطلاب والمقيمين<br>
+    لا يُستخدم بديلاً عن القرار السريري
+  </div>
+</div>
+
+</div><!-- /app -->
+
+<!-- ===================== READER ===================== -->
+<div class="reader" id="reader">
+  <div class="reader-header">
+    <button class="icon-btn" onclick="closeLesson()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="reader-title">
+      <div class="t" id="rTitle">الدرس</div>
+      <div class="s" id="rSub">الوحدة</div>
+    </div>
+  </div>
+  <div class="reader-progress" id="rProg"></div>
+  <div class="reader-body" id="rBody"></div>
+</div>
+
+<!-- ===================== BOTTOM NAV ===================== -->
+<div class="bottom-nav">
+  <button class="nav-item active" data-view="home">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>الرئيسية
+  </button>
+  <button class="nav-item" data-view="lessons">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>دروس
+  </button>
+  <button class="nav-item" data-view="viewer">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12h3l3-9 4 18 3-9h5"/></svg>EEG
+  </button>
+  <button class="nav-item" data-view="quiz">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg>اختبار
+  </button>
+  <button class="nav-item" data-view="more">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>المزيد
+  </button>
+</div>
+
+<div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span id="toastMsg">تم</span></div>
+
+<script>
+/* ===========================================
+   STATE
+=========================================== */
+const State = {
+  done: JSON.parse(localStorage.getItem('najm_done')||'[]'),
+  quizStats: JSON.parse(localStorage.getItem('najm_quiz')||'{"correct":0,"total":0}'),
+  save(){
+    localStorage.setItem('najm_done', JSON.stringify(this.done));
+    localStorage.setItem('najm_quiz', JSON.stringify(this.quizStats));
+  }
+};
+
+/* ===========================================
+   WAVEFORM ENGINE
+   Math-generated realistic EEG waveforms
+=========================================== */
+const WaveEngine = {
+  rng(seed){let s=seed||1;return()=>{s=(s*9301+49297)%233280;return s/233280}},
+
+  // Generate one sample at time t (sec) for given pattern
+  sample(pattern, t, ch=0, seedR=null){
+    const r = seedR || Math.random;
+    const noise = (a)=>(r()-.5)*a;
+    let y=0;
+    switch(pattern){
+      case 'alpha':
+        y = 35*Math.sin(2*Math.PI*10*t + ch*0.3) + noise(8);
+        break;
+      case 'beta':
+        y = 12*Math.sin(2*Math.PI*20*t + ch*0.5) + 4*Math.sin(2*Math.PI*15*t) + noise(5);
+        break;
+      case 'theta':
+        y = 45*Math.sin(2*Math.PI*6*t + ch*0.4) + noise(8);
+        break;
+      case 'delta':
+        y = 80*Math.sin(2*Math.PI*2*t + ch*0.2) + 20*Math.sin(2*Math.PI*1.3*t) + noise(8);
+        break;
+      case 'plads': case 'pleds': {
+        // PLEDs: 1 Hz sharp-slow on left side only
+        const period = 1.0;
+        const phase = (t % period)/period;
+        const sharp = Math.exp(-Math.pow((phase-.1)*30,2))*-90;
+        const slow = Math.exp(-Math.pow((phase-.3)*8,2))*40;
+        const sideMul = ch<4 ? 1 : 0.15; // lateralized left
+        y = (sharp+slow)*sideMul + noise(6);
+        break;
+      }
+      case 'pswc': {
+        // PSWC: 1 Hz bilateral synchronous
+        const period = 1.0;
+        const phase = (t % period)/period;
+        const sharp = Math.exp(-Math.pow((phase-.15)*35,2))*-70;
+        const slow = Math.exp(-Math.pow((phase-.4)*7,2))*35;
+        y = (sharp+slow) + noise(6);
+        break;
+      }
+      case 'spike-wave': {
+        // 3 Hz generalized spike-wave (absence)
+        const period = 1/3;
+        const phase = (t % period)/period;
+        const spike = Math.exp(-Math.pow((phase-.1)*40,2))*-100;
+        const wave = Math.exp(-Math.pow((phase-.5)*5,2))*60;
+        y = (spike+wave) + noise(4);
+        break;
+      }
+      case 'burst-supp': {
+        // 2s suppression + 1s burst cycle
+        const cycle = 3.5;
+        const phase = (t % cycle);
+        if (phase < 2.5) y = noise(3); // suppression
+        else y = 60*Math.sin(2*Math.PI*12*t) + 40*Math.sin(2*Math.PI*4*t) + noise(15);
+        break;
+      }
+      case 'triphasic': {
+        const period = 0.5;
+        const phase = (t % period)/period;
+        const p1 = Math.exp(-Math.pow((phase-.15)*16,2))*30;
+        const p2 = Math.exp(-Math.pow((phase-.35)*16,2))*-60;
+        const p3 = Math.exp(-Math.pow((phase-.55)*16,2))*40;
+        // Frontal dominant
+        const frontMul = ch<2 ? 1 : 0.4;
+        y = (p1+p2+p3)*frontMul + noise(5);
+        break;
+      }
+      case 'sreda': {
+        // 6 Hz rhythmic posterior
+        y = 40*Math.sin(2*Math.PI*6*t) + 15*Math.sin(2*Math.PI*12*t) + noise(5);
+        const postMul = ch>=4 ? 1 : 0.3;
+        y *= postMul;
+        break;
+      }
+      case 'firda': {
+        // 2 Hz frontal rhythmic delta
+        y = 60*Math.sin(2*Math.PI*2.2*t) + noise(8);
+        const frontMul = ch<2 ? 1 : 0.3;
+        y *= frontMul;
+        break;
+      }
+      case 'eci': {
+        // Electrocerebral inactivity - flat
+        y = noise(0.5);
+        break;
+      }
+      case 'alpha-coma': {
+        // 9 Hz diffuse no reactivity
+        y = 28*Math.sin(2*Math.PI*9*t + ch*0.1) + noise(5);
+        break;
+      }
+      case 'birds': {
+        // brief rhythmic bursts every 8s
+        const cycle = 8;
+        const phase = t % cycle;
+        if (phase>2 && phase<5){
+          y = 50*Math.sin(2*Math.PI*4*phase) + noise(6);
+        } else {
+          y = 25*Math.sin(2*Math.PI*8*t) + noise(8);
+        }
+        break;
+      }
+      case 'k-complex': {
+        // sleep N2 with K-complex + spindle
+        const cycle = 6;
+        const phase = t % cycle;
+        let bg = 15*Math.sin(2*Math.PI*4*t) + noise(8);
+        if (phase>2 && phase<2.5){
+          // K-complex
+          bg += -60*Math.exp(-Math.pow((phase-2.2)*8,2)) + 40*Math.exp(-Math.pow((phase-2.4)*8,2));
+        }
+        if (phase>3 && phase<3.7){
+          // sleep spindle
+          bg += 25*Math.sin(2*Math.PI*13*t)*Math.exp(-Math.pow((phase-3.35)*5,2));
+        }
+        y = bg;
+        break;
+      }
+      case 'rem': {
+        // low voltage mixed + sawtooth
+        y = 12*Math.sin(2*Math.PI*4*t + Math.sin(t*8)) + 8*Math.sin(2*Math.PI*7*t) + noise(8);
+        break;
+      }
+      case 'emg-artifact': {
+        // muscle high freq
+        y = noise(40) + 20*Math.sin(2*Math.PI*60*t);
+        break;
+      }
+      case 'eye-blink': {
+        // periodic frontal high amplitude
+        const cycle = 3;
+        const phase = t % cycle;
+        if (phase<.3 && ch<2) y = 150*Math.exp(-Math.pow((phase-.1)*20,2));
+        else y = 10*Math.sin(2*Math.PI*10*t) + noise(5);
+        break;
+      }
+      case 'seizure': {
+        // evolving rhythmic
+        const evolve = Math.min(t*0.3, 1);
+        const freq = 3 + evolve*8;
+        const amp = 30 + evolve*60;
+        y = amp*Math.sin(2*Math.PI*freq*t) + noise(8);
+        const focal = (ch===2||ch===3) ? 1 : 0.4;
+        y *= focal;
+        break;
+      }
+      case 'breach': {
+        // very high amplitude alpha/beta over defect
+        const breachCh = (ch===3);
+        y = breachCh
+          ? 120*Math.sin(2*Math.PI*10*t) + 40*Math.sin(2*Math.PI*20*t) + noise(10)
+          : 30*Math.sin(2*Math.PI*10*t) + noise(6);
+        break;
+      }
+      case 'mu': {
+        // arch-shaped mu rhythm central
+        const muCh = (ch===2||ch===3);
+        if (muCh){
+          // arciform: sharp negative, rounded positive
+          const phase = (t*10) % 1;
+          y = 30*Math.sin(2*Math.PI*10*t) - 10*Math.sin(4*Math.PI*10*t) + noise(5);
+        } else {
+          y = 20*Math.sin(2*Math.PI*10*t) + noise(5);
+        }
+        break;
+      }
+      default:
+        y = noise(8);
+    }
+    return y;
+  },
+
+  // Draw multi-channel waveform on canvas
+  drawMulti(ctx, pattern, opts={}){
+    const {
+      width, height, channels=8, duration=10,
+      gain=7, sampleRate=128, time=0, gridColor='#0d2a1d',
+      lineColor='#7af3a8', showLabels=true, labels=['Fp1-F3','Fp2-F4','F3-C3','F4-C4','C3-P3','C4-P4','P3-O1','P4-O2']
+    } = opts;
+
+    ctx.fillStyle='#000';
+    ctx.fillRect(0,0,width,height);
+
+    // Grid
+    ctx.strokeStyle=gridColor;
+    ctx.lineWidth=0.5;
+    ctx.beginPath();
+    // Vertical (1 sec each)
+    for (let s=0;s<=duration;s++){
+      const x = (s/duration)*width;
+      ctx.moveTo(x,0);ctx.lineTo(x,height);
+    }
+    // Horizontal
+    const chH = height/channels;
+    for (let c=0;c<=channels;c++){
+      const y = c*chH;
+      ctx.moveTo(0,y);ctx.lineTo(width,y);
+    }
+    ctx.stroke();
+
+    // Major lines every second
+    ctx.strokeStyle='#1a4a2d';
+    ctx.lineWidth=0.8;
+    ctx.beginPath();
+    for (let s=0;s<=duration;s++){
+      const x = (s/duration)*width;
+      ctx.moveTo(x,0);ctx.lineTo(x,height);
+    }
+    ctx.stroke();
+
+    // Waveforms
+    ctx.lineWidth=1.2;
+    ctx.strokeStyle=lineColor;
+    ctx.shadowColor=lineColor;
+    ctx.shadowBlur=4;
+
+    const samples = Math.floor(duration*sampleRate);
+    const dx = width/samples;
+    const ampScale = gain/7; // base gain
+
+    const seed = WaveEngine.rng(42);
+
+    for (let c=0;c<channels;c++){
+      ctx.beginPath();
+      const centerY = c*chH + chH/2;
+      for (let i=0;i<=samples;i++){
+        const t = time + i/sampleRate;
+        let y = WaveEngine.sample(pattern, t, c, seed);
+        y = y/ampScale * (chH/200); // scale to channel height
+        const py = centerY - y;
+        if (i===0) ctx.moveTo(i*dx, py);
+        else ctx.lineTo(i*dx, py);
+      }
+      ctx.stroke();
+    }
+
+    ctx.shadowBlur=0;
+
+    // Channel labels
+    if (showLabels){
+      ctx.fillStyle='rgba(122,243,168,.5)';
+      ctx.font='10px "IBM Plex Mono", monospace';
+      ctx.textAlign='left';
+      for (let c=0;c<channels;c++){
+        ctx.fillText(labels[c]||`CH${c+1}`, 6, c*chH + 12);
+      }
+    }
+
+    // Calibration mark (50 µV)
+    ctx.strokeStyle='#7af3a8';
+    ctx.lineWidth=1.5;
+    ctx.beginPath();
+    ctx.moveTo(width-30, height-20);
+    ctx.lineTo(width-30, height-50);
+    ctx.moveTo(width-35, height-50);
+    ctx.lineTo(width-25, height-50);
+    ctx.moveTo(width-35, height-20);
+    ctx.lineTo(width-25, height-20);
+    ctx.stroke();
+    ctx.fillStyle='rgba(122,243,168,.7)';
+    ctx.font='9px "IBM Plex Mono", monospace';
+    ctx.fillText('50µV', width-50, height-30);
+  },
+
+  // Single channel mini render
+  drawMini(ctx, pattern, opts={}){
+    const {width, height, duration=4} = opts;
+    ctx.fillStyle='#000';
+    ctx.fillRect(0,0,width,height);
+    // grid
+    ctx.strokeStyle='#0d2a1d';
+    ctx.lineWidth=0.5;
+    ctx.beginPath();
+    for (let s=0;s<=duration*2;s++){
+      const x = (s/(duration*2))*width;
+      ctx.moveTo(x,0);ctx.lineTo(x,height);
+    }
+    for (let i=0;i<=4;i++){
+      const y = (i/4)*height;
+      ctx.moveTo(0,y);ctx.lineTo(width,y);
+    }
+    ctx.stroke();
+
+    // wave
+    ctx.strokeStyle='#7af3a8';
+    ctx.shadowColor='#7af3a8';
+    ctx.shadowBlur=3;
+    ctx.lineWidth=1.3;
+    ctx.beginPath();
+    const sr=200;
+    const samples=duration*sr;
+    const dx=width/samples;
+    for (let i=0;i<=samples;i++){
+      const t=i/sr;
+      let y = WaveEngine.sample(pattern, t, 0);
+      y = y * (height/200);
+      const py = height/2 - y;
+      if (i===0) ctx.moveTo(0,py); else ctx.lineTo(i*dx, py);
+    }
+    ctx.stroke();
+    ctx.shadowBlur=0;
+  }
+};
+
+/* ===========================================
+   DATA: PATTERNS
+=========================================== */
+const PATTERNS = [
+  {id:'alpha', name:'Alpha Rhythm', ar:'إيقاع ألفا', cat:['normal'], mark:'good', icon:'good',
+   desc:'إيقاع طبيعي بمعدل 8-13 Hz يظهر في المنطقة القذالية (O1/O2) عند إغماض العينين والاسترخاء. <strong>يختفي (يُحجب) عند فتح العين أو الانتباه</strong> — وهذا الـ reactivity هو علامة الطبيعية.',
+   tags:[{t:'طبيعي',c:'good'},{t:'Posterior',c:'info'}],
+   clinical:'غياب ألفا أو عدم blocking عند فتح العين قد يشير إلى encephalopathy. الفرق بين النصفين >50% يستحق التحقيق.'},
+
+  {id:'beta', name:'Beta Activity', ar:'نشاط بيتا', cat:['normal'], mark:'good', icon:'good',
+   desc:'نشاط سريع >13 Hz منتشر بالأمام أو المركزي. سعة منخفضة عادة (<20 µV). <strong>زيادة بيتا الواضحة تشير إلى بنزوديازيبينات أو باربيتورات</strong>.',
+   tags:[{t:'طبيعي',c:'good'},{t:'Frontal',c:'info'},{t:'Drug-induced',c:'warn'}],
+   clinical:'Excess beta (>20-25 µV) في frontal central = دليل على benzodiazepine use. مفيد في تقييم الـ drug compliance.'},
+
+  {id:'mu', name:'Mu Rhythm', ar:'إيقاع مو', cat:['normal'], mark:'good', icon:'good',
+   desc:'إيقاع 7-11 Hz فوق المنطقة الوسطى (C3/C4) بشكل arciform (شبه قوس). <strong>يُحجب بالحركة اليدوية المقابلة</strong> أو حتى التفكير في الحركة.',
+   tags:[{t:'طبيعي',c:'good'},{t:'Central',c:'info'},{t:'حركي',c:'neut'}],
+   clinical:'لا تخلطه مع spike activity! Mu مستمر، arciform، ويختفي بحركة اليد. شائع في 20% من البالغين.'},
+
+  {id:'k-complex', name:'K-Complex & Spindles', ar:'مركبات K والمغازل', cat:['normal'], mark:'good', icon:'good',
+   desc:'<strong>K-complex:</strong> موجة حادة سلبية كبيرة متبوعة بإيجابية، تُثار بالمنبهات الخارجية أثناء النوم. <strong>Sleep spindles:</strong> 12-14 Hz في رشقات قصيرة في N2.',
+   tags:[{t:'NREM',c:'info'},{t:'N2',c:'good'}],
+   clinical:'غياب الـ spindles في النوم بعد cardiac arrest = مؤشر بروجنوستي سيء. حضورها = الـ thalamocortical pathway سليم.'},
+
+  {id:'rem', name:'REM Sleep', ar:'نوم الريم', cat:['normal'], mark:'info', icon:'info',
+   desc:'نشاط مختلط منخفض السعة شبيه باليقظة، مع <strong>sawtooth waves</strong> في vertex وحركات عين سريعة. EMG في الذقن مكبوت.',
+   tags:[{t:'النوم',c:'info'}],
+   clinical:'REM بدون atonia = REM behavior disorder، مرتبط بـ Parkinson و synucleinopathies. في الـ ICU، REM rebound بعد إيقاف sedation.'},
+
+  {id:'sreda', name:'SREDA', ar:'تفريغ صرعي شكلي حميد', cat:['benign'], mark:'good', icon:'good',
+   desc:'<strong>Subclinical Rhythmic Epileptiform Discharge of Adults</strong>. نمط 5-7 Hz في posterior/temporoparietal، يظهر فجأة دون أعراض ويختفي مفاجئاً بعد 40-80 ثانية.',
+   tags:[{t:'حميد',c:'good'},{t:'تشخيص تفريقي',c:'info'}],
+   clinical:'لا علاج، لا متابعة. شائع الخلط بـ seizure activity. القاعدة: إذا كان المريض clinically alert أثناء النمط = SREDA حتى يثبت العكس.'},
+
+  {id:'breach', name:'Breach Rhythm', ar:'إيقاع العيب الجمجمي', cat:['benign'], mark:'good', icon:'good',
+   desc:'نشاط ألفا/بيتا عالي السعة (>100 µV) فوق منطقة skull defect (post-craniotomy, burr hole). <strong>artifact فيزيائي حميد</strong> بسبب فقدان impedance الجمجم.',
+   tags:[{t:'حميد',c:'good'},{t:'Post-op',c:'info'}],
+   clinical:'لا يحتاج علاجاً. يبقى reactive لـ eye opening. لا يتبعه slow wave. لا تخلطه مع focal epileptiform activity.'},
+
+  {id:'pleds', name:'LPDs (PLEDs)', ar:'التفريغات الدورية الجانبية', cat:['epileptiform','periodic','icu'], mark:'crit', icon:'crit',
+   desc:'<strong>Lateralized Periodic Discharges</strong> (PLEDs قديماً). موجات حادة دورية بـ 0.5-3 Hz من نصف كرة دماغية واحدة. علامة خلل وظيفي حاد.',
+   tags:[{t:'حرج',c:'crit'},{t:'ICU',c:'warn'},{t:'دوري',c:'info'}],
+   clinical:'PLEDs + حمى + altered mental = HSV Encephalitis حتى يثبت العكس. ابدأ Acyclovir 10 mg/kg q8h فوراً قبل النتائج.'},
+
+  {id:'pswc', name:'PSWC (CJD)', ar:'مركبات الموجات الحادة الدورية', cat:['epileptiform','periodic'], mark:'crit', icon:'crit',
+   desc:'مركبات حادة دورية <strong>ثنائية الجانب ومتزامنة</strong> بـ 0.5-2 Hz، أعلى في frontal. العلامة الكهربائية الأكثر تخصصاً لـ Creutzfeldt-Jakob Disease.',
+   tags:[{t:'تشخيصي',c:'crit'},{t:'CJD',c:'crit'},{t:'دوري',c:'info'}],
+   clinical:'تظهر في 60-70% من sporadic CJD. الثلاثي: PSWC + تدهور إدراكي سريع + myoclonus = CJD. تختفي في المراحل المتأخرة.'},
+
+  {id:'gpds', name:'GPDs', ar:'التفريغات الدورية المعممة', cat:['periodic','icu'], mark:'crit', icon:'crit',
+   desc:'<strong>Generalized Periodic Discharges</strong>. تفريغات معممة بمعدل دوري. تشمل triphasic waves وبعض حالات NCSE. التشخيص التفريقي واسع.',
+   tags:[{t:'حرج',c:'crit'},{t:'ICU',c:'warn'}],
+   clinical:'GPDs >2.5 Hz = treat as seizure. <2.5 Hz = ictal-interictal continuum، يحتاج تقييم إكلينيكي وعلاج تجريبي.'},
+
+  {id:'triphasic', name:'Triphasic Waves', ar:'الأمواج ثلاثية الطور', cat:['periodic','icu'], mark:'warn', icon:'warn',
+   desc:'موجات ذات ثلاثة أطوار (positive-negative-positive) بـ 1.5-2.5 Hz، frontal dominant. <strong>غير محددة لـ hepatic encephalopathy</strong> — تظهر في metabolic، uremic، hyponatremia، CJD.',
+   tags:[{t:'Metabolic',c:'warn'},{t:'دوري',c:'info'}],
+   clinical:'الفرق عن seizure: ثابتة الشكل، لا evolution. تستجيب لتصحيح Ammonia. إذا استمرت رغم العلاج = فكر في NCSE واعطِ benzodiazepine trial.'},
+
+  {id:'spike-wave', name:'3 Hz Spike-Wave', ar:'موجة حادة-بطيئة 3 هرتز', cat:['epileptiform'], mark:'crit', icon:'crit',
+   desc:'النمط الكلاسيكي لـ <strong>typical absence epilepsy</strong>. تفريغات معممة متماثلة بـ 3 Hz بنمط spike-and-wave. تظهر مع loss of awareness خلال 5-30 ثانية.',
+   tags:[{t:'Absence',c:'crit'},{t:'معمم',c:'info'}],
+   clinical:'يُثار بـ hyperventilation في 80% من الأطفال. علاج الخط الأول: Ethosuximide أو Valproate. تجنب Carbamazepine — قد يفاقم.'},
+
+  {id:'birds', name:'BIRDs', ar:'تفريغات إيقاعية قصيرة', cat:['epileptiform','icu'], mark:'warn', icon:'warn',
+   desc:'<strong>Brief Potentially Ictal Rhythmic Discharges</strong>. تفريغات إيقاعية <10 ثوانٍ، >4 Hz، evolving morphology. على الحافة بين interictal و ictal.',
+   tags:[{t:'ICU',c:'warn'},{t:'محتمل صرعي',c:'warn'}],
+   clinical:'BIRDs متكررة (>1 كل 10 دقائق) أو حقل rhythmic >10s = تعامل كـ status epilepticus. ابدأ Levetiracetam أو Lacosamide.'},
+
+  {id:'burst-supp', name:'Burst Suppression', ar:'الانفجار والكبت', cat:['icu','coma'], mark:'crit', icon:'crit',
+   desc:'نمط متناوب بين <strong>bursts</strong> من النشاط متعدد الأشكال و <strong>suppression</strong> (<10 µV). علامة خلل عميق في الدماغ.',
+   tags:[{t:'حرج',c:'crit'},{t:'Coma',c:'info'}],
+   clinical:'مع anesthesia = هدف علاجي في refractory status. بدون أدوية بعد cardiac arrest = prognosis سيء (مع reactive bursts قد يتحسن). hypothermic = طبيعي عند <32°C.'},
+
+  {id:'alpha-coma', name:'Alpha Coma', ar:'غيبوبة ألفا', cat:['coma','icu'], mark:'crit', icon:'crit',
+   desc:'نشاط ألفا (8-12 Hz) منتشر في مريض comatose <strong>غير reactive</strong>. يختلف عن ألفا الطبيعي بالانتشار وغياب الـ blocking.',
+   tags:[{t:'حرج',c:'crit'},{t:'بروجنوستي سيء',c:'crit'}],
+   clinical:'Post cardiac arrest, brainstem stroke, drug intoxication. prognosis سيء جداً للـ post-anoxic. اختبر الـ reactivity بمنبه مؤلم قبل التشخيص النهائي.'},
+
+  {id:'firda', name:'FIRDA', ar:'دلتا إيقاعي جبهي متقطع', cat:['icu'], mark:'warn', icon:'warn',
+   desc:'<strong>Frontal Intermittent Rhythmic Delta Activity</strong>. دلتا 1-3 Hz في frontal، متزامن ثنائي الجانب. علامة غير محددة لخلل وظيفي.',
+   tags:[{t:'Metabolic',c:'warn'},{t:'ICP',c:'warn'}],
+   clinical:'في الأطفال OIRDA (occipital) قد يشير لـ absence. unilateral = mass lesion. bilateral = metabolic، increased ICP، deep midline lesion.'},
+
+  {id:'eci', name:'Electrocerebral Inactivity', ar:'خمول كهربي دماغي', cat:['coma'], mark:'crit', icon:'crit',
+   desc:'غياب كامل للنشاط الكهربي (<2 µV) في كل المناطق، مع <strong>gain 2 µV/mm</strong> و distance ≥10cm، لمدة ≥30 دقيقة.',
+   tags:[{t:'Brain Death',c:'crit'},{t:'تأكيدي',c:'info'}],
+   clinical:'EEG هو confirmatory فقط. استبعد hypothermia (<32°C)، CNS depressants، metabolic. EEG لا يقيس brainstem activity.'},
+
+  {id:'seizure', name:'Electrographic Seizure', ar:'نوبة كهربائية', cat:['epileptiform','icu'], mark:'crit', icon:'crit',
+   desc:'نشاط إيقاعي/متطور <strong>(evolving)</strong> >2.5 Hz أو >10 ثوانٍ، مع تغير في frequency, amplitude, location, morphology. قد يكون non-convulsive.',
+   tags:[{t:'حرج',c:'crit'},{t:'Salzburg',c:'info'}],
+   clinical:'معايير Salzburg: rhythmic discharge >2.5 Hz أو evolving + spatiotemporal change = seizure. NCSE شائع في ICU encephalopathy (10-30%).'},
+
+  {id:'eye-blink', name:'Eye Blink Artifact', ar:'تشويش رمش العين', cat:['benign'], mark:'info', icon:'info',
+   desc:'موجات حادة موجبة عالية السعة في <strong>Fp1/Fp2</strong> فقط، مزامنة مع الرمش. تظهر in-phase في الجبهة الأمامية.',
+   tags:[{t:'Artifact',c:'info'},{t:'Ocular',c:'neut'}],
+   clinical:'لا تخلطها مع frontal spike. القاعدة: artifact في Fp1/Fp2 فقط = ocular. إذا انتشرت إلى F3/F4 = نشاط دماغي حقيقي.'}
+];
+
+/* ===========================================
+   LESSONS DATA
+=========================================== */
+const LESSONS = [
+  {
+    id:1, dur:'15 د', topics:8,
+    title:'الأساس: الفيزياء والقطبيات',
+    desc:'فهم منشأ النشاط الكهربي، نظام 10-20، Montages، والفلاتر الرقمية.',
+    content:`
+      <h3>من أين تأتي إشارة EEG؟</h3>
+      <p>EEG يقيس <strong>field potentials</strong> الناتجة عن تزامن آلاف الخلايا الهرمية في القشرة. الإشارة هي مجموع <strong>postsynaptic potentials</strong> وليست action potentials. لتظهر موجة، نحتاج تزامن ٦ سم² من القشرة على الأقل.</p>
+
+      <div class="callout gold">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <p>القاعدة الذهبية: EEG = cortex فقط. النشاط من الـ deep structures (basal ganglia, hippocampus deep, brainstem) <b>لا يُسجل مباشرة</b>.</p>
+      </div>
+
+      <h3>نظام 10-20 الدولي</h3>
+      <p>تقسيم فروة الرأس بنسب 10% و 20% من المسافات التشريحية الأساسية: nasion-inion، و pre-auricular-pre-auricular.</p>
+      <ul>
+        <li><strong>Fp</strong> = Frontopolar &nbsp;|&nbsp; <strong>F</strong> = Frontal</li>
+        <li><strong>C</strong> = Central (فوق Rolandic fissure)</li>
+        <li><strong>P</strong> = Parietal &nbsp;|&nbsp; <strong>O</strong> = Occipital</li>
+        <li><strong>T</strong> = Temporal (T3/T4 الآن T7/T8 في النظام المعدّل)</li>
+      </ul>
+      <p>الأرقام: <strong>زوجية للأيمن</strong> (2,4,6,8)، <strong>فردية لليسار</strong> (1,3,5,7)، و <strong>Z</strong> للخط الأوسط (Fz, Cz, Pz, Oz).</p>
+
+      <h3>أنواع Montages</h3>
+      <p><strong>Bipolar (مثل Longitudinal "double banana"):</strong> كل قناة = فرق بين electrodes متجاورين. مفيد للنشاط المحلي. النشاط البؤري يظهر بـ <strong>phase reversal</strong> — قمم متعاكسة على القناتين فوق وتحت البؤرة.</p>
+      <p><strong>Referential (Average أو Common):</strong> كل electrode يُقاس مقابل reference. يُظهر السعة الحقيقية لكنه عرضة لـ contamination إذا كان الـ reference نشطاً.</p>
+
+      <div class="callout warn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <p>Reference contaminated يصنع "نشاطاً وهمياً" في كل القنوات. إذا شككت، انقل الـ reference إلى electrode بعيد أو استخدم average reference.</p>
+      </div>
+
+      <h3>الفلاتر الرقمية</h3>
+      <div class="kv-grid">
+        <div class="kv"><div class="kv-k">High-Pass (LFF)</div><div class="kv-v mono">0.5-1 Hz</div></div>
+        <div class="kv"><div class="kv-k">Low-Pass (HFF)</div><div class="kv-v mono">70 Hz</div></div>
+        <div class="kv"><div class="kv-k">Notch</div><div class="kv-v mono">50/60 Hz</div></div>
+        <div class="kv"><div class="kv-k">Sample Rate</div><div class="kv-v mono">≥256 Hz</div></div>
+      </div>
+      <p><strong>تحذير:</strong> رفع HFF (مثلاً إلى 35 Hz) قد <strong>يخفي spike activity</strong>. تشغيل Notch قد يُذيب spike إذا كانت أساسياً 50 Hz. إذا شككت في نشاط مريب — أطفئ كل الفلاتر مؤقتاً.</p>
+
+      <h3>المعايرة</h3>
+      <p><strong>Paper speed:</strong> 30 mm/s. كل 3 سم = ١ ثانية، و كل ميليمتر = 33 ms تقريباً.</p>
+      <p><strong>Sensitivity:</strong> 7 µV/mm افتراضي. زيادة الـ sensitivity = الموجة تبدو أكبر (مفيد لـ ECI). نقصانها = أصغر (مفيد للنشاط العالي السعة).</p>
+
+      <div class="callout tip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <p>لقياس التردد بسرعة: عدّ الأمواج في ٣ سم (= ١ ثانية). موجة كاملة كل سنتيمتر = ٣ Hz. تذكر: spike width <70 ms، sharp wave 70-200 ms.</p>
+      </div>
+    `
+  },
+  {
+    id:2, dur:'18 د', topics:6,
+    title:'الإيقاعات الطبيعية',
+    desc:'ألفا، بيتا، ثيتا، دلتا، مو، lambda، وكل ما يلي في فحص الـ awake.',
+    content:`
+      <h3>إيقاع ألفا (Alpha)</h3>
+      <p><strong>التعريف:</strong> 8-13 Hz في المنطقة القذالية (O1, O2) عند البالغ المسترخي مع عيون مغلقة. السعة 20-60 µV عادة. <strong>Reactivity</strong> بفتح العين = العلامة الأهم للطبيعية.</p>
+
+      <div class="kv-grid">
+        <div class="kv"><div class="kv-k">عمر 3 سنوات</div><div class="kv-v">~8 Hz</div></div>
+        <div class="kv"><div class="kv-k">عمر 10 سنوات</div><div class="kv-v">~10 Hz</div></div>
+        <div class="kv"><div class="kv-k">البالغ</div><div class="kv-v">9-11 Hz</div></div>
+        <div class="kv"><div class="kv-k">المسن (>60)</div><div class="kv-v">≥8 Hz</div></div>
+      </div>
+
+      <p><strong>الـ Posterior Dominant Rhythm (PDR) <8 Hz في البالغ = abnormal</strong>. عدم تماثل >50% بين النصفين = ابحث عن lesion في الجانب الأبطأ.</p>
+
+      <h3>إيقاع بيتا (Beta)</h3>
+      <p>>13 Hz، سعة <20 µV، منتشر بالأمام. زيادة beta الواضحة في frontal central = دليل على <strong>benzodiazepines, barbiturates, propofol, chloral hydrate</strong>.</p>
+
+      <h3>ثيتا ودلتا (Theta & Delta)</h3>
+      <p><strong>ثيتا الطبيعي:</strong> 4-7 Hz، يظهر فقط في drowsiness و في temporal anterior. كميات صغيرة في البالغ مسموحة. ظهوره diffuse في wakefulness = abnormal.</p>
+      <p><strong>دلتا الطبيعي:</strong> <4 Hz، يظهر فقط في deep sleep (N3). أي دلتا في wakefulness البالغ = pathologic.</p>
+
+      <div class="callout info">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <p>في الأطفال، slow wave activity أكثر قبولاً. مثلاً <strong>Posterior Slow Waves of Youth (PSWY)</strong> طبيعي حتى ١٥ سنة.</p>
+      </div>
+
+      <h3>إيقاع مو (Mu)</h3>
+      <p>7-11 Hz فوق central (C3/C4) بشكل arciform. يُحجب بحركة اليد المقابلة أو حتى التخيل. <strong>يظهر في 20% من البالغين</strong>. لا تخلطه مع epileptiform discharge.</p>
+
+      <h3>أمواج Lambda و POSTS</h3>
+      <p><strong>Lambda:</strong> موجات حادة موجبة في occipital، تُثار بـ scanning eye movements في wakefulness.</p>
+      <p><strong>POSTS (Positive Occipital Sharp Transients of Sleep):</strong> موجات حادة موجبة في O1/O2 خلال N1/N2. <strong>طبيعي تماماً</strong> رغم شكلها epileptiform.</p>
+
+      <h3>مراحل النوم — معايير AASM</h3>
+      <div class="cmp-table-wrap">
+        <table class="cmp-table">
+          <tr><th>المرحلة</th><th>المعالم</th><th>%</th></tr>
+          <tr><td><strong>W</strong></td><td>Alpha posterior + eye movements</td><td>5%</td></tr>
+          <tr><td><strong>N1</strong></td><td>زوال alpha + vertex sharp waves</td><td>5%</td></tr>
+          <tr><td><strong>N2</strong></td><td>Sleep spindles + K-complexes</td><td>50%</td></tr>
+          <tr><td><strong>N3</strong></td><td>>20% delta high-amplitude</td><td>20%</td></tr>
+          <tr><td><strong>R</strong></td><td>Low voltage mixed + sawtooth</td><td>20%</td></tr>
+        </table>
+      </div>
+
+      <div class="callout gold">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <p>غياب spindles في النوم بعد cardiac arrest = <strong>مؤشر بروجنوستي سيء</strong>. حضورها بعد 24 ساعة = الـ thalamocortical pathway سليمة.</p>
+      </div>
+    `
+  },
+  {
+    id:3, dur:'20 د', topics:7,
+    title:'Artifacts: الفصل بين الحقيقي والوهمي',
+    desc:'تشويش العضلات، العيون، EKG، حركة، عرق، 60Hz، breach، وحيل التمييز.',
+    content:`
+      <h3>القاعدة الذهبية</h3>
+      <div class="callout gold">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <p>٩٠٪ من "النشاط الغريب" في EEG = artifact. التمييز بينه وبين النشاط الحقيقي هو ما يفرق المبتدئ عن الخبير.</p>
+      </div>
+
+      <h3>Artifacts العضلية (EMG)</h3>
+      <p>نشاط سريع >70 Hz، polyspike، في temporal/frontal/jaw. <strong>الفرق عن seizure:</strong> EMG عشوائي بلا evolution، يقل بالاسترخاء، ويزداد بالتجهم. عند الشك، اطلب من المريض فتح فمه واسترخاء الفك.</p>
+
+      <h3>Artifacts العين</h3>
+      <p><strong>Vertical eye movement (blink):</strong> موجة موجبة في Fp1+Fp2 بنفس الاتجاه (in-phase). تختفي بفتح العين الثابت.</p>
+      <p><strong>Lateral eye movement:</strong> موجبة في Fp1 + سالبة في Fp2 (أو العكس). out-of-phase في frontal.</p>
+
+      <div class="callout tip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <p>القاعدة: artifact ينحصر في Fp1/Fp2 = ocular. إذا انتشر إلى F3/F4 = نشاط دماغي حقيقي. ضع electrode إضافي على infraorbital ridge للتأكيد.</p>
+      </div>
+
+      <h3>EKG Artifact</h3>
+      <p>Spike صغير منتظم متزامن مع QRS، يظهر في temporal خصوصاً عند المرضى ذوي الرقبة القصيرة أو السمنة. <strong>قارنه دائماً مع EKG channel</strong>.</p>
+      <p>Pulse artifact: موجة بطيئة (لا spike) متزامنة مع pulse، سببها electrode فوق شريان.</p>
+
+      <h3>تشويش 50/60 Hz</h3>
+      <p>خط رفيع منتظم في كل القنوات. سببه: أسلاك الكهرباء، grounding سيئ، electrode impedance >10 kΩ. <strong>الحل الأول:</strong> فحص الـ electrodes وإعادة التثبيت قبل تشغيل Notch filter.</p>
+
+      <div class="callout warn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>
+        <p>Notch filter يُخفي gamma band activity (>40 Hz) المرتبط ببعض seizures. لا تستخدمه افتراضياً.</p>
+      </div>
+
+      <h3>Sweat Artifact</h3>
+      <p>Baseline wander بطيء جداً (<0.5 Hz) بسبب تغير impedance من العرق. الحل: تبريد المريض، تجفيف الـ electrodes، رفع HFF إلى 1 Hz مؤقتاً.</p>
+
+      <h3>Electrode Pop</h3>
+      <p>Spike حاد جداً في <strong>قناة واحدة فقط</strong> يتبعه استرداد بطيء. سببه فقدان contact مؤقت. القاعدة: spike حقيقي يظهر في قناتين متجاورتين على الأقل.</p>
+
+      <h3>الفروقات الحاسمة</h3>
+      <table class="cmp-table">
+        <tr><th>السمة</th><th>Artifact</th><th>نشاط دماغي</th></tr>
+        <tr><td>التوزيع</td><td>قناة واحدة عادة</td><td>field منطقي</td></tr>
+        <tr><td>التطور</td><td>ثابت/عشوائي</td><td>evolves</td></tr>
+        <tr><td>السياق</td><td>مع حركة/EKG/blink</td><td>مستقل</td></tr>
+        <tr><td>الـ Field</td><td>غير تشريحي</td><td>منطقي تشريحياً</td></tr>
+      </table>
+    `
+  },
+  {
+    id:4, dur:'22 د', topics:9,
+    title:'الأنماط الصرعية',
+    desc:'Spikes, sharp waves, polyspikes, generalized vs focal، و الـ EEG في أنواع الصرع.',
+    content:`
+      <h3>التعريفات الأساسية</h3>
+      <ul>
+        <li><strong>Spike:</strong> موجة حادة < 70 ms، sharp pointed، sticks out from background</li>
+        <li><strong>Sharp wave:</strong> 70-200 ms</li>
+        <li><strong>Spike-and-wave:</strong> spike متبوع بـ slow wave</li>
+        <li><strong>Polyspike:</strong> ≥2 spikes متتالية</li>
+      </ul>
+
+      <h3>معايير الـ Epileptiform Discharge الحقيقي</h3>
+      <p>(IFCN 2017 criteria، يحتاج ٤ من ٦):</p>
+      <ul>
+        <li>Di- or tri-phasic morphology</li>
+        <li>Sharp/spiky relative to background</li>
+        <li>Duration different from ongoing activity</li>
+        <li>Asymmetric (rising vs falling)</li>
+        <li>Followed by slow wave</li>
+        <li>Disrupts background, has physiologic field</li>
+      </ul>
+
+      <div class="callout gold">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <p>في bipolar montage، الـ epileptiform discharge الحقيقي يُظهر <strong>phase reversal</strong> — قناتان متعاكستان فوق وتحت بؤرة النشاط. هذا يحدد الموقع.</p>
+      </div>
+
+      <h3>متلازمات الصرع — البصمات الكهربائية</h3>
+      <table class="cmp-table">
+        <tr><th>المتلازمة</th><th>النمط الكهربائي</th></tr>
+        <tr><td>Childhood Absence (CAE)</td><td>3 Hz generalized spike-wave</td></tr>
+        <tr><td>JME</td><td>4-6 Hz polyspike-wave generalized</td></tr>
+        <tr><td>Lennox-Gastaut</td><td>Slow spike-wave 1.5-2.5 Hz + GPFA</td></tr>
+        <tr><td>BECTS (Rolandic)</td><td>Centrotemporal spikes (sleep activated)</td></tr>
+        <tr><td>West Syndrome</td><td>Hypsarrhythmia</td></tr>
+        <tr><td>Temporal Lobe Epilepsy</td><td>Anterior temporal spikes (T1/T2)</td></tr>
+      </table>
+
+      <h3>Hypsarrhythmia</h3>
+      <p>نمط فوضوي عالي السعة (>200 µV)، high-voltage chaotic، مع multifocal spikes. مرض رضع (3-12 شهر) في West syndrome. <strong>الثلاثي: infantile spasms + hypsarrhythmia + developmental regression</strong>.</p>
+
+      <h3>تنشيط النوبات (Activation Procedures)</h3>
+      <ul>
+        <li><strong>Hyperventilation:</strong> ٣ دقائق. تُنشّط absence في 80% من الأطفال. تُحدث slowing diffuse طبيعي.</li>
+        <li><strong>Photic stimulation:</strong> 1-30 Hz. Photoparoxysmal response = إستجابة معممة تستمر بعد التحفيز.</li>
+        <li><strong>Sleep deprivation:</strong> تُنشّط 30-50% من البؤر الخفية، خاصة في الـ frontal.</li>
+      </ul>
+
+      <h3>Status Epilepticus غير المتشنج (NCSE)</h3>
+      <div class="callout danger">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 9v4M12 17h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+        <p>NCSE موجود في ١٠-٣٠٪ من مرضى ICU encephalopathy. إذا كان هناك تغير في mental status بدون سبب واضح + EEG abnormal = اعمل EEG مطول واعطِ benzodiazepine trial.</p>
+      </div>
+
+      <p><strong>معايير Salzburg لـ NCSE:</strong></p>
+      <ul>
+        <li>Epileptiform discharges >2.5 Hz, أو</li>
+        <li>Epileptiform discharges ≤2.5 Hz + clinical/EEG improvement بعد IV AED, أو</li>
+        <li>Rhythmic activity >0.5 Hz + spatial-temporal evolution</li>
+      </ul>
+    `
+  },
+  {
+    id:5, dur:'25 د', topics:10,
+    title:'احتراف الـ ICU',
+    desc:'PLEDs, GPDs, BIRDs, triphasic, burst-suppression، وكيف تفرق بين القاتل والحميد.',
+    content:`
+      <h3>لماذا ICU EEG مختلف؟</h3>
+      <p>مرضى ICU يجمعون أسباباً متعددة لـ encephalopathy: hypoxic، metabolic، structural، infectious، toxic. الـ EEG هنا أداة <strong>تشخيصية وبروجنوستية وعلاجية</strong>.</p>
+
+      <h3>نظام ACNS لتصنيف الـ patterns</h3>
+      <p>الـ <strong>American Clinical Neurophysiology Society</strong> وضعت تصنيفاً موحداً:</p>
+      <p>الـ Pattern = (Location)(Type) — مثلاً LPDs, GPDs, LRDA, GRDA. كل nomenclature بـ ٣ أحرف:</p>
+      <ul>
+        <li><strong>L</strong>ateralized / <strong>G</strong>eneralized / <strong>B</strong>ilateral / <strong>M</strong>ultifocal</li>
+        <li><strong>P</strong>eriodic <strong>D</strong>ischarges / <strong>R</strong>hythmic <strong>D</strong>elta <strong>A</strong>ctivity</li>
+      </ul>
+
+      <h3>LPDs (PLEDs قديماً)</h3>
+      <p>Periodic discharges على جانب واحد بـ 0.5-3 Hz. أسبابها:</p>
+      <ul>
+        <li>Acute stroke (الأكثر)</li>
+        <li>HSV Encephalitis (الأخطر)</li>
+        <li>Brain abscess, tumor</li>
+        <li>Post-ictal Todd's phenomenon</li>
+      </ul>
+
+      <div class="callout danger">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 9v4M12 17h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+        <p>LPDs + fever + altered mental = HSV Encephalitis حتى يثبت العكس. ابدأ Acyclovir 10 mg/kg q8h IV فوراً قبل LP أو MRI.</p>
+      </div>
+
+      <h3>BiPDs و BIPLEDs</h3>
+      <p>LPDs من الجانبين لكن <strong>independent</strong> (غير متزامن). تشير إلى:</p>
+      <ul>
+        <li>CJD (مع PSWC)</li>
+        <li>Severe anoxic encephalopathy</li>
+        <li>Bilateral structural lesions</li>
+      </ul>
+
+      <h3>GPDs و Triphasic Waves</h3>
+      <p>GPDs المعممة قد تكون triphasic waves (metabolic) أو true epileptiform. الفرق:</p>
+      <table class="cmp-table">
+        <tr><th>السمة</th><th>Triphasic</th><th>Epileptiform GPDs</th></tr>
+        <tr><td>المعدل</td><td>1.5-2.5 Hz</td><td>>2.5 Hz أو evolving</td></tr>
+        <tr><td>الشكل</td><td>3-phase ثابت</td><td>متطور</td></tr>
+        <tr><td>التوزيع</td><td>Frontal max</td><td>متغير</td></tr>
+        <tr><td>الاستجابة لـ BZD</td><td>لا تختفي</td><td>تتحسن غالباً</td></tr>
+      </table>
+
+      <h3>The Ictal-Interictal Continuum (IIC)</h3>
+      <p>منطقة رمادية: GPDs/LPDs بـ 1-2.5 Hz بدون evolution واضح. <strong>قد تكون أو لا تكون مرتبطة بإصابة عصبية مستمرة</strong>.</p>
+      <p>الإدارة: <strong>BZD trial</strong> — 2 mg lorazepam IV. إذا تحسّن النمط + المريض = treat as NCSE. إذا لم يتحسن = راقب.</p>
+
+      <h3>Burst Suppression</h3>
+      <p>الأسباب:</p>
+      <ul>
+        <li><strong>علاجي مقصود:</strong> propofol/pentobarbital للـ refractory status (هدف 50% suppression)</li>
+        <li><strong>Hypothermia:</strong> طبيعي عند <32°C</li>
+        <li><strong>Post-anoxic:</strong> bad prognosis لكن reactive bursts قد تتحسن</li>
+        <li><strong>Hypoxia/encephalopathy شديدة</strong></li>
+      </ul>
+
+      <div class="callout warn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+        <p>"Identical bursts" (نفس الشكل المتكرر) بعد cardiac arrest = prognosis سيء جداً. Variability في الـ bursts = أفضل قليلاً.</p>
+      </div>
+
+      <h3>Reactivity Testing</h3>
+      <p>اختبار حاسم في تقييم prognosis:</p>
+      <ul>
+        <li>Auditory: نادي اسم المريض، صفّق</li>
+        <li>Tactile: ضغط على sternum، nipple twist</li>
+        <li>Painful: nail bed pressure</li>
+      </ul>
+      <p>تغير الـ EEG (frequency, amplitude, morphology) خلال ٣٠ ثانية بعد المنبه = <strong>reactive = better prognosis</strong>.</p>
+
+      <h3>التوصيات العملية في ICU</h3>
+      <div class="callout gold">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <p>"If you don't know what it is, and the patient is encephalopathic — it might be seizures until proven otherwise." اطلب continuous EEG ≥24h لأي coma غامض.</p>
+      </div>
+    `
+  },
+  {
+    id:6, dur:'15 د', topics:5,
+    title:'السكتة، الموت الدماغي، والمحاكيات',
+    desc:'EEG في acute stroke، معايير ECI، PNES، و patterns نادرة.',
+    content:`
+      <h3>EEG في السكتة الدماغية</h3>
+      <p>ليس أول-line في diagnosis، لكنه مفيد في:</p>
+      <ul>
+        <li>تقييم altered consciousness الغامضة</li>
+        <li>كشف NCSE المصاحبة (شائعة في ICH خصوصاً)</li>
+        <li>تقييم prognosis في large hemispheric infarction</li>
+      </ul>
+
+      <h3>تطور EEG في السكتة</h3>
+      <table class="cmp-table">
+        <tr><th>الزمن</th><th>الـ EEG</th></tr>
+        <tr><td>Hyperacute (<6h)</td><td>Loss of normal activity فقط</td></tr>
+        <tr><td>Acute (6-48h)</td><td>Focal slowing، LPDs ممكن</td></tr>
+        <tr><td>Subacute (2-14d)</td><td>Delta شديد، breach rhythm إذا craniectomy</td></tr>
+        <tr><td>Chronic (>14d)</td><td>Theta slowing، reorganization</td></tr>
+      </table>
+
+      <h3>تقييم الموت الدماغي</h3>
+      <p><strong>EEG هو confirmatory فقط</strong>. المعايير الأساسية لـ brain death:</p>
+      <ul>
+        <li>Coma + Known cause</li>
+        <li>Absent brainstem reflexes (corneal, gag, doll's eyes, calorics, pupillary)</li>
+        <li>Positive apnea test (PaCO2 >60 mmHg مع لا breathing)</li>
+        <li>استبعاد: hypothermia, sedatives, hypotension</li>
+      </ul>
+
+      <h3>Electrocerebral Inactivity (ECI) — البروتوكول</h3>
+      <div class="kv-grid">
+        <div class="kv"><div class="kv-k">Sensitivity</div><div class="kv-v mono">2 µV/mm</div></div>
+        <div class="kv"><div class="kv-k">Inter-electrode</div><div class="kv-v mono">≥10 cm</div></div>
+        <div class="kv"><div class="kv-k">Recording time</div><div class="kv-v mono">≥30 min</div></div>
+        <div class="kv"><div class="kv-k">HFF / LFF</div><div class="kv-v mono">0.1 / 70 Hz</div></div>
+      </div>
+      <p><strong>لا notch filter</strong>. يجب تسجيل reactivity لـ noise, light, pain. أي activity >2 µV ينفي ECI.</p>
+
+      <div class="callout warn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+        <p>EEG يسجل cortex فقط. Brainstem reflexes أو spinal reflexes أو ECG artifacts قد تظهر في brain dead. لا تخلط بينها وبين cerebral activity.</p>
+      </div>
+
+      <h3>PNES (Psychogenic Non-Epileptic Seizures)</h3>
+      <p>الأكثر تحدياً في الـ EMU. السمات الكهربائية:</p>
+      <ul>
+        <li>EEG <strong>طبيعي تماماً</strong> أثناء "النوبة"</li>
+        <li>لا post-ictal slowing</li>
+        <li>Awareness preserved (مع eye closure resistance)</li>
+        <li>Movements: erratic, asynchronous, side-to-side head shaking</li>
+        <li>Duration > 2 min شائع (epileptic seizures ≤2 min عادة)</li>
+        <li>Pelvic thrusting، forced eye closure</li>
+      </ul>
+
+      <h3>Patterns نادرة لكن مهمة</h3>
+      <p><strong>Phantom Spike-and-Wave (6 Hz S/W):</strong> 6 Hz spike-wave صغير، عابر، حميد عادة. WHAM = Wakefulness, High amplitude, Anterior, Male = benign. FOLD = Female, Occipital, Low amplitude, Drowsy = pathologic.</p>
+      <p><strong>14&6 Hz Positive Spikes:</strong> bursts من positive spikes في posterior خلال drowsiness. حميد رغم الشكل المخيف.</p>
+      <p><strong>BETS/SSS (Benign Epileptiform Transients of Sleep):</strong> small sharp spikes في temporal خلال النوم. حميدة تماماً.</p>
+
+      <div class="callout gold">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <p>القاعدة: قبل تشخيص أي مريض بالصرع بناءً على EEG وحده، تذكر أن ٣٪ من الناس الأصحاء لديهم epileptiform discharges، و٢-٤٪ من البالغين لديهم BETS. السياق السريري هو الفيصل.</p>
+      </div>
+    `
+  },
+  {
+    id:7, dur:'18 د', topics:6,
+    title:'حالات سريرية: من الواقع',
+    desc:'٦ حالات حقيقية من ICU وERوEMU مع EEG وتحليل خطوة بخطوة.',
+    content:`
+      <h3>الحالة ١: السيدة ذات الحمى</h3>
+      <p><strong>القصة:</strong> سيدة ٤٥ عاماً، حمى ٣ أيام، confusion يتطور إلى coma. CSF: lymphocytic pleocytosis. EEG يظهر periodic discharges في left temporal بـ 1 Hz.</p>
+      <div class="callout danger">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>
+        <p><b>التشخيص:</b> HSV Encephalitis. LPDs في temporal + fever + lymphocytic CSF = ابدأ Acyclovir فوراً. MRI سيُظهر T2/FLAIR hyperintensity في temporal lobes.</p>
+      </div>
+
+      <h3>الحالة ٢: المسن بعد cardiac arrest</h3>
+      <p><strong>القصة:</strong> رجل ٧٢ عاماً، VF arrest، ROSC بعد ٢٠ دقيقة. ٢٤ ساعة بعد cooling. EEG: burst suppression مع identical bursts، non-reactive.</p>
+      <div class="callout warn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+        <p><b>التفسير:</b> Identical bursts + non-reactive + post-anoxic = poor prognosis في 95% من الحالات. لكن انتظر 72h على الأقل بعد rewarming قبل القرار النهائي. NSE level + MRI يضيفون قيمة.</p>
+      </div>
+
+      <h3>الحالة ٣: شاب بـ confusion غامض</h3>
+      <p><strong>القصة:</strong> شاب ٢٥ عاماً، يصل ER بـ altered mental status. لا اختلاجات واضحة. EEG: rhythmic 3 Hz activity في left hemisphere، evolving.</p>
+      <p><b>التشخيص:</b> NCSE (Non-Convulsive Status Epilepticus). أعطِ Lorazepam 4 mg IV. تحسّن في EEG وفي الـ mental status خلال ١٠ دقائق = أكّد التشخيص. ابدأ Levetiracetam loading.</p>
+
+      <h3>الحالة ٤: السيدة المصفرة</h3>
+      <p><strong>القصة:</strong> سيدة ٦٠ عاماً، history cirrhosis، confusion يتطور. Ammonia 180. EEG: bilateral triphasic waves في frontal بـ 2 Hz.</p>
+      <p><b>التشخيص:</b> Hepatic encephalopathy grade III. Triphasic waves <strong>ليست تشخيصية</strong> لكن مرتبطة. علاج Lactulose, Rifaximin. الـ EEG سيتحسن مع تطبيع Ammonia.</p>
+
+      <h3>الحالة ٥: التدهور السريع</h3>
+      <p><strong>القصة:</strong> رجل ٦٥ عاماً، تدهور إدراكي خلال ٣ أشهر، myoclonus. MRI: cortical ribbon DWI hyperintensity. EEG: bilateral synchronous periodic sharp wave complexes بـ 1 Hz.</p>
+      <div class="callout danger">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+        <p><b>التشخيص:</b> Sporadic CJD. الثلاثي: rapid cognitive decline + myoclonus + PSWC = sensitivity 60-70%. أكّد بـ 14-3-3 و RT-QuIC في CSF. لا علاج، prognosis قاتل خلال أشهر.</p>
+      </div>
+
+      <h3>الحالة ٦: النوبات المتكررة الكاذبة</h3>
+      <p><strong>القصة:</strong> سيدة ٣٢ سنة، "نوبات" متعددة يومياً منذ ٦ أشهر، فاشلة على ٣ AEDs. EMU monitoring لـ ٤٨ ساعة: ٦ نوبات سُجلت كلها مع EEG <strong>طبيعي تماماً</strong>، forced eye closure، movements متعددة الاتجاهات.</p>
+      <div class="callout info">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <p><b>التشخيص:</b> PNES. التواصل مع المريضة بحساسية، إيقاف AEDs تدريجياً، إحالة psychiatric. ٧٠٪ يتحسنون مع CBT.</p>
+      </div>
+
+      <div class="callout gold">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <p><b>درس عام من الحالات:</b> EEG وحده لا يشخص. يقدم معلومات، لكن التشخيص النهائي يحتاج clinical context + neuroimaging + labs. لا تعالج EEG، عالج المريض.</p>
+      </div>
+    `
+  }
+];
+
+/* ===========================================
+   QUIZ DATA
+=========================================== */
+const QUIZ = {
+  patterns:[
+    {q:'النمط الذي أمامك من جانب واحد، 1 Hz، sharp-slow في مريض مع حمى. التشخيص؟', pattern:'pleds',
+     opts:['PSWC (CJD)','LPDs (PLEDs) — اشتبه HSV','Triphasic waves','Burst suppression'], a:1,
+     ex:'<b>LPDs</b> من جانب واحد فقط. مع fever = HSV Encephalitis حتى يثبت العكس. PSWC يكون bilateral synchronous.'},
+    {q:'نمط ثنائي الجانب متزامن، 1 Hz، periodic sharp wave complexes في مريض مع myoclonus وتدهور إدراكي سريع. التشخيص؟', pattern:'pswc',
+     opts:['HSV Encephalitis','sporadic CJD','Hepatic encephalopathy','NCSE'], a:1,
+     ex:'<b>PSWC</b> + rapid cognitive decline + myoclonus = sporadic CJD. حساسية 60-70%، خصوصية >90%.'},
+    {q:'موجات ثلاثية الأطوار، frontal dominant، 2 Hz في مريض مع Ammonia مرتفع. التشخيص الأرجح؟', pattern:'triphasic',
+     opts:['Frontal lobe seizure','Hepatic encephalopathy','SREDA','Alpha coma'], a:1,
+     ex:'<b>Triphasic waves</b> مع high Ammonia = Hepatic encephalopathy. غير تشخيصية تماماً لكن مرتبطة.'},
+    {q:'مريض comatose بعد cardiac arrest. EEG: ألفا 9 Hz منتشر بدون reactivity. التشخيص؟', pattern:'alpha-coma',
+     opts:['Normal awake EEG','REM sleep','Alpha coma','Drug intoxication'], a:2,
+     ex:'<b>Alpha coma</b>: نشاط ألفا في comatose patient بدون reactivity. post-anoxic = prognosis سيء جداً.'},
+    {q:'3 Hz generalized spike-and-wave في طفل ٨ سنوات مع نوبات غياب قصيرة. التشخيص؟', pattern:'spike-wave',
+     opts:['Lennox-Gastaut','Childhood Absence Epilepsy','JME','Focal seizure'], a:1,
+     ex:'<b>3 Hz spike-wave</b> = Childhood Absence Epilepsy. علاج: Ethosuximide أو Valproate. تجنب Carbamazepine.'}
+  ],
+  clinical:[
+    {q:'مريض ICU، altered mental status بدون سبب واضح، EEG يظهر rhythmic 3 Hz activity في left hemisphere مع evolution. الإجراء الأول؟',
+     opts:['زيد propofol','Lorazepam 4 mg IV trial','MRI brain','انتظر EEG ينتهي'], a:1,
+     ex:'يطابق معايير NCSE (Salzburg). <b>Lorazepam IV trial</b> هو الخطوة التشخيصية والعلاجية معاً. تحسن EEG + clinical = أكّد NCSE.'},
+    {q:'سيدة ٤٥ سنة، حمى ٣ أيام، confusion، LPDs في temporal left. الإجراء العاجل؟',
+     opts:['انتظر CSF و MRI','ابدأ Acyclovir 10 mg/kg q8h فوراً','أعطِ مضاد للحمى فقط','EEG monitoring مستمر'], a:1,
+     ex:'<b>HSV Encephalitis</b> = state emergency. تأخير Acyclovir >24h يضاعف الوفيات. ابدأ قبل CSF/MRI.'},
+    {q:'مريض ICU بعد cardiac arrest، burst suppression بـ identical bursts non-reactive بعد 72h من rewarming. ماذا يعني؟',
+     opts:['تحسن متوقع','Prognosis سيء جداً','أعطِ Levetiracetam','نمط طبيعي'], a:1,
+     ex:'<b>Identical non-reactive bursts</b> بعد 72h من rewarming = poor prognosis في >95%. اربط بـ NSE و MRI قبل القرار.'},
+    {q:'شاب يصل بعد "نوبة" 5 دقائق، forced eye closure، حركات متعددة الاتجاهات، EEG طبيعي تماماً أثناء الحدث. التشخيص؟',
+     opts:['Frontal lobe seizure','Temporal lobe seizure','PNES','NCSE'], a:2,
+     ex:'<b>PNES</b>: EEG طبيعي أثناء النوبة + forced eye closure + non-stereotyped movements. الـ EMU هو gold standard للتشخيص.'},
+    {q:'مريض مع CKD على dialysis، confusion، EEG يظهر GPDs بـ 2 Hz frontal max. الإجراء الأول؟',
+     opts:['Acyclovir','Lorazepam trial','Hemodialysis emergent','MRI brain'], a:1,
+     ex:'GPDs بـ 2 Hz في uremic = قد تكون triphasic أو NCSE. <b>Lorazepam trial</b> أولاً ثم dialysis. إذا تحسّن النمط بـ BZD = NCSE.'}
+  ],
+  technical:[
+    {q:'القيمة الافتراضية لـ High-Pass Filter في EEG هي؟',
+     opts:['0.5-1 Hz','5 Hz','15 Hz','30 Hz'], a:0,
+     ex:'<b>HPF افتراضي = 0.5-1 Hz</b>. رفعه يخفي slow wave activity. لا تتجاوز 1 Hz في clinical EEG.'},
+    {q:'في تقييم Brain Death، ما هو الـ sensitivity المطلوب؟',
+     opts:['7 µV/mm','10 µV/mm','2 µV/mm','50 µV/mm'], a:2,
+     ex:'<b>2 µV/mm</b> هو الـ maximum sensitivity للتأكد من absence of any cerebral activity. أيضاً distance ≥10 cm.'},
+    {q:'في bipolar montage، النشاط البؤري يُعرف بـ:',
+     opts:['Amplitude المرتفع فقط','Phase reversal بين قناتين متجاورتين','تشابه القنوات','Spike في كل القنوات'], a:1,
+     ex:'<b>Phase reversal</b> في bipolar montage = القمم متعاكسة في القناتين فوق وتحت البؤرة. هذا يحدد الموقع الدقيق.'},
+    {q:'مريض يحرك فكه ويظهر spike في temporal channels فقط. الأرجح؟',
+     opts:['Temporal lobe spike','EMG artifact','Eye movement','POSTS'], a:1,
+     ex:'<b>EMG artifact</b> من mastication. الفرق عن seizure: ثابت، عشوائي، يقل بالاسترخاء.'},
+    {q:'ما هو الفرق الأهم بين Mu rhythm و central spike؟',
+     opts:['Mu يُحجب بحركة اليد المقابلة','Spike أسرع','لا يوجد فرق','Mu في occipital'], a:0,
+     ex:'<b>Mu rhythm يُحجب بحركة اليد المقابلة</b> (أو حتى التخيل). شكل arciform، 7-11 Hz، central. حميد تماماً.'}
+  ]
+};
+
+/* ===========================================
+   GLOSSARY
+=========================================== */
+const GLOSSARY = [
+  {en:'Alpha Rhythm', ar:'إيقاع ألفا', def:'إيقاع 8-13 Hz في المنطقة القذالية عند البالغ المسترخي مع عيون مغلقة. يُحجب بفتح العين.'},
+  {en:'Burst Suppression', ar:'الانفجار والكبت', def:'تناوب بين bursts من النشاط (>10 µV) و suppression (<10 µV) لـ ≥1 ثانية. يظهر في anesthesia العميقة، hypothermia، أو ضرر دماغي شديد.'},
+  {en:'BIRDs', ar:'تفريغات إيقاعية قصيرة محتملة الصرعية', def:'Brief Potentially Ictal Rhythmic Discharges — تفريغات إيقاعية <10 ثوانٍ، >4 Hz، evolving. على الحافة بين interictal و ictal.'},
+  {en:'CJD', ar:'مرض كروتزفيلت-ياكوب', def:'اعتلال بريوني مميت يسبب dementia سريعة + myoclonus. EEG يظهر PSWC في 60-70% من الحالات.'},
+  {en:'ECI', ar:'خمول كهربي دماغي', def:'Electrocerebral Inactivity — غياب كامل للنشاط الكهربي (<2 µV) في كل المناطق، مع 2 µV/mm gain ومسافة ≥10 cm.'},
+  {en:'FIRDA', ar:'دلتا إيقاعي جبهي متقطع', def:'Frontal Intermittent Rhythmic Delta Activity — دلتا 1-3 Hz في frontal، علامة غير محددة لخلل وظيفي.'},
+  {en:'GPDs', ar:'تفريغات دورية معممة', def:'Generalized Periodic Discharges — تفريغات معممة بمعدل دوري. تشمل triphasic waves والـ generalized epileptiform.'},
+  {en:'Hypsarrhythmia', ar:'الفوضى الكهربية للرضع', def:'نمط فوضوي عالي السعة (>200 µV) مع multifocal spikes في الرضع. سمة West syndrome.'},
+  {en:'IIC', ar:'الطيف بين interictal و ictal', def:'Ictal-Interictal Continuum — منطقة رمادية لأنماط قد تكون أو لا تكون مرتبطة بإصابة عصبية مستمرة.'},
+  {en:'JME', ar:'صرع رمعي عضلي شبابي', def:'Juvenile Myoclonic Epilepsy — متلازمة صرع معمم بـ myoclonic jerks + GTCs + absences. EEG: 4-6 Hz polyspike-wave.'},
+  {en:'K-Complex', ar:'مركب K', def:'موجة حادة سلبية كبيرة متبوعة بإيجابية في N2 sleep. تُثار بالمنبهات الخارجية.'},
+  {en:'LPDs', ar:'تفريغات دورية جانبية', def:'Lateralized Periodic Discharges (PLEDs سابقاً). تفريغات دورية من نصف كرة واحدة بـ 0.5-3 Hz.'},
+  {en:'Montage', ar:'القطبية', def:'ترتيب electrodes للعرض. Bipolar يقارن متجاورين، Referential يقارن بـ common reference.'},
+  {en:'Mu Rhythm', ar:'إيقاع مو', def:'7-11 Hz arciform في central. يُحجب بحركة اليد المقابلة. حميد تماماً.'},
+  {en:'NCSE', ar:'الحالة الصرعية غير المتشنجة', def:'Non-Convulsive Status Epilepticus — نوبات كهربائية مستمرة بدون حركات واضحة. شائعة في ICU.'},
+  {en:'POSTS', ar:'موجات حادة موجبة في النوم', def:'Positive Occipital Sharp Transients of Sleep — موجات حادة موجبة في O1/O2 خلال N1/N2. طبيعي.'},
+  {en:'PNES', ar:'نوبات نفسية المنشأ', def:'Psychogenic Non-Epileptic Seizures — أحداث تشبه النوبات لكن EEG طبيعي. أصلها نفسي.'},
+  {en:'PSWC', ar:'مركبات الموجات الحادة الدورية', def:'Periodic Sharp Wave Complexes — bilateral synchronous discharges بـ 0.5-2 Hz. سمة CJD.'},
+  {en:'Reactivity', ar:'الاستجابية', def:'تغير EEG (frequency, amplitude, morphology) خلال 30 ثانية بعد منبه. مؤشر بروجنوستي إيجابي.'},
+  {en:'Salzburg Criteria', ar:'معايير سالزبورغ', def:'معايير تشخيص NCSE: epileptiform discharges >2.5 Hz أو evolving rhythmic >0.5 Hz مع spatial-temporal change.'},
+  {en:'Sleep Spindle', ar:'مغزل النوم', def:'رشقات 12-14 Hz في N2 لمدة ≥0.5 ثانية. منشأها thalamic reticular nucleus.'},
+  {en:'SREDA', ar:'تفريغ صرعي شكلي حميد', def:'Subclinical Rhythmic EEG Discharge of Adults — نمط 5-7 Hz في posterior، حميد تماماً، يظهر فجأة دون أعراض.'},
+  {en:'Status Epilepticus', ar:'الحالة الصرعية', def:'نوبة >5 دقائق أو نوبات متكررة بدون recovery. emergency يستلزم علاج فوري.'},
+  {en:'Triphasic Waves', ar:'الأمواج ثلاثية الأطوار', def:'موجات بـ 3 phases (+/-/+) بمعدل 1.5-2.5 Hz في frontal. مرتبطة بـ metabolic encephalopathy.'}
+];
+
+/* ===========================================
+   NAVIGATION
+=========================================== */
+function switchView(name){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.view===name));
+  document.querySelectorAll('.nav-item').forEach(t=>t.classList.toggle('active', t.dataset.view===name));
+  window.scrollTo({top:0,behavior:'instant'});
+  if (name==='viewer') startLiveViewer();
+  else stopLiveViewer();
+}
+document.querySelectorAll('[data-view]').forEach(el=>{
+  el.addEventListener('click', ()=>switchView(el.dataset.view));
+});
+
+/* ===========================================
+   LESSONS RENDER
+=========================================== */
+function renderLessons(){
+  const list = document.getElementById('lessonsList');
+  list.innerHTML = LESSONS.map(L=>`
+    <div class="lesson-card ${State.done.includes(L.id)?'done':''}" onclick="openLesson(${L.id})">
+      <div class="lesson-num">${State.done.includes(L.id)?'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>':String(L.id).padStart(2,'0')}</div>
+      <div class="lesson-info">
+        <div class="lesson-title">${L.title}</div>
+        <div class="lesson-desc">${L.desc}</div>
+        <div class="lesson-meta">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>${L.dur}</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>${L.topics} مواضيع</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openLesson(id){
+  const L = LESSONS.find(x=>x.id===id);
+  if (!L) return;
+  document.getElementById('rTitle').textContent = L.title;
+  document.getElementById('rSub').textContent = `الوحدة ${id} · ${L.dur}`;
+  document.getElementById('rBody').innerHTML = L.content + `
+    <button class="next-btn" onclick="completeLesson(${id})">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      <span>${State.done.includes(id)?'مراجعة الدرس':'أنهيت هذا الدرس'}</span>
+    </button>
+  `;
+  document.getElementById('reader').classList.add('open');
+  document.body.style.overflow='hidden';
+
+  // progress tracking
+  const reader = document.getElementById('reader');
+  const prog = document.getElementById('rProg');
+  reader.onscroll = ()=>{
+    const max = reader.scrollHeight - reader.clientHeight;
+    const p = Math.min(100,(reader.scrollTop/max)*100);
+    prog.style.setProperty('--p', p+'%');
+    prog.setAttribute('data-p', p);
+  };
+}
+
+function closeLesson(){
+  document.getElementById('reader').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function completeLesson(id){
+  if (!State.done.includes(id)){
+    State.done.push(id);
+    State.save();
+    showToast('أحسنت! تم إكمال الدرس');
+  }
+  updateProgress();
+  renderLessons();
+  closeLesson();
+}
+
+/* ===========================================
+   PROGRESS
+=========================================== */
+function updateProgress(){
+  const total = LESSONS.length;
+  const done = State.done.length;
+  const pct = Math.round(done/total*100);
+  document.getElementById('ringPct').textContent = pct+'%';
+  document.getElementById('sLessons').textContent = done+'/'+total;
+  const bar = document.getElementById('ringBar');
+  if (bar){
+    const circ = 2*Math.PI*32;
+    bar.setAttribute('pathLength', 201);
+    bar.style.strokeDasharray = `${(pct/100)*201} 201`;
+  }
+  const h = document.getElementById('ringH');
+  const s = document.getElementById('ringS');
+  if (done===0){h.textContent='ابدأ رحلتك الآن';s.textContent='اضغط على أي درس لتبدأ التعلم'}
+  else if (done<total){h.textContent='تقدم رائع!';s.textContent=`أمامك ${total-done} دروس فقط`}
+  else {h.textContent='🎉 أكملت كل الدروس!';s.textContent='أنت جاهز للممارسة'}
+
+  const qs = State.quizStats;
+  const acc = qs.total>0 ? Math.round(qs.correct/qs.total*100)+'%' : '—';
+  document.getElementById('sAcc').textContent = acc;
+
+  const note = document.getElementById('progNote');
+  if (note) note.textContent = `${done}/${total} دروس · ${qs.correct}/${qs.total} إجابات صحيحة`;
+}
+
+function resetProgress(){
+  if (!confirm('هل أنت متأكد من إعادة تعيين كل التقدم؟')) return;
+  State.done = [];
+  State.quizStats = {correct:0,total:0};
+  State.save();
+  updateProgress();
+  renderLessons();
+  showToast('تم إعادة التعيين');
+}
+
+/* ===========================================
+   PATTERNS RENDER
+=========================================== */
+let patFilter = 'all';
+let patQuery = '';
+
+function renderPatterns(){
+  const list = document.getElementById('patternsList');
+  const filtered = PATTERNS.filter(p=>{
+    const matchCat = patFilter==='all' || p.cat.includes(patFilter);
+    const matchQ = !patQuery ||
+      p.name.toLowerCase().includes(patQuery) ||
+      p.ar.includes(patQuery) ||
+      p.desc.toLowerCase().includes(patQuery);
+    return matchCat && matchQ;
+  });
+
+  list.innerHTML = filtered.map((p,i)=>`
+    <div class="pattern-card" data-id="${p.id}">
+      <div class="pattern-head" onclick="togglePattern('${p.id}')">
+        <div class="pattern-mark mark-${p.mark}">${getMarkIcon(p.icon)}</div>
+        <div style="flex:1;min-width:0">
+          <div class="pattern-name">${p.name}</div>
+          <div class="pattern-fullname">${p.ar}</div>
+        </div>
+        <svg class="pattern-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="pattern-body">
+        <div class="pattern-body-inner">
+          <canvas id="pat-${p.id}" width="600" height="120" style="width:100%;background:#000;border-radius:12px;border:1px solid rgba(0,212,255,.15);margin-bottom:12px"></canvas>
+          <p>${p.desc}</p>
+          <div class="tags">${p.tags.map(t=>`<span class="tag ${t.c}">${t.t}</span>`).join('')}</div>
+          <div class="clinical-box">
+            <div class="lbl">📋 السياق السريري</div>
+            <p>${p.clinical}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('') || '<p style="text-align:center;color:var(--text-3);padding:40px 20px">لا توجد نتائج. جرب كلمة أخرى.</p>';
+}
+
+function getMarkIcon(t){
+  const icons = {
+    crit:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+    warn:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+    good:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>',
+    info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>'
+  };
+  return icons[t]||icons.info;
+}
+
+function togglePattern(id){
+  const card = document.querySelector(`[data-id="${id}"]`);
+  const isOpen = card.classList.toggle('open');
+  if (isOpen){
+    setTimeout(()=>{
+      const c = document.getElementById('pat-'+id);
+      if (c && !c.dataset.drawn){
+        const ctx = c.getContext('2d');
+        c.width = c.offsetWidth * 2;
+        c.height = 240;
+        ctx.scale(1,1);
+        WaveEngine.drawMulti(ctx, id, {
+          width:c.width, height:c.height,
+          channels:4, duration:6, sampleRate:128,
+          labels:['Fp1-F3','Fp2-F4','C3-P3','C4-P4']
+        });
+        c.dataset.drawn='1';
+      }
+    },300);
+  }
+}
+
+document.getElementById('patSearch').addEventListener('input', e=>{
+  patQuery = e.target.value.toLowerCase().trim();
+  renderPatterns();
+});
+document.querySelectorAll('#patChips .chip').forEach(c=>{
+  c.addEventListener('click', ()=>{
+    document.querySelectorAll('#patChips .chip').forEach(x=>x.classList.remove('active'));
+    c.classList.add('active');
+    patFilter = c.dataset.cat;
+    renderPatterns();
+  });
+});
+
+/* ===========================================
+   LIVE VIEWER
+=========================================== */
+const Viewer = {
+  pattern:'alpha',
+  gain:7,
+  speed:30,
+  lp:70,
+  hp:5, // 0.5 actually, scaled
+  playing:true,
+  time:0,
+  raf:null,
+  canvas:null,
+  ctx:null
+};
+
+const VIEWER_PATTERNS = [
+  {id:'alpha', name:'Alpha (طبيعي)', diag:{t:'Alpha Rhythm',d:'إيقاع 10 Hz طبيعي في occipital، يختفي بفتح العين. علامة الصحة.'}},
+  {id:'beta', name:'Beta',  diag:{t:'Beta Activity',d:'نشاط سريع >13 Hz. زيادة واضحة = benzodiazepines.'}},
+  {id:'theta', name:'Theta', diag:{t:'Theta',d:'4-7 Hz. طبيعي في drowsiness، abnormal منتشر في wakefulness.'}},
+  {id:'delta', name:'Delta', diag:{t:'Delta',d:'<4 Hz. طبيعي في deep sleep، abnormal في wakefulness.'}},
+  {id:'mu', name:'Mu', diag:{t:'Mu Rhythm',d:'7-11 Hz arciform في central. يُحجب بحركة اليد المقابلة.'}},
+  {id:'pleds', name:'LPDs', diag:{t:'LPDs (PLEDs)',d:'تفريغات دورية من جانب واحد. اشتبه HSV encephalitis مع fever!'}},
+  {id:'pswc', name:'PSWC', diag:{t:'PSWC',d:'دوري ثنائي الجانب متزامن — علامة CJD مع myoclonus.'}},
+  {id:'spike-wave', name:'3 Hz S/W', diag:{t:'3 Hz Spike-Wave',d:'النمط الكلاسيكي لـ absence epilepsy. أعطِ Ethosuximide.'}},
+  {id:'triphasic', name:'Triphasic', diag:{t:'Triphasic Waves',d:'metabolic encephalopathy (kepatic غالباً). تحقق Ammonia.'}},
+  {id:'burst-supp', name:'Burst-Supp', diag:{t:'Burst Suppression',d:'anesthesia عميقة، hypothermia، أو ضرر دماغي شديد.'}},
+  {id:'alpha-coma', name:'Alpha Coma', diag:{t:'Alpha Coma',d:'ألفا منتشر في comatose بدون reactivity. prognosis سيء.'}},
+  {id:'firda', name:'FIRDA', diag:{t:'FIRDA',d:'دلتا frontal إيقاعي. encephalopathy أو ICP مرتفع.'}},
+  {id:'sreda', name:'SREDA', diag:{t:'SREDA',d:'نمط حميد 5-7 Hz في posterior. بدون أعراض، لا علاج.'}},
+  {id:'birds', name:'BIRDs', diag:{t:'BIRDs',d:'تفريغات إيقاعية قصيرة. >1/10min = treat as seizure.'}},
+  {id:'k-complex', name:'Sleep N2', diag:{t:'NREM N2',d:'K-complex + sleep spindles. علامة نوم سليم.'}},
+  {id:'rem', name:'REM Sleep', diag:{t:'REM Sleep',d:'low voltage مختلط + sawtooth waves. eye movements سريعة.'}},
+  {id:'seizure', name:'Seizure', diag:{t:'Electrographic Seizure',d:'نشاط متطور (evolving). ابدأ benzodiazepine + AED loading.'}},
+  {id:'eci', name:'ECI', diag:{t:'Electrocerebral Inactivity',d:'غياب كامل للنشاط. confirmatory لـ brain death.'}},
+  {id:'breach', name:'Breach', diag:{t:'Breach Rhythm',d:'ألفا/بيتا عالي السعة فوق skull defect. حميد تماماً.'}},
+  {id:'emg-artifact', name:'EMG Artifact', diag:{t:'EMG Artifact',d:'تشويش عضلي. عشوائي، يقل بالاسترخاء. ليس صرعاً.'}}
+];
+
+function buildPatternSelector(){
+  const wrap = document.getElementById('patSelector');
+  wrap.innerHTML = VIEWER_PATTERNS.map(p=>`
+    <button class="pat-btn ${p.id===Viewer.pattern?'active':''}" data-p="${p.id}">${p.name}</button>
+  `).join('');
+  wrap.querySelectorAll('.pat-btn').forEach(b=>{
+    b.addEventListener('click',()=>{
+      wrap.querySelectorAll('.pat-btn').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      Viewer.pattern = b.dataset.p;
+      Viewer.time = 0;
+      const meta = VIEWER_PATTERNS.find(x=>x.id===Viewer.pattern);
+      document.getElementById('vPattern').textContent = meta.name;
+      document.getElementById('diagTitle').textContent = meta.diag.t;
+      document.getElementById('diagDesc').textContent = meta.diag.d;
+    });
+  });
+}
+
+function setupCanvas(){
+  const c = document.getElementById('liveCanvas');
+  const wrap = c.parentElement;
+  c.width = wrap.offsetWidth * 2;
+  c.height = 640;
+  c.style.height = '320px';
+  Viewer.canvas = c;
+  Viewer.ctx = c.getContext('2d');
+}
+
+function tick(){
+  if (!Viewer.playing || !Viewer.canvas) return;
+  WaveEngine.drawMulti(Viewer.ctx, Viewer.pattern, {
+    width:Viewer.canvas.width, height:Viewer.canvas.height,
+    channels:8, duration:10*(30/Viewer.speed), sampleRate:128,
+    gain:Viewer.gain, time:Viewer.time
+  });
+  Viewer.time += 0.05*(Viewer.speed/30);
+  Viewer.raf = requestAnimationFrame(tick);
+}
+
+function startLiveViewer(){
+  setupCanvas();
+  if (Viewer.raf) cancelAnimationFrame(Viewer.raf);
+  Viewer.playing = true;
+  tick();
+}
+
+function stopLiveViewer(){
+  if (Viewer.raf){cancelAnimationFrame(Viewer.raf);Viewer.raf=null}
+}
+
+// Controls
+document.getElementById('rGain').addEventListener('input', e=>{
+  Viewer.gain = +e.target.value;
+  document.getElementById('kGain').textContent = e.target.value+' µV/mm';
+  document.getElementById('vGain').textContent = e.target.value;
+});
+document.getElementById('rSpeed').addEventListener('input', e=>{
+  Viewer.speed = +e.target.value;
+  document.getElementById('kSpeed').textContent = e.target.value+' mm/s';
+  document.getElementById('vSpeed').textContent = e.target.value;
+  document.getElementById('pageInfo').textContent = Math.round(300/e.target.value)+'s';
+});
+document.getElementById('rLP').addEventListener('input', e=>{
+  document.getElementById('kLP').textContent = e.target.value+' Hz';
+});
+document.getElementById('rHP').addEventListener('input', e=>{
+  document.getElementById('kHP').textContent = (+e.target.value/10).toFixed(1)+' Hz';
+});
+document.getElementById('playBtn').addEventListener('click',()=>{
+  Viewer.playing = !Viewer.playing;
+  const icon = document.getElementById('playIcon');
+  if (Viewer.playing){
+    icon.innerHTML='<rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>';
+    tick();
+  } else {
+    icon.innerHTML='<polygon points="7 5 19 12 7 19 7 5"/>';
+  }
+});
+
+/* ===========================================
+   QUIZ
+=========================================== */
+const Quiz = {
+  category:null,
+  questions:[],
+  idx:0,
+  score:0,
+  answered:false
+};
+
+function startQuiz(cat){
+  Quiz.category = cat;
+  if (cat==='mixed'){
+    Quiz.questions = [...QUIZ.patterns, ...QUIZ.clinical, ...QUIZ.technical].sort(()=>Math.random()-.5);
+  } else {
+    Quiz.questions = [...QUIZ[cat]].sort(()=>Math.random()-.5);
+  }
+  Quiz.idx = 0;
+  Quiz.score = 0;
+  document.getElementById('quizHome').style.display='none';
+  document.getElementById('quizPlay').style.display='block';
+  renderQuiz();
+}
+
+function renderQuiz(){
+  if (Quiz.idx >= Quiz.questions.length){
+    renderScore();
+    return;
+  }
+  const q = Quiz.questions[Quiz.idx];
+  const wrap = document.getElementById('quizPlay');
+  Quiz.answered = false;
+
+  wrap.innerHTML = `
+    <div class="q-progress">
+      <span>${Quiz.idx+1}/${Quiz.questions.length}</span>
+      <div class="q-progress-bar"><div style="width:${(Quiz.idx/Quiz.questions.length)*100}%"></div></div>
+      <span style="color:var(--success)">${Quiz.score}</span>
+    </div>
+    <div class="q-card">
+      <div class="q-num">سؤال ${Quiz.idx+1}</div>
+      <div class="q-text">${q.q}</div>
+      ${q.pattern?`<div class="q-image"><canvas id="qCanvas" width="600" height="120" style="width:100%;display:block"></canvas></div>`:''}
+      <div class="q-opts">
+        ${q.opts.map((o,i)=>`
+          <button class="q-opt" data-i="${i}">
+            <span class="o-marker">${['أ','ب','ج','د'][i]}</span>
+            <span>${o}</span>
+          </button>
+        `).join('')}
+      </div>
+      <div class="q-explain" id="qExplain"></div>
+      <button class="next-btn" id="qNext" style="display:none" onclick="nextQuiz()">
+        <span>السؤال التالي</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+    </div>
+  `;
+
+  if (q.pattern){
+    const c = document.getElementById('qCanvas');
+    c.width = c.offsetWidth * 2;
+    c.height = 240;
+    WaveEngine.drawMulti(c.getContext('2d'), q.pattern, {
+      width:c.width, height:c.height, channels:4, duration:6, sampleRate:128,
+      labels:['Fp1-F3','Fp2-F4','C3-P3','C4-P4']
+    });
+  }
+
+  wrap.querySelectorAll('.q-opt').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      if (Quiz.answered) return;
+      Quiz.answered = true;
+      const i = +btn.dataset.i;
+      const correct = q.a===i;
+      wrap.querySelectorAll('.q-opt').forEach((b,j)=>{
+        b.classList.add('disabled');
+        if (j===q.a) b.classList.add('correct');
+        else if (j===i) b.classList.add('wrong');
+      });
+      if (correct) Quiz.score++;
+      State.quizStats.total++;
+      if (correct) State.quizStats.correct++;
+      State.save();
+      updateProgress();
+
+      const exp = document.getElementById('qExplain');
+      exp.innerHTML = `<b>${correct?'✓ صحيح!':'✗ الإجابة الصحيحة:'}</b> ${q.ex}`;
+      exp.classList.add('show');
+      document.getElementById('qNext').style.display='flex';
+    });
+  });
+}
+
+function nextQuiz(){
+  Quiz.idx++;
+  renderQuiz();
+}
+
+function renderScore(){
+  const total = Quiz.questions.length;
+  const pct = Math.round(Quiz.score/total*100);
+  const stars = pct>=80?'⭐⭐⭐':pct>=60?'⭐⭐':pct>=40?'⭐':'';
+  const msg = pct>=80?'ممتاز! أنت مستعد لقراءة EEG':pct>=60?'جيد جداً، استمر':pct>=40?'بداية جيدة، راجع الدروس':'يحتاج مراجعة، عد للدروس';
+
+  document.getElementById('quizPlay').innerHTML = `
+    <div class="score-screen">
+      <div class="big">${Quiz.score}/${total}</div>
+      <div class="stars">${stars}</div>
+      <p>${msg}</p>
+      <button class="next-btn" onclick="backToQuizHome()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+        <span>اختبار جديد</span>
+      </button>
+    </div>
+  `;
+}
+
+function backToQuizHome(){
+  document.getElementById('quizPlay').style.display='none';
+  document.getElementById('quizHome').style.display='block';
+}
+
+/* ===========================================
+   GLOSSARY
+=========================================== */
+function renderGlossary(filter=''){
+  const list = document.getElementById('glossList');
+  const items = GLOSSARY.filter(g=>
+    !filter ||
+    g.en.toLowerCase().includes(filter) ||
+    g.ar.includes(filter) ||
+    g.def.toLowerCase().includes(filter)
+  ).sort((a,b)=>a.en.localeCompare(b.en));
+
+  list.innerHTML = items.map(g=>`
+    <div class="gloss-item">
+      <div class="gloss-term">${g.en}</div>
+      <div class="gloss-ar">${g.ar}</div>
+      <div class="gloss-def">${g.def}</div>
+    </div>
+  `).join('') || '<p style="text-align:center;color:var(--text-3);padding:30px">لا توجد نتائج</p>';
+}
+
+document.getElementById('glossSearch').addEventListener('input', e=>{
+  renderGlossary(e.target.value.toLowerCase().trim());
+});
+
+/* ===========================================
+   POD (Pattern of the Day) — random
+=========================================== */
+function renderPOD(){
+  const pool = PATTERNS.filter(p=>p.cat.includes('icu')||p.cat.includes('epileptiform'));
+  const today = new Date().toDateString();
+  let seed = 0;
+  for (let i=0;i<today.length;i++) seed += today.charCodeAt(i);
+  const pod = pool[seed % pool.length];
+
+  document.getElementById('podName').textContent = pod.name+' — '+pod.ar;
+  document.getElementById('podDesc').textContent = pod.clinical;
+
+  const c = document.getElementById('podCanvas');
+  c.width = c.offsetWidth * 2;
+  c.height = 160;
+  c.style.height = '80px';
+  WaveEngine.drawMulti(c.getContext('2d'), pod.id, {
+    width:c.width, height:c.height, channels:2, duration:5, sampleRate:128,
+    labels:['Fp1-F3','Fp2-F4']
+  });
+}
+
+/* ===========================================
+   TOAST + MISC
+=========================================== */
+function showToast(msg){
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+function openSearch(){
+  switchView('patterns');
+  setTimeout(()=>document.getElementById('patSearch').focus(),300);
+}
+
+/* ===========================================
+   INIT
+=========================================== */
+function init(){
+  // Hide splash
+  setTimeout(()=>document.getElementById('splash').classList.add('gone'), 1400);
+
+  // PWA install detection
+  if (window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches){
+    document.getElementById('installHint').style.display='none';
+  }
+
+  // Render all sections
+  renderLessons();
+  renderPatterns();
+  renderGlossary();
+  buildPatternSelector();
+  updateProgress();
+  renderPOD();
+
+  // Hero wave animation
+  setInterval(()=>{
+    const path = document.getElementById('heroWave');
+    if (path){
+      const points = [];
+      for (let x=0;x<=400;x+=10){
+        const y = 100 + 20*Math.sin(x/30+Date.now()/500) + 8*Math.sin(x/15+Date.now()/300);
+        points.push(`${x} ${y.toFixed(1)}`);
+      }
+      path.setAttribute('d', 'M'+points.join(' L'));
+    }
+  }, 80);
+}
+
+// Prevent pinch zoom
+document.addEventListener('gesturestart', e=>e.preventDefault());
+document.addEventListener('touchmove', e=>{
+  if (e.scale && e.scale!==1) e.preventDefault();
+}, {passive:false});
+
+window.addEventListener('load', init);
+window.addEventListener('resize', ()=>{
+  if (document.getElementById('view-viewer').classList.contains('active')){
+    setupCanvas();
+  }
+});
+</script>
+
+</body>
+</html>
