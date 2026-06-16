@@ -1,81 +1,205 @@
-# CineMind — AI Movie Recommendation
+# Najm-icucalc
+Icu used drugs calculator 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-> Discover the movies made for you. Answer a few questions and let AI uncover
-> films and series perfectly matched to your personality.
+<title>Najm ICUCalc v3</title>
 
-A dark, cinematic, mobile-first web app that blends **Netflix premium
-aesthetics + Apple minimalism + Spotify personalization + modern AI product
-design**. Built as a dependency-free static site — open `index.html` and it
-just runs (no build step, no backend, works offline).
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #0b1220;
+  color: #e5e7eb;
+}
 
-## Run it
+header {
+  background: #0284c7;
+  padding: 14px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+}
 
-```bash
-# any static file server works, e.g.
-python3 -m http.server 8000
-# then open http://localhost:8000
-```
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 16px;
+}
 
-Or simply open `index.html` directly in a browser.
+input {
+  width: 100%;
+  padding: 14px;
+  font-size: 18px;
+  border-radius: 10px;
+  border: none;
+  margin-bottom: 10px;
+}
 
-## Screens
+.buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
 
-1. **Hero / Landing** — full-screen blurred poster collage, parallax glow,
-   floating particles, cinematic fade-ins, `Start My Analysis` CTA.
-2. **AI Personality Survey** — 6-step card wizard (Mood, Story, Pace,
-   Character, Lifestyle, Genres) with an animated progress bar and slide
-   transitions. Single-choice questions auto-advance; genres are multi-select.
-3. **AI Analysis** — immersive "Entertainment DNA" scanner with a rotating
-   radar, pulsing core, orbiting node and staged status messages.
-4. **Results Dashboard** — glassmorphism profile card with an AI personality
-   summary, a large match-score ring, and personality tags.
-5. **Recommendations** — Netflix-style snap-scrolling carousels (Perfect
-   Matches, Hidden Gems, Comfort Watches, Mind-Blowing Stories, Based on Your
-   Personality) with hover poster zoom and per-film match badges + AI reasoning.
-6. **Movie Details Modal** — large poster, trailer area, synopsis, cast,
-   director, streaming availability, an AI "why this pick" block, and
-   `Add to Watchlist`. Closes via X, backdrop click, or `Esc`.
-7. **Watchlist** — grid/list toggle, sort by genre, filter by mood chips,
-   remove on hover, and an illustrated empty state.
-8. **AI Tools** — Movie Therapist (type a feeling → get a prescribed film),
-   Couple Mode, Family Mode, and a one-tap **Surprise Me** with a dramatic reveal.
-9. **Badges** — Sci-Fi Master, Documentary Explorer, Thriller Hunter, Cinema
-   Philosopher and more, with locked/unlocked states and progress rings.
+button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #1f2937;
+  color: white;
+}
 
-## Design tokens
+button:hover {
+  background: #374151;
+}
 
-| Token | Value |
-| --- | --- |
-| Background | `#0B0B0F` |
-| Card Surface | `#17171C` |
-| Primary Accent | `#E50914` |
-| Secondary Accent | `#6C63FF` |
-| Text Primary | `#FFFFFF` |
-| Text Secondary | `#B3B3B3` |
-| Font | Inter (system-like, premium) |
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
 
-## How the "AI" works
+.card {
+  background: #111827;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #1f2937;
+}
 
-There's no network call. `js/engine.js` contains a transparent, deterministic
-scoring model: each title is scored 0–100 against your survey answers
-(weighted by genre, mood, story tone, character archetype, pacing and acclaim),
-your archetype drives the profile summary, and the watchlist powers badge
-progress. State persists in `localStorage`, so your results and watchlist
-survive a refresh.
+.card h3 {
+  margin-top: 0;
+  color: #38bdf8;
+}
 
-## Project structure
+.dose {
+  margin: 6px 0;
+  font-size: 14px;
+}
 
-```
-index.html        # shell: ambient background, app mount, tab bar, modal/toast roots
-css/styles.css    # full design system, animations, responsive rules
-js/data.js        # movies, survey questions, archetypes, badges
-js/engine.js      # state, persistence, scoring/match model, watchlist & badges
-js/screens.js     # screen + component render functions (HTML)
-js/app.js         # router, transitions, event delegation, feature behaviors
-```
+.low { color: #fbbf24; }
+.mid { color: #34d399; }
+.high { color: #ef4444; }
 
-> Posters are rendered as cinematic gradient cards keyed to each film's mood,
-> so the experience stays fast and fully offline without external image assets.
+.footer {
+  text-align: center;
+  font-size: 11px;
+  color: #6b7280;
+  margin: 20px;
+}
+</style>
+</head>
 
-*For demonstration purposes — recommendations are generated by a local
-heuristic, not a production ML model.*
+<body>
+
+<header>Najm ICUCalc v3 — Critical Care Mode</header>
+
+<div class="container">
+
+<input type="number" id="weight" placeholder="Enter weight (kg)" oninput="calc()">
+
+<div class="buttons">
+  <button onclick="setWeight(60)">60kg</button>
+  <button onclick="setWeight(70)">70kg</button>
+  <button onclick="setWeight(80)">80kg</button>
+  <button onclick="setWeight(90)">90kg</button>
+</div>
+
+<div class="grid">
+
+<div class="card">
+<h3>Sedation</h3>
+<div class="dose">Fentanyl: <span id="fentanyl"></span></div>
+<div class="dose">Propofol: <span id="propofol"></span></div>
+<div class="dose">Midazolam: <span id="midazolam"></span></div>
+<div class="dose">Dexmedetomidine: <span id="dex"></span></div>
+</div>
+
+<div class="card">
+<h3>Inotropes</h3>
+<div class="dose">Norepinephrine: <span id="norepi"></span></div>
+<div class="dose">Epinephrine: <span id="epi"></span></div>
+<div class="dose">Dopamine: <span id="dop"></span></div>
+<div class="dose">Dobutamine: <span id="dob"></span></div>
+</div>
+
+<div class="card">
+<h3>Antihypertensives</h3>
+<div class="dose">Esmolol: <span id="esmo"></span></div>
+<div class="dose">Nicardipine: 5–15 mg/hr</div>
+<div class="dose">Labetalol: 2–8 mg/min</div>
+</div>
+
+</div>
+
+<div class="footer">
+For clinical reference only — always verify ICU protocols
+</div>
+
+</div>
+
+<script>
+
+const drugs = {
+  fentanyl: [1, 5],
+  propofol: [5, 50],
+  midazolam: [0.02, 0.1],
+  dex: [0.2, 0.7],
+
+  norepi: [0.01, 1],
+  epi: [0.01, 1],
+  dop: [2, 20],
+  dob: [2, 20],
+
+  esmo: [50, 300]
+};
+
+function calc() {
+  const w = parseFloat(document.getElementById("weight").value);
+  if (!w || w <= 0) return clearAll();
+
+  set("fentanyl", drugs.fentanyl, w);
+  set("propofol", drugs.propofol, w);
+  set("midazolam", drugs.midazolam, w);
+  set("dex", drugs.dex, w);
+
+  set("norepi", drugs.norepi, w);
+  set("epi", drugs.epi, w);
+  set("dop", drugs.dop, w);
+  set("dob", drugs.dob, w);
+
+  set("esmo", drugs.esmo, w);
+}
+
+function set(id, range, w) {
+  const min = range[0] * w;
+  const max = range[1] * w;
+
+  const el = document.getElementById(id);
+
+  let cls = "mid";
+  if (max > min * 5) cls = "high";
+  else if (max < min * 2) cls = "low";
+
+  el.className = cls;
+  el.innerText = `${min.toFixed(2)} – ${max.toFixed(2)} mcg/min`;
+}
+
+function clearAll() {
+  document.querySelectorAll("span").forEach(s => s.innerText = "--");
+}
+
+function setWeight(w) {
+  document.getElementById("weight").value = w;
+  calc();
+}
+
+</script>
+
+</body>
+</html>
