@@ -10,8 +10,9 @@ const STORE_KEY = "cinemind_state_v1";
 const State = {
   answers: {},        // questionId -> value | [values]
   profile: null,      // { archetype, summary, tags, score }
-  scores: {},         // movieId -> match percentage
-  watchlist: [],      // [movieId]
+  scores: {},         // movieId -> match percentage (local catalogue)
+  watchlist: [],      // [movie object] — full objects so TMDB titles persist
+  cache: {},          // movieId -> movie object (session lookups for modal/surprise)
   route: "hero",
   watchlistView: "grid",
   watchlistSort: "all",
@@ -35,12 +36,17 @@ function loadState() {
     const raw = localStorage.getItem(STORE_KEY);
     if (!raw) return false;
     const data = JSON.parse(raw);
+    // Migrate older saves where watchlist held ids (strings).
+    const wl = (Array.isArray(data.watchlist) ? data.watchlist : [])
+      .map((item) => typeof item === "string" ? movieById(item) : item)
+      .filter(Boolean);
     Object.assign(State, {
       answers: data.answers || {},
       profile: data.profile || null,
       scores: data.scores || {},
-      watchlist: Array.isArray(data.watchlist) ? data.watchlist : []
+      watchlist: wl
     });
+    wl.forEach(cacheMovie);
     return !!State.profile;
   } catch (e) { return false; }
 }
@@ -53,8 +59,17 @@ function resetState() {
   saveState();
 }
 
-// ---- Lookups ---------------------------------------------------------
-const movieById = (id) => MOVIES.find((m) => m.id === id);
+// ---- Lookups & cache -------------------------------------------------
+function cacheMovie(m) { if (m && m.id) State.cache[m.id] = m; }
+
+// Resolves a movie id from the local catalogue, the session cache, or the
+// watchlist — so both bundled and live TMDB titles are always findable.
+function movieById(id) {
+  return MOVIES.find((m) => m.id === id) ||
+         State.cache[id] ||
+         State.watchlist.find((m) => m.id === id) ||
+         null;
+}
 
 // ---- The "AI" model --------------------------------------------------
 // Scores a single movie 0–100 against the user's answers. Weighted so
@@ -164,6 +179,12 @@ function runAnalysis() {
   return State.profile;
 }
 
+// Match % for any movie — bundled or TMDB — without throwing on missing fields.
+function matchFor(movie) {
+  if (State.scores[movie.id]) return State.scores[movie.id];
+  return movie.tmdb ? tmdbMatch(movie, State.answers) : scoreMovie(movie, State.answers);
+}
+
 // Full catalogue, scored against the current answers, ranked best-first.
 function rankedMovies() {
   return MOVIES
@@ -261,13 +282,20 @@ function topPick(exclude = []) {
 }
 
 // ---- Watchlist -------------------------------------------------------
-function inWatchlist(id) { return State.watchlist.includes(id); }
+function inWatchlist(id) { return State.watchlist.some((m) => m.id === id); }
 
 function toggleWatchlist(id) {
-  const idx = State.watchlist.indexOf(id);
+  const idx = State.watchlist.findIndex((m) => m.id === id);
   let added;
-  if (idx === -1) { State.watchlist.push(id); added = true; }
-  else { State.watchlist.splice(idx, 1); added = false; }
+  if (idx === -1) {
+    const movie = movieById(id);
+    if (!movie) return false;
+    State.watchlist.push(movie);
+    added = true;
+  } else {
+    State.watchlist.splice(idx, 1);
+    added = false;
+  }
   saveState();
   updateWatchlistBadge();
   checkBadgeUnlocks();
@@ -284,11 +312,11 @@ function updateWatchlistBadge() {
 
 // ---- Badges ----------------------------------------------------------
 function badgeProgress(badge) {
-  const wl = State.watchlist.map(movieById).filter(Boolean);
+  const wl = State.watchlist.slice();
   let count;
   if (badge.any) count = wl.length;
-  else if (badge.genre) count = wl.filter((m) => m.genres.includes(badge.genre)).length;
-  else if (badge.category) count = wl.filter((m) => m.categories.includes(badge.category)).length;
+  else if (badge.genre) count = wl.filter((m) => (m.genres || []).includes(badge.genre)).length;
+  else if (badge.category) count = wl.filter((m) => (m.categories || []).includes(badge.category)).length;
   else count = 0;
   return { count: Math.min(count, badge.goal), goal: badge.goal, unlocked: count >= badge.goal };
 }

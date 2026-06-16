@@ -7,11 +7,22 @@
 // ---- Small shared bits ----------------------------------------------
 const SPARK_SVG = '<svg class="spark" viewBox="0 0 24 24" fill="none"><path d="M12 2 9.5 8.5 3 11l6.5 2.5L12 20l2.5-6.5L21 11l-6.5-2.5z" fill="currentColor"/></svg>';
 
+// Escape user/API-provided text before injecting into HTML.
+function esc(s) {
+  return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
 function posterArt(movie, extra = "") {
-  return `<div class="poster__art" style="background:${gradFor(movie.grad)}">
-    ${extra}
-    <div class="poster__logo">${movie.title}</div>
-  </div>`;
+  const bg = gradFor(movie.grad);
+  // Real TMDB artwork when available, with the themed gradient as a fallback
+  // layer behind it (and on image error).
+  const inner = movie.poster
+    ? `<img class="poster__img" src="${esc(movie.poster)}" alt="${esc(movie.title)}" loading="lazy"
+         onerror="this.remove()" />`
+    : `<div class="poster__logo">${esc(movie.title)}</div>`;
+  return `<div class="poster__art" style="background:${bg}">${extra}${inner}</div>`;
 }
 
 function posterCard(entry, opts = {}) {
@@ -20,21 +31,24 @@ function posterCard(entry, opts = {}) {
   const removeBtn = opts.removable
     ? `<button class="wl-remove" data-remove="${m.id}" aria-label="Remove from watchlist">✕</button>` : "";
   const matchBadge = `<span class="poster__match"><b>${match}%</b> Match</span>`;
-  return `<button class="poster" data-movie="${m.id}">
+  const rating = m.rating ? `★ ${m.rating.toFixed(1)}` : "NR";
+  const rt = m.runtime ? `<span>${formatRuntime(m.runtime)}</span>` : "";
+  return `<button class="poster" data-movie="${esc(m.id)}">
     ${posterArt(m, matchBadge + removeBtn)}
     <div class="poster__body">
-      <h4 class="poster__name">${m.title}</h4>
+      <h4 class="poster__name">${esc(m.title)}</h4>
       <div class="poster__meta">
-        <span class="imdb">★ ${m.rating.toFixed(1)}</span>
-        <span>${m.year}</span>
-        <span>${formatRuntime(m.runtime)}</span>
+        <span class="imdb">${rating}</span>
+        <span>${esc(m.year)}</span>
+        ${rt}
       </div>
-      <p class="poster__why">${m.why}</p>
+      <p class="poster__why">${esc(m.why || "")}</p>
     </div>
   </button>`;
 }
 
 function formatRuntime(min) {
+  if (!min) return "";
   const h = Math.floor(min / 60), m = min % 60;
   return h ? `${h}h ${m}m` : `${m}m`;
 }
@@ -137,22 +151,36 @@ function ResultsScreen() {
   const p = State.profile;
   const tags = p.tags.map((t) => `<span class="tag">${t}</span>`).join("");
 
-  const rows = buildRecommendationRows().map((def) => {
-    const cards = def.entries.map((e) => posterCard(e)).join("");
-    return `<div class="row">
-      <div class="row__head">
-        <h3 class="row__title">${def.title}<em>${def.hint}</em></h3>
-      </div>
-      <div class="carousel">${cards}</div>
-    </div>`;
-  }).join("");
+  // When TMDB is connected we render skeletons and fill them in asynchronously
+  // (app.js -> populateResults). Otherwise render the bundled library now.
+  let rowsHtml;
+  if (TMDB.enabled()) {
+    rowsHtml = `<div id="rowsHost">${skeletonRows(4)}</div>`;
+  } else {
+    rowsHtml = `<div id="rowsHost">${renderRows(buildRecommendationRows())}</div>`;
+  }
+
+  const banner = TMDB.enabled()
+    ? `<div class="data-banner data-banner--live">
+        <span><span class="live-dot"></span> Live library · The Movie Database</span>
+        <button class="data-banner__btn" data-action="open-settings">Manage</button>
+      </div>`
+    : `<div class="data-banner">
+        <span>🎬 You're viewing a demo library of ${MOVIES.length} films. Connect TMDB for the full catalogue with real posters.</span>
+        <button class="data-banner__btn data-banner__btn--cta" data-action="open-settings">Connect full library</button>
+      </div>`;
 
   return `<section class="page results container page-pad">
     <div class="topbar">
       <div class="brand">
         <span class="brand__logo">${SPARK_SVG_LOGO()}</span> CineMind
       </div>
-      <button class="btn btn--ghost" data-action="retake" style="padding:11px 20px;font-size:14px">Retake quiz</button>
+      <div style="display:flex;gap:10px;align-items:center">
+        <button class="icon-btn" data-action="open-settings" aria-label="Settings" title="Settings">
+          <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" stroke="currentColor" stroke-width="1.6"/><path d="M19.4 13a7.8 7.8 0 0 0 0-2l2-1.5-2-3.5-2.4 1a7.6 7.6 0 0 0-1.7-1l-.4-2.5h-4l-.4 2.5a7.6 7.6 0 0 0-1.7 1l-2.4-1-2 3.5L4.6 11a7.8 7.8 0 0 0 0 2l-2 1.5 2 3.5 2.4-1a7.6 7.6 0 0 0 1.7 1l.4 2.5h4l.4-2.5a7.6 7.6 0 0 0 1.7-1l2.4 1 2-3.5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="btn btn--ghost" data-action="retake" style="padding:11px 20px;font-size:14px">Retake quiz</button>
+      </div>
     </div>
 
     <div class="profile-card reveal" style="animation-delay:.05s">
@@ -167,8 +195,27 @@ function ResultsScreen() {
       </div>
     </div>
 
-    ${rows}
+    ${banner}
+    ${rowsHtml}
   </section>`;
+}
+
+// Renders an array of row defs to HTML (shared by local + TMDB paths).
+function renderRows(rows) {
+  if (!rows.length) return `<div class="empty" style="margin-top:30px"><div class="empty__art">🎭</div><h3>No matches found</h3><p>Try retaking the quiz with different answers.</p></div>`;
+  return rows.map((def) => {
+    const cards = def.entries.map((e) => posterCard(e)).join("");
+    return `<div class="row">
+      <div class="row__head">
+        <h3 class="row__title">${esc(def.title)}<em>${esc(def.hint)}</em></h3>
+      </div>
+      <div class="carousel">${cards}</div>
+    </div>`;
+  }).join("");
+}
+
+function skeletonRows(n) {
+  return Array.from({ length: n }).map(() => skeletonRow()).join("");
 }
 
 function archetypeArticle(name) {
@@ -181,57 +228,103 @@ function SPARK_SVG_LOGO() {
 }
 
 // ---- 6. Movie details modal -----------------------------------------
-function MovieModal(movie) {
-  const match = State.scores[movie.id] || scoreMovie(movie, State.answers);
+function MovieModal(movie, opts = {}) {
+  const match = State.scores[movie.id] || (movie.tmdb ? tmdbMatch(movie, State.answers) : scoreMovie(movie, State.answers));
   const inList = inWatchlist(movie.id);
-  const chips = movie.genres.map((g) => `<span class="chip">${g}</span>`).join("");
-  const streaming = movie.streaming.map((s) => {
-    const c = STREAM_COLORS[s] || "#444";
-    return `<span class="stream-pill"><span class="ico" style="background:${c}">${s[0]}</span>${s}</span>`;
-  }).join("");
+  const chips = (movie.genres || []).map((g) => `<span class="chip">${esc(g)}</span>`).join("");
+
+  // Hero: real backdrop/poster image when present, gradient fallback behind.
+  const heroImg = (movie.backdrop || movie.poster)
+    ? `<img class="sheet__img" src="${esc(movie.backdrop || movie.poster)}" alt="${esc(movie.title)}" onerror="this.remove()"/>`
+    : `<div class="poster__logo">${esc(movie.title)}</div>`;
+
+  const trailerBtn = movie.trailerKey
+    ? `<a class="sheet__trailer" href="https://www.youtube.com/watch?v=${esc(movie.trailerKey)}" target="_blank" rel="noopener">
+         <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7z" fill="currentColor"/></svg> Watch Trailer</a>`
+    : `<button class="sheet__trailer" data-action="trailer">
+         <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7z" fill="currentColor"/></svg> Play Trailer</button>`;
+
+  const loading = opts.loading ? `<span class="sheet__loading">Loading details…</span>` : "";
+  const facts = [];
+  if (movie.director) facts.push(`<div class="fact"><small>Director</small><span>${esc(movie.director)}</span></div>`);
+  if (movie.cast && movie.cast.length) facts.push(`<div class="fact"><small>Cast</small><span>${esc(movie.cast.join(", "))}</span></div>`);
+  if (movie.runtime) facts.push(`<div class="fact"><small>Runtime</small><span>${formatRuntime(movie.runtime)}</span></div>`);
+  facts.push(`<div class="fact"><small>Genres</small><span>${esc((movie.genres || []).join(", "))}</span></div>`);
+
+  let streamingBlock = "";
+  if (movie.streaming && movie.streaming.length) {
+    const streaming = movie.streaming.map((s) => {
+      const c = STREAM_COLORS[s] || "#5b5b66";
+      return `<span class="stream-pill"><span class="ico" style="background:${c}">${esc(s[0])}</span>${esc(s)}</span>`;
+    }).join("");
+    streamingBlock = `<small class="sheet__label">Where to watch</small><div class="streaming">${streaming}</div>`;
+  }
+
+  const ratingStr = movie.rating ? `★ ${movie.rating.toFixed(1)}` : "Not rated";
 
   return `<div class="overlay" data-overlay>
-    <div class="sheet" role="dialog" aria-modal="true" aria-label="${movie.title} details">
+    <div class="sheet" role="dialog" aria-modal="true" aria-label="${esc(movie.title)} details">
       <button class="sheet__close" data-close aria-label="Close">✕</button>
       <div class="sheet__hero" style="background:${gradFor(movie.grad)}">
-        <div class="poster__logo">${movie.title}</div>
-        <button class="sheet__trailer" data-action="trailer">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
-          Play Trailer
-        </button>
+        ${heroImg}
+        ${trailerBtn}
       </div>
       <div class="sheet__body">
-        <h2 class="sheet__title">${movie.title}</h2>
+        <h2 class="sheet__title">${esc(movie.title)} ${loading}</h2>
         <div class="sheet__meta">
-          <span class="imdb">★ ${movie.rating.toFixed(1)} IMDb</span>
-          <span>${movie.year}</span>
-          <span>${formatRuntime(movie.runtime)}</span>
+          <span class="imdb">${ratingStr}</span>
+          <span>${esc(movie.year)}</span>
+          ${movie.runtime ? `<span>${formatRuntime(movie.runtime)}</span>` : ""}
           <span class="match">${match}% Match</span>
         </div>
         <div class="genre-chips">${chips}</div>
-        <p class="sheet__synopsis">${movie.synopsis}</p>
+        <p class="sheet__synopsis">${esc(movie.synopsis)}</p>
 
         <div class="ai-block">
           <div class="ai-block__head">${SPARK_SVG} Why CineMind picked this for you</div>
-          <p>${movie.why}</p>
+          <p>${esc(movie.why || tmdbWhy(movie, State.answers))}</p>
         </div>
 
-        <div class="facts">
-          <div class="fact"><small>Director</small><span>${movie.director}</span></div>
-          <div class="fact"><small>Cast</small><span>${movie.cast.join(", ")}</span></div>
-          <div class="fact"><small>Runtime</small><span>${formatRuntime(movie.runtime)}</span></div>
-          <div class="fact"><small>Genres</small><span>${movie.genres.join(", ")}</span></div>
-        </div>
+        <div class="facts">${facts.join("")}</div>
 
-        <small style="color:var(--text-dim);display:block;margin-bottom:10px;text-transform:uppercase;letter-spacing:.1em;font-size:12px">Where to watch</small>
-        <div class="streaming">${streaming}</div>
+        ${streamingBlock}
 
         <div class="sheet__actions">
-          <button class="btn btn--primary" data-action="toggle-watchlist" data-movie="${movie.id}">
+          <button class="btn btn--primary" data-action="toggle-watchlist" data-movie="${esc(movie.id)}">
             ${inList ? watchlistRemoveLabel() : watchlistAddLabel()}
           </button>
           <button class="btn btn--ghost" data-close>Close</button>
         </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ---- Settings / TMDB connection modal -------------------------------
+function SettingsModal() {
+  const connected = TMDB.enabled();
+  return `<div class="overlay" data-overlay>
+    <div class="sheet sheet--narrow" role="dialog" aria-modal="true" aria-label="Settings">
+      <button class="sheet__close" data-close aria-label="Close">✕</button>
+      <div class="sheet__body" style="margin-top:0;padding-top:30px">
+        <h2 class="sheet__title" style="font-size:26px">Connect the full library</h2>
+        <p class="sheet__synopsis" style="margin-bottom:18px">
+          CineMind can stream the entire ${`<b>TMDB</b>`} movie catalogue — real posters, ratings, cast and trailers.
+          Add a free API key (it's stored only on this device, never uploaded).
+        </p>
+        <ol class="howto">
+          <li>Create a free account at <a href="https://www.themoviedb.org/signup" target="_blank" rel="noopener">themoviedb.org</a></li>
+          <li>Open <a href="https://www.themoviedb.org/settings/api" target="_blank" rel="noopener">Settings → API</a> and request a key (choose “Developer”)</li>
+          <li>Copy your <b>API Key (v3 auth)</b> and paste it below</li>
+        </ol>
+        <div class="key-field">
+          <input id="tmdbKeyInput" type="text" inputmode="text" autocomplete="off" spellcheck="false"
+            placeholder="Paste TMDB API key…" value="${esc(TMDB.key())}" />
+          <button class="btn btn--primary" data-action="save-key">${connected ? "Update" : "Connect"}</button>
+        </div>
+        <div id="keyStatus" class="key-status">${connected ? '<span class="ok">✓ Connected to live library</span>' : ""}</div>
+        ${connected ? `<button class="btn btn--ghost btn--block" data-action="disconnect-key" style="margin-top:14px">Disconnect &amp; use demo library</button>` : ""}
+        <p class="key-note">No key? No problem — the app keeps working with a built-in demo library.</p>
       </div>
     </div>
   </div>`;
@@ -246,17 +339,17 @@ function watchlistRemoveLabel() {
 
 // ---- 7. Watchlist ----------------------------------------------------
 function WatchlistScreen() {
-  let entries = State.watchlist.map(movieById).filter(Boolean);
+  let entries = State.watchlist.slice();
 
   // Filters
   if (State.watchlistSort !== "all") {
     entries = entries.filter((m) => m.genres.includes(State.watchlistSort));
   }
   if (State.watchlistMood !== "all") {
-    entries = entries.filter((m) => m.moods.includes(State.watchlistMood));
+    entries = entries.filter((m) => (m.moods || []).includes(State.watchlistMood));
   }
 
-  const genresPresent = Array.from(new Set(State.watchlist.map(movieById).filter(Boolean).flatMap((m) => m.genres))).sort();
+  const genresPresent = Array.from(new Set(State.watchlist.slice().flatMap((m) => m.genres))).sort();
   const sortOptions = ['<option value="all">All genres</option>']
     .concat(genresPresent.map((g) => `<option value="${g}" ${State.watchlistSort === g ? "selected" : ""}>${g}</option>`))
     .join("");
@@ -282,7 +375,7 @@ function WatchlistScreen() {
       <button class="btn btn--ghost" data-action="clear-filters">Clear filters</button>
     </div>`;
   } else {
-    const cards = entries.map((m) => posterCard({ movie: m, match: State.scores[m.id] || scoreMovie(m, State.answers) }, { removable: true })).join("");
+    const cards = entries.map((m) => posterCard({ movie: m, match: matchFor(m) }, { removable: true })).join("");
     body = `<div class="grid-list ${State.watchlistView === "list" ? "list-view" : ""}">${cards}</div>`;
   }
 
@@ -369,7 +462,7 @@ function FeaturesScreen() {
 
 // ---- 9. Badges -------------------------------------------------------
 function BadgesScreen() {
-  const wl = State.watchlist.map(movieById).filter(Boolean);
+  const wl = State.watchlist.slice();
   const unlockedCount = BADGES.filter((b) => badgeProgress(b).unlocked).length;
   const genresExplored = new Set(wl.flatMap((m) => m.genres)).size;
 

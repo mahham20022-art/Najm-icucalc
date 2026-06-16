@@ -1121,3 +1121,87 @@ img { display: block; max-width: 100%; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
 }
+
+/* ============================================================
+   TMDB live data — real posters, data banner, settings panel
+   ============================================================ */
+.poster__img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+.poster__art .poster__match, .poster__art .wl-remove { z-index: 2; }
+
+.sheet__img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+.sheet__hero .sheet__trailer, .sheet__hero .poster__logo { z-index: 2; }
+.sheet__loading {
+  font-size: 13px; font-weight: 500; color: var(--text-dim);
+  margin-left: 8px; vertical-align: middle;
+}
+.sheet__label {
+  color: var(--text-dim); display: block; margin-bottom: 10px;
+  text-transform: uppercase; letter-spacing: .1em; font-size: 12px;
+}
+.sheet--narrow { width: min(520px, 100%); }
+
+.icon-btn {
+  width: 44px; height: 44px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--surface); border: 1px solid var(--hairline-strong);
+  color: var(--text); transition: background .2s, transform .2s;
+}
+.icon-btn:hover { background: var(--surface-2); }
+.icon-btn:active { transform: scale(0.94); }
+
+.data-banner {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+  margin: 22px 0 6px;
+  padding: 14px 18px;
+  border-radius: var(--radius);
+  background: var(--glass);
+  border: 1px solid var(--hairline-strong);
+  backdrop-filter: blur(12px);
+  font-size: 14px; color: var(--text-dim);
+}
+.data-banner--live { border-color: rgba(94,255,160,0.25); }
+.data-banner span { display: inline-flex; align-items: center; gap: 9px; }
+.live-dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: #5effa0; box-shadow: 0 0 10px #5effa0;
+  animation: pulse 1.8s ease-in-out infinite;
+}
+.data-banner__btn {
+  border: 1px solid var(--hairline-strong); background: rgba(255,255,255,0.06);
+  color: var(--text); border-radius: var(--radius-full);
+  padding: 9px 16px; font-size: 13px; font-weight: 600; white-space: nowrap;
+}
+.data-banner__btn--cta {
+  background: linear-gradient(135deg, #ff2b36, var(--accent)); border: none;
+  box-shadow: 0 8px 22px -8px var(--accent-glow);
+}
+
+.howto { color: var(--text-dim); line-height: 1.7; font-size: 14.5px; padding-left: 20px; margin: 0 0 20px; }
+.howto a { color: #cfcbff; }
+.key-field { display: flex; gap: 10px; margin-bottom: 12px; }
+.key-field input {
+  flex: 1; min-width: 0;
+  background: var(--bg); border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-full); padding: 13px 18px; color: #fff; font-size: 14.5px;
+}
+.key-field input::placeholder { color: #6b6b76; }
+.key-status { min-height: 22px; font-size: 13.5px; font-weight: 600; margin-bottom: 4px; }
+.key-status .ok { color: #5effa0; }
+.key-status .err { color: #ff6b73; }
+.key-status .muted { color: var(--text-dim); }
+.key-note { font-size: 12.5px; color: var(--text-dim); margin: 14px 0 0; }
+
+.reveal-card .spotlight { overflow: hidden; }
+.therapist-response .mini-poster { overflow: hidden; }
+.therapist-response .mini-poster img { width: 100%; height: 100%; object-fit: cover; }
