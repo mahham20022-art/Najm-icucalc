@@ -137,10 +137,8 @@ function ResultsScreen() {
   const p = State.profile;
   const tags = p.tags.map((t) => `<span class="tag">${t}</span>`).join("");
 
-  const rows = ROW_DEFS.map((def) => {
-    const entries = moviesFor(def.key, 12);
-    if (!entries.length) return "";
-    const cards = entries.map((e) => posterCard(e)).join("");
+  const rows = buildRecommendationRows().map((def) => {
+    const cards = def.entries.map((e) => posterCard(e)).join("");
     return `<div class="row">
       <div class="row__head">
         <h3 class="row__title">${def.title}<em>${def.hint}</em></h3>

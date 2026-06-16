@@ -66,24 +66,20 @@ function scoreMovie(movie, answers) {
   const genreHits = movie.genres.filter((g) => genres.includes(g)).length;
   score += genreHits * 11;
 
-  if (answers.mood && movie.moods.includes(answers.mood)) score += 14;
-  if (answers.story && movie.tone.includes(answers.story)) score += 16;
+  if (answers.mood && movie.moods.includes(answers.mood)) score += 16;
+  if (answers.story && movie.tone.includes(answers.story)) score += 18;
 
   // Character archetype nudges toward thematically aligned tones.
-  const charMap = {
-    "The Thinker": ["Mind-bending"],
-    "The Dreamer": ["Emotional", "Inspirational"],
-    "The Explorer": ["Action-packed", "Inspirational"],
-    "The Rebel": ["Dark", "Mind-bending"],
-    "The Leader": ["Inspirational", "Action-packed"],
-    "The Outsider": ["Emotional", "Real-life stories"]
-  };
-  const charTones = charMap[answers.character] || [];
-  if (charTones.some((t) => movie.tone.includes(t))) score += 8;
+  const charTones = ARCHETYPE_TONES[answers.character] || [];
+  if (charTones.some((t) => movie.tone.includes(t))) score += 10;
 
   // Pace tilts on runtime as a light proxy.
-  if (answers.pace === "Fast and intense" && movie.runtime <= 120) score += 5;
-  if (answers.pace === "Slow and deep" && movie.runtime >= 130) score += 5;
+  if (answers.pace === "Fast and intense" && movie.runtime <= 120) score += 6;
+  if (answers.pace === "Slow and deep" && movie.runtime >= 130) score += 6;
+
+  // Lifestyle adds a light, personality-consistent nudge.
+  const lifeTone = LIFESTYLE_TONES[answers.lifestyle] || [];
+  if (lifeTone.some((t) => movie.tone.includes(t))) score += 5;
 
   // Reward acclaim slightly so great films surface.
   score += (movie.rating - 7.5) * 4;
@@ -93,8 +89,35 @@ function scoreMovie(movie, answers) {
   for (let i = 0; i < movie.id.length; i++) h = (h * 31 + movie.id.charCodeAt(i)) % 13;
   score += h - 6;
 
-  return Math.max(72, Math.min(99, Math.round(score)));
+  // Floor of 62 keeps weak matches presentable; strong matches separate clearly.
+  return Math.max(62, Math.min(99, Math.round(score)));
 }
+
+// Archetype + lifestyle tone affinities (module-level so rows can reuse them).
+const ARCHETYPE_TONES = {
+  "The Thinker": ["Mind-bending"],
+  "The Dreamer": ["Emotional", "Inspirational"],
+  "The Explorer": ["Action-packed", "Inspirational"],
+  "The Rebel": ["Dark", "Mind-bending"],
+  "The Leader": ["Inspirational", "Action-packed"],
+  "The Outsider": ["Emotional", "Real-life stories"]
+};
+const LIFESTYLE_TONES = {
+  "Reading": ["Mind-bending", "Real-life stories"],
+  "Gaming": ["Action-packed", "Mind-bending"],
+  "Traveling": ["Inspirational", "Action-packed"],
+  "Sports": ["Inspirational", "Action-packed"],
+  "Family time": ["Emotional", "Inspirational"],
+  "Learning": ["Mind-bending", "Real-life stories"]
+};
+const STORY_ROW_TITLES = {
+  "Mind-bending": "Mind-Blowing Stories",
+  "Emotional": "Emotional Journeys",
+  "Inspirational": "Inspiring Watches",
+  "Action-packed": "Edge-of-Your-Seat",
+  "Dark": "Into the Dark",
+  "Real-life stories": "Rooted in Reality"
+};
 
 // Determines the archetype. Prefers the chosen character; otherwise infers.
 function deriveArchetype(answers) {
@@ -141,13 +164,91 @@ function runAnalysis() {
   return State.profile;
 }
 
-// Returns the scored movie list for a category, sorted by match desc.
-function moviesFor(categoryKey, limit) {
-  const list = MOVIES
-    .filter((m) => m.categories.includes(categoryKey))
+// Full catalogue, scored against the current answers, ranked best-first.
+function rankedMovies() {
+  return MOVIES
     .map((m) => ({ movie: m, match: State.scores[m.id] || scoreMovie(m, State.answers) }))
     .sort((a, b) => b.match - a.match);
-  return limit ? list.slice(0, limit) : list;
+}
+
+// Builds the recommendation rows DYNAMICALLY from the user's answers, so
+// different personalities genuinely get different titles — not just a
+// re-sort of the same static lists. Rows are tailored to the picked
+// genres, mood, story preference and derived archetype.
+function buildRecommendationRows() {
+  const a = State.answers;
+  const ranked = rankedMovies();
+  const take = (arr, n = 10) => arr.slice(0, n);
+  const rows = [];
+  const featured = new Set();
+
+  // Helper: builds a row from a candidate pool (already score-sorted). To stop
+  // every row repeating the same headline picks, titles shown in an earlier
+  // row are dropped here; if that leaves too few, we backfill with the best of
+  // the rest. Each row stays cleanly sorted high→low by match score.
+  const addRow = (title, hint, pool, keepAll) => {
+    if (pool.length < 3) return;
+    let entries;
+    if (keepAll) {
+      entries = pool;
+    } else {
+      entries = pool.filter((e) => !featured.has(e.movie.id));
+      if (entries.length < 3) {
+        entries = pool.slice().sort((x, y) => y.match - x.match);
+      }
+    }
+    if (entries.length < 3) return;
+
+    // Skip a row that's essentially a duplicate of one already shown
+    // (>=80% of the visible top 5 overlapping) — keeps every row distinct.
+    const topIds = entries.slice(0, 5).map((e) => e.movie.id);
+    const isDup = rows.some((r) => {
+      const prev = r.entries.slice(0, 5).map((e) => e.movie.id);
+      const shared = topIds.filter((id) => prev.includes(id)).length;
+      return shared >= Math.ceil(Math.min(topIds.length, prev.length) * 0.8);
+    });
+    if (isDup) return;
+
+    entries.slice(0, 6).forEach((e) => featured.add(e.movie.id));
+    rows.push({ title, hint, entries: take(entries, 10) });
+  };
+
+  // 1. Perfect Matches — the highest-scoring titles for THIS profile (kept in
+  //    pure score order; this is the headline row).
+  addRow("Perfect Matches", "Your highest AI match scores", ranked, true);
+
+  // 2. Based on the user's character archetype.
+  const arch = State.profile ? State.profile.archetype : deriveArchetype(a);
+  const aTones = ARCHETYPE_TONES[arch] || [];
+  addRow(`Because you're ${arch}`, "Tuned to your character type",
+    ranked.filter((e) => e.movie.tone.some((t) => aTones.includes(t))));
+
+  // 3. One row per favourite genre the user actually selected (max 2).
+  (a.genres || [])
+    .map((g) => ({ g, entries: ranked.filter((e) => e.movie.genres.includes(g)) }))
+    .filter((x) => x.entries.length >= 3)
+    .sort((x, y) => y.entries.length - x.entries.length)
+    .slice(0, 2)
+    .forEach(({ g, entries }) => addRow(`Because you love ${g}`, "From the genres you picked", entries));
+
+  // 4. Mood-driven row for how they feel today.
+  if (a.mood) {
+    addRow(`For your ${a.mood.toLowerCase()} mood`, "Matched to how you feel today",
+      ranked.filter((e) => e.movie.moods.includes(a.mood)));
+  }
+
+  // 5. Story-preference row (e.g. Mind-Blowing Stories).
+  if (a.story && STORY_ROW_TITLES[a.story]) {
+    addRow(STORY_ROW_TITLES[a.story], "Your favourite kind of story",
+      ranked.filter((e) => e.movie.tone.includes(a.story)));
+  }
+
+  // 6. Hidden Gems — strong matches that didn't already headline a row,
+  //    leaning to the less mainstream end of the catalogue.
+  addRow("Hidden Gems", "Underrated picks, matched to you",
+    ranked.filter((e) => !featured.has(e.movie.id) && e.movie.rating < 8.5));
+
+  return rows;
 }
 
 // Best single recommendation, optionally excluding ids (for Surprise Me).
