@@ -1,0 +1,15 @@
+{
+  "name": "Najm ICUCalc — ICU Infusion Calculator",
+  "short_name": "ICUCalc",
+  "description": "Adult ICU continuous-infusion dose and pump-rate (mL/hr) calculator. Clinical reference only.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0b1220",
+  "theme_color": "#0b1220",
+  "categories": ["medical", "health", "utilities"],
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

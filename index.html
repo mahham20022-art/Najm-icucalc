@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Najm ICUCalc — adult ICU continuous-infusion dose and pump-rate (mL/hr) calculator. Offline capable. For clinical reference only.">
+<meta name="theme-color" content="#0b1220">
+<title>Najm ICUCalc — ICU Infusion Calculator</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<style>
+:root {
+  --bg: #0b1220;
+  --bg-elev: #111827;
+  --bg-elev-2: #0f1623;
+  --surface: #131c2e;
+  --border: #233047;
+  --text: #e5e7eb;
+  --text-dim: #93a4bd;
+  --text-faint: #64748b;
+  --brand: #0ea5e9;
+  --brand-strong: #0284c7;
+  --accent: #38bdf8;
+  --ok: #34d399;
+  --warn: #fbbf24;
+  --danger: #f87171;
+  --focus: #7dd3fc;
+  --radius: 14px;
+  --radius-sm: 9px;
+  --shadow: 0 8px 30px rgba(0,0,0,.35);
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+[data-theme="light"] {
+  --bg: #eef2f7;
+  --bg-elev: #ffffff;
+  --bg-elev-2: #f4f7fb;
+  --surface: #ffffff;
+  --border: #d6dee9;
+  --text: #0f1b2d;
+  --text-dim: #4a5a72;
+  --text-faint: #7688a0;
+  --brand: #0284c7;
+  --brand-strong: #0369a1;
+  --accent: #0369a1;
+  --shadow: 0 8px 24px rgba(15,27,45,.10);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--accent); }
+
+/* ---------- Header / sticky control bar ---------- */
+.appbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: saturate(140%) blur(10px);
+  border-bottom: 1px solid var(--border);
+  padding-top: env(safe-area-inset-top);
+}
+.appbar-inner {
+  max-width: 1080px;
+  margin: auto;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.brand .logo {
+  width: 38px; height: 38px;
+  flex: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-strong) 100%);
+  display: grid; place-items: center;
+  color: #fff; font-weight: 800; font-size: 17px;
+  box-shadow: 0 4px 14px rgba(2,132,199,.35);
+}
+.brand h1 { font-size: 17px; margin: 0; letter-spacing: .2px; }
+.brand .sub { font-size: 11.5px; color: var(--text-dim); margin: 0; }
+.brand .spacer { flex: 1; }
+.icon-btn {
+  appearance: none;
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-elev);
+  color: var(--text);
+  font-size: 18px;
+  cursor: pointer;
+  display: grid; place-items: center;
+}
+.icon-btn:hover { border-color: var(--brand); }
+
+.controls {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 10px;
+}
+.field { display: flex; flex-direction: column; gap: 4px; }
+.field label {
+  font-size: 11px; font-weight: 600; letter-spacing: .4px;
+  text-transform: uppercase; color: var(--text-dim);
+}
+.input-wrap { position: relative; display: flex; align-items: center; }
+.input-wrap .unit {
+  position: absolute; right: 12px;
+  color: var(--text-faint); font-size: 13px; pointer-events: none;
+}
+input[type="number"], input[type="search"] {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-elev);
+  color: var(--text);
+}
+input[type="number"] { padding-right: 38px; font-variant-numeric: tabular-nums; }
+input:focus-visible, select:focus-visible, button:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.weight-presets { display: flex; gap: 6px; margin-top: 6px; }
+.weight-presets button {
+  flex: 1;
+  padding: 7px 4px;
+  font-size: 13px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-elev);
+  color: var(--text-dim);
+  cursor: pointer;
+}
+.weight-presets button:hover { border-color: var(--brand); color: var(--text); }
+.weight-presets button.active {
+  background: var(--brand-strong); border-color: var(--brand-strong); color: #fff;
+}
+
+/* ---------- Disclaimer ---------- */
+.disclaimer {
+  max-width: 1080px;
+  margin: 14px auto 0;
+  padding: 10px 14px;
+  background: color-mix(in srgb, var(--warn) 14%, var(--bg-elev));
+  border: 1px solid color-mix(in srgb, var(--warn) 45%, var(--border));
+  border-radius: var(--radius-sm);
+  font-size: 12.5px;
+  color: var(--text);
+  display: flex; gap: 10px; align-items: flex-start;
+}
+.disclaimer .x { margin-left: auto; cursor: pointer; color: var(--text-dim); background: none; border: none; font-size: 16px; }
+
+/* ---------- Layout ---------- */
+.container { max-width: 1080px; margin: 0 auto; padding: 16px; }
+
+.category { margin-bottom: 26px; }
+.category h2 {
+  font-size: 13px; letter-spacing: .6px; text-transform: uppercase;
+  color: var(--text-dim);
+  margin: 0 0 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.category h2::before {
+  content: ""; width: 10px; height: 10px; border-radius: 3px;
+  background: var(--cat, var(--brand));
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 14px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 15px;
+  display: flex; flex-direction: column; gap: 10px;
+  box-shadow: var(--shadow);
+  border-top: 3px solid var(--cat, var(--brand));
+}
+.card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.card-head h3 { margin: 0; font-size: 16px; }
+.card-head .dose-unit { font-size: 11px; color: var(--text-faint); font-family: var(--mono); }
+
+.range-line {
+  font-size: 13.5px; color: var(--text-dim);
+}
+.range-line b { color: var(--text); font-variant-numeric: tabular-nums; }
+
+.conc-row { display: flex; flex-direction: column; gap: 4px; }
+.conc-row label { font-size: 11px; color: var(--text-faint); text-transform: uppercase; letter-spacing: .3px; }
+select {
+  width: 100%;
+  padding: 9px 11px;
+  font-size: 13.5px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-elev);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.rate {
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 11px 12px;
+}
+.rate .rate-label { font-size: 11px; color: var(--text-faint); text-transform: uppercase; letter-spacing: .3px; }
+.rate .rate-val {
+  font-size: 21px; font-weight: 700; font-family: var(--mono);
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.rate .rate-val small { font-size: 12px; color: var(--text-dim); font-weight: 500; }
+.rate .rate-sub { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+
+.target {
+  display: flex; align-items: center; gap: 9px;
+}
+.target input[type="range"] { flex: 1; accent-color: var(--brand); }
+.target .target-dose {
+  font-family: var(--mono); font-size: 13px; min-width: 64px; text-align: right;
+  color: var(--text); font-variant-numeric: tabular-nums;
+}
+
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 600;
+  padding: 3px 8px; border-radius: 999px;
+}
+.badge.warn { background: color-mix(in srgb, var(--danger) 18%, transparent); color: var(--danger); }
+.note { font-size: 11.5px; color: var(--text-faint); }
+.card.dim { opacity: .4; }
+
+.empty {
+  text-align: center; color: var(--text-dim);
+  padding: 50px 16px; font-size: 14px;
+}
+
+/* ---------- Footer ---------- */
+footer {
+  max-width: 1080px; margin: 10px auto 40px; padding: 16px;
+  font-size: 11.5px; color: var(--text-faint); text-align: center;
+  border-top: 1px solid var(--border);
+}
+footer strong { color: var(--text-dim); }
+
+@media (max-width: 560px) {
+  .controls { grid-template-columns: 1fr; }
+}
+@media print {
+  .appbar, .disclaimer, .conc-row, .target, .icon-btn { display: none !important; }
+  body { background: #fff; color: #000; }
+  .card { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <div class="appbar-inner">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">N</div>
+      <div>
+        <h1>Najm ICUCalc</h1>
+        <p class="sub">Adult ICU continuous-infusion calculator</p>
+      </div>
+      <span class="spacer"></span>
+      <button class="icon-btn" id="themeBtn" title="Toggle theme" aria-label="Toggle light/dark theme">🌓</button>
+      <button class="icon-btn" id="printBtn" title="Print / export" aria-label="Print">🖨️</button>
+    </div>
+
+    <div class="controls">
+      <div class="field">
+        <label for="weight">Patient weight</label>
+        <div class="input-wrap">
+          <input type="number" id="weight" inputmode="decimal" min="0" max="400" step="0.5"
+                 placeholder="e.g. 70" autocomplete="off">
+          <span class="unit">kg</span>
+        </div>
+        <div class="weight-presets" id="weightPresets" role="group" aria-label="Weight presets">
+          <button type="button" data-w="50">50</button>
+          <button type="button" data-w="60">60</button>
+          <button type="button" data-w="70">70</button>
+          <button type="button" data-w="80">80</button>
+          <button type="button" data-w="90">90</button>
+          <button type="button" data-w="100">100</button>
+        </div>
+      </div>
+      <div class="field">
+        <label for="search">Search drug</label>
+        <div class="input-wrap">
+          <input type="search" id="search" placeholder="Filter by name…" autocomplete="off" aria-label="Search drug">
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="disclaimer" id="disclaimer" role="note">
+  <span aria-hidden="true">⚠️</span>
+  <span><strong>Clinical reference only.</strong> Doses are typical adult ranges and may differ from your institution's protocols.
+  Always independently verify every dose, concentration, and pump rate before administration.</span>
+  <button class="x" id="dismissDisclaimer" aria-label="Dismiss disclaimer">✕</button>
+</div>
+
+<main class="container" id="app" aria-live="polite"></main>
+
+<footer>
+  <p><strong>Najm ICUCalc</strong> · Not a substitute for clinical judgement · Verify against local ICU protocols and a current formulary.</p>
+  <p>Works offline. Your weight &amp; settings stay on this device.</p>
+</footer>
+
+<script>
+"use strict";
+
+/* =========================================================================
+   Drug data — adult ICU continuous infusions.
+   conc values are expressed in the SAME mass unit as the dose (mcg | mg | units)
+   per mL, so rate math is unit-consistent.
+   Sources: standard adult critical-care infusion references. VERIFY LOCALLY.
+   ========================================================================= */
+const CATEGORIES = [
+  { id: "vaso", name: "Vasopressors & Inotropes", color: "#f87171" },
+  { id: "sed",  name: "Sedation & Analgesia",     color: "#a78bfa" },
+  { id: "htn",  name: "Antihypertensives & Vasodilators", color: "#34d399" },
+  { id: "other",name: "Other Infusions",          color: "#38bdf8" },
+];
+
+// massUnit: mass unit of the dose. per: time base of the dose. weight: per-kg?
+const DRUGS = [
+  // ---- Vasopressors & Inotropes ----
+  { cat:"vaso", name:"Norepinephrine", massUnit:"mcg", per:"min", weight:true,  min:0.01, max:0.5, ceiling:2,
+    conc:[{l:"4 mg / 250 mL (16 mcg/mL)",v:16},{l:"8 mg / 250 mL (32 mcg/mL)",v:32},{l:"16 mg / 250 mL (64 mcg/mL)",v:64}] },
+  { cat:"vaso", name:"Epinephrine", massUnit:"mcg", per:"min", weight:true, min:0.01, max:0.5, ceiling:1,
+    conc:[{l:"4 mg / 250 mL (16 mcg/mL)",v:16},{l:"8 mg / 250 mL (32 mcg/mL)",v:32}] },
+  { cat:"vaso", name:"Phenylephrine", massUnit:"mcg", per:"min", weight:true, min:0.1, max:3, ceiling:5,
+    conc:[{l:"20 mg / 250 mL (80 mcg/mL)",v:80},{l:"50 mg / 250 mL (200 mcg/mL)",v:200}] },
+  { cat:"vaso", name:"Dopamine", massUnit:"mcg", per:"min", weight:true, min:2, max:20, ceiling:20,
+    conc:[{l:"400 mg / 250 mL (1600 mcg/mL)",v:1600},{l:"800 mg / 250 mL (3200 mcg/mL)",v:3200}] },
+  { cat:"vaso", name:"Dobutamine", massUnit:"mcg", per:"min", weight:true, min:2, max:20, ceiling:20,
+    conc:[{l:"250 mg / 250 mL (1000 mcg/mL)",v:1000},{l:"500 mg / 250 mL (2000 mcg/mL)",v:2000}] },
+  { cat:"vaso", name:"Milrinone", massUnit:"mcg", per:"min", weight:true, min:0.125, max:0.75, ceiling:0.75,
+    conc:[{l:"20 mg / 100 mL (200 mcg/mL)",v:200},{l:"40 mg / 200 mL (200 mcg/mL)",v:200}] },
+  { cat:"vaso", name:"Vasopressin", massUnit:"units", per:"min", weight:false, min:0.01, max:0.04, ceiling:0.04,
+    conc:[{l:"20 units / 100 mL (0.2 u/mL)",v:0.2},{l:"40 units / 100 mL (0.4 u/mL)",v:0.4}] },
+
+  // ---- Sedation & Analgesia ----
+  { cat:"sed", name:"Propofol", massUnit:"mcg", per:"min", weight:true, min:5, max:50, ceiling:80,
+    conc:[{l:"10 mg/mL (1% — 10000 mcg/mL)",v:10000},{l:"20 mg/mL (2% — 20000 mcg/mL)",v:20000}] },
+  { cat:"sed", name:"Dexmedetomidine", massUnit:"mcg", per:"hr", weight:true, min:0.2, max:1.5, ceiling:1.5,
+    conc:[{l:"4 mcg/mL (400 mcg / 100 mL)",v:4},{l:"8 mcg/mL (400 mcg / 50 mL)",v:8}] },
+  { cat:"sed", name:"Midazolam", massUnit:"mg", per:"hr", weight:true, min:0.02, max:0.1, ceiling:0.2,
+    conc:[{l:"1 mg/mL",v:1},{l:"2 mg/mL",v:2}] },
+  { cat:"sed", name:"Fentanyl", massUnit:"mcg", per:"hr", weight:true, min:0.7, max:10, ceiling:10,
+    conc:[{l:"10 mcg/mL (500 mcg / 50 mL)",v:10},{l:"50 mcg/mL (undiluted)",v:50}] },
+  { cat:"sed", name:"Ketamine (analgosedation)", massUnit:"mg", per:"hr", weight:true, min:0.1, max:0.5, ceiling:1,
+    conc:[{l:"1 mg/mL",v:1},{l:"2 mg/mL",v:2}] },
+
+  // ---- Antihypertensives & Vasodilators ----
+  { cat:"htn", name:"Nicardipine", massUnit:"mg", per:"hr", weight:false, min:5, max:15, ceiling:15,
+    conc:[{l:"0.1 mg/mL (25 mg / 250 mL)",v:0.1},{l:"0.2 mg/mL (40 mg / 200 mL)",v:0.2}] },
+  { cat:"htn", name:"Clevidipine", massUnit:"mg", per:"hr", weight:false, min:1, max:21, ceiling:32,
+    conc:[{l:"0.5 mg/mL",v:0.5}] },
+  { cat:"htn", name:"Labetalol", massUnit:"mg", per:"min", weight:false, min:0.5, max:2, ceiling:2,
+    conc:[{l:"1 mg/mL (200 mg / 200 mL)",v:1}] },
+  { cat:"htn", name:"Esmolol", massUnit:"mcg", per:"min", weight:true, min:50, max:200, ceiling:300,
+    conc:[{l:"10 mg/mL (2500 mg / 250 mL)",v:10000},{l:"20 mg/mL (2000 mg / 100 mL)",v:20000}] },
+  { cat:"htn", name:"Nitroglycerin", massUnit:"mcg", per:"min", weight:false, min:5, max:200, ceiling:400,
+    conc:[{l:"100 mcg/mL (25 mg / 250 mL)",v:100},{l:"200 mcg/mL (50 mg / 250 mL)",v:200},{l:"400 mcg/mL (100 mg / 250 mL)",v:400}] },
+  { cat:"htn", name:"Nitroprusside", massUnit:"mcg", per:"min", weight:true, min:0.3, max:5, ceiling:10,
+    conc:[{l:"200 mcg/mL (50 mg / 250 mL)",v:200},{l:"100 mcg/mL (50 mg / 500 mL)",v:100}] },
+
+  // ---- Other Infusions ----
+  { cat:"other", name:"Insulin (regular)", massUnit:"units", per:"hr", weight:false, min:0.5, max:10, ceiling:20,
+    conc:[{l:"1 unit/mL (100 units / 100 mL)",v:1}] },
+  { cat:"other", name:"Heparin", massUnit:"units", per:"hr", weight:true, min:12, max:18, ceiling:18,
+    conc:[{l:"100 units/mL (25000 u / 250 mL)",v:100}] },
+  { cat:"other", name:"Amiodarone", massUnit:"mg", per:"min", weight:false, min:0.5, max:1, ceiling:1,
+    conc:[{l:"1.8 mg/mL (900 mg / 500 mL)",v:1.8},{l:"3.6 mg/mL (450 mg / 125 mL)",v:3.6}] },
+  { cat:"other", name:"Furosemide", massUnit:"mg", per:"hr", weight:false, min:1, max:10, ceiling:40,
+    conc:[{l:"10 mg/mL (undiluted)",v:10},{l:"1 mg/mL (250 mg / 250 mL)",v:1}] },
+];
+
+/* ============================ State / persistence ======================== */
+const LS_KEY = "najm-icucalc-v4";
+const state = loadState();
+
+function loadState() {
+  try {
+    const s = JSON.parse(localStorage.getItem(LS_KEY)) || {};
+    return { weight: s.weight ?? null, theme: s.theme ?? "dark",
+             conc: s.conc ?? {}, target: s.target ?? {}, disclaimer: s.disclaimer ?? true };
+  } catch { return { weight:null, theme:"dark", conc:{}, target:{}, disclaimer:true }; }
+}
+function saveState() {
+  try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch {}
+}
+
+/* ============================ Calculation ================================ */
+// Returns mL/hr for a given dose, or null if not computable.
+function rateMlHr(drug, dose, weight, conc) {
+  if (!isFinite(dose) || dose <= 0 || !conc) return null;
+  if (drug.weight && (!weight || weight <= 0)) return null;
+  let massPerHr = dose * (drug.weight ? weight : 1);
+  if (drug.per === "min") massPerHr *= 60;
+  return massPerHr / conc; // conc is massUnit per mL
+}
+
+function fmtRate(r) {
+  if (r == null) return null;
+  if (r >= 100) return r.toFixed(0);
+  if (r >= 10) return r.toFixed(1);
+  return r.toFixed(2);
+}
+function fmtDose(d) {
+  if (d < 0.1) return d.toFixed(3).replace(/0+$/,"").replace(/\.$/,"");
+  if (d < 1)   return d.toFixed(2);
+  if (d < 10)  return (Math.round(d*100)/100).toString();
+  return (Math.round(d*10)/10).toString();
+}
+
+/* ============================ Rendering ================================= */
+const app = document.getElementById("app");
+
+function buildCards() {
+  app.innerHTML = "";
+  const weight = state.weight;
+  let anyVisible = false;
+  const query = (document.getElementById("search").value || "").trim().toLowerCase();
+
+  for (const cat of CATEGORIES) {
+    const drugs = DRUGS.filter(d => d.cat === cat.id &&
+      (!query || d.name.toLowerCase().includes(query)));
+    if (!drugs.length) continue;
+    anyVisible = true;
+
+    const section = document.createElement("section");
+    section.className = "category";
+    section.style.setProperty("--cat", cat.color);
+    section.innerHTML = `<h2>${cat.name}</h2>`;
+    const grid = document.createElement("div");
+    grid.className = "grid";
+
+    for (const drug of drugs) grid.appendChild(buildCard(drug, cat, weight));
+    section.appendChild(grid);
+    app.appendChild(section);
+  }
+
+  if (!anyVisible) {
+    app.innerHTML = `<p class="empty">No drug matches “${escapeHtml(query)}”.</p>`;
+  }
+}
+
+function buildCard(drug, cat, weight) {
+  const key = drug.name;
+  const card = document.createElement("article");
+  card.className = "card";
+  card.style.setProperty("--cat", cat.color);
+
+  const unitLabel = `${drug.massUnit}${drug.weight ? "/kg" : ""}/${drug.per}`;
+  const concIdx = clampIdx(state.conc[key], drug.conc.length);
+  const conc = drug.conc[concIdx].v;
+
+  // target dose (default = geometric-ish midpoint, clamped to range)
+  let target = state.target[key];
+  if (target == null) target = +(drug.min + (drug.max - drug.min) * 0.4).toFixed(4);
+  target = Math.min(Math.max(target, drug.min), drug.max);
+
+  const rMin = rateMlHr(drug, drug.min, weight, conc);
+  const rMax = rateMlHr(drug, drug.max, weight, conc);
+  const rTar = rateMlHr(drug, target, weight, conc);
+
+  const needsWeight = drug.weight && (!weight || weight <= 0);
+  const overCeiling = drug.ceiling && target > drug.ceiling;
+
+  const rangeRates = (rMin != null && rMax != null)
+    ? `<div class="rate-sub">Full range: <b>${fmtRate(rMin)}–${fmtRate(rMax)}</b> mL/hr</div>` : "";
+
+  card.innerHTML = `
+    <div class="card-head">
+      <h3>${escapeHtml(drug.name)}</h3>
+      <span class="dose-unit">${unitLabel}</span>
+    </div>
+    <div class="range-line">Dose: <b>${fmtDose(drug.min)}–${fmtDose(drug.max)}</b> ${unitLabel}
+      ${drug.ceiling && drug.ceiling > drug.max ? `<span class="note">(max ~${fmtDose(drug.ceiling)})</span>` : ""}
+    </div>
+
+    <div class="conc-row">
+      <label for="conc-${slug(key)}">Concentration</label>
+      <select id="conc-${slug(key)}" data-drug="${escapeHtml(key)}" aria-label="${escapeHtml(drug.name)} concentration">
+        ${drug.conc.map((c,i)=>`<option value="${i}" ${i===concIdx?"selected":""}>${escapeHtml(c.l)}</option>`).join("")}
+      </select>
+    </div>
+
+    <div class="target">
+      <input type="range" min="${drug.min}" max="${drug.max}" value="${target}"
+             step="${stepFor(drug)}" data-drug="${escapeHtml(key)}"
+             aria-label="${escapeHtml(drug.name)} target dose">
+      <span class="target-dose">${fmtDose(target)}</span>
+    </div>
+
+    <div class="rate">
+      <div class="rate-label">Pump rate @ ${fmtDose(target)} ${unitLabel}</div>
+      <div class="rate-val">${needsWeight ? "—" : (rTar!=null?fmtRate(rTar):"—")} <small>mL/hr</small></div>
+      ${needsWeight ? `<div class="rate-sub">Enter weight to calculate</div>` : rangeRates}
+    </div>
+
+    ${overCeiling ? `<span class="badge warn">⚠ Above usual max (${fmtDose(drug.ceiling)})</span>` : ""}
+  `;
+  return card;
+}
+
+/* ============================ Helpers =================================== */
+function stepFor(d) {
+  const span = d.max - d.min;
+  if (span <= 0.2) return 0.005;
+  if (span <= 2) return 0.05;
+  if (span <= 20) return 0.5;
+  return 1;
+}
+function clampIdx(i, len) { i = i|0; return (i>=0 && i<len) ? i : 0; }
+function slug(s){ return s.toLowerCase().replace(/[^a-z0-9]+/g,"-"); }
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+
+/* ============================ Events =================================== */
+const weightInput = document.getElementById("weight");
+const presets = document.getElementById("weightPresets");
+
+function setWeight(w, fromInput) {
+  state.weight = (w && w > 0) ? w : null;
+  if (!fromInput) weightInput.value = state.weight ?? "";
+  [...presets.children].forEach(b => b.classList.toggle("active", +b.dataset.w === state.weight));
+  saveState();
+  buildCards();
+}
+
+weightInput.addEventListener("input", () => setWeight(parseFloat(weightInput.value), true));
+presets.addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  setWeight(+b.dataset.w, false);
+});
+
+document.getElementById("search").addEventListener("input", debounce(buildCards, 120));
+
+// Delegated change handlers for per-card controls (survive re-render)
+app.addEventListener("input", e => {
+  const t = e.target;
+  if (t.matches('input[type="range"]')) {
+    const key = t.dataset.drug;
+    state.target[key] = parseFloat(t.value);
+    saveState();
+    // light update without full rebuild
+    const card = t.closest(".card");
+    card.querySelector(".target-dose").textContent = fmtDose(parseFloat(t.value));
+    rerenderCardRate(card, key);
+  }
+});
+app.addEventListener("change", e => {
+  if (e.target.matches("select[data-drug]")) {
+    state.conc[e.target.dataset.drug] = +e.target.value;
+    saveState();
+    buildCards();
+  }
+});
+
+function rerenderCardRate(card, key) {
+  const drug = DRUGS.find(d => d.name === key);
+  const concSel = card.querySelector("select[data-drug]");
+  const conc = drug.conc[clampIdx(+concSel.value, drug.conc.length)].v;
+  const dose = parseFloat(card.querySelector('input[type="range"]').value);
+  const r = rateMlHr(drug, dose, state.weight, conc);
+  const unitLabel = `${drug.massUnit}${drug.weight ? "/kg" : ""}/${drug.per}`;
+  const needsWeight = drug.weight && (!state.weight || state.weight <= 0);
+  card.querySelector(".rate-label").textContent = `Pump rate @ ${fmtDose(dose)} ${unitLabel}`;
+  card.querySelector(".rate-val").innerHTML =
+    `${needsWeight ? "—" : (r!=null?fmtRate(r):"—")} <small>mL/hr</small>`;
+  const badge = card.querySelector(".badge.warn");
+  const over = drug.ceiling && dose > drug.ceiling;
+  if (over && !badge) {
+    const b = document.createElement("span");
+    b.className = "badge warn";
+    b.textContent = `⚠ Above usual max (${fmtDose(drug.ceiling)})`;
+    card.appendChild(b);
+  } else if (!over && badge) badge.remove();
+}
+
+/* Theme */
+function applyTheme() {
+  document.documentElement.setAttribute("data-theme", state.theme);
+  document.querySelector('meta[name="theme-color"]').setAttribute(
+    "content", state.theme === "light" ? "#eef2f7" : "#0b1220");
+}
+document.getElementById("themeBtn").addEventListener("click", () => {
+  state.theme = state.theme === "light" ? "dark" : "light";
+  applyTheme(); saveState();
+});
+
+/* Print */
+document.getElementById("printBtn").addEventListener("click", () => window.print());
+
+/* Disclaimer */
+const disclaimerEl = document.getElementById("disclaimer");
+if (!state.disclaimer) disclaimerEl.style.display = "none";
+document.getElementById("dismissDisclaimer").addEventListener("click", () => {
+  disclaimerEl.style.display = "none";
+  state.disclaimer = false; saveState();
+});
+
+function debounce(fn, ms){ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), ms); }; }
+
+/* ============================ Init ===================================== */
+applyTheme();
+if (state.weight) { weightInput.value = state.weight;
+  [...presets.children].forEach(b => b.classList.toggle("active", +b.dataset.w === state.weight)); }
+buildCards();
+
+/* Service worker (offline) */
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () =>
+    navigator.serviceWorker.register("sw.js").catch(()=>{}));
+}
+</script>
+</body>
+</html>

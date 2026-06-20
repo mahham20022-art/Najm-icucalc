@@ -1,205 +1,78 @@
-# Najm-icucalc
-Icu used drugs calculator 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+# Najm ICUCalc
 
-<title>Najm ICUCalc v3</title>
+> Adult ICU continuous-infusion **dose & pump-rate (mL/hr) calculator** — fast, offline-capable, and installable.
 
-<style>
-body {
-  margin: 0;
-  font-family: Arial;
-  background: #0b1220;
-  color: #e5e7eb;
-}
+A single-purpose web app for the bedside: enter the patient's weight, pick a bag
+concentration, and get the infusion pump rate in **mL/hr** for common critical-care
+drips — with the correct, drug-specific dosing units.
 
-header {
-  background: #0284c7;
-  padding: 14px;
-  text-align: center;
-  font-weight: bold;
-  font-size: 18px;
-}
+> ⚠️ **Clinical reference only.** Doses are typical adult ranges and may differ
+> from your institution's protocols. Always independently verify every dose,
+> concentration, and pump rate against a current formulary and local ICU
+> guidelines before administration. This tool does not replace clinical judgement.
 
-.container {
-  max-width: 900px;
-  margin: auto;
-  padding: 16px;
-}
+---
 
-input {
-  width: 100%;
-  padding: 14px;
-  font-size: 18px;
-  border-radius: 10px;
-  border: none;
-  margin-bottom: 10px;
-}
+## Features
 
-.buttons {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 15px;
-}
+- **Correct, drug-specific units** — `mcg/kg/min`, `mcg/kg/hr`, `mg/kg/hr`,
+  `mg/hr`, `units/min`, etc. (the previous version labelled everything `mcg/min`).
+- **Real pump-rate output** — converts a dose at a chosen bag concentration into
+  an actual **mL/hr** rate, plus the full min–max range.
+- **Selectable standard concentrations** per drug (e.g. norepinephrine 16 / 32 / 64 mcg/mL).
+- **Target-dose slider** — dial in a specific dose and read the exact rate live.
+- **Safety guardrails** — flags doses above the usual maximum; prompts for weight
+  on weight-based drugs.
+- **21 common ICU infusions** across 4 categories: vasopressors/inotropes,
+  sedation/analgesia, antihypertensives/vasodilators, and other infusions.
+- **Search/filter**, **light & dark themes**, **print/export** layout.
+- **Offline-first PWA** — installable to a home screen, works with no signal.
+  Weight and settings persist on-device (localStorage); no data leaves the device.
+- Accessible: labelled controls, keyboard-operable, focus-visible, reduced-motion aware.
 
-button {
-  flex: 1;
-  padding: 10px;
-  border: none;
-  border-radius: 8px;
-  background: #1f2937;
-  color: white;
-}
+## How the rate is calculated
 
-button:hover {
-  background: #374151;
-}
+Rates are normalised to a per-hour mass, then divided by the bag concentration:
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 12px;
-}
+```
+mass/hr = dose × (weight if weight-based) × (60 if dose is per-minute)
+rate (mL/hr) = mass/hr ÷ concentration (same mass unit per mL)
+```
 
-.card {
-  background: #111827;
-  padding: 14px;
-  border-radius: 12px;
-  border: 1px solid #1f2937;
-}
+## Run it
 
-.card h3 {
-  margin-top: 0;
-  color: #38bdf8;
-}
+It's a static site — no build step.
 
-.dose {
-  margin: 6px 0;
-  font-size: 14px;
-}
+```bash
+# any static server works; for example:
+python3 -m http.server 8080
+# then open http://localhost:8080
+```
 
-.low { color: #fbbf24; }
-.mid { color: #34d399; }
-.high { color: #ef4444; }
+Or just open `index.html` directly (the service worker / install prompt needs
+`http(s)`, but the calculator itself works from `file://`).
 
-.footer {
-  text-align: center;
-  font-size: 11px;
-  color: #6b7280;
-  margin: 20px;
-}
-</style>
-</head>
+### Install as an app
+Open it in a mobile or desktop browser and choose **Add to Home Screen / Install**.
+After the first load it runs fully offline.
 
-<body>
+## Project structure
 
-<header>Najm ICUCalc v3 — Critical Care Mode</header>
+| File | Purpose |
+|------|---------|
+| `index.html` | The entire app — UI, drug data, and calculation logic |
+| `manifest.webmanifest` | PWA metadata (name, icons, display) |
+| `sw.js` | Service worker for offline caching |
+| `icon.svg` | App / home-screen icon |
 
-<div class="container">
+## Drug data & accuracy
 
-<input type="number" id="weight" placeholder="Enter weight (kg)" oninput="calc()">
+Drug ranges and standard concentrations follow widely-published adult
+critical-care references and are intended as a starting point, **not** as
+institutional protocol. When deploying in a clinical setting, review and adjust
+the `DRUGS` array in `index.html` to match your local formulary, then bump the
+`CACHE` version in `sw.js` so devices pick up the change.
 
-<div class="buttons">
-  <button onclick="setWeight(60)">60kg</button>
-  <button onclick="setWeight(70)">70kg</button>
-  <button onclick="setWeight(80)">80kg</button>
-  <button onclick="setWeight(90)">90kg</button>
-</div>
+## License
 
-<div class="grid">
-
-<div class="card">
-<h3>Sedation</h3>
-<div class="dose">Fentanyl: <span id="fentanyl"></span></div>
-<div class="dose">Propofol: <span id="propofol"></span></div>
-<div class="dose">Midazolam: <span id="midazolam"></span></div>
-<div class="dose">Dexmedetomidine: <span id="dex"></span></div>
-</div>
-
-<div class="card">
-<h3>Inotropes</h3>
-<div class="dose">Norepinephrine: <span id="norepi"></span></div>
-<div class="dose">Epinephrine: <span id="epi"></span></div>
-<div class="dose">Dopamine: <span id="dop"></span></div>
-<div class="dose">Dobutamine: <span id="dob"></span></div>
-</div>
-
-<div class="card">
-<h3>Antihypertensives</h3>
-<div class="dose">Esmolol: <span id="esmo"></span></div>
-<div class="dose">Nicardipine: 5–15 mg/hr</div>
-<div class="dose">Labetalol: 2–8 mg/min</div>
-</div>
-
-</div>
-
-<div class="footer">
-For clinical reference only — always verify ICU protocols
-</div>
-
-</div>
-
-<script>
-
-const drugs = {
-  fentanyl: [1, 5],
-  propofol: [5, 50],
-  midazolam: [0.02, 0.1],
-  dex: [0.2, 0.7],
-
-  norepi: [0.01, 1],
-  epi: [0.01, 1],
-  dop: [2, 20],
-  dob: [2, 20],
-
-  esmo: [50, 300]
-};
-
-function calc() {
-  const w = parseFloat(document.getElementById("weight").value);
-  if (!w || w <= 0) return clearAll();
-
-  set("fentanyl", drugs.fentanyl, w);
-  set("propofol", drugs.propofol, w);
-  set("midazolam", drugs.midazolam, w);
-  set("dex", drugs.dex, w);
-
-  set("norepi", drugs.norepi, w);
-  set("epi", drugs.epi, w);
-  set("dop", drugs.dop, w);
-  set("dob", drugs.dob, w);
-
-  set("esmo", drugs.esmo, w);
-}
-
-function set(id, range, w) {
-  const min = range[0] * w;
-  const max = range[1] * w;
-
-  const el = document.getElementById(id);
-
-  let cls = "mid";
-  if (max > min * 5) cls = "high";
-  else if (max < min * 2) cls = "low";
-
-  el.className = cls;
-  el.innerText = `${min.toFixed(2)} – ${max.toFixed(2)} mcg/min`;
-}
-
-function clearAll() {
-  document.querySelectorAll("span").forEach(s => s.innerText = "--");
-}
-
-function setWeight(w) {
-  document.getElementById("weight").value = w;
-  calc();
-}
-
-</script>
-
-</body>
-</html>
+Provided as-is for educational and reference use. No warranty; not a medical device.
