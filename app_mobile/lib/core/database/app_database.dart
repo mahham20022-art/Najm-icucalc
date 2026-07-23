@@ -52,7 +52,32 @@ class SyncState extends Table {
   Set<Column> get primaryKey => {entityType};
 }
 
-@DriftDatabase(tables: [Outbox, SyncState])
+/// Challenge Mode's entire persisted state (100-day journey) — one row
+/// per user, per the same per-user local-table scoping rule as every
+/// other table here. Day sets are stored as JSON-encoded int arrays
+/// since Drift has no native set/array column type; the data layer
+/// (`ChallengeLocalDataSource`) owns encoding/decoding, never the domain
+/// entity.
+class ChallengeProgress extends Table {
+  TextColumn get userId => text()();
+  DateTimeColumn get startedAt => dateTime()();
+  DateTimeColumn get lastActionDate => dateTime().nullable()();
+  TextColumn get completedDaysJson => text().withDefault(const Constant('[]'))();
+  TextColumn get skippedDaysJson => text().withDefault(const Constant('[]'))();
+  TextColumn get bookmarkedDaysJson => text().withDefault(const Constant('[]'))();
+
+  /// Daily reminder preference — stored alongside progress rather than a
+  /// separate prefs mechanism, since it's per-user Challenge Mode state
+  /// like everything else in this row.
+  BoolColumn get reminderEnabled => boolean().withDefault(const Constant(false))();
+  IntColumn get reminderHour => integer().withDefault(const Constant(19))();
+  IntColumn get reminderMinute => integer().withDefault(const Constant(0))();
+
+  @override
+  Set<Column> get primaryKey => {userId};
+}
+
+@DriftDatabase(tables: [Outbox, SyncState, ChallengeProgress])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
@@ -64,7 +89,17 @@ class AppDatabase extends _$AppDatabase {
   /// `MED100_DATABASE_DESIGN.md` §0 for the schema-versioning convention
   /// this project follows on both the Firestore and Drift sides.
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+    onCreate: (m) => m.createAll(),
+    onUpgrade: (m, from, to) async {
+      if (from < 2) {
+        await m.createTable(challengeProgress);
+      }
+    },
+  );
 
   static QueryExecutor _openConnection() {
     return driftDatabase(name: 'med100');

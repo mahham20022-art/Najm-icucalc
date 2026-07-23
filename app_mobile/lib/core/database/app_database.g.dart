@@ -848,16 +848,570 @@ class SyncStateCompanion extends UpdateCompanion<SyncStateData> {
   }
 }
 
+class $ChallengeProgressTable extends ChallengeProgress
+    with TableInfo<$ChallengeProgressTable, ChallengeProgressData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ChallengeProgressTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<String> userId = GeneratedColumn<String>(
+    'user_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _startedAtMeta = const VerificationMeta('startedAt');
+  @override
+  late final GeneratedColumn<DateTime> startedAt = GeneratedColumn<DateTime>(
+    'started_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _lastActionDateMeta = const VerificationMeta('lastActionDate');
+  @override
+  late final GeneratedColumn<DateTime> lastActionDate = GeneratedColumn<DateTime>(
+    'last_action_date',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _completedDaysJsonMeta = const VerificationMeta(
+    'completedDaysJson',
+  );
+  @override
+  late final GeneratedColumn<String> completedDaysJson = GeneratedColumn<String>(
+    'completed_days_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  );
+  static const VerificationMeta _skippedDaysJsonMeta = const VerificationMeta('skippedDaysJson');
+  @override
+  late final GeneratedColumn<String> skippedDaysJson = GeneratedColumn<String>(
+    'skipped_days_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  );
+  static const VerificationMeta _bookmarkedDaysJsonMeta = const VerificationMeta(
+    'bookmarkedDaysJson',
+  );
+  @override
+  late final GeneratedColumn<String> bookmarkedDaysJson = GeneratedColumn<String>(
+    'bookmarked_days_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  );
+  static const VerificationMeta _reminderEnabledMeta = const VerificationMeta('reminderEnabled');
+  @override
+  late final GeneratedColumn<bool> reminderEnabled = GeneratedColumn<bool>(
+    'reminder_enabled',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('CHECK ("reminder_enabled" IN (0, 1))'),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _reminderHourMeta = const VerificationMeta('reminderHour');
+  @override
+  late final GeneratedColumn<int> reminderHour = GeneratedColumn<int>(
+    'reminder_hour',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(19),
+  );
+  static const VerificationMeta _reminderMinuteMeta = const VerificationMeta('reminderMinute');
+  @override
+  late final GeneratedColumn<int> reminderMinute = GeneratedColumn<int>(
+    'reminder_minute',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    userId,
+    startedAt,
+    lastActionDate,
+    completedDaysJson,
+    skippedDaysJson,
+    bookmarkedDaysJson,
+    reminderEnabled,
+    reminderHour,
+    reminderMinute,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'challenge_progress';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ChallengeProgressData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('user_id')) {
+      context.handle(_userIdMeta, userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
+    } else if (isInserting) {
+      context.missing(_userIdMeta);
+    }
+    if (data.containsKey('started_at')) {
+      context.handle(
+        _startedAtMeta,
+        startedAt.isAcceptableOrUnknown(data['started_at']!, _startedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_startedAtMeta);
+    }
+    if (data.containsKey('last_action_date')) {
+      context.handle(
+        _lastActionDateMeta,
+        lastActionDate.isAcceptableOrUnknown(data['last_action_date']!, _lastActionDateMeta),
+      );
+    }
+    if (data.containsKey('completed_days_json')) {
+      context.handle(
+        _completedDaysJsonMeta,
+        completedDaysJson.isAcceptableOrUnknown(
+          data['completed_days_json']!,
+          _completedDaysJsonMeta,
+        ),
+      );
+    }
+    if (data.containsKey('skipped_days_json')) {
+      context.handle(
+        _skippedDaysJsonMeta,
+        skippedDaysJson.isAcceptableOrUnknown(data['skipped_days_json']!, _skippedDaysJsonMeta),
+      );
+    }
+    if (data.containsKey('bookmarked_days_json')) {
+      context.handle(
+        _bookmarkedDaysJsonMeta,
+        bookmarkedDaysJson.isAcceptableOrUnknown(
+          data['bookmarked_days_json']!,
+          _bookmarkedDaysJsonMeta,
+        ),
+      );
+    }
+    if (data.containsKey('reminder_enabled')) {
+      context.handle(
+        _reminderEnabledMeta,
+        reminderEnabled.isAcceptableOrUnknown(data['reminder_enabled']!, _reminderEnabledMeta),
+      );
+    }
+    if (data.containsKey('reminder_hour')) {
+      context.handle(
+        _reminderHourMeta,
+        reminderHour.isAcceptableOrUnknown(data['reminder_hour']!, _reminderHourMeta),
+      );
+    }
+    if (data.containsKey('reminder_minute')) {
+      context.handle(
+        _reminderMinuteMeta,
+        reminderMinute.isAcceptableOrUnknown(data['reminder_minute']!, _reminderMinuteMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {userId};
+  @override
+  ChallengeProgressData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ChallengeProgressData(
+      userId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}user_id'],
+      )!,
+      startedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}started_at'],
+      )!,
+      lastActionDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}last_action_date'],
+      ),
+      completedDaysJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}completed_days_json'],
+      )!,
+      skippedDaysJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}skipped_days_json'],
+      )!,
+      bookmarkedDaysJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}bookmarked_days_json'],
+      )!,
+      reminderEnabled: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}reminder_enabled'],
+      )!,
+      reminderHour: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}reminder_hour'],
+      )!,
+      reminderMinute: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}reminder_minute'],
+      )!,
+    );
+  }
+
+  @override
+  $ChallengeProgressTable createAlias(String alias) {
+    return $ChallengeProgressTable(attachedDatabase, alias);
+  }
+}
+
+class ChallengeProgressData extends DataClass implements Insertable<ChallengeProgressData> {
+  final String userId;
+  final DateTime startedAt;
+  final DateTime? lastActionDate;
+  final String completedDaysJson;
+  final String skippedDaysJson;
+  final String bookmarkedDaysJson;
+
+  /// Daily reminder preference — stored alongside progress rather than a
+  /// separate prefs mechanism, since it's per-user Challenge Mode state
+  /// like everything else in this row.
+  final bool reminderEnabled;
+  final int reminderHour;
+  final int reminderMinute;
+  const ChallengeProgressData({
+    required this.userId,
+    required this.startedAt,
+    this.lastActionDate,
+    required this.completedDaysJson,
+    required this.skippedDaysJson,
+    required this.bookmarkedDaysJson,
+    required this.reminderEnabled,
+    required this.reminderHour,
+    required this.reminderMinute,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['user_id'] = Variable<String>(userId);
+    map['started_at'] = Variable<DateTime>(startedAt);
+    if (!nullToAbsent || lastActionDate != null) {
+      map['last_action_date'] = Variable<DateTime>(lastActionDate);
+    }
+    map['completed_days_json'] = Variable<String>(completedDaysJson);
+    map['skipped_days_json'] = Variable<String>(skippedDaysJson);
+    map['bookmarked_days_json'] = Variable<String>(bookmarkedDaysJson);
+    map['reminder_enabled'] = Variable<bool>(reminderEnabled);
+    map['reminder_hour'] = Variable<int>(reminderHour);
+    map['reminder_minute'] = Variable<int>(reminderMinute);
+    return map;
+  }
+
+  ChallengeProgressCompanion toCompanion(bool nullToAbsent) {
+    return ChallengeProgressCompanion(
+      userId: Value(userId),
+      startedAt: Value(startedAt),
+      lastActionDate: lastActionDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastActionDate),
+      completedDaysJson: Value(completedDaysJson),
+      skippedDaysJson: Value(skippedDaysJson),
+      bookmarkedDaysJson: Value(bookmarkedDaysJson),
+      reminderEnabled: Value(reminderEnabled),
+      reminderHour: Value(reminderHour),
+      reminderMinute: Value(reminderMinute),
+    );
+  }
+
+  factory ChallengeProgressData.fromJson(Map<String, dynamic> json, {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ChallengeProgressData(
+      userId: serializer.fromJson<String>(json['userId']),
+      startedAt: serializer.fromJson<DateTime>(json['startedAt']),
+      lastActionDate: serializer.fromJson<DateTime?>(json['lastActionDate']),
+      completedDaysJson: serializer.fromJson<String>(json['completedDaysJson']),
+      skippedDaysJson: serializer.fromJson<String>(json['skippedDaysJson']),
+      bookmarkedDaysJson: serializer.fromJson<String>(json['bookmarkedDaysJson']),
+      reminderEnabled: serializer.fromJson<bool>(json['reminderEnabled']),
+      reminderHour: serializer.fromJson<int>(json['reminderHour']),
+      reminderMinute: serializer.fromJson<int>(json['reminderMinute']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'userId': serializer.toJson<String>(userId),
+      'startedAt': serializer.toJson<DateTime>(startedAt),
+      'lastActionDate': serializer.toJson<DateTime?>(lastActionDate),
+      'completedDaysJson': serializer.toJson<String>(completedDaysJson),
+      'skippedDaysJson': serializer.toJson<String>(skippedDaysJson),
+      'bookmarkedDaysJson': serializer.toJson<String>(bookmarkedDaysJson),
+      'reminderEnabled': serializer.toJson<bool>(reminderEnabled),
+      'reminderHour': serializer.toJson<int>(reminderHour),
+      'reminderMinute': serializer.toJson<int>(reminderMinute),
+    };
+  }
+
+  ChallengeProgressData copyWith({
+    String? userId,
+    DateTime? startedAt,
+    Value<DateTime?> lastActionDate = const Value.absent(),
+    String? completedDaysJson,
+    String? skippedDaysJson,
+    String? bookmarkedDaysJson,
+    bool? reminderEnabled,
+    int? reminderHour,
+    int? reminderMinute,
+  }) => ChallengeProgressData(
+    userId: userId ?? this.userId,
+    startedAt: startedAt ?? this.startedAt,
+    lastActionDate: lastActionDate.present ? lastActionDate.value : this.lastActionDate,
+    completedDaysJson: completedDaysJson ?? this.completedDaysJson,
+    skippedDaysJson: skippedDaysJson ?? this.skippedDaysJson,
+    bookmarkedDaysJson: bookmarkedDaysJson ?? this.bookmarkedDaysJson,
+    reminderEnabled: reminderEnabled ?? this.reminderEnabled,
+    reminderHour: reminderHour ?? this.reminderHour,
+    reminderMinute: reminderMinute ?? this.reminderMinute,
+  );
+  ChallengeProgressData copyWithCompanion(ChallengeProgressCompanion data) {
+    return ChallengeProgressData(
+      userId: data.userId.present ? data.userId.value : this.userId,
+      startedAt: data.startedAt.present ? data.startedAt.value : this.startedAt,
+      lastActionDate: data.lastActionDate.present ? data.lastActionDate.value : this.lastActionDate,
+      completedDaysJson: data.completedDaysJson.present
+          ? data.completedDaysJson.value
+          : this.completedDaysJson,
+      skippedDaysJson: data.skippedDaysJson.present
+          ? data.skippedDaysJson.value
+          : this.skippedDaysJson,
+      bookmarkedDaysJson: data.bookmarkedDaysJson.present
+          ? data.bookmarkedDaysJson.value
+          : this.bookmarkedDaysJson,
+      reminderEnabled: data.reminderEnabled.present
+          ? data.reminderEnabled.value
+          : this.reminderEnabled,
+      reminderHour: data.reminderHour.present ? data.reminderHour.value : this.reminderHour,
+      reminderMinute: data.reminderMinute.present ? data.reminderMinute.value : this.reminderMinute,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ChallengeProgressData(')
+          ..write('userId: $userId, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('lastActionDate: $lastActionDate, ')
+          ..write('completedDaysJson: $completedDaysJson, ')
+          ..write('skippedDaysJson: $skippedDaysJson, ')
+          ..write('bookmarkedDaysJson: $bookmarkedDaysJson, ')
+          ..write('reminderEnabled: $reminderEnabled, ')
+          ..write('reminderHour: $reminderHour, ')
+          ..write('reminderMinute: $reminderMinute')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    userId,
+    startedAt,
+    lastActionDate,
+    completedDaysJson,
+    skippedDaysJson,
+    bookmarkedDaysJson,
+    reminderEnabled,
+    reminderHour,
+    reminderMinute,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ChallengeProgressData &&
+          other.userId == this.userId &&
+          other.startedAt == this.startedAt &&
+          other.lastActionDate == this.lastActionDate &&
+          other.completedDaysJson == this.completedDaysJson &&
+          other.skippedDaysJson == this.skippedDaysJson &&
+          other.bookmarkedDaysJson == this.bookmarkedDaysJson &&
+          other.reminderEnabled == this.reminderEnabled &&
+          other.reminderHour == this.reminderHour &&
+          other.reminderMinute == this.reminderMinute);
+}
+
+class ChallengeProgressCompanion extends UpdateCompanion<ChallengeProgressData> {
+  final Value<String> userId;
+  final Value<DateTime> startedAt;
+  final Value<DateTime?> lastActionDate;
+  final Value<String> completedDaysJson;
+  final Value<String> skippedDaysJson;
+  final Value<String> bookmarkedDaysJson;
+  final Value<bool> reminderEnabled;
+  final Value<int> reminderHour;
+  final Value<int> reminderMinute;
+  final Value<int> rowid;
+  const ChallengeProgressCompanion({
+    this.userId = const Value.absent(),
+    this.startedAt = const Value.absent(),
+    this.lastActionDate = const Value.absent(),
+    this.completedDaysJson = const Value.absent(),
+    this.skippedDaysJson = const Value.absent(),
+    this.bookmarkedDaysJson = const Value.absent(),
+    this.reminderEnabled = const Value.absent(),
+    this.reminderHour = const Value.absent(),
+    this.reminderMinute = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ChallengeProgressCompanion.insert({
+    required String userId,
+    required DateTime startedAt,
+    this.lastActionDate = const Value.absent(),
+    this.completedDaysJson = const Value.absent(),
+    this.skippedDaysJson = const Value.absent(),
+    this.bookmarkedDaysJson = const Value.absent(),
+    this.reminderEnabled = const Value.absent(),
+    this.reminderHour = const Value.absent(),
+    this.reminderMinute = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : userId = Value(userId),
+       startedAt = Value(startedAt);
+  static Insertable<ChallengeProgressData> custom({
+    Expression<String>? userId,
+    Expression<DateTime>? startedAt,
+    Expression<DateTime>? lastActionDate,
+    Expression<String>? completedDaysJson,
+    Expression<String>? skippedDaysJson,
+    Expression<String>? bookmarkedDaysJson,
+    Expression<bool>? reminderEnabled,
+    Expression<int>? reminderHour,
+    Expression<int>? reminderMinute,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (userId != null) 'user_id': userId,
+      if (startedAt != null) 'started_at': startedAt,
+      if (lastActionDate != null) 'last_action_date': lastActionDate,
+      if (completedDaysJson != null) 'completed_days_json': completedDaysJson,
+      if (skippedDaysJson != null) 'skipped_days_json': skippedDaysJson,
+      if (bookmarkedDaysJson != null) 'bookmarked_days_json': bookmarkedDaysJson,
+      if (reminderEnabled != null) 'reminder_enabled': reminderEnabled,
+      if (reminderHour != null) 'reminder_hour': reminderHour,
+      if (reminderMinute != null) 'reminder_minute': reminderMinute,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ChallengeProgressCompanion copyWith({
+    Value<String>? userId,
+    Value<DateTime>? startedAt,
+    Value<DateTime?>? lastActionDate,
+    Value<String>? completedDaysJson,
+    Value<String>? skippedDaysJson,
+    Value<String>? bookmarkedDaysJson,
+    Value<bool>? reminderEnabled,
+    Value<int>? reminderHour,
+    Value<int>? reminderMinute,
+    Value<int>? rowid,
+  }) {
+    return ChallengeProgressCompanion(
+      userId: userId ?? this.userId,
+      startedAt: startedAt ?? this.startedAt,
+      lastActionDate: lastActionDate ?? this.lastActionDate,
+      completedDaysJson: completedDaysJson ?? this.completedDaysJson,
+      skippedDaysJson: skippedDaysJson ?? this.skippedDaysJson,
+      bookmarkedDaysJson: bookmarkedDaysJson ?? this.bookmarkedDaysJson,
+      reminderEnabled: reminderEnabled ?? this.reminderEnabled,
+      reminderHour: reminderHour ?? this.reminderHour,
+      reminderMinute: reminderMinute ?? this.reminderMinute,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (userId.present) {
+      map['user_id'] = Variable<String>(userId.value);
+    }
+    if (startedAt.present) {
+      map['started_at'] = Variable<DateTime>(startedAt.value);
+    }
+    if (lastActionDate.present) {
+      map['last_action_date'] = Variable<DateTime>(lastActionDate.value);
+    }
+    if (completedDaysJson.present) {
+      map['completed_days_json'] = Variable<String>(completedDaysJson.value);
+    }
+    if (skippedDaysJson.present) {
+      map['skipped_days_json'] = Variable<String>(skippedDaysJson.value);
+    }
+    if (bookmarkedDaysJson.present) {
+      map['bookmarked_days_json'] = Variable<String>(bookmarkedDaysJson.value);
+    }
+    if (reminderEnabled.present) {
+      map['reminder_enabled'] = Variable<bool>(reminderEnabled.value);
+    }
+    if (reminderHour.present) {
+      map['reminder_hour'] = Variable<int>(reminderHour.value);
+    }
+    if (reminderMinute.present) {
+      map['reminder_minute'] = Variable<int>(reminderMinute.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ChallengeProgressCompanion(')
+          ..write('userId: $userId, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('lastActionDate: $lastActionDate, ')
+          ..write('completedDaysJson: $completedDaysJson, ')
+          ..write('skippedDaysJson: $skippedDaysJson, ')
+          ..write('bookmarkedDaysJson: $bookmarkedDaysJson, ')
+          ..write('reminderEnabled: $reminderEnabled, ')
+          ..write('reminderHour: $reminderHour, ')
+          ..write('reminderMinute: $reminderMinute, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $OutboxTable outbox = $OutboxTable(this);
   late final $SyncStateTable syncState = $SyncStateTable(this);
+  late final $ChallengeProgressTable challengeProgress = $ChallengeProgressTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [outbox, syncState];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [outbox, syncState, challengeProgress];
 }
 
 typedef $$OutboxTableCreateCompanionBuilder =
@@ -1243,10 +1797,271 @@ typedef $$SyncStateTableProcessedTableManager =
       SyncStateData,
       PrefetchHooks Function()
     >;
+typedef $$ChallengeProgressTableCreateCompanionBuilder =
+    ChallengeProgressCompanion Function({
+      required String userId,
+      required DateTime startedAt,
+      Value<DateTime?> lastActionDate,
+      Value<String> completedDaysJson,
+      Value<String> skippedDaysJson,
+      Value<String> bookmarkedDaysJson,
+      Value<bool> reminderEnabled,
+      Value<int> reminderHour,
+      Value<int> reminderMinute,
+      Value<int> rowid,
+    });
+typedef $$ChallengeProgressTableUpdateCompanionBuilder =
+    ChallengeProgressCompanion Function({
+      Value<String> userId,
+      Value<DateTime> startedAt,
+      Value<DateTime?> lastActionDate,
+      Value<String> completedDaysJson,
+      Value<String> skippedDaysJson,
+      Value<String> bookmarkedDaysJson,
+      Value<bool> reminderEnabled,
+      Value<int> reminderHour,
+      Value<int> reminderMinute,
+      Value<int> rowid,
+    });
+
+class $$ChallengeProgressTableFilterComposer
+    extends Composer<_$AppDatabase, $ChallengeProgressTable> {
+  $$ChallengeProgressTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get startedAt =>
+      $composableBuilder(column: $table.startedAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get lastActionDate =>
+      $composableBuilder(column: $table.lastActionDate, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get completedDaysJson => $composableBuilder(
+    column: $table.completedDaysJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get skippedDaysJson => $composableBuilder(
+    column: $table.skippedDaysJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get bookmarkedDaysJson => $composableBuilder(
+    column: $table.bookmarkedDaysJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get reminderEnabled => $composableBuilder(
+    column: $table.reminderEnabled,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get reminderHour =>
+      $composableBuilder(column: $table.reminderHour, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get reminderMinute =>
+      $composableBuilder(column: $table.reminderMinute, builder: (column) => ColumnFilters(column));
+}
+
+class $$ChallengeProgressTableOrderingComposer
+    extends Composer<_$AppDatabase, $ChallengeProgressTable> {
+  $$ChallengeProgressTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get startedAt =>
+      $composableBuilder(column: $table.startedAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get lastActionDate => $composableBuilder(
+    column: $table.lastActionDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get completedDaysJson => $composableBuilder(
+    column: $table.completedDaysJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get skippedDaysJson => $composableBuilder(
+    column: $table.skippedDaysJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get bookmarkedDaysJson => $composableBuilder(
+    column: $table.bookmarkedDaysJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get reminderEnabled => $composableBuilder(
+    column: $table.reminderEnabled,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get reminderHour =>
+      $composableBuilder(column: $table.reminderHour, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get reminderMinute => $composableBuilder(
+    column: $table.reminderMinute,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$ChallengeProgressTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ChallengeProgressTable> {
+  $$ChallengeProgressTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get startedAt =>
+      $composableBuilder(column: $table.startedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get lastActionDate =>
+      $composableBuilder(column: $table.lastActionDate, builder: (column) => column);
+
+  GeneratedColumn<String> get completedDaysJson =>
+      $composableBuilder(column: $table.completedDaysJson, builder: (column) => column);
+
+  GeneratedColumn<String> get skippedDaysJson =>
+      $composableBuilder(column: $table.skippedDaysJson, builder: (column) => column);
+
+  GeneratedColumn<String> get bookmarkedDaysJson =>
+      $composableBuilder(column: $table.bookmarkedDaysJson, builder: (column) => column);
+
+  GeneratedColumn<bool> get reminderEnabled =>
+      $composableBuilder(column: $table.reminderEnabled, builder: (column) => column);
+
+  GeneratedColumn<int> get reminderHour =>
+      $composableBuilder(column: $table.reminderHour, builder: (column) => column);
+
+  GeneratedColumn<int> get reminderMinute =>
+      $composableBuilder(column: $table.reminderMinute, builder: (column) => column);
+}
+
+class $$ChallengeProgressTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ChallengeProgressTable,
+          ChallengeProgressData,
+          $$ChallengeProgressTableFilterComposer,
+          $$ChallengeProgressTableOrderingComposer,
+          $$ChallengeProgressTableAnnotationComposer,
+          $$ChallengeProgressTableCreateCompanionBuilder,
+          $$ChallengeProgressTableUpdateCompanionBuilder,
+          (
+            ChallengeProgressData,
+            BaseReferences<_$AppDatabase, $ChallengeProgressTable, ChallengeProgressData>,
+          ),
+          ChallengeProgressData,
+          PrefetchHooks Function()
+        > {
+  $$ChallengeProgressTableTableManager(_$AppDatabase db, $ChallengeProgressTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ChallengeProgressTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ChallengeProgressTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ChallengeProgressTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> userId = const Value.absent(),
+                Value<DateTime> startedAt = const Value.absent(),
+                Value<DateTime?> lastActionDate = const Value.absent(),
+                Value<String> completedDaysJson = const Value.absent(),
+                Value<String> skippedDaysJson = const Value.absent(),
+                Value<String> bookmarkedDaysJson = const Value.absent(),
+                Value<bool> reminderEnabled = const Value.absent(),
+                Value<int> reminderHour = const Value.absent(),
+                Value<int> reminderMinute = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ChallengeProgressCompanion(
+                userId: userId,
+                startedAt: startedAt,
+                lastActionDate: lastActionDate,
+                completedDaysJson: completedDaysJson,
+                skippedDaysJson: skippedDaysJson,
+                bookmarkedDaysJson: bookmarkedDaysJson,
+                reminderEnabled: reminderEnabled,
+                reminderHour: reminderHour,
+                reminderMinute: reminderMinute,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String userId,
+                required DateTime startedAt,
+                Value<DateTime?> lastActionDate = const Value.absent(),
+                Value<String> completedDaysJson = const Value.absent(),
+                Value<String> skippedDaysJson = const Value.absent(),
+                Value<String> bookmarkedDaysJson = const Value.absent(),
+                Value<bool> reminderEnabled = const Value.absent(),
+                Value<int> reminderHour = const Value.absent(),
+                Value<int> reminderMinute = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ChallengeProgressCompanion.insert(
+                userId: userId,
+                startedAt: startedAt,
+                lastActionDate: lastActionDate,
+                completedDaysJson: completedDaysJson,
+                skippedDaysJson: skippedDaysJson,
+                bookmarkedDaysJson: bookmarkedDaysJson,
+                reminderEnabled: reminderEnabled,
+                reminderHour: reminderHour,
+                reminderMinute: reminderMinute,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) =>
+              p0.map((e) => (e.readTable(table), BaseReferences(db, table, e))).toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$ChallengeProgressTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ChallengeProgressTable,
+      ChallengeProgressData,
+      $$ChallengeProgressTableFilterComposer,
+      $$ChallengeProgressTableOrderingComposer,
+      $$ChallengeProgressTableAnnotationComposer,
+      $$ChallengeProgressTableCreateCompanionBuilder,
+      $$ChallengeProgressTableUpdateCompanionBuilder,
+      (
+        ChallengeProgressData,
+        BaseReferences<_$AppDatabase, $ChallengeProgressTable, ChallengeProgressData>,
+      ),
+      ChallengeProgressData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
   $AppDatabaseManager(this._db);
   $$OutboxTableTableManager get outbox => $$OutboxTableTableManager(_db, _db.outbox);
   $$SyncStateTableTableManager get syncState => $$SyncStateTableTableManager(_db, _db.syncState);
+  $$ChallengeProgressTableTableManager get challengeProgress =>
+      $$ChallengeProgressTableTableManager(_db, _db.challengeProgress);
 }

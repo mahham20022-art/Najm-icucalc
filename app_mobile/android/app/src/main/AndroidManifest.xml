@@ -1,6 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Required by local_auth_android for biometric (fingerprint/face) prompts. -->
     <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
+    <!-- Required by flutter_local_notifications (Challenge Mode's daily
+         reminder) so the plugin can reschedule its alarm after a device
+         reboot — without this the reminder silently stops firing until
+         the app is next opened. -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <application
         android:label="med100"
         android:name="${applicationName}"
@@ -32,6 +37,23 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <!-- Required by flutter_local_notifications for `zonedSchedule` to
+             fire and reschedule the Challenge Mode daily reminder at all —
+             the plugin only declares POST_NOTIFICATIONS/VIBRATE in its own
+             manifest since v16; these receivers are the app's
+             responsibility (see the plugin's README §AndroidManifest.xml
+             setup). -->
+        <receiver android:exported="false"
+            android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
+        <receiver android:exported="false"
+            android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
+            </intent-filter>
+        </receiver>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

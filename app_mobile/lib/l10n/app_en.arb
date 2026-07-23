@@ -34,5 +34,33 @@
   "goToLogin": "Already have an account? Log In",
   "openSettings": "Settings",
   "openSubscription": "Subscription",
-  "openTeachingMode": "Teaching Mode"
+  "openTeachingMode": "Teaching Mode",
+  "challengeTodaysTopic": "Today's Topic",
+  "challengeMarkDone": "Done",
+  "challengeSkip": "Skip",
+  "challengeRestart": "Restart",
+  "challengeRestartConfirmTitle": "Restart your journey?",
+  "challengeRestartConfirmBody": "This clears all progress, streaks, and bookmarks and starts over from Day 1. This can't be undone.",
+  "challengeCancel": "Cancel",
+  "challengeAlreadyDoneTitle": "See you tomorrow!",
+  "challengeAlreadyDoneBody": "You've already completed today's step. Come back tomorrow for the next one.",
+  "challengeJourneyComplete": "You completed the 100-day journey!",
+  "challengeCurrentStreak": "Current Streak",
+  "challengeStreakDays": "{count} {count, plural, =1{day} other{days}}",
+  "@challengeStreakDays": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "challengeStatisticsTitle": "Statistics",
+  "challengeCompletedLabel": "Completed",
+  "challengeSkippedLabel": "Skipped",
+  "challengeCompletionRate": "Completion",
+  "challengeBookmarksEmpty": "Bookmark a day from Today's Topic to find it here later.",
+  "challengeReminderTitle": "Daily Reminder",
+  "challengeReminderSubtitle": "Get a nudge if you haven't done today's step yet",
+  "challengeReminderPermissionDenied": "Notifications permission was denied — enable it in system settings to use reminders.",
+  "challengeSaveReminder": "Save"
 }

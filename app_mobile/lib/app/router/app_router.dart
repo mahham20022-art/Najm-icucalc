@@ -7,6 +7,9 @@ import '../../features/auth_onboarding/presentation/screens/profile_screen.dart'
 import '../../features/auth_onboarding/presentation/screens/register_screen.dart';
 import '../../features/auth_onboarding/presentation/screens/splash_screen.dart';
 import '../../features/auth_onboarding/presentation/viewmodels/auth_view_model.dart';
+import '../../features/challenge_mode/presentation/screens/challenge_bookmarks_screen.dart';
+import '../../features/challenge_mode/presentation/screens/challenge_home_screen.dart';
+import '../../features/challenge_mode/presentation/screens/challenge_statistics_screen.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/app_shell.dart';
 import '../../shared/widgets/placeholder_screen.dart';
@@ -107,8 +110,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: '/home',
                 name: AppRoute.home,
-                builder: (context, state) =>
-                    const PlaceholderScreen(screenName: 'Home', showAppBar: false),
+                builder: (context, state) => const ChallengeHomeScreen(),
               ),
             ],
           ),
@@ -131,7 +133,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   GoRoute(
                     path: 'statistics',
                     name: AppRoute.statistics,
-                    builder: (context, state) => const PlaceholderScreen(screenName: 'Statistics'),
+                    builder: (context, state) => const ChallengeStatisticsScreen(),
                   ),
                 ],
               ),
@@ -142,7 +144,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: '/bookmarks',
                 name: AppRoute.bookmarks,
-                builder: (context, state) => const PlaceholderScreen(screenName: 'Bookmarks'),
+                builder: (context, state) => const ChallengeBookmarksScreen(),
               ),
             ],
           ),

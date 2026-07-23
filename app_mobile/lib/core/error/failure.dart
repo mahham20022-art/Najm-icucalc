@@ -90,3 +90,11 @@ class BiometricFailure extends Failure {
 class AuthFailure extends Failure {
   const AuthFailure([super.message = 'Something went wrong signing you in.']);
 }
+
+/// Challenge Mode's Daily Unlock rule: at most one day can be marked
+/// Done or Skip per calendar date.
+class AlreadyActionedTodayFailure extends Failure {
+  const AlreadyActionedTodayFailure([
+    super.message = "You've already completed today's challenge — come back tomorrow!",
+  ]);
+}

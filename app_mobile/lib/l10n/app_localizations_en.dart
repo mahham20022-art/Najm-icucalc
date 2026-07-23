@@ -63,4 +63,80 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get openTeachingMode => 'Teaching Mode';
+
+  @override
+  String get challengeTodaysTopic => 'Today\'s Topic';
+
+  @override
+  String get challengeMarkDone => 'Done';
+
+  @override
+  String get challengeSkip => 'Skip';
+
+  @override
+  String get challengeRestart => 'Restart';
+
+  @override
+  String get challengeRestartConfirmTitle => 'Restart your journey?';
+
+  @override
+  String get challengeRestartConfirmBody =>
+      'This clears all progress, streaks, and bookmarks and starts over from Day 1. This can\'t be undone.';
+
+  @override
+  String get challengeCancel => 'Cancel';
+
+  @override
+  String get challengeAlreadyDoneTitle => 'See you tomorrow!';
+
+  @override
+  String get challengeAlreadyDoneBody =>
+      'You\'ve already completed today\'s step. Come back tomorrow for the next one.';
+
+  @override
+  String get challengeJourneyComplete => 'You completed the 100-day journey!';
+
+  @override
+  String get challengeCurrentStreak => 'Current Streak';
+
+  @override
+  String challengeStreakDays(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'days',
+      one: 'day',
+    );
+    return '$count $_temp0';
+  }
+
+  @override
+  String get challengeStatisticsTitle => 'Statistics';
+
+  @override
+  String get challengeCompletedLabel => 'Completed';
+
+  @override
+  String get challengeSkippedLabel => 'Skipped';
+
+  @override
+  String get challengeCompletionRate => 'Completion';
+
+  @override
+  String get challengeBookmarksEmpty =>
+      'Bookmark a day from Today\'s Topic to find it here later.';
+
+  @override
+  String get challengeReminderTitle => 'Daily Reminder';
+
+  @override
+  String get challengeReminderSubtitle =>
+      'Get a nudge if you haven\'t done today\'s step yet';
+
+  @override
+  String get challengeReminderPermissionDenied =>
+      'Notifications permission was denied — enable it in system settings to use reminders.';
+
+  @override
+  String get challengeSaveReminder => 'Save';
 }

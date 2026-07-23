@@ -63,4 +63,80 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get openTeachingMode => 'وضع التدريس';
+
+  @override
+  String get challengeTodaysTopic => 'موضوع اليوم';
+
+  @override
+  String get challengeMarkDone => 'تم';
+
+  @override
+  String get challengeSkip => 'تخطٍّ';
+
+  @override
+  String get challengeRestart => 'إعادة البدء';
+
+  @override
+  String get challengeRestartConfirmTitle => 'إعادة بدء رحلتك؟';
+
+  @override
+  String get challengeRestartConfirmBody =>
+      'سيؤدي هذا إلى مسح كل التقدم والسلاسل والمحفوظات والبدء من جديد من اليوم الأول. لا يمكن التراجع عن هذا.';
+
+  @override
+  String get challengeCancel => 'إلغاء';
+
+  @override
+  String get challengeAlreadyDoneTitle => 'أراك غدًا!';
+
+  @override
+  String get challengeAlreadyDoneBody =>
+      'لقد أكملت خطوة اليوم بالفعل. عد غدًا للخطوة التالية.';
+
+  @override
+  String get challengeJourneyComplete => 'لقد أكملت رحلة المئة يوم!';
+
+  @override
+  String get challengeCurrentStreak => 'السلسلة الحالية';
+
+  @override
+  String challengeStreakDays(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'أيام',
+      one: 'يوم',
+    );
+    return '$count $_temp0';
+  }
+
+  @override
+  String get challengeStatisticsTitle => 'الإحصائيات';
+
+  @override
+  String get challengeCompletedLabel => 'مكتمل';
+
+  @override
+  String get challengeSkippedLabel => 'متخطّى';
+
+  @override
+  String get challengeCompletionRate => 'نسبة الإنجاز';
+
+  @override
+  String get challengeBookmarksEmpty =>
+      'احفظ يومًا من موضوع اليوم لتجده هنا لاحقًا.';
+
+  @override
+  String get challengeReminderTitle => 'تذكير يومي';
+
+  @override
+  String get challengeReminderSubtitle =>
+      'احصل على تنبيه إذا لم تكمل خطوة اليوم بعد';
+
+  @override
+  String get challengeReminderPermissionDenied =>
+      'تم رفض إذن الإشعارات — فعّله من إعدادات النظام لاستخدام التذكيرات.';
+
+  @override
+  String get challengeSaveReminder => 'حفظ';
 }

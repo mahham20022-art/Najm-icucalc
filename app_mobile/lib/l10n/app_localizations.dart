@@ -205,6 +205,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Teaching Mode'**
   String get openTeachingMode;
+
+  /// No description provided for @challengeTodaysTopic.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Topic'**
+  String get challengeTodaysTopic;
+
+  /// No description provided for @challengeMarkDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get challengeMarkDone;
+
+  /// No description provided for @challengeSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get challengeSkip;
+
+  /// No description provided for @challengeRestart.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart'**
+  String get challengeRestart;
+
+  /// No description provided for @challengeRestartConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart your journey?'**
+  String get challengeRestartConfirmTitle;
+
+  /// No description provided for @challengeRestartConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This clears all progress, streaks, and bookmarks and starts over from Day 1. This can\'t be undone.'**
+  String get challengeRestartConfirmBody;
+
+  /// No description provided for @challengeCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get challengeCancel;
+
+  /// No description provided for @challengeAlreadyDoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'See you tomorrow!'**
+  String get challengeAlreadyDoneTitle;
+
+  /// No description provided for @challengeAlreadyDoneBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve already completed today\'s step. Come back tomorrow for the next one.'**
+  String get challengeAlreadyDoneBody;
+
+  /// No description provided for @challengeJourneyComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'You completed the 100-day journey!'**
+  String get challengeJourneyComplete;
+
+  /// No description provided for @challengeCurrentStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Streak'**
+  String get challengeCurrentStreak;
+
+  /// No description provided for @challengeStreakDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} {count, plural, =1{day} other{days}}'**
+  String challengeStreakDays(num count);
+
+  /// No description provided for @challengeStatisticsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Statistics'**
+  String get challengeStatisticsTitle;
+
+  /// No description provided for @challengeCompletedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get challengeCompletedLabel;
+
+  /// No description provided for @challengeSkippedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Skipped'**
+  String get challengeSkippedLabel;
+
+  /// No description provided for @challengeCompletionRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Completion'**
+  String get challengeCompletionRate;
+
+  /// No description provided for @challengeBookmarksEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Bookmark a day from Today\'s Topic to find it here later.'**
+  String get challengeBookmarksEmpty;
+
+  /// No description provided for @challengeReminderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Reminder'**
+  String get challengeReminderTitle;
+
+  /// No description provided for @challengeReminderSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Get a nudge if you haven\'t done today\'s step yet'**
+  String get challengeReminderSubtitle;
+
+  /// No description provided for @challengeReminderPermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications permission was denied — enable it in system settings to use reminders.'**
+  String get challengeReminderPermissionDenied;
+
+  /// No description provided for @challengeSaveReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get challengeSaveReminder;
 }
 
 class _AppLocalizationsDelegate
