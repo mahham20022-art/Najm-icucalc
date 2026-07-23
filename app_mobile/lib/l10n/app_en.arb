@@ -1,0 +1,24 @@
+{
+  "@@locale": "en",
+  "appName": "Med100",
+  "@appName": {
+    "description": "The application name, shown on the splash screen."
+  },
+  "tagline": "One Topic. Every Day. Master Your Specialty.",
+  "@tagline": {
+    "description": "PRD tagline, shown beneath the wordmark on Splash (MED100_UI_UX_SPEC.md §1)."
+  },
+  "navHome": "Home",
+  "navBookmarks": "Bookmarks",
+  "navProgress": "Progress",
+  "navProfile": "Profile",
+  "screenNotImplemented": "{screenName} — foundation only, not yet implemented",
+  "@screenNotImplemented": {
+    "description": "Placeholder body text for scaffolded routes.",
+    "placeholders": {
+      "screenName": {
+        "type": "String"
+      }
+    }
+  }
+}

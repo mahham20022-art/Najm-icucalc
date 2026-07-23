@@ -1,0 +1,10 @@
+{
+  "@@locale": "ar",
+  "appName": "ميد١٠٠",
+  "tagline": "موضوع واحد. كل يوم. أتقن تخصصك.",
+  "navHome": "الرئيسية",
+  "navBookmarks": "المحفوظات",
+  "navProgress": "التقدم",
+  "navProfile": "الملف الشخصي",
+  "screenNotImplemented": "{screenName} — الأساس فقط، لم يُنفَّذ بعد"
+}

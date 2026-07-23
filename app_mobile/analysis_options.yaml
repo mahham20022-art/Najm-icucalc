@@ -1,0 +1,25 @@
+include: package:flutter_lints/flutter.yaml
+
+# Clean Architecture boundary rule (MED100_ARCHITECTURE.md §2): nothing
+# under a feature's `domain/` folder may import Flutter, Firebase, Drift,
+# or any other package-specific type. `flutter_lints` alone can't express
+# a folder-scoped import restriction — enforcing this mechanically
+# requires a `custom_lint` rule (e.g. via the `import_lint` package),
+# which is deliberately left for whoever implements the first real
+# feature rather than added speculatively here. Until then, this is a
+# reviewed-by-hand convention, not a CI-enforced one.
+
+analyzer:
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
+  exclude:
+    - "**/*.g.dart"
+    - "lib/l10n/app_localizations*.dart"
+
+linter:
+  rules:
+    prefer_single_quotes: true
+    always_declare_return_types: true
+    avoid_print: true
