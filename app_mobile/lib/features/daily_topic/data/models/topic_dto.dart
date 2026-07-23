@@ -8,6 +8,7 @@ class TopicDto {
   const TopicDto({
     required this.id,
     required this.title,
+    required this.body,
     required this.specialtyId,
     required this.estimatedMinutes,
     required this.isFree,
@@ -16,6 +17,7 @@ class TopicDto {
 
   final String id;
   final String title;
+  final String body;
   final String specialtyId;
   final int estimatedMinutes;
   final bool isFree;
@@ -24,6 +26,7 @@ class TopicDto {
   factory TopicDto.fromJson(Map<String, dynamic> json) => TopicDto(
     id: json['id'] as String,
     title: json['title'] as String,
+    body: json['body'] as String,
     specialtyId: json['specialtyId'] as String,
     estimatedMinutes: json['estimatedMinutes'] as int,
     isFree: json['isFree'] as bool,
@@ -33,6 +36,7 @@ class TopicDto {
   Map<String, dynamic> toJson() => {
     'id': id,
     'title': title,
+    'body': body,
     'specialtyId': specialtyId,
     'estimatedMinutes': estimatedMinutes,
     'isFree': isFree,
@@ -42,6 +46,7 @@ class TopicDto {
   Topic toEntity() => Topic(
     id: id,
     title: title,
+    body: body,
     specialtyId: specialtyId,
     estimatedMinutes: estimatedMinutes,
     isFree: isFree,

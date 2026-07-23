@@ -12,9 +12,7 @@ import '../../domain/entities/ai_request.dart';
 import '../../domain/entities/ai_response.dart';
 import '../../domain/entities/ai_response_chunk.dart';
 import '../../domain/entities/prompt_template.dart';
-import '../../domain/entities/prompt_type.dart';
 import '../../domain/entities/token_usage.dart';
-import '../../domain/prompt_templates.dart';
 import '../../domain/repositories/ai_engine_repository.dart';
 import '../../domain/repositories/ai_provider.dart';
 import '../config/ai_engine_config.dart';
@@ -194,8 +192,77 @@ class AiEngineRepositoryImpl implements AiEngineRepository {
     }
   }
 
+  @override
+  Stream<Result<AiResponseChunk>> chat({
+    required List<AiMessage> messages,
+    int maxTokens = 500,
+    double temperature = 0.4,
+    AiProviderId? providerOverride,
+  }) async* {
+    final providerId = providerOverride ?? AiEngineConfig.defaultProvider;
+    final provider = _providers[providerId]!;
+    final model = provider.defaultModel;
+    final optimizedMessages = _tokenEstimator.truncateToBudget(
+      messages,
+      AiEngineConfig.promptTokenBudget,
+    );
+
+    if (!_rateLimiters[providerId]!.tryAcquire()) {
+      yield const Result.failure(AiRateLimitedFailure());
+      return;
+    }
+
+    final buffer = StringBuffer();
+    try {
+      final events = provider.completeStream(
+        messages: optimizedMessages,
+        maxTokens: maxTokens,
+        temperature: temperature,
+        model: model,
+      );
+
+      await for (final event in events) {
+        buffer.write(event.delta);
+        if (!event.done) {
+          yield Result.success(AiResponseChunk(delta: event.delta, done: false));
+          continue;
+        }
+
+        final resultModel = event.model ?? model;
+        final usage =
+            event.usage ??
+            TokenUsage(
+              promptTokens: _tokenEstimator.estimateMessagesTokens(optimizedMessages),
+              completionTokens: _tokenEstimator.estimateTokens(buffer.toString()),
+            );
+        final cost = _costEstimator.estimateCostUsd(
+          provider: provider,
+          model: resultModel,
+          usage: usage,
+        );
+
+        yield Result.success(
+          AiResponseChunk(
+            delta: event.delta,
+            done: true,
+            finalResponse: AiResponse(
+              content: buffer.toString(),
+              provider: providerId,
+              model: resultModel,
+              usage: usage,
+              estimatedCostUsd: cost,
+              cached: false,
+            ),
+          ),
+        );
+      }
+    } catch (_) {
+      yield const Result.failure(AiProviderFailure());
+    }
+  }
+
   _GenerationPlan _plan(AiRequest request) {
-    final template = PromptTemplates.byId(request.promptTemplateId);
+    final template = request.promptTemplate;
     final messages = template.render(request.variables);
     final providerId = request.providerOverride ?? AiEngineConfig.defaultProvider;
     final provider = _providers[providerId]!;
@@ -206,11 +273,7 @@ class AiEngineRepositoryImpl implements AiEngineRepository {
     );
 
     final renderedInput = optimizedMessages.map((m) => '${m.role.name}:${m.content}').join('\n');
-    final cacheKey = _cacheKey(
-      promptType: template.promptType,
-      renderedInput: renderedInput,
-      model: model,
-    );
+    final cacheKey = _cacheKey(templateId: template.id, renderedInput: renderedInput, model: model);
 
     return _GenerationPlan(
       template: template,
@@ -245,12 +308,17 @@ class AiEngineRepositoryImpl implements AiEngineRepository {
     return error is TimeoutException || error is http.ClientException;
   }
 
+  /// `sha256(promptType + inputHash + modelVersion)` per
+  /// `MED100_DATABASE_DESIGN.md` §10 — [templateId] stands in for
+  /// `promptType` here since template ids are already unique and
+  /// versioned (`topic_summary_v1`), so a template's own identity is a
+  /// more precise cache-key input than a shared coarse-grained enum.
   String _cacheKey({
-    required PromptType promptType,
+    required String templateId,
     required String renderedInput,
     required String model,
   }) {
-    final raw = '${promptType.name}:$renderedInput:$model';
+    final raw = '$templateId:$renderedInput:$model';
     return sha256.convert(utf8.encode(raw)).toString();
   }
 }

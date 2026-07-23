@@ -9,6 +9,7 @@ class Topic extends Equatable {
   const Topic({
     required this.id,
     required this.title,
+    required this.body,
     required this.specialtyId,
     required this.estimatedMinutes,
     required this.isFree,
@@ -16,10 +17,16 @@ class Topic extends Equatable {
 
   final String id;
   final String title;
+
+  /// The clinician-authored source text — what a learner reads on the
+  /// Learning Screen itself, and the only source `features/ai_mastery`
+  /// is allowed to generate content from (never invented facts not
+  /// present here).
+  final String body;
   final String specialtyId;
   final int estimatedMinutes;
   final bool isFree;
 
   @override
-  List<Object?> get props => [id, title, specialtyId, estimatedMinutes, isFree];
+  List<Object?> get props => [id, title, body, specialtyId, estimatedMinutes, isFree];
 }

@@ -117,3 +117,14 @@ class AiRateLimitedFailure extends Failure {
 class AiProviderFailure extends Failure {
   const AiProviderFailure([super.message = 'The AI assistant is unavailable right now.']);
 }
+
+/// The AI call itself succeeded, but a structured Mastery Mode feature
+/// (MCQs, Flashcards, Comparison Tables, Algorithms, References) that
+/// requires the response to be parseable JSON got something else back —
+/// distinct from [AiProviderFailure] since the vendor call didn't fail,
+/// the content just didn't match the expected shape.
+class AiMalformedResponseFailure extends Failure {
+  const AiMalformedResponseFailure([
+    super.message = "The AI assistant's response couldn't be understood — please try again.",
+  ]);
+}

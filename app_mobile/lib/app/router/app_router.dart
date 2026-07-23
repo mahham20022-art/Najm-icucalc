@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/ai_mastery/presentation/screens/mastery_route_screen.dart';
 import '../../features/auth_onboarding/presentation/screens/login_screen.dart';
 import '../../features/auth_onboarding/presentation/screens/profile_screen.dart';
 import '../../features/auth_onboarding/presentation/screens/register_screen.dart';
@@ -186,9 +187,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/topic/:topicId',
         name: AppRoute.topic,
-        builder: (context, state) => PlaceholderScreen(
-          screenName: "Today's Topic / Learning Screen (${state.pathParameters['topicId']})",
-        ),
+        builder: (context, state) => MasteryRouteScreen(topicId: state.pathParameters['topicId']!),
       ),
       GoRoute(
         path: '/topic/:topicId/mcqs',
