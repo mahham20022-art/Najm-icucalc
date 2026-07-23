@@ -12,6 +12,15 @@
          perfectly scheduled daily reminder can still be silently dropped
          by the OS. -->
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
+    <!-- Required by speech_to_text for Teaching Mode's Voice Explanation
+         input. BLUETOOTH* is for headset mic support; INTERNET is
+         because on-device recognition isn't guaranteed on every device,
+         so the OS may fall back to a network recognition service. -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
     <application
         android:label="med100"
         android:name="${applicationName}"
@@ -70,6 +79,11 @@
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
+        </intent>
+        <!-- Required on Android 11+ (SDK 30+) for speech_to_text to find
+             the on-device speech recognition service at all. -->
+        <intent>
+            <action android:name="android.speech.RecognitionService"/>
         </intent>
     </queries>
 </manifest>

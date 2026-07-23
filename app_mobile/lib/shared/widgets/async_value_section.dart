@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../app/theme/app_colors.dart';
-import '../../../../app/theme/app_spacing.dart';
-import '../../../../core/error/failure.dart';
+import '../../app/theme/app_colors.dart';
+import '../../app/theme/app_spacing.dart';
+import '../../core/error/failure.dart';
 
-/// Renders an `AsyncValue<T>` from one of `mastery_content_providers.dart`'s
-/// `FutureProvider.family`s with a consistent loading/error/data shell,
-/// so every one of the six read-only sections looks and behaves the
-/// same way rather than each screen re-implementing its own spinner and
-/// error card.
-class MasteryAsyncSection<T> extends StatelessWidget {
-  const MasteryAsyncSection({
+/// Renders an `AsyncValue<T>` (from a `FutureProvider`/`StreamProvider`
+/// wrapping a use case that returns `Result<T>`, with the `Failure`
+/// thrown into `AsyncValue.error` on the failure branch) with a
+/// consistent loading/error/data shell. Originally AI Mastery Mode's,
+/// promoted to `shared/` once Teaching Mode needed the exact same
+/// "resolve a Topic from a route param" loading/error pattern —
+/// extracting on the second consumer, not speculatively before one
+/// existed.
+class AsyncValueSection<T> extends StatelessWidget {
+  const AsyncValueSection({
     super.key,
     required this.value,
     required this.builder,
@@ -26,8 +29,8 @@ class MasteryAsyncSection<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return value.when(
       data: (data) => builder(context, data),
-      loading: () => const MasteryThinkingIndicator(),
-      error: (error, _) => MasteryErrorView(
+      loading: () => const ThinkingIndicator(),
+      error: (error, _) => InlineErrorView(
         message: error is Failure ? error.message : 'Something went wrong.',
         onRetry: onRetry,
       ),
@@ -38,8 +41,8 @@ class MasteryAsyncSection<T> extends StatelessWidget {
 /// The "actively generating" state — deliberately distinct from a
 /// content skeleton (`MED100_UI_UX_SPEC.md` §13): AI generation is real
 /// work happening right now, not a fetch of already-known data.
-class MasteryThinkingIndicator extends StatelessWidget {
-  const MasteryThinkingIndicator({super.key});
+class ThinkingIndicator extends StatelessWidget {
+  const ThinkingIndicator({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -67,8 +70,8 @@ class MasteryThinkingIndicator extends StatelessWidget {
   }
 }
 
-class MasteryErrorView extends StatelessWidget {
-  const MasteryErrorView({super.key, required this.message, required this.onRetry});
+class InlineErrorView extends StatelessWidget {
+  const InlineErrorView({super.key, required this.message, required this.onRetry});
 
   final String message;
   final VoidCallback onRetry;

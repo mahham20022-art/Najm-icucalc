@@ -28,6 +28,12 @@
 	<true/>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Use Face ID to sign back in quickly and securely.</string>
+	<!-- Required by speech_to_text for Teaching Mode's Voice Explanation
+	     input. -->
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Med100 uses your microphone so you can explain a topic out loud in Teaching Mode.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Med100 transcribes your spoken explanation in Teaching Mode so it can be evaluated.</string>
 	<!--
 	  Google Sign-In requires a URL scheme equal to the REVERSED_CLIENT_ID
 	  from GoogleService-Info.plist (produced by `flutterfire configure`

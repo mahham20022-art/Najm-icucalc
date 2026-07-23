@@ -148,8 +148,54 @@ class AiCacheLocal extends Table {
   Set<Column> get primaryKey => {cacheKey};
 }
 
+/// A completed Teaching Mode session — Med100's signature "teach it back"
+/// feature. Per-user (unlike `AiCacheLocal`): a teach-back explanation
+/// and its evaluation are personal progress, not shared content, per
+/// `MED100_DATABASE_DESIGN.md` §0a's per-user local-table scoping rule.
+///
+/// `@DataClassName` avoids Drift's default row-class name colliding with
+/// `features/teaching_mode/domain/entities/teaching_session.dart`'s
+/// `TeachingSession` domain entity — Drift would otherwise strip the
+/// table name's trailing "s" and generate a class of that exact name.
+@DataClassName('TeachingSessionRow')
+class TeachingSessions extends Table {
+  TextColumn get id => text()();
+  TextColumn get userId => text()();
+  TextColumn get topicId => text()();
+  TextColumn get topicTitle => text()();
+
+  /// `voice | written`.
+  TextColumn get mode => text()();
+  TextColumn get explanationText => text()();
+
+  IntColumn get accuracyScore => integer()();
+  IntColumn get clinicalReasoningScore => integer()();
+  IntColumn get completenessScore => integer()();
+  IntColumn get confidenceScore => integer()();
+  TextColumn get missingConceptsJson => text().withDefault(const Constant('[]'))();
+  TextColumn get hallucinationsJson => text().withDefault(const Constant('[]'))();
+  TextColumn get feedback => text()();
+
+  /// Stored rather than only re-derived, so history queries (e.g. "best
+  /// score for this topic") don't need to load and recompute every row.
+  IntColumn get masteryScore => integer()();
+
+  DateTimeColumn get completedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 @DriftDatabase(
-  tables: [Outbox, SyncState, ChallengeProgress, ReminderPreference, NotificationLog, AiCacheLocal],
+  tables: [
+    Outbox,
+    SyncState,
+    ChallengeProgress,
+    ReminderPreference,
+    NotificationLog,
+    AiCacheLocal,
+    TeachingSessions,
+  ],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
@@ -162,7 +208,7 @@ class AppDatabase extends _$AppDatabase {
   /// `MED100_DATABASE_DESIGN.md` §0 for the schema-versioning convention
   /// this project follows on both the Firestore and Drift sides.
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -182,6 +228,9 @@ class AppDatabase extends _$AppDatabase {
       }
       if (from < 4) {
         await m.createTable(aiCacheLocal);
+      }
+      if (from < 5) {
+        await m.createTable(teachingSessions);
       }
     },
   );

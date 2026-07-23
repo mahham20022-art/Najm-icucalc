@@ -3,13 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../shared/widgets/async_value_section.dart';
 import '../../../daily_topic/daily_topic_providers.dart';
-import 'mastery_home_screen.dart';
+import 'teaching_mode_screen.dart';
 
-/// The actual `/topic/:topicId` route target — resolves the path
-/// param into a full `Topic` (title + body) before handing off to
-/// [MasteryHomeScreen], which needs the body text to generate anything.
-class MasteryRouteScreen extends ConsumerWidget {
-  const MasteryRouteScreen({super.key, required this.topicId});
+/// The `/topic/:topicId/teach` route target — resolves the path param
+/// into a full `Topic` before handing off to [TeachingModeScreen], which
+/// needs the body text to evaluate an explanation against.
+class TeachingRouteScreen extends ConsumerWidget {
+  const TeachingRouteScreen({super.key, required this.topicId});
 
   final String topicId;
 
@@ -22,7 +22,7 @@ class MasteryRouteScreen extends ConsumerWidget {
       body: AsyncValueSection(
         value: topicAsync,
         onRetry: () => ref.invalidate(topicByIdProvider(topicId)),
-        builder: (context, topic) => MasteryHomeScreen(topic: topic),
+        builder: (context, topic) => TeachingModeScreen(topic: topic),
       ),
     );
   }

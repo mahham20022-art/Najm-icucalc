@@ -2551,6 +2551,841 @@ class AiCacheLocalCompanion extends UpdateCompanion<AiCacheLocalData> {
   }
 }
 
+class $TeachingSessionsTable extends TeachingSessions
+    with TableInfo<$TeachingSessionsTable, TeachingSessionRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TeachingSessionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<String> userId = GeneratedColumn<String>(
+    'user_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _topicIdMeta = const VerificationMeta('topicId');
+  @override
+  late final GeneratedColumn<String> topicId = GeneratedColumn<String>(
+    'topic_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _topicTitleMeta = const VerificationMeta('topicTitle');
+  @override
+  late final GeneratedColumn<String> topicTitle = GeneratedColumn<String>(
+    'topic_title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _modeMeta = const VerificationMeta('mode');
+  @override
+  late final GeneratedColumn<String> mode = GeneratedColumn<String>(
+    'mode',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _explanationTextMeta = const VerificationMeta('explanationText');
+  @override
+  late final GeneratedColumn<String> explanationText = GeneratedColumn<String>(
+    'explanation_text',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _accuracyScoreMeta = const VerificationMeta('accuracyScore');
+  @override
+  late final GeneratedColumn<int> accuracyScore = GeneratedColumn<int>(
+    'accuracy_score',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _clinicalReasoningScoreMeta = const VerificationMeta(
+    'clinicalReasoningScore',
+  );
+  @override
+  late final GeneratedColumn<int> clinicalReasoningScore = GeneratedColumn<int>(
+    'clinical_reasoning_score',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _completenessScoreMeta = const VerificationMeta(
+    'completenessScore',
+  );
+  @override
+  late final GeneratedColumn<int> completenessScore = GeneratedColumn<int>(
+    'completeness_score',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _confidenceScoreMeta = const VerificationMeta('confidenceScore');
+  @override
+  late final GeneratedColumn<int> confidenceScore = GeneratedColumn<int>(
+    'confidence_score',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _missingConceptsJsonMeta = const VerificationMeta(
+    'missingConceptsJson',
+  );
+  @override
+  late final GeneratedColumn<String> missingConceptsJson = GeneratedColumn<String>(
+    'missing_concepts_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  );
+  static const VerificationMeta _hallucinationsJsonMeta = const VerificationMeta(
+    'hallucinationsJson',
+  );
+  @override
+  late final GeneratedColumn<String> hallucinationsJson = GeneratedColumn<String>(
+    'hallucinations_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  );
+  static const VerificationMeta _feedbackMeta = const VerificationMeta('feedback');
+  @override
+  late final GeneratedColumn<String> feedback = GeneratedColumn<String>(
+    'feedback',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _masteryScoreMeta = const VerificationMeta('masteryScore');
+  @override
+  late final GeneratedColumn<int> masteryScore = GeneratedColumn<int>(
+    'mastery_score',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _completedAtMeta = const VerificationMeta('completedAt');
+  @override
+  late final GeneratedColumn<DateTime> completedAt = GeneratedColumn<DateTime>(
+    'completed_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    userId,
+    topicId,
+    topicTitle,
+    mode,
+    explanationText,
+    accuracyScore,
+    clinicalReasoningScore,
+    completenessScore,
+    confidenceScore,
+    missingConceptsJson,
+    hallucinationsJson,
+    feedback,
+    masteryScore,
+    completedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'teaching_sessions';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<TeachingSessionRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('user_id')) {
+      context.handle(_userIdMeta, userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
+    } else if (isInserting) {
+      context.missing(_userIdMeta);
+    }
+    if (data.containsKey('topic_id')) {
+      context.handle(_topicIdMeta, topicId.isAcceptableOrUnknown(data['topic_id']!, _topicIdMeta));
+    } else if (isInserting) {
+      context.missing(_topicIdMeta);
+    }
+    if (data.containsKey('topic_title')) {
+      context.handle(
+        _topicTitleMeta,
+        topicTitle.isAcceptableOrUnknown(data['topic_title']!, _topicTitleMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_topicTitleMeta);
+    }
+    if (data.containsKey('mode')) {
+      context.handle(_modeMeta, mode.isAcceptableOrUnknown(data['mode']!, _modeMeta));
+    } else if (isInserting) {
+      context.missing(_modeMeta);
+    }
+    if (data.containsKey('explanation_text')) {
+      context.handle(
+        _explanationTextMeta,
+        explanationText.isAcceptableOrUnknown(data['explanation_text']!, _explanationTextMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_explanationTextMeta);
+    }
+    if (data.containsKey('accuracy_score')) {
+      context.handle(
+        _accuracyScoreMeta,
+        accuracyScore.isAcceptableOrUnknown(data['accuracy_score']!, _accuracyScoreMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_accuracyScoreMeta);
+    }
+    if (data.containsKey('clinical_reasoning_score')) {
+      context.handle(
+        _clinicalReasoningScoreMeta,
+        clinicalReasoningScore.isAcceptableOrUnknown(
+          data['clinical_reasoning_score']!,
+          _clinicalReasoningScoreMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_clinicalReasoningScoreMeta);
+    }
+    if (data.containsKey('completeness_score')) {
+      context.handle(
+        _completenessScoreMeta,
+        completenessScore.isAcceptableOrUnknown(
+          data['completeness_score']!,
+          _completenessScoreMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_completenessScoreMeta);
+    }
+    if (data.containsKey('confidence_score')) {
+      context.handle(
+        _confidenceScoreMeta,
+        confidenceScore.isAcceptableOrUnknown(data['confidence_score']!, _confidenceScoreMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_confidenceScoreMeta);
+    }
+    if (data.containsKey('missing_concepts_json')) {
+      context.handle(
+        _missingConceptsJsonMeta,
+        missingConceptsJson.isAcceptableOrUnknown(
+          data['missing_concepts_json']!,
+          _missingConceptsJsonMeta,
+        ),
+      );
+    }
+    if (data.containsKey('hallucinations_json')) {
+      context.handle(
+        _hallucinationsJsonMeta,
+        hallucinationsJson.isAcceptableOrUnknown(
+          data['hallucinations_json']!,
+          _hallucinationsJsonMeta,
+        ),
+      );
+    }
+    if (data.containsKey('feedback')) {
+      context.handle(
+        _feedbackMeta,
+        feedback.isAcceptableOrUnknown(data['feedback']!, _feedbackMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_feedbackMeta);
+    }
+    if (data.containsKey('mastery_score')) {
+      context.handle(
+        _masteryScoreMeta,
+        masteryScore.isAcceptableOrUnknown(data['mastery_score']!, _masteryScoreMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_masteryScoreMeta);
+    }
+    if (data.containsKey('completed_at')) {
+      context.handle(
+        _completedAtMeta,
+        completedAt.isAcceptableOrUnknown(data['completed_at']!, _completedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_completedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  TeachingSessionRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TeachingSessionRow(
+      id: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      userId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}user_id'],
+      )!,
+      topicId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}topic_id'],
+      )!,
+      topicTitle: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}topic_title'],
+      )!,
+      mode: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}mode'])!,
+      explanationText: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}explanation_text'],
+      )!,
+      accuracyScore: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}accuracy_score'],
+      )!,
+      clinicalReasoningScore: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}clinical_reasoning_score'],
+      )!,
+      completenessScore: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}completeness_score'],
+      )!,
+      confidenceScore: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}confidence_score'],
+      )!,
+      missingConceptsJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}missing_concepts_json'],
+      )!,
+      hallucinationsJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}hallucinations_json'],
+      )!,
+      feedback: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}feedback'],
+      )!,
+      masteryScore: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}mastery_score'],
+      )!,
+      completedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}completed_at'],
+      )!,
+    );
+  }
+
+  @override
+  $TeachingSessionsTable createAlias(String alias) {
+    return $TeachingSessionsTable(attachedDatabase, alias);
+  }
+}
+
+class TeachingSessionRow extends DataClass implements Insertable<TeachingSessionRow> {
+  final String id;
+  final String userId;
+  final String topicId;
+  final String topicTitle;
+
+  /// `voice | written`.
+  final String mode;
+  final String explanationText;
+  final int accuracyScore;
+  final int clinicalReasoningScore;
+  final int completenessScore;
+  final int confidenceScore;
+  final String missingConceptsJson;
+  final String hallucinationsJson;
+  final String feedback;
+
+  /// Stored rather than only re-derived, so history queries (e.g. "best
+  /// score for this topic") don't need to load and recompute every row.
+  final int masteryScore;
+  final DateTime completedAt;
+  const TeachingSessionRow({
+    required this.id,
+    required this.userId,
+    required this.topicId,
+    required this.topicTitle,
+    required this.mode,
+    required this.explanationText,
+    required this.accuracyScore,
+    required this.clinicalReasoningScore,
+    required this.completenessScore,
+    required this.confidenceScore,
+    required this.missingConceptsJson,
+    required this.hallucinationsJson,
+    required this.feedback,
+    required this.masteryScore,
+    required this.completedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['user_id'] = Variable<String>(userId);
+    map['topic_id'] = Variable<String>(topicId);
+    map['topic_title'] = Variable<String>(topicTitle);
+    map['mode'] = Variable<String>(mode);
+    map['explanation_text'] = Variable<String>(explanationText);
+    map['accuracy_score'] = Variable<int>(accuracyScore);
+    map['clinical_reasoning_score'] = Variable<int>(clinicalReasoningScore);
+    map['completeness_score'] = Variable<int>(completenessScore);
+    map['confidence_score'] = Variable<int>(confidenceScore);
+    map['missing_concepts_json'] = Variable<String>(missingConceptsJson);
+    map['hallucinations_json'] = Variable<String>(hallucinationsJson);
+    map['feedback'] = Variable<String>(feedback);
+    map['mastery_score'] = Variable<int>(masteryScore);
+    map['completed_at'] = Variable<DateTime>(completedAt);
+    return map;
+  }
+
+  TeachingSessionsCompanion toCompanion(bool nullToAbsent) {
+    return TeachingSessionsCompanion(
+      id: Value(id),
+      userId: Value(userId),
+      topicId: Value(topicId),
+      topicTitle: Value(topicTitle),
+      mode: Value(mode),
+      explanationText: Value(explanationText),
+      accuracyScore: Value(accuracyScore),
+      clinicalReasoningScore: Value(clinicalReasoningScore),
+      completenessScore: Value(completenessScore),
+      confidenceScore: Value(confidenceScore),
+      missingConceptsJson: Value(missingConceptsJson),
+      hallucinationsJson: Value(hallucinationsJson),
+      feedback: Value(feedback),
+      masteryScore: Value(masteryScore),
+      completedAt: Value(completedAt),
+    );
+  }
+
+  factory TeachingSessionRow.fromJson(Map<String, dynamic> json, {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TeachingSessionRow(
+      id: serializer.fromJson<String>(json['id']),
+      userId: serializer.fromJson<String>(json['userId']),
+      topicId: serializer.fromJson<String>(json['topicId']),
+      topicTitle: serializer.fromJson<String>(json['topicTitle']),
+      mode: serializer.fromJson<String>(json['mode']),
+      explanationText: serializer.fromJson<String>(json['explanationText']),
+      accuracyScore: serializer.fromJson<int>(json['accuracyScore']),
+      clinicalReasoningScore: serializer.fromJson<int>(json['clinicalReasoningScore']),
+      completenessScore: serializer.fromJson<int>(json['completenessScore']),
+      confidenceScore: serializer.fromJson<int>(json['confidenceScore']),
+      missingConceptsJson: serializer.fromJson<String>(json['missingConceptsJson']),
+      hallucinationsJson: serializer.fromJson<String>(json['hallucinationsJson']),
+      feedback: serializer.fromJson<String>(json['feedback']),
+      masteryScore: serializer.fromJson<int>(json['masteryScore']),
+      completedAt: serializer.fromJson<DateTime>(json['completedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'userId': serializer.toJson<String>(userId),
+      'topicId': serializer.toJson<String>(topicId),
+      'topicTitle': serializer.toJson<String>(topicTitle),
+      'mode': serializer.toJson<String>(mode),
+      'explanationText': serializer.toJson<String>(explanationText),
+      'accuracyScore': serializer.toJson<int>(accuracyScore),
+      'clinicalReasoningScore': serializer.toJson<int>(clinicalReasoningScore),
+      'completenessScore': serializer.toJson<int>(completenessScore),
+      'confidenceScore': serializer.toJson<int>(confidenceScore),
+      'missingConceptsJson': serializer.toJson<String>(missingConceptsJson),
+      'hallucinationsJson': serializer.toJson<String>(hallucinationsJson),
+      'feedback': serializer.toJson<String>(feedback),
+      'masteryScore': serializer.toJson<int>(masteryScore),
+      'completedAt': serializer.toJson<DateTime>(completedAt),
+    };
+  }
+
+  TeachingSessionRow copyWith({
+    String? id,
+    String? userId,
+    String? topicId,
+    String? topicTitle,
+    String? mode,
+    String? explanationText,
+    int? accuracyScore,
+    int? clinicalReasoningScore,
+    int? completenessScore,
+    int? confidenceScore,
+    String? missingConceptsJson,
+    String? hallucinationsJson,
+    String? feedback,
+    int? masteryScore,
+    DateTime? completedAt,
+  }) => TeachingSessionRow(
+    id: id ?? this.id,
+    userId: userId ?? this.userId,
+    topicId: topicId ?? this.topicId,
+    topicTitle: topicTitle ?? this.topicTitle,
+    mode: mode ?? this.mode,
+    explanationText: explanationText ?? this.explanationText,
+    accuracyScore: accuracyScore ?? this.accuracyScore,
+    clinicalReasoningScore: clinicalReasoningScore ?? this.clinicalReasoningScore,
+    completenessScore: completenessScore ?? this.completenessScore,
+    confidenceScore: confidenceScore ?? this.confidenceScore,
+    missingConceptsJson: missingConceptsJson ?? this.missingConceptsJson,
+    hallucinationsJson: hallucinationsJson ?? this.hallucinationsJson,
+    feedback: feedback ?? this.feedback,
+    masteryScore: masteryScore ?? this.masteryScore,
+    completedAt: completedAt ?? this.completedAt,
+  );
+  TeachingSessionRow copyWithCompanion(TeachingSessionsCompanion data) {
+    return TeachingSessionRow(
+      id: data.id.present ? data.id.value : this.id,
+      userId: data.userId.present ? data.userId.value : this.userId,
+      topicId: data.topicId.present ? data.topicId.value : this.topicId,
+      topicTitle: data.topicTitle.present ? data.topicTitle.value : this.topicTitle,
+      mode: data.mode.present ? data.mode.value : this.mode,
+      explanationText: data.explanationText.present
+          ? data.explanationText.value
+          : this.explanationText,
+      accuracyScore: data.accuracyScore.present ? data.accuracyScore.value : this.accuracyScore,
+      clinicalReasoningScore: data.clinicalReasoningScore.present
+          ? data.clinicalReasoningScore.value
+          : this.clinicalReasoningScore,
+      completenessScore: data.completenessScore.present
+          ? data.completenessScore.value
+          : this.completenessScore,
+      confidenceScore: data.confidenceScore.present
+          ? data.confidenceScore.value
+          : this.confidenceScore,
+      missingConceptsJson: data.missingConceptsJson.present
+          ? data.missingConceptsJson.value
+          : this.missingConceptsJson,
+      hallucinationsJson: data.hallucinationsJson.present
+          ? data.hallucinationsJson.value
+          : this.hallucinationsJson,
+      feedback: data.feedback.present ? data.feedback.value : this.feedback,
+      masteryScore: data.masteryScore.present ? data.masteryScore.value : this.masteryScore,
+      completedAt: data.completedAt.present ? data.completedAt.value : this.completedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TeachingSessionRow(')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('topicId: $topicId, ')
+          ..write('topicTitle: $topicTitle, ')
+          ..write('mode: $mode, ')
+          ..write('explanationText: $explanationText, ')
+          ..write('accuracyScore: $accuracyScore, ')
+          ..write('clinicalReasoningScore: $clinicalReasoningScore, ')
+          ..write('completenessScore: $completenessScore, ')
+          ..write('confidenceScore: $confidenceScore, ')
+          ..write('missingConceptsJson: $missingConceptsJson, ')
+          ..write('hallucinationsJson: $hallucinationsJson, ')
+          ..write('feedback: $feedback, ')
+          ..write('masteryScore: $masteryScore, ')
+          ..write('completedAt: $completedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    userId,
+    topicId,
+    topicTitle,
+    mode,
+    explanationText,
+    accuracyScore,
+    clinicalReasoningScore,
+    completenessScore,
+    confidenceScore,
+    missingConceptsJson,
+    hallucinationsJson,
+    feedback,
+    masteryScore,
+    completedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TeachingSessionRow &&
+          other.id == this.id &&
+          other.userId == this.userId &&
+          other.topicId == this.topicId &&
+          other.topicTitle == this.topicTitle &&
+          other.mode == this.mode &&
+          other.explanationText == this.explanationText &&
+          other.accuracyScore == this.accuracyScore &&
+          other.clinicalReasoningScore == this.clinicalReasoningScore &&
+          other.completenessScore == this.completenessScore &&
+          other.confidenceScore == this.confidenceScore &&
+          other.missingConceptsJson == this.missingConceptsJson &&
+          other.hallucinationsJson == this.hallucinationsJson &&
+          other.feedback == this.feedback &&
+          other.masteryScore == this.masteryScore &&
+          other.completedAt == this.completedAt);
+}
+
+class TeachingSessionsCompanion extends UpdateCompanion<TeachingSessionRow> {
+  final Value<String> id;
+  final Value<String> userId;
+  final Value<String> topicId;
+  final Value<String> topicTitle;
+  final Value<String> mode;
+  final Value<String> explanationText;
+  final Value<int> accuracyScore;
+  final Value<int> clinicalReasoningScore;
+  final Value<int> completenessScore;
+  final Value<int> confidenceScore;
+  final Value<String> missingConceptsJson;
+  final Value<String> hallucinationsJson;
+  final Value<String> feedback;
+  final Value<int> masteryScore;
+  final Value<DateTime> completedAt;
+  final Value<int> rowid;
+  const TeachingSessionsCompanion({
+    this.id = const Value.absent(),
+    this.userId = const Value.absent(),
+    this.topicId = const Value.absent(),
+    this.topicTitle = const Value.absent(),
+    this.mode = const Value.absent(),
+    this.explanationText = const Value.absent(),
+    this.accuracyScore = const Value.absent(),
+    this.clinicalReasoningScore = const Value.absent(),
+    this.completenessScore = const Value.absent(),
+    this.confidenceScore = const Value.absent(),
+    this.missingConceptsJson = const Value.absent(),
+    this.hallucinationsJson = const Value.absent(),
+    this.feedback = const Value.absent(),
+    this.masteryScore = const Value.absent(),
+    this.completedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  TeachingSessionsCompanion.insert({
+    required String id,
+    required String userId,
+    required String topicId,
+    required String topicTitle,
+    required String mode,
+    required String explanationText,
+    required int accuracyScore,
+    required int clinicalReasoningScore,
+    required int completenessScore,
+    required int confidenceScore,
+    this.missingConceptsJson = const Value.absent(),
+    this.hallucinationsJson = const Value.absent(),
+    required String feedback,
+    required int masteryScore,
+    required DateTime completedAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       userId = Value(userId),
+       topicId = Value(topicId),
+       topicTitle = Value(topicTitle),
+       mode = Value(mode),
+       explanationText = Value(explanationText),
+       accuracyScore = Value(accuracyScore),
+       clinicalReasoningScore = Value(clinicalReasoningScore),
+       completenessScore = Value(completenessScore),
+       confidenceScore = Value(confidenceScore),
+       feedback = Value(feedback),
+       masteryScore = Value(masteryScore),
+       completedAt = Value(completedAt);
+  static Insertable<TeachingSessionRow> custom({
+    Expression<String>? id,
+    Expression<String>? userId,
+    Expression<String>? topicId,
+    Expression<String>? topicTitle,
+    Expression<String>? mode,
+    Expression<String>? explanationText,
+    Expression<int>? accuracyScore,
+    Expression<int>? clinicalReasoningScore,
+    Expression<int>? completenessScore,
+    Expression<int>? confidenceScore,
+    Expression<String>? missingConceptsJson,
+    Expression<String>? hallucinationsJson,
+    Expression<String>? feedback,
+    Expression<int>? masteryScore,
+    Expression<DateTime>? completedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (userId != null) 'user_id': userId,
+      if (topicId != null) 'topic_id': topicId,
+      if (topicTitle != null) 'topic_title': topicTitle,
+      if (mode != null) 'mode': mode,
+      if (explanationText != null) 'explanation_text': explanationText,
+      if (accuracyScore != null) 'accuracy_score': accuracyScore,
+      if (clinicalReasoningScore != null) 'clinical_reasoning_score': clinicalReasoningScore,
+      if (completenessScore != null) 'completeness_score': completenessScore,
+      if (confidenceScore != null) 'confidence_score': confidenceScore,
+      if (missingConceptsJson != null) 'missing_concepts_json': missingConceptsJson,
+      if (hallucinationsJson != null) 'hallucinations_json': hallucinationsJson,
+      if (feedback != null) 'feedback': feedback,
+      if (masteryScore != null) 'mastery_score': masteryScore,
+      if (completedAt != null) 'completed_at': completedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  TeachingSessionsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? userId,
+    Value<String>? topicId,
+    Value<String>? topicTitle,
+    Value<String>? mode,
+    Value<String>? explanationText,
+    Value<int>? accuracyScore,
+    Value<int>? clinicalReasoningScore,
+    Value<int>? completenessScore,
+    Value<int>? confidenceScore,
+    Value<String>? missingConceptsJson,
+    Value<String>? hallucinationsJson,
+    Value<String>? feedback,
+    Value<int>? masteryScore,
+    Value<DateTime>? completedAt,
+    Value<int>? rowid,
+  }) {
+    return TeachingSessionsCompanion(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      topicId: topicId ?? this.topicId,
+      topicTitle: topicTitle ?? this.topicTitle,
+      mode: mode ?? this.mode,
+      explanationText: explanationText ?? this.explanationText,
+      accuracyScore: accuracyScore ?? this.accuracyScore,
+      clinicalReasoningScore: clinicalReasoningScore ?? this.clinicalReasoningScore,
+      completenessScore: completenessScore ?? this.completenessScore,
+      confidenceScore: confidenceScore ?? this.confidenceScore,
+      missingConceptsJson: missingConceptsJson ?? this.missingConceptsJson,
+      hallucinationsJson: hallucinationsJson ?? this.hallucinationsJson,
+      feedback: feedback ?? this.feedback,
+      masteryScore: masteryScore ?? this.masteryScore,
+      completedAt: completedAt ?? this.completedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (userId.present) {
+      map['user_id'] = Variable<String>(userId.value);
+    }
+    if (topicId.present) {
+      map['topic_id'] = Variable<String>(topicId.value);
+    }
+    if (topicTitle.present) {
+      map['topic_title'] = Variable<String>(topicTitle.value);
+    }
+    if (mode.present) {
+      map['mode'] = Variable<String>(mode.value);
+    }
+    if (explanationText.present) {
+      map['explanation_text'] = Variable<String>(explanationText.value);
+    }
+    if (accuracyScore.present) {
+      map['accuracy_score'] = Variable<int>(accuracyScore.value);
+    }
+    if (clinicalReasoningScore.present) {
+      map['clinical_reasoning_score'] = Variable<int>(clinicalReasoningScore.value);
+    }
+    if (completenessScore.present) {
+      map['completeness_score'] = Variable<int>(completenessScore.value);
+    }
+    if (confidenceScore.present) {
+      map['confidence_score'] = Variable<int>(confidenceScore.value);
+    }
+    if (missingConceptsJson.present) {
+      map['missing_concepts_json'] = Variable<String>(missingConceptsJson.value);
+    }
+    if (hallucinationsJson.present) {
+      map['hallucinations_json'] = Variable<String>(hallucinationsJson.value);
+    }
+    if (feedback.present) {
+      map['feedback'] = Variable<String>(feedback.value);
+    }
+    if (masteryScore.present) {
+      map['mastery_score'] = Variable<int>(masteryScore.value);
+    }
+    if (completedAt.present) {
+      map['completed_at'] = Variable<DateTime>(completedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TeachingSessionsCompanion(')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('topicId: $topicId, ')
+          ..write('topicTitle: $topicTitle, ')
+          ..write('mode: $mode, ')
+          ..write('explanationText: $explanationText, ')
+          ..write('accuracyScore: $accuracyScore, ')
+          ..write('clinicalReasoningScore: $clinicalReasoningScore, ')
+          ..write('completenessScore: $completenessScore, ')
+          ..write('confidenceScore: $confidenceScore, ')
+          ..write('missingConceptsJson: $missingConceptsJson, ')
+          ..write('hallucinationsJson: $hallucinationsJson, ')
+          ..write('feedback: $feedback, ')
+          ..write('masteryScore: $masteryScore, ')
+          ..write('completedAt: $completedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -2560,6 +3395,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $ReminderPreferenceTable reminderPreference = $ReminderPreferenceTable(this);
   late final $NotificationLogTable notificationLog = $NotificationLogTable(this);
   late final $AiCacheLocalTable aiCacheLocal = $AiCacheLocalTable(this);
+  late final $TeachingSessionsTable teachingSessions = $TeachingSessionsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2571,6 +3407,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     reminderPreference,
     notificationLog,
     aiCacheLocal,
+    teachingSessions,
   ];
 }
 
@@ -3784,6 +4621,361 @@ typedef $$AiCacheLocalTableProcessedTableManager =
       AiCacheLocalData,
       PrefetchHooks Function()
     >;
+typedef $$TeachingSessionsTableCreateCompanionBuilder =
+    TeachingSessionsCompanion Function({
+      required String id,
+      required String userId,
+      required String topicId,
+      required String topicTitle,
+      required String mode,
+      required String explanationText,
+      required int accuracyScore,
+      required int clinicalReasoningScore,
+      required int completenessScore,
+      required int confidenceScore,
+      Value<String> missingConceptsJson,
+      Value<String> hallucinationsJson,
+      required String feedback,
+      required int masteryScore,
+      required DateTime completedAt,
+      Value<int> rowid,
+    });
+typedef $$TeachingSessionsTableUpdateCompanionBuilder =
+    TeachingSessionsCompanion Function({
+      Value<String> id,
+      Value<String> userId,
+      Value<String> topicId,
+      Value<String> topicTitle,
+      Value<String> mode,
+      Value<String> explanationText,
+      Value<int> accuracyScore,
+      Value<int> clinicalReasoningScore,
+      Value<int> completenessScore,
+      Value<int> confidenceScore,
+      Value<String> missingConceptsJson,
+      Value<String> hallucinationsJson,
+      Value<String> feedback,
+      Value<int> masteryScore,
+      Value<DateTime> completedAt,
+      Value<int> rowid,
+    });
+
+class $$TeachingSessionsTableFilterComposer
+    extends Composer<_$AppDatabase, $TeachingSessionsTable> {
+  $$TeachingSessionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get topicId =>
+      $composableBuilder(column: $table.topicId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get topicTitle =>
+      $composableBuilder(column: $table.topicTitle, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get mode =>
+      $composableBuilder(column: $table.mode, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get explanationText => $composableBuilder(
+    column: $table.explanationText,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get accuracyScore =>
+      $composableBuilder(column: $table.accuracyScore, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get clinicalReasoningScore => $composableBuilder(
+    column: $table.clinicalReasoningScore,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get completenessScore => $composableBuilder(
+    column: $table.completenessScore,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get confidenceScore => $composableBuilder(
+    column: $table.confidenceScore,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get missingConceptsJson => $composableBuilder(
+    column: $table.missingConceptsJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get hallucinationsJson => $composableBuilder(
+    column: $table.hallucinationsJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get feedback =>
+      $composableBuilder(column: $table.feedback, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get masteryScore =>
+      $composableBuilder(column: $table.masteryScore, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get completedAt =>
+      $composableBuilder(column: $table.completedAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$TeachingSessionsTableOrderingComposer
+    extends Composer<_$AppDatabase, $TeachingSessionsTable> {
+  $$TeachingSessionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get topicId =>
+      $composableBuilder(column: $table.topicId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get topicTitle =>
+      $composableBuilder(column: $table.topicTitle, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get mode =>
+      $composableBuilder(column: $table.mode, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get explanationText => $composableBuilder(
+    column: $table.explanationText,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get accuracyScore => $composableBuilder(
+    column: $table.accuracyScore,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get clinicalReasoningScore => $composableBuilder(
+    column: $table.clinicalReasoningScore,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get completenessScore => $composableBuilder(
+    column: $table.completenessScore,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get confidenceScore => $composableBuilder(
+    column: $table.confidenceScore,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get missingConceptsJson => $composableBuilder(
+    column: $table.missingConceptsJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get hallucinationsJson => $composableBuilder(
+    column: $table.hallucinationsJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get feedback =>
+      $composableBuilder(column: $table.feedback, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get masteryScore =>
+      $composableBuilder(column: $table.masteryScore, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get completedAt =>
+      $composableBuilder(column: $table.completedAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$TeachingSessionsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $TeachingSessionsTable> {
+  $$TeachingSessionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => column);
+
+  GeneratedColumn<String> get topicId =>
+      $composableBuilder(column: $table.topicId, builder: (column) => column);
+
+  GeneratedColumn<String> get topicTitle =>
+      $composableBuilder(column: $table.topicTitle, builder: (column) => column);
+
+  GeneratedColumn<String> get mode =>
+      $composableBuilder(column: $table.mode, builder: (column) => column);
+
+  GeneratedColumn<String> get explanationText =>
+      $composableBuilder(column: $table.explanationText, builder: (column) => column);
+
+  GeneratedColumn<int> get accuracyScore =>
+      $composableBuilder(column: $table.accuracyScore, builder: (column) => column);
+
+  GeneratedColumn<int> get clinicalReasoningScore =>
+      $composableBuilder(column: $table.clinicalReasoningScore, builder: (column) => column);
+
+  GeneratedColumn<int> get completenessScore =>
+      $composableBuilder(column: $table.completenessScore, builder: (column) => column);
+
+  GeneratedColumn<int> get confidenceScore =>
+      $composableBuilder(column: $table.confidenceScore, builder: (column) => column);
+
+  GeneratedColumn<String> get missingConceptsJson =>
+      $composableBuilder(column: $table.missingConceptsJson, builder: (column) => column);
+
+  GeneratedColumn<String> get hallucinationsJson =>
+      $composableBuilder(column: $table.hallucinationsJson, builder: (column) => column);
+
+  GeneratedColumn<String> get feedback =>
+      $composableBuilder(column: $table.feedback, builder: (column) => column);
+
+  GeneratedColumn<int> get masteryScore =>
+      $composableBuilder(column: $table.masteryScore, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get completedAt =>
+      $composableBuilder(column: $table.completedAt, builder: (column) => column);
+}
+
+class $$TeachingSessionsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $TeachingSessionsTable,
+          TeachingSessionRow,
+          $$TeachingSessionsTableFilterComposer,
+          $$TeachingSessionsTableOrderingComposer,
+          $$TeachingSessionsTableAnnotationComposer,
+          $$TeachingSessionsTableCreateCompanionBuilder,
+          $$TeachingSessionsTableUpdateCompanionBuilder,
+          (
+            TeachingSessionRow,
+            BaseReferences<_$AppDatabase, $TeachingSessionsTable, TeachingSessionRow>,
+          ),
+          TeachingSessionRow,
+          PrefetchHooks Function()
+        > {
+  $$TeachingSessionsTableTableManager(_$AppDatabase db, $TeachingSessionsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$TeachingSessionsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$TeachingSessionsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$TeachingSessionsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> userId = const Value.absent(),
+                Value<String> topicId = const Value.absent(),
+                Value<String> topicTitle = const Value.absent(),
+                Value<String> mode = const Value.absent(),
+                Value<String> explanationText = const Value.absent(),
+                Value<int> accuracyScore = const Value.absent(),
+                Value<int> clinicalReasoningScore = const Value.absent(),
+                Value<int> completenessScore = const Value.absent(),
+                Value<int> confidenceScore = const Value.absent(),
+                Value<String> missingConceptsJson = const Value.absent(),
+                Value<String> hallucinationsJson = const Value.absent(),
+                Value<String> feedback = const Value.absent(),
+                Value<int> masteryScore = const Value.absent(),
+                Value<DateTime> completedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => TeachingSessionsCompanion(
+                id: id,
+                userId: userId,
+                topicId: topicId,
+                topicTitle: topicTitle,
+                mode: mode,
+                explanationText: explanationText,
+                accuracyScore: accuracyScore,
+                clinicalReasoningScore: clinicalReasoningScore,
+                completenessScore: completenessScore,
+                confidenceScore: confidenceScore,
+                missingConceptsJson: missingConceptsJson,
+                hallucinationsJson: hallucinationsJson,
+                feedback: feedback,
+                masteryScore: masteryScore,
+                completedAt: completedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String userId,
+                required String topicId,
+                required String topicTitle,
+                required String mode,
+                required String explanationText,
+                required int accuracyScore,
+                required int clinicalReasoningScore,
+                required int completenessScore,
+                required int confidenceScore,
+                Value<String> missingConceptsJson = const Value.absent(),
+                Value<String> hallucinationsJson = const Value.absent(),
+                required String feedback,
+                required int masteryScore,
+                required DateTime completedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => TeachingSessionsCompanion.insert(
+                id: id,
+                userId: userId,
+                topicId: topicId,
+                topicTitle: topicTitle,
+                mode: mode,
+                explanationText: explanationText,
+                accuracyScore: accuracyScore,
+                clinicalReasoningScore: clinicalReasoningScore,
+                completenessScore: completenessScore,
+                confidenceScore: confidenceScore,
+                missingConceptsJson: missingConceptsJson,
+                hallucinationsJson: hallucinationsJson,
+                feedback: feedback,
+                masteryScore: masteryScore,
+                completedAt: completedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) =>
+              p0.map((e) => (e.readTable(table), BaseReferences(db, table, e))).toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$TeachingSessionsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $TeachingSessionsTable,
+      TeachingSessionRow,
+      $$TeachingSessionsTableFilterComposer,
+      $$TeachingSessionsTableOrderingComposer,
+      $$TeachingSessionsTableAnnotationComposer,
+      $$TeachingSessionsTableCreateCompanionBuilder,
+      $$TeachingSessionsTableUpdateCompanionBuilder,
+      (
+        TeachingSessionRow,
+        BaseReferences<_$AppDatabase, $TeachingSessionsTable, TeachingSessionRow>,
+      ),
+      TeachingSessionRow,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -3798,4 +4990,6 @@ class $AppDatabaseManager {
       $$NotificationLogTableTableManager(_db, _db.notificationLog);
   $$AiCacheLocalTableTableManager get aiCacheLocal =>
       $$AiCacheLocalTableTableManager(_db, _db.aiCacheLocal);
+  $$TeachingSessionsTableTableManager get teachingSessions =>
+      $$TeachingSessionsTableTableManager(_db, _db.teachingSessions);
 }

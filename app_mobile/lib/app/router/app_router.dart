@@ -11,6 +11,7 @@ import '../../features/auth_onboarding/presentation/viewmodels/auth_view_model.d
 import '../../features/challenge_mode/presentation/screens/challenge_bookmarks_screen.dart';
 import '../../features/challenge_mode/presentation/screens/challenge_home_screen.dart';
 import '../../features/challenge_mode/presentation/screens/challenge_statistics_screen.dart';
+import '../../features/teaching_mode/presentation/screens/teaching_route_screen.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/app_shell.dart';
 import '../../shared/widgets/placeholder_screen.dart';
@@ -38,6 +39,7 @@ abstract final class AppRoute {
   static const subscription = 'subscription';
   static const mcqs = 'mcqs';
   static const flashcards = 'flashcards';
+  static const teachTopic = 'teach-topic'; // Teaching Mode's real, topic-scoped flow
 }
 
 /// Locations reachable without a fully authenticated session — Splash
@@ -193,6 +195,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/topic/:topicId/mcqs',
         name: AppRoute.mcqs,
         builder: (context, state) => const PlaceholderScreen(screenName: 'MCQs'),
+      ),
+      // Med100's signature feature — teach the topic back, by voice or
+      // in writing, and get an AI-evaluated Mastery Score. Reached from
+      // AI Mastery Mode's AppBar action once a topic has been studied.
+      GoRoute(
+        path: '/topic/:topicId/teach',
+        name: AppRoute.teachTopic,
+        builder: (context, state) => TeachingRouteScreen(topicId: state.pathParameters['topicId']!),
       ),
       GoRoute(
         path: '/flashcards',

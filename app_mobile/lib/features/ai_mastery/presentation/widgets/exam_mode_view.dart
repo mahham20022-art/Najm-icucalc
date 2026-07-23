@@ -3,10 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_spacing.dart';
+import '../../../../shared/widgets/async_value_section.dart';
 import '../../../daily_topic/domain/entities/topic.dart';
 import '../../domain/entities/exam_session.dart';
 import '../viewmodels/exam_view_model.dart';
-import 'mastery_async_section.dart';
 
 /// A timed-feeling, sequential test flow over the same generated
 /// question bank the MCQs section practices with — one question at a
@@ -24,8 +24,8 @@ class ExamModeView extends ConsumerWidget {
 
     return switch (state) {
       ExamNotStarted() => _StartCard(onStart: viewModel.start),
-      ExamLoading() => const MasteryThinkingIndicator(),
-      ExamLoadFailed(:final failure) => MasteryErrorView(
+      ExamLoading() => const ThinkingIndicator(),
+      ExamLoadFailed(:final failure) => InlineErrorView(
         message: failure.message,
         onRetry: viewModel.start,
       ),

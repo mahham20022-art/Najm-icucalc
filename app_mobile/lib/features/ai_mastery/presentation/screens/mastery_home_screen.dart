@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../app/router/app_router.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_spacing.dart';
+import '../../../../shared/widgets/async_value_section.dart';
 import '../../../daily_topic/domain/entities/topic.dart';
 import '../../domain/entities/mastery_section_type.dart';
 import '../viewmodels/mastery_content_providers.dart';
@@ -11,7 +14,6 @@ import '../widgets/comparison_table_view.dart';
 import '../widgets/consultant_chat_view.dart';
 import '../widgets/exam_mode_view.dart';
 import '../widgets/flashcard_stack_view.dart';
-import '../widgets/mastery_async_section.dart';
 import '../widgets/mcq_practice_list.dart';
 import '../widgets/prose_section_view.dart';
 import '../widgets/references_view.dart';
@@ -55,7 +57,20 @@ class _MasteryHomeScreenState extends State<MasteryHomeScreen> {
     final colors = AppColors.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text(widget.topic.title, maxLines: 1, overflow: TextOverflow.ellipsis)),
+      appBar: AppBar(
+        title: Text(widget.topic.title, maxLines: 1, overflow: TextOverflow.ellipsis),
+        actions: [
+          // The "after finishing every topic" entry point into Teaching
+          // Mode — Med100's signature feature — reachable from wherever
+          // a topic is actually being studied.
+          IconButton(
+            icon: const Icon(Icons.record_voice_over_outlined),
+            tooltip: 'Teach It Back',
+            onPressed: () =>
+                context.goNamed(AppRoute.teachTopic, pathParameters: {'topicId': widget.topic.id}),
+          ),
+        ],
+      ),
       body: Column(
         children: [
           Container(
@@ -111,7 +126,7 @@ class _SectionBody extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     if (_proseSections.contains(section)) {
       final key = (topic: topic, section: section);
-      return MasteryAsyncSection(
+      return AsyncValueSection(
         value: ref.watch(proseSectionProvider(key)),
         onRetry: () => ref.invalidate(proseSectionProvider(key)),
         builder: (context, content) => ProseSectionView(content: content),
@@ -119,27 +134,27 @@ class _SectionBody extends ConsumerWidget {
     }
 
     return switch (section) {
-      MasterySectionType.comparisonTables => MasteryAsyncSection(
+      MasterySectionType.comparisonTables => AsyncValueSection(
         value: ref.watch(comparisonTableProvider(topic)),
         onRetry: () => ref.invalidate(comparisonTableProvider(topic)),
         builder: (context, table) => ComparisonTableView(table: table),
       ),
-      MasterySectionType.algorithms => MasteryAsyncSection(
+      MasterySectionType.algorithms => AsyncValueSection(
         value: ref.watch(algorithmProvider(topic)),
         onRetry: () => ref.invalidate(algorithmProvider(topic)),
         builder: (context, algorithm) => AlgorithmView(algorithm: algorithm),
       ),
-      MasterySectionType.mcqs => MasteryAsyncSection(
+      MasterySectionType.mcqs => AsyncValueSection(
         value: ref.watch(mcqsProvider(topic)),
         onRetry: () => ref.invalidate(mcqsProvider(topic)),
         builder: (context, mcqs) => McqPracticeList(mcqs: mcqs),
       ),
-      MasterySectionType.flashcards => MasteryAsyncSection(
+      MasterySectionType.flashcards => AsyncValueSection(
         value: ref.watch(flashcardsProvider(topic)),
         onRetry: () => ref.invalidate(flashcardsProvider(topic)),
         builder: (context, cards) => FlashcardStackView(cards: cards),
       ),
-      MasterySectionType.references => MasteryAsyncSection(
+      MasterySectionType.references => AsyncValueSection(
         value: ref.watch(referencesProvider(topic)),
         onRetry: () => ref.invalidate(referencesProvider(topic)),
         builder: (context, references) => ReferencesView(references: references),
