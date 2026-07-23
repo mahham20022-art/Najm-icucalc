@@ -58,7 +58,7 @@ The identity and profile anchor for every other entity.
 | `createdAt` / `lastActiveAt` | timestamp | |
 | `schemaVersion` | int | |
 
-Subcollections (each detailed in its own section): `progress`, `streaks`, `mastery`, `sreSchedule`, `flashcardSchedule`, `bookmarks`, `quizAttempts`, `notificationTokens`, `settings`, `statistics`, `unlockedAchievements`.
+Subcollections (each detailed in its own section): `progress`, `streaks`, `mastery`, `flashcardSchedule`, `pathEnrollments`, `bookmarks`, `quizAttempts`, `notificationTokens`, `notificationLog`, `settings`, `statistics`, `unlockedAchievements`, `syncMeta`. (No separate `sreSchedule` subcollection exists — the architecture doc's illustrative sketch used that name for topic-level review scheduling, but this document's §8 supersedes it with per-flashcard scheduling via `flashcardSchedule`, which is the actual granularity spaced repetition operates at.)
 
 **Write owner:** client writes its own profile fields (`displayName`, `locale`, `notificationTime`); `role` and `institutionId` are server-only (set via a Cloud Function during institutional enrollment or admin action).
 

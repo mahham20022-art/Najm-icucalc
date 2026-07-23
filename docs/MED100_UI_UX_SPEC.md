@@ -2,7 +2,7 @@
 
 **Based on:** `MED100_PRD.md`, `MED100_ARCHITECTURE.md`, `MED100_DATABASE_DESIGN.md`
 **Author:** Apple Senior UI/UX Design Team (design specification role)
-**Status:** Draft v1.0 — specification only, no implementation code
+**Status:** Draft v1.1 — revised after cross-document audit; token definitions below are superseded in detail by `MED100_DESIGN_SYSTEM.md`, kept here in summary form only
 **Last updated:** 2026-07-23
 
 This document specifies every screen and state in the Med100 experience at Apple Human Interface Guidelines quality: purpose, layout, every component with its states, and behavior. It is platform-agnostic in spirit (the actual client is Flutter, per `MED100_ARCHITECTURE.md`) but held to iOS-native conventions — Dynamic-Type-equivalent scaling, semantic color tokens, restrained motion, tab-bar/nav-bar patterns — as the quality bar, implemented as custom Flutter widgets rather than literal UIKit.
@@ -15,7 +15,7 @@ Every screen below references these system-level decisions rather than restating
 
 **Typography.** A single type family rendered through the platform's native font stack (SF Pro on iOS, matching system font elsewhere), on a modular scale: Display (32/40), Title 1 (28/34), Title 2 (22/28), Title 3 (20/25), Headline (17/22, semibold), Body (17/22, regular), Callout (16/21), Subheadline (15/20), Footnote (13/18), Caption (12/16). All sizes scale with the user's OS text-size setting (Dynamic-Type-equivalent) up to accessibility XL sizes without truncating — no fixed-height text containers anywhere in the spec.
 
-**Color system.** Semantic tokens, not literal colors, so Light and Dark Mode (Section 20) are two value-sets behind the same names: `background/primary`, `background/secondary`, `surface/elevated`, `label/primary`, `label/secondary`, `label/tertiary`, `accent` (Med100 clinical-trust blue), `success` (mastery/correct), `warning` (due-for-review/streak-risk), `danger` (incorrect/destructive). Every component below is described in terms of these tokens.
+**Color system.** Semantic tokens, not literal colors, so Light and Dark Mode (Section 20) are two value-sets behind the same names: `background/primary`, `background/secondary`, `surface/elevated`, `label/primary`, `label/secondary`, `label/tertiary`, `accent` (Med100 clinical-trust blue — split into `accent/fill` and `accent/foreground` sub-tokens, see `MED100_DESIGN_SYSTEM.md` §1.3), `success` (mastery/correct), `warning` (due-for-review/streak-risk), `danger` (incorrect/destructive). Every component below is described in terms of these tokens; exact hex values, contrast verification, and the full token set live in `MED100_DESIGN_SYSTEM.md`, not here.
 
 **Spacing.** 8pt base grid (4pt for icon-to-label micro-gaps, 16/24/32pt for section rhythm).
 
@@ -293,7 +293,7 @@ Not an inverted light theme — a deliberately designed second value-set behind 
 
 - **Backgrounds** are true near-black (OLED-friendly), not dark grey.
 - **Elevated surfaces** (cards, sheets) use a lighter charcoal fill plus a 1px hairline border instead of a drop shadow — shadows read poorly against a near-black base, so elevation is communicated by fill lightness and the hairline, not by simulated light direction.
-- **Accent blue** shifts slightly brighter and more saturated in Dark Mode than its Light Mode value — a direct reuse of the light-theme blue would look muddy against near-black and fail contrast requirements.
+- **Accent blue** — the *foreground* use (text, links, active icons sitting on the background) shifts slightly brighter and more saturated in Dark Mode; a direct reuse of the light-theme value would look muddy against near-black and fail contrast requirements. The *fill* use (button/control backgrounds under a white label) deliberately does **not** shift — a brighter fill would itself fail contrast against a white label. These are two distinct tokens, not one value used two ways; see `MED100_DESIGN_SYSTEM.md` §1.3 for the verified contrast reasoning.
 - **Semantic status colors** (success/warning/danger) get slightly desaturated Dark Mode variants to avoid visually "vibrating" against the dark background.
 - **Imagery** — line-art icons are single-color and tint automatically with the active theme (no dual assets needed); illustrations with a light background ship as a separate dark-optimized variant where one is needed.
 - Defaults to following the system setting; an explicit override lives in Settings → Appearance (Section 11).

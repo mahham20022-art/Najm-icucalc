@@ -147,13 +147,13 @@ Med100 Certification (recognized micro-credentials), live case discussions with 
 2. **Onboarding** — Downloads app → selects role (student/resident/attending/nurse) → selects specialty track(s) → selects exam goal (optional) → sets daily notification time.
 3. **First Topic (Aha moment)** — Receives push notification at chosen time → opens 4-minute topic → answers quiz → sees "Day 1 streak started" + Mastery % appear.
 4. **Habit Formation (Day 2–14)** — Daily notification becomes routine; spaced-repetition flashbacks reintroduce Day 1–3 content; streak counter builds emotional investment.
-5. **Value Realization (Week 3–4)** — User notices real clinical recall improvement (e.g., recalls a dosing fact at bedside); free-tier paywall hit (e.g., 2nd specialty track locked) prompts upgrade consideration.
+5. **Value Realization (Week 3–4)** — User notices real clinical recall improvement (e.g., recalls a dosing fact at bedside); hits the soft paywall on a specific premium-flagged topic (per-topic entitlement, not a locked 2nd track — see Section 7) and considers upgrading.
 6. **Conversion** — User upgrades to Premium during a moment of high motivation (e.g., 30 days before board exam, or after a near-miss clinical moment where they wished they'd known something).
 7. **Retention & Advocacy** — User maintains 100+ day streak, shares Mastery % milestone on social/LinkedIn, invites colleagues/co-residents (referral loop), institution notices adoption and inquires about B2B license.
 
 ## 11. Success Metrics
 
-*Instrumentation note: every metric below requires a corresponding analytics event defined before launch, not retrofitted after — e.g., retention/DAU needs a session-open event, quiz-accuracy trends need per-attempt events keyed to topic/track. `MED100_DATABASE_DESIGN.md`'s `quizAttempts`/`flashcardSchedule` append-only logs (§5, §8) are the source these metrics are computed from, feeding the BigQuery export in `MED100_ARCHITECTURE.md` §7.4 — this doc defines what to measure, the referenced schema defines how it's captured.*
+*Instrumentation note: every metric below requires a corresponding analytics event defined before launch, not retrofitted after — e.g., retention/DAU needs a session-open event, quiz-accuracy trends need per-attempt events keyed to topic/track. `MED100_DATABASE_DESIGN.md`'s `quizAttempts`/`flashcardSchedule` append-only logs (§5, §8) are the source these metrics are computed from, feeding the BigQuery export in `MED100_ARCHITECTURE.md` §7.5 — this doc defines what to measure, the referenced schema defines how it's captured.*
 
 **Engagement (Habit Health)**
 - D1 / D7 / D30 retention (target: D30 ≥ 35% as a hypothesis to validate against pilot data — consumer-habit-app benchmarks like Duolingo don't necessarily transfer to a professional-audience product, so this is a starting target, not a committed number)

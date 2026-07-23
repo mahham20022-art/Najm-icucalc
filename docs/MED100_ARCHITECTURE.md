@@ -1,8 +1,8 @@
 # Med100 — Software Architecture Document
 
-**Based on:** Med100 PRD v1.0 (`docs/MED100_PRD.md`)
+**Based on:** Med100 PRD v1.1 (`docs/MED100_PRD.md`)
 **Author:** Principal Software Architect
-**Status:** Draft v1.0 — architecture documentation only, no implementation
+**Status:** Draft v1.1 — revised after review and cross-document audit passes
 **Last updated:** 2026-07-23
 
 ---
@@ -22,7 +22,7 @@ Everything else below assumes the MVP scope from the PRD: 2 specialty tracks, iO
 
 ### 1.1 Guiding style
 
-**Modular monolith on a BaaS foundation, client-side Clean Architecture.** The backend is organized as domain-bounded modules within one Firebase project (not yet split into microservices), because the team is small, the MVP surface is narrow, and premature service-splitting would tax velocity without a proven bottleneck. Each backend module (Content, Learning/Progress, Identity, Notifications, Billing, AI, Institutional) is written with a clear internal boundary so any one of them can be extracted into an independently-deployed service later (see Section 12) once real load data justifies it.
+**Modular monolith on a BaaS foundation, client-side Clean Architecture.** The backend is organized as domain-bounded modules within one Firebase project (not yet split into microservices), because the team is small, the MVP surface is narrow, and premature service-splitting would tax velocity without a proven bottleneck. Each backend module (Content, Learning/Progress, Identity, Notifications, Billing, AI, Institutional) is written with a clear internal boundary so any one of them can be extracted into an independently-deployed service later (see Section 13) once real load data justifies it.
 
 ### 1.2 System components
 
@@ -97,7 +97,7 @@ flowchart TB
 | Firebase Auth | Identity, session management, custom claims for role-based access |
 | Firestore | Operational database: per-user progress/state, editorial drafts, institutional cohort metadata |
 | Cloud Functions | All server-side business logic, organized by domain module; sole writer of shared/derived state |
-| CDN (Hosting) | Serves published, versioned topic content and media as cache-friendly static payloads — deliberately kept out of Firestore's read path (see Section 12) |
+| CDN (Hosting) | Serves published, versioned topic content and media as cache-friendly static payloads — deliberately kept out of Firestore's read path (see Section 13) |
 | Cloud Messaging | Daily topic push notifications, timezone-bucketed |
 | AI Layer (Cloud Run) | Content-assist drafting and adaptive scheduling, both async and human-gated |
 | BigQuery | All heavy analytics/reporting, isolated from production Firestore |
@@ -274,8 +274,8 @@ users/{userId}
     { currentStreak, longestStreak, lastActiveDate }
   users/{userId}/mastery/{specialtyId}              # SERVER-COMPUTED, client read-only
     { masteryPercent, computedAt }
-  users/{userId}/sreSchedule/{topicId}
-    { nextReviewDate, intervalDays, easeFactor }
+  users/{userId}/flashcardSchedule/{flashcardId}    # per-card SM-2 state — see MED100_DATABASE_DESIGN.md §8;
+    { nextReviewDate, intervalDays, easeFactor }     # spaced repetition operates at flashcard granularity, not topic granularity
 
 topics/{topicId}                    # top-level, not nested under a track — a topic can belong to multiple learning paths
   { title, version, isFree, bodyRef, publishedAt, examMappings[] }
@@ -305,7 +305,7 @@ Design principle: **denormalize for reads, centralize writes in Cloud Functions.
 
 - `content`: draft→review→publish state machine, version stamping, CDN payload generation on publish.
 - `learning`: quiz submission validation, mastery recompute, SRE interval update (SM-2-style algorithm, MVP = fixed rule, Phase 2+ = calls `ai_bridge`).
-- `notifications`: Cloud Scheduler–triggered, timezone-bucketed daily fan-out via Pub/Sub + Cloud Tasks (not a single loop — see Section 12).
+- `notifications`: Cloud Scheduler–triggered, timezone-bucketed daily fan-out via Pub/Sub + Cloud Tasks (not a single loop — see Section 13).
 - `billing`: RevenueCat/Stripe webhook receiver, writes to `subscriptions/{userId}`.
 - `institutional` (Phase 3): cohort compliance aggregation, scheduled nightly.
 - `ai_bridge`: thin async trigger forwarding to the Cloud Run AI services; never called synchronously from the client.
@@ -337,8 +337,8 @@ Local schema (mirrors a subset of Firestore, plus device-only tables):
 |---|---|
 | `cached_topics` | Downloaded topic content (current + prior 7 days by default; full track if downloaded-ahead) |
 | `quiz_attempts_log` | Append-only, local source of truth until synced |
-| `sre_schedule` | `topicId, nextReviewDate, intervalDays, easeFactor` — SM-2-like state |
-| `streaks_cache` | Per-track streak snapshot for instant offline render |
+| `flashcard_schedule` | `flashcardId, nextReviewDate, intervalDays, easeFactor` — SM-2-like state, per-card granularity (`MED100_DATABASE_DESIGN.md` §8) |
+| `streaks_cache` | Read-only cache of the server-computed streak projection, plus a locally-computed optimistic preview for instant offline render (`MED100_DATABASE_DESIGN.md` §6) |
 | `outbox` | Pending mutations (quiz submissions, streak updates) awaiting sync, with client-generated UUID + retry count |
 
 The local DB is the **only** thing the presentation layer reads from directly (via repository); Firestore is a sync target, never a direct read dependency of the UI.
@@ -352,7 +352,8 @@ The local DB is the **only** thing the presentation layer reads from directly (v
 - **Read path:** Repository serves from Drift instantly. A background sync listener (Firestore snapshot listener when online) upserts remote changes into Drift; the UI is driven by a Drift stream, so it updates reactively whether the write came from local action or remote sync — the UI never needs to know which source produced the update.
 - **Write path:** Every mutation writes to the local `outbox` table synchronously (optimistic UI update), then a background sync worker drains the outbox to Cloud Functions when connectivity returns, with exponential backoff.
 - **Conflict resolution:**
-  - Scalar fields (streak count, mastery %) — **last-write-wins by server timestamp**, since conflicts here are rare and low-stakes.
+  - Derived state (streak count, mastery %) — **not a sync-conflict case at all.** These are never written by the client and never merged client-side; per §7.2, they're server-computed projections off the immutable attempt log, so there is no "last write" to resolve between devices in the first place. An earlier draft of this section described them as client-synced scalars using last-write-wins, which is exactly the flaw §7.2 fixes — that description is superseded, not a parallel valid path.
+  - Purely client-owned scalar fields (e.g., Settings preferences) — last-write-wins by server timestamp is appropriate here, since there's no derived value to protect and conflicts are rare and low-stakes.
   - Append-only logs (quiz attempts) — **never overwritten**, merged by client-generated UUID + timestamp, so a user on two devices doesn't lose an attempt either side recorded.
   - Content — **immutable-once-published**; sync is pure cache invalidation via a `version` field comparison, not a merge.
 - **Idempotency:** every outbox mutation carries a client-generated UUID; Cloud Functions dedupe on that ID, so retry-after-timeout (common on ward Wi-Fi) never double-counts a quiz attempt or double-increments a streak.
@@ -371,8 +372,8 @@ Deliberately isolated from the user-facing request path — both AI subsystems a
 
 ### 10.2 Adaptive Scheduling Engine (Phase 3+)
 
-- Consumes anonymized quiz-performance events from BigQuery to recompute personalized SRE intervals (replacing the MVP's fixed-interval schedule) and topic-ordering hints.
-- Runs as a scheduled batch job, writing results back to `users/{userId}/sreSchedule/*` — the mobile client stays "dumb," simply reading whatever schedule is there; no on-device ML runtime is required for MVP or this phase.
+- Consumes anonymized quiz-performance events from BigQuery to recompute personalized spaced-repetition intervals (replacing the MVP's fixed-interval schedule) and topic-ordering hints.
+- Runs as a scheduled batch job, writing results back to `users/{userId}/flashcardSchedule/*` (per-card granularity, per `MED100_DATABASE_DESIGN.md` §8) — the mobile client stays "dumb," simply reading whatever schedule is there; no on-device ML runtime is required for MVP or this phase.
 
 ### 10.3 Vendor abstraction
 
@@ -401,7 +402,7 @@ Both subsystems sit behind an internal interface (`ContentGenerationPort`, `Sche
 - **Payments:** PCI scope fully delegated to RevenueCat/Stripe; Med100 backend only ever consumes signed webhook events, never raw card data.
 - **Abuse/rate limiting:** Function-level throttling plus Firestore rules capping write frequency (e.g., max quiz submissions/minute) to prevent scripted streak/mastery gaming.
 - **Content protection:** premium media served via signed, short-TTL Cloud Storage URLs (Section 7.2's content-delivery split); free content is intentionally public/CDN-cached and not protected this way, since it isn't meant to be gated.
-- **Compliance:** GDPR-aligned data export/delete via a dedicated Cloud Function, sweeping every subcollection enumerated in `MED100_DATABASE_DESIGN.md` (progress, streaks, mastery, both schedule subcollections, bookmarks, quizAttempts, notification tokens/log, settings, statistics, unlocked achievements, sync meta); data residency/multi-region evaluated per-contract once institutional (Phase 3) customers require it — noting that Firestore's region is fixed at project creation, so this is a project migration if deferred too long, not a later config change, and a deliberate starting region should be chosen now with that cost in mind.
+- **Compliance:** GDPR-aligned data export/delete via a dedicated Cloud Function, sweeping every subcollection enumerated in `MED100_DATABASE_DESIGN.md` (progress, streaks, mastery, path enrollments, both schedule subcollections, bookmarks, quizAttempts, notification tokens/log, settings, statistics, unlocked achievements, sync meta); data residency/multi-region evaluated per-contract once institutional (Phase 3) customers require it — noting that Firestore's region is fixed at project creation, so this is a project migration if deferred too long, not a later config change, and a deliberate starting region should be chosen now with that cost in mind.
 - **Firestore Rules testing & CI (previously unspecified):** every rules change is validated in the Firebase Emulator Suite with a dedicated rules-unit-test file per collection (asserting both the allowed and denied cases from the write-ownership matrix in `MED100_DATABASE_DESIGN.md` §17) before merge; CI blocks deployment on a failing rules test. Because rules are the actual authorization boundary (not a UI nicety), a bad rules deploy is a real security incident, not just a bug — it gets the same test-gate rigor as application code, not less.
 
 ---

@@ -2,7 +2,7 @@
 
 **Based on:** `MED100_PRD.md`, `MED100_ARCHITECTURE.md`, `MED100_DATABASE_DESIGN.md`, `MED100_UI_UX_SPEC.md`
 **Author:** Apple Senior UI/UX Design Team
-**Status:** Draft v2.0 — supersedes v1.0; this is the canonical UI library specification for the application
+**Status:** Draft v2.1 — supersedes v2.0; restores two component specs (ChoiceButton, FlashcardStack) dropped during the v1.0→v2.0 rewrite and only left as dangling index references, and fixes a broken internal cross-reference (§17)
 **Last updated:** 2026-07-23
 
 This document is the single source of truth for every visual and interaction primitive in Med100 — the library the whole app is assembled from, not a per-screen restatement. `MED100_UI_UX_SPEC.md` describes *where* components appear; this document defines *what each component is*, in every state, in both themes. No feature logic or implementation code is included.
@@ -116,6 +116,20 @@ All button variants share the same height/radius/motion scale; only fill and bor
 - **Toggle / Switch** — standard two-state track+thumb; `on` track uses `accent/fill`, `off` track uses `separator`; thumb is always white in both themes for consistent legibility against either track color.
 - **Chip** (specialty selection, filter tags) — `radius/control-sm`, Caption or Callout label, optional leading icon, selected state adds a 1.5pt `accent/foreground` border and tints the fill.
 
+### 5.1 ChoiceButton (specialized — MCQ answer option)
+
+Full-width minus margins · min height 56pt (comfortably exceeds the 44pt tap-target floor even at large Dynamic Type sizes) · corner radius `radius/control-md` · 1.5pt border · label style Body.
+
+| State | Fill | Border | Trailing glyph |
+|---|---|---|---|
+| Neutral (unanswered) | `background/secondary` | `separator`, 1.5pt | none |
+| Selected (pre-submit) | unchanged | `accent/foreground`, 2pt | none |
+| Correct (post-submit) | `success` at 12% tint (full-strength `success` is reserved for the glyph itself, per §17.2) | `success`, 2pt | checkmark, full-strength `success` |
+| Incorrect (post-submit) | `danger` at 12% tint | `danger`, 2pt | X, full-strength `danger` |
+| Offline-pending | `background/secondary` | `separator`, dashed | sync-pending glyph, `label/tertiary` |
+
+The correct choice always renders in its Correct state simultaneously with an Incorrect selection elsewhere in the same question, so the right answer is never left ambiguous. Color is never the only differentiator here — every non-neutral state pairs its tint with a distinct glyph (§17.3), which is also why the Correct/Incorrect tints are capped at 12% rather than full-strength fills: a full-strength `success`/`danger` fill under body-weight choice text would fall below the 4.5:1 floor (§1.2), whereas a 12% tint behind unchanged `label/primary` text keeps the text at its full, unaffected contrast and lets the glyph — not the background — carry the color signal at full strength.
+
 ---
 
 ## 6. Cards
@@ -128,6 +142,16 @@ The generic, domain-agnostic card family — structural, not clinical (see §7 f
 - **Track Shelf Card** — Content Card variant sized for horizontal-scroll shelves, always paired with a small `ProgressRing` (§11) in a fixed corner position across every instance.
 
 **Shared interaction rule:** any tappable card gets the same `motion/micro` press feedback as a button (scale to 0.97) — cards are never visually inert if they're actually tappable, so users can tell tappable and static cards apart before they even tap.
+
+### 6.1 FlashcardStack (specialized)
+
+16:10 aspect ratio at phone widths, capped max-width at tablet widths (`MED100_UI_UX_SPEC.md` §21) · `radius/card` corners · `surface/elevated` fill.
+
+- **Front-face** — centers a Title-2-style prompt with generous internal padding (`space-6`) so short and long prompts both sit optically centered.
+- **Back-face** — reached via tap-anywhere on the card or an explicit "Show Answer" button (the button exists specifically so the flip affordance is discoverable and accessible, not solely a tap-to-guess gesture); flip uses `motion/flip` (400ms spring rotation).
+- **GradingButtonRow** — the four-button Again/Hard/Good/Easy row anchored below the card (not part of the card itself): each button is a Secondary-style button colored along a `danger`→`warning`→`success`→`accent/foreground` gradient (Again through Easy) with a Footnote-style interval preview beneath its label ("Again → tomorrow"). This row, not the swipe gesture below, is the primary and fully accessible grading path.
+- **SwipeGestureLayer** — an optional swipe-to-grade overlay (left = Again, right = Easy) layered on top of the card for power users; purely additive — every action it exposes is also reachable through `GradingButtonRow`, so nothing is swipe-only. Under RTL, the gesture mapping mirrors so the same physical thumb-motion side keeps the same relative "lighter/heavier" grade meaning (§17.5), rather than preserving the literal left/right label.
+- **CardProgressIndicator** — a `StepIndicator` (§11) instance ("Card 3 of 12 due today") positioned above the stack.
 
 ---
 
@@ -238,16 +262,37 @@ Not an inverted Light Theme — a separately tuned value set behind the same tok
 
 ## 17. Accessibility Rules
 
-1. **Tap targets** — every interactive element, regardless of visual size or text scale, maintains a minimum 44×44pt hit area.
-2. **Contrast** — verified per §1.2; `label/tertiary` and any fill/glyph pair measuring below 4.5:1 is restricted to bold/large text or icon-only use, never small regular-weight text (the `danger`/`success` fill rule from §1.2 is the concrete case of this rule, not an exception to it).
-3. **Color is never the sole differentiator.** Every status distinction pairs color with a shape or icon: MCQ correct/incorrect always carries a checkmark/X glyph alongside the tint (§5's ChoiceButton spec), track badges use color plus a text label, sync-pending state uses a distinct glyph plus a dashed border, not tint alone.
-4. **Dynamic Type** — every component supports scaling to AX5 (3.12×, §2) without clipping or truncation; no fixed-height text container exists anywhere in the library.
-5. **RTL (Arabic)** — full mirroring: text alignment, back-chevron direction, linear progress-bar fill direction, and horizontal motion (page swipes, back-navigation slides) all flip under RTL layout; flashcard swipe-to-grade gesture mapping flips correspondingly so "the safer/lighter grade" stays on the same physical thumb-motion side rather than the same literal left/right label.
-6. **Reduce Motion** — governed globally at the motion-token layer (§18), not per-component, so no screen can accidentally omit it.
-7. **Reduce Transparency** — any translucent surface (the soft-paywall blur overlay on a premium topic, `MED100_UI_UX_SPEC.md` §5) has a fully opaque fallback treatment when this OS setting is enabled, rather than a degraded blur.
-8. **Screen reader semantics** — every interactive element carries a label, hint, and role; decorative illustrations are explicitly marked non-accessible rather than read aloud as unlabeled images; a Card's constituent parts (title, badge, progress ring) are grouped as one semantic stop so VoiceOver/TalkBack reads it as one coherent unit, not five fragmented ones.
-9. **Live regions** — content that updates without user navigation (a streak count changing on sync, a sync-status indicator resolving) is exposed as an accessible live region so the change is announced, not only visually implied.
-10. **Keyboard/focus order** — on web and tablet with a hardware keyboard, focus order follows logical reading order (top-to-bottom, leading-to-trailing, mirrored under RTL) with a visible focus ring on every focusable element.
+*(Numbered as addressable subsections — 17.1, 17.2, etc. — specifically so other sections of this document can cite a single rule precisely, rather than pointing at "§17" as an undifferentiated block.)*
+
+### 17.1 Tap targets
+Every interactive element, regardless of visual size or text scale, maintains a minimum 44×44pt hit area.
+
+### 17.2 Contrast
+Verified per §1.2; `label/tertiary` and any fill/glyph pair measuring below 4.5:1 is restricted to bold/large text or icon-only use, never small regular-weight text (the `danger`/`success` fill rule from §1.2 is the concrete case of this rule, not an exception to it).
+
+### 17.3 Color is never the sole differentiator
+Every status distinction pairs color with a shape or icon: MCQ correct/incorrect always carries a checkmark/X glyph alongside the tint (§5.1's ChoiceButton spec), track badges use color plus a text label, sync-pending state uses a distinct glyph plus a dashed border, not tint alone.
+
+### 17.4 Dynamic Type
+Every component supports scaling to AX5 (3.12×, §2) without clipping or truncation; no fixed-height text container exists anywhere in the library.
+
+### 17.5 RTL (Arabic)
+Full mirroring: text alignment, back-chevron direction, linear progress-bar fill direction, and horizontal motion (page swipes, back-navigation slides) all flip under RTL layout; the FlashcardStack's swipe-to-grade gesture mapping (§6.1) flips correspondingly so "the safer/lighter grade" stays on the same physical thumb-motion side rather than the same literal left/right label.
+
+### 17.6 Reduce Motion
+Governed globally at the motion-token layer (§18), not per-component, so no screen can accidentally omit it.
+
+### 17.7 Reduce Transparency
+Any translucent surface (the soft-paywall blur overlay on a premium topic, `MED100_UI_UX_SPEC.md` §5) has a fully opaque fallback treatment when this OS setting is enabled, rather than a degraded blur.
+
+### 17.8 Screen reader semantics
+Every interactive element carries a label, hint, and role; decorative illustrations are explicitly marked non-accessible rather than read aloud as unlabeled images; a Card's constituent parts (title, badge, progress ring) are grouped as one semantic stop so VoiceOver/TalkBack reads it as one coherent unit, not five fragmented ones.
+
+### 17.9 Live regions
+Content that updates without user navigation (a streak count changing on sync, a sync-status indicator resolving) is exposed as an accessible live region so the change is announced, not only visually implied.
+
+### 17.10 Keyboard/focus order
+On web and tablet with a hardware keyboard, focus order follows logical reading order (top-to-bottom, leading-to-trailing, mirrored under RTL) with a visible focus ring on every focusable element.
 
 ---
 
@@ -292,8 +337,10 @@ Every component defined in this document, for at-a-glance reference. "Screens" c
 | StreakBadge | Progress (§11) | — | Home, Progress |
 | MasteryDeltaBadge | Progress (§11) | entrance animation, at-rest | MCQ/Flashcard summary |
 | SkeletonShimmer | Progress/Loading (§11, §12) | shaped per host component | Any content load >300ms |
-| ChoiceButton | Buttons (specialized, §6.2 of prior redline pass) | neutral, selected, correct, incorrect, offline-pending | MCQs |
-| FlashcardStack | Cards (specialized) | front, back, flipping | Flashcards, Teaching Mode |
+| ChoiceButton | Buttons (specialized, §5.1) | neutral, selected, correct, incorrect, offline-pending | MCQs |
+| FlashcardStack | Cards (specialized, §6.1) | front, back, flipping | Flashcards, Teaching Mode |
+| GradingButtonRow | Cards (specialized, §6.1) | four graded button states, per-button interval preview | Flashcards |
+| SwipeGestureLayer | Cards (specialized, §6.1) | additive over GradingButtonRow, never swipe-only | Flashcards |
 
 ---
 
