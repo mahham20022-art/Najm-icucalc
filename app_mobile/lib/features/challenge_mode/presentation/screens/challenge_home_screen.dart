@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_spacing.dart';
 import '../../../../core/error/failure.dart';
+import '../../../../core/notifications/domain/entities/notification_permission_status.dart';
+import '../../../../core/notifications/notification_providers.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/challenge_content.dart';
 import '../../domain/entities/challenge_state.dart';
@@ -140,8 +142,9 @@ class _ChallengeHomeScreenState extends ConsumerState<ChallengeHomeScreen> {
   }
 
   Future<void> _openReminderSheet(BuildContext context) async {
-    final viewModel = ref.read(challengeViewModelProvider.notifier);
-    final current = await viewModel.reminderSettings();
+    final reminderRepository = ref.read(reminderRepositoryProvider);
+    final current = await reminderRepository.getSettings();
+    final ignoringBatteryOptimizations = await reminderRepository.isIgnoringBatteryOptimizations();
     if (!context.mounted) return;
     await showModalBottomSheet<void>(
       context: context,
@@ -150,16 +153,24 @@ class _ChallengeHomeScreenState extends ConsumerState<ChallengeHomeScreen> {
         initialEnabled: current.enabled,
         initialHour: current.hour,
         initialMinute: current.minute,
+        initialIgnoringBatteryOptimizations: ignoringBatteryOptimizations,
+        onRequestIgnoreBatteryOptimizations: reminderRepository.requestIgnoreBatteryOptimizations,
         onSave: (enabled, hour, minute) async {
-          final granted = await viewModel.setReminder(enabled: enabled, hour: hour, minute: minute);
-          if (!sheetContext.mounted) return;
-          if (!granted) {
-            ScaffoldMessenger.of(sheetContext).showSnackBar(
-              SnackBar(
-                content: Text(AppLocalizations.of(sheetContext).challengeReminderPermissionDenied),
-              ),
-            );
+          if (enabled) {
+            final status = await reminderRepository.requestPermission();
+            if (status == NotificationPermissionStatus.denied) {
+              if (!sheetContext.mounted) return;
+              ScaffoldMessenger.of(sheetContext).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    AppLocalizations.of(sheetContext).challengeReminderPermissionDenied,
+                  ),
+                ),
+              );
+              return;
+            }
           }
+          await reminderRepository.setSchedule(enabled: enabled, hour: hour, minute: minute);
         },
       ),
     );
@@ -289,12 +300,16 @@ class _ReminderSheet extends StatefulWidget {
     required this.initialEnabled,
     required this.initialHour,
     required this.initialMinute,
+    required this.initialIgnoringBatteryOptimizations,
+    required this.onRequestIgnoreBatteryOptimizations,
     required this.onSave,
   });
 
   final bool initialEnabled;
   final int initialHour;
   final int initialMinute;
+  final bool initialIgnoringBatteryOptimizations;
+  final Future<bool> Function() onRequestIgnoreBatteryOptimizations;
   final void Function(bool enabled, int hour, int minute) onSave;
 
   @override
@@ -304,6 +319,7 @@ class _ReminderSheet extends StatefulWidget {
 class _ReminderSheetState extends State<_ReminderSheet> {
   late bool _enabled = widget.initialEnabled;
   late TimeOfDay _time = TimeOfDay(hour: widget.initialHour, minute: widget.initialMinute);
+  late bool _ignoringBatteryOptimizations = widget.initialIgnoringBatteryOptimizations;
 
   @override
   Widget build(BuildContext context) {
@@ -335,6 +351,20 @@ class _ReminderSheetState extends State<_ReminderSheet> {
                 final picked = await showTimePicker(context: context, initialTime: _time);
                 if (picked != null) setState(() => _time = picked);
               },
+            ),
+          if (_enabled && !_ignoringBatteryOptimizations)
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(Icons.battery_alert_outlined),
+              title: Text(l10n.challengeBatteryOptimizationTitle),
+              subtitle: Text(l10n.challengeBatteryOptimizationSubtitle),
+              trailing: TextButton(
+                onPressed: () async {
+                  final granted = await widget.onRequestIgnoreBatteryOptimizations();
+                  if (mounted) setState(() => _ignoringBatteryOptimizations = granted);
+                },
+                child: Text(l10n.challengeBatteryOptimizationAction),
+              ),
             ),
           const SizedBox(height: AppSpacing.space4),
           SizedBox(

@@ -43,35 +43,6 @@ class ChallengeLocalDataSource {
     await (_db.delete(_db.challengeProgress)..where((t) => t.userId.equals(userId))).go();
   }
 
-  Future<({bool enabled, int hour, int minute})> getReminderSettings(String userId) async {
-    final query = _db.select(_db.challengeProgress)..where((t) => t.userId.equals(userId));
-    final row = await query.getSingleOrNull();
-    if (row == null) return (enabled: false, hour: 19, minute: 0);
-    return (enabled: row.reminderEnabled, hour: row.reminderHour, minute: row.reminderMinute);
-  }
-
-  /// Ensures a row exists for [userId] first (a user toggling the
-  /// reminder before ever marking a day done would otherwise have
-  /// nothing to upsert onto) then updates just the reminder columns —
-  /// this deliberately does *not* go through [saveState]/`ChallengeState`
-  /// so setting a reminder can never accidentally touch progress fields.
-  Future<void> setReminderSettings(
-    String userId, {
-    required bool enabled,
-    required int hour,
-    required int minute,
-  }) async {
-    final existing = await getState(userId);
-    await saveState(userId, existing);
-    await (_db.update(_db.challengeProgress)..where((t) => t.userId.equals(userId))).write(
-      ChallengeProgressCompanion(
-        reminderEnabled: Value(enabled),
-        reminderHour: Value(hour),
-        reminderMinute: Value(minute),
-      ),
-    );
-  }
-
   ChallengeState? _toEntity(ChallengeProgressData? row) {
     if (row == null) return null;
     return ChallengeState(

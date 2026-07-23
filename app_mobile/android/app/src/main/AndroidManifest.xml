@@ -6,6 +6,12 @@
          reboot — without this the reminder silently stops firing until
          the app is next opened. -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <!-- Lets the reminder engine ask the user to exempt Med100 from
+         Doze/App Standby battery optimization (permission_handler's
+         `Permission.ignoreBatteryOptimizations`) — without this a
+         perfectly scheduled daily reminder can still be silently dropped
+         by the OS. -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
     <application
         android:label="med100"
         android:name="${applicationName}"

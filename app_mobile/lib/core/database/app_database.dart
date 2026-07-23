@@ -58,6 +58,12 @@ class SyncState extends Table {
 /// since Drift has no native set/array column type; the data layer
 /// (`ChallengeLocalDataSource`) owns encoding/decoding, never the domain
 /// entity.
+///
+/// Reminder preferences used to live on this table, but "remind me daily"
+/// is a cross-feature concern (the architecture doc's daily-notification
+/// fan-out is keyed off a top-level user preference, not Challenge Mode
+/// specifically) — see `ReminderPreference` below, owned by
+/// `core/notifications`.
 class ChallengeProgress extends Table {
   TextColumn get userId => text()();
   DateTimeColumn get startedAt => dateTime()();
@@ -66,18 +72,61 @@ class ChallengeProgress extends Table {
   TextColumn get skippedDaysJson => text().withDefault(const Constant('[]'))();
   TextColumn get bookmarkedDaysJson => text().withDefault(const Constant('[]'))();
 
-  /// Daily reminder preference — stored alongside progress rather than a
-  /// separate prefs mechanism, since it's per-user Challenge Mode state
-  /// like everything else in this row.
-  BoolColumn get reminderEnabled => boolean().withDefault(const Constant(false))();
-  IntColumn get reminderHour => integer().withDefault(const Constant(19))();
-  IntColumn get reminderMinute => integer().withDefault(const Constant(0))();
+  @override
+  Set<Column> get primaryKey => {userId};
+}
+
+/// The reminder engine's own persisted schedule — one row per user, per
+/// `MED100_DATABASE_DESIGN.md` §0a. Lives in `core/` (not a feature
+/// module) since any feature may eventually want to nudge the user via
+/// the same daily-reminder slot (`MED100_ARCHITECTURE.md` §7.3 describes
+/// this exact mechanism for Today's Topic).
+class ReminderPreference extends Table {
+  TextColumn get userId => text()();
+  BoolColumn get enabled => boolean().withDefault(const Constant(false))();
+  IntColumn get hour => integer().withDefault(const Constant(19))();
+  IntColumn get minute => integer().withDefault(const Constant(0))();
+
+  /// The IANA timezone identifier the daily notification was last
+  /// scheduled against — compared to the device's current timezone on
+  /// every app resume so travel across timezones triggers a reschedule
+  /// instead of silently firing at the wrong local time.
+  TextColumn get timezoneId => text().nullable()();
+
+  /// The last calendar date (local, time-of-day stripped) a reminder
+  /// notification was actually shown for — local-schedule fire, FCM
+  /// fallback, or missed-reminder catch-up alike. Drives both
+  /// duplicate-suppression (don't catch-up twice in one day) and
+  /// missed-reminder detection (today's slot passed with nothing logged).
+  DateTimeColumn get lastNotifiedDate => dateTime().nullable()();
 
   @override
   Set<Column> get primaryKey => {userId};
 }
 
-@DriftDatabase(tables: [Outbox, SyncState, ChallengeProgress])
+/// Mirrors `MED100_DATABASE_DESIGN.md` §11's `notifications_local` table
+/// — the log target for both server-delivered (FCM) and on-device
+/// fallback notifications, so the notification history doesn't need to
+/// distinguish the two sources.
+class NotificationLog extends Table {
+  TextColumn get id => text()();
+  TextColumn get userId => text()();
+
+  /// `daily_reminder | streak_risk | achievement | billing` — only
+  /// `daily_reminder` is actually produced by this codebase today.
+  TextColumn get type => text()();
+  TextColumn get title => text()();
+  TextColumn get body => text()();
+  TextColumn get payloadJson => text().withDefault(const Constant('{}'))();
+  TextColumn get deepLink => text().nullable()();
+  DateTimeColumn get receivedAt => dateTime()();
+  DateTimeColumn get readAt => dateTime().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+@DriftDatabase(tables: [Outbox, SyncState, ChallengeProgress, ReminderPreference, NotificationLog])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
@@ -89,7 +138,7 @@ class AppDatabase extends _$AppDatabase {
   /// `MED100_DATABASE_DESIGN.md` §0 for the schema-versioning convention
   /// this project follows on both the Firestore and Drift sides.
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -97,6 +146,15 @@ class AppDatabase extends _$AppDatabase {
     onUpgrade: (m, from, to) async {
       if (from < 2) {
         await m.createTable(challengeProgress);
+      }
+      if (from < 3) {
+        // Drops ChallengeProgress's old reminderEnabled/reminderHour/
+        // reminderMinute columns (no longer part of the class above) by
+        // recreating the table from the current schema, and adds the two
+        // new engine-owned tables. Pre-launch, no real user data at risk.
+        await m.alterTable(TableMigration(challengeProgress));
+        await m.createTable(reminderPreference);
+        await m.createTable(notificationLog);
       }
     },
   );

@@ -62,5 +62,8 @@
   "challengeReminderTitle": "Daily Reminder",
   "challengeReminderSubtitle": "Get a nudge if you haven't done today's step yet",
   "challengeReminderPermissionDenied": "Notifications permission was denied — enable it in system settings to use reminders.",
-  "challengeSaveReminder": "Save"
+  "challengeSaveReminder": "Save",
+  "challengeBatteryOptimizationTitle": "Improve reminder reliability",
+  "challengeBatteryOptimizationSubtitle": "Let Med100 ignore battery optimization so reminders arrive on time",
+  "challengeBatteryOptimizationAction": "Allow"
 }

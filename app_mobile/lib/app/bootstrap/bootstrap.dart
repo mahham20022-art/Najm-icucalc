@@ -1,11 +1,13 @@
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/database/app_database.dart';
+import '../../core/notifications/data/datasources/fcm_datasource.dart';
 import '../../firebase_options.dart';
 import 'app_flavor.dart';
 
@@ -100,5 +102,20 @@ Future<void> _initializeFirebase() async {
       'reCAPTCHA site key / attestation setup exists): $error',
     );
     debugPrintStack(stackTrace: stackTrace);
+  }
+
+  // Firebase Messaging's background-message isolate entry point, per
+  // `core/notifications/data/datasources/fcm_datasource.dart` — must be
+  // registered before `runApp` so a data message can wake it even while
+  // the app is fully terminated. Skipped on web: that platform delivers
+  // background pushes via a service worker file this foundation-stage
+  // app doesn't ship yet, not via this handler.
+  if (!kIsWeb) {
+    try {
+      FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+    } catch (error, stackTrace) {
+      debugPrint('FCM background handler registration skipped/failed: $error');
+      debugPrintStack(stackTrace: stackTrace);
+    }
   }
 }

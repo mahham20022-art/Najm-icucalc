@@ -331,6 +331,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save'**
   String get challengeSaveReminder;
+
+  /// No description provided for @challengeBatteryOptimizationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Improve reminder reliability'**
+  String get challengeBatteryOptimizationTitle;
+
+  /// No description provided for @challengeBatteryOptimizationSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Let Med100 ignore battery optimization so reminders arrive on time'**
+  String get challengeBatteryOptimizationSubtitle;
+
+  /// No description provided for @challengeBatteryOptimizationAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow'**
+  String get challengeBatteryOptimizationAction;
 }
 
 class _AppLocalizationsDelegate

@@ -139,4 +139,14 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get challengeSaveReminder => 'حفظ';
+
+  @override
+  String get challengeBatteryOptimizationTitle => 'تحسين موثوقية التذكيرات';
+
+  @override
+  String get challengeBatteryOptimizationSubtitle =>
+      'اسمح لتطبيق ميد١٠٠ بتجاهل تحسين البطارية ليصلك التذكير في وقته';
+
+  @override
+  String get challengeBatteryOptimizationAction => 'سماح';
 }

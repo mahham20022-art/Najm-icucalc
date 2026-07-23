@@ -139,4 +139,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get challengeSaveReminder => 'Save';
+
+  @override
+  String get challengeBatteryOptimizationTitle =>
+      'Improve reminder reliability';
+
+  @override
+  String get challengeBatteryOptimizationSubtitle =>
+      'Let Med100 ignore battery optimization so reminders arrive on time';
+
+  @override
+  String get challengeBatteryOptimizationAction => 'Allow';
 }

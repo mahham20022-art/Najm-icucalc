@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/bootstrap/bootstrap.dart';
 import '../../core/session/current_user.dart';
-import 'data/challenge_reminder_scheduler.dart';
 import 'data/datasources/challenge_local_datasource.dart';
 import 'data/repositories/challenge_repository_impl.dart';
 import 'domain/repositories/challenge_repository.dart';
@@ -39,11 +38,4 @@ final restartChallengeUseCaseProvider = Provider<RestartChallengeUseCase>((ref) 
 
 final toggleBookmarkUseCaseProvider = Provider<ToggleBookmarkUseCase>((ref) {
   return ToggleBookmarkUseCase(ref.watch(challengeRepositoryProvider));
-});
-
-/// A single scheduler instance for the app's lifetime — holds the
-/// `flutter_local_notifications` plugin's own internal init state
-/// (`ChallengeReminderScheduler._initialized`).
-final challengeReminderSchedulerProvider = Provider<ChallengeReminderScheduler>((ref) {
-  return ChallengeReminderScheduler();
 });

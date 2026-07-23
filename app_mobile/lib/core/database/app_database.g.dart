@@ -915,37 +915,6 @@ class $ChallengeProgressTable extends ChallengeProgress
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
   );
-  static const VerificationMeta _reminderEnabledMeta = const VerificationMeta('reminderEnabled');
-  @override
-  late final GeneratedColumn<bool> reminderEnabled = GeneratedColumn<bool>(
-    'reminder_enabled',
-    aliasedName,
-    false,
-    type: DriftSqlType.bool,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways('CHECK ("reminder_enabled" IN (0, 1))'),
-    defaultValue: const Constant(false),
-  );
-  static const VerificationMeta _reminderHourMeta = const VerificationMeta('reminderHour');
-  @override
-  late final GeneratedColumn<int> reminderHour = GeneratedColumn<int>(
-    'reminder_hour',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(19),
-  );
-  static const VerificationMeta _reminderMinuteMeta = const VerificationMeta('reminderMinute');
-  @override
-  late final GeneratedColumn<int> reminderMinute = GeneratedColumn<int>(
-    'reminder_minute',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(0),
-  );
   @override
   List<GeneratedColumn> get $columns => [
     userId,
@@ -954,9 +923,6 @@ class $ChallengeProgressTable extends ChallengeProgress
     completedDaysJson,
     skippedDaysJson,
     bookmarkedDaysJson,
-    reminderEnabled,
-    reminderHour,
-    reminderMinute,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1013,24 +979,6 @@ class $ChallengeProgressTable extends ChallengeProgress
         ),
       );
     }
-    if (data.containsKey('reminder_enabled')) {
-      context.handle(
-        _reminderEnabledMeta,
-        reminderEnabled.isAcceptableOrUnknown(data['reminder_enabled']!, _reminderEnabledMeta),
-      );
-    }
-    if (data.containsKey('reminder_hour')) {
-      context.handle(
-        _reminderHourMeta,
-        reminderHour.isAcceptableOrUnknown(data['reminder_hour']!, _reminderHourMeta),
-      );
-    }
-    if (data.containsKey('reminder_minute')) {
-      context.handle(
-        _reminderMinuteMeta,
-        reminderMinute.isAcceptableOrUnknown(data['reminder_minute']!, _reminderMinuteMeta),
-      );
-    }
     return context;
   }
 
@@ -1064,18 +1012,6 @@ class $ChallengeProgressTable extends ChallengeProgress
         DriftSqlType.string,
         data['${effectivePrefix}bookmarked_days_json'],
       )!,
-      reminderEnabled: attachedDatabase.typeMapping.read(
-        DriftSqlType.bool,
-        data['${effectivePrefix}reminder_enabled'],
-      )!,
-      reminderHour: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}reminder_hour'],
-      )!,
-      reminderMinute: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}reminder_minute'],
-      )!,
     );
   }
 
@@ -1092,13 +1028,6 @@ class ChallengeProgressData extends DataClass implements Insertable<ChallengePro
   final String completedDaysJson;
   final String skippedDaysJson;
   final String bookmarkedDaysJson;
-
-  /// Daily reminder preference — stored alongside progress rather than a
-  /// separate prefs mechanism, since it's per-user Challenge Mode state
-  /// like everything else in this row.
-  final bool reminderEnabled;
-  final int reminderHour;
-  final int reminderMinute;
   const ChallengeProgressData({
     required this.userId,
     required this.startedAt,
@@ -1106,9 +1035,6 @@ class ChallengeProgressData extends DataClass implements Insertable<ChallengePro
     required this.completedDaysJson,
     required this.skippedDaysJson,
     required this.bookmarkedDaysJson,
-    required this.reminderEnabled,
-    required this.reminderHour,
-    required this.reminderMinute,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1121,9 +1047,6 @@ class ChallengeProgressData extends DataClass implements Insertable<ChallengePro
     map['completed_days_json'] = Variable<String>(completedDaysJson);
     map['skipped_days_json'] = Variable<String>(skippedDaysJson);
     map['bookmarked_days_json'] = Variable<String>(bookmarkedDaysJson);
-    map['reminder_enabled'] = Variable<bool>(reminderEnabled);
-    map['reminder_hour'] = Variable<int>(reminderHour);
-    map['reminder_minute'] = Variable<int>(reminderMinute);
     return map;
   }
 
@@ -1137,9 +1060,6 @@ class ChallengeProgressData extends DataClass implements Insertable<ChallengePro
       completedDaysJson: Value(completedDaysJson),
       skippedDaysJson: Value(skippedDaysJson),
       bookmarkedDaysJson: Value(bookmarkedDaysJson),
-      reminderEnabled: Value(reminderEnabled),
-      reminderHour: Value(reminderHour),
-      reminderMinute: Value(reminderMinute),
     );
   }
 
@@ -1152,9 +1072,6 @@ class ChallengeProgressData extends DataClass implements Insertable<ChallengePro
       completedDaysJson: serializer.fromJson<String>(json['completedDaysJson']),
       skippedDaysJson: serializer.fromJson<String>(json['skippedDaysJson']),
       bookmarkedDaysJson: serializer.fromJson<String>(json['bookmarkedDaysJson']),
-      reminderEnabled: serializer.fromJson<bool>(json['reminderEnabled']),
-      reminderHour: serializer.fromJson<int>(json['reminderHour']),
-      reminderMinute: serializer.fromJson<int>(json['reminderMinute']),
     );
   }
   @override
@@ -1167,9 +1084,6 @@ class ChallengeProgressData extends DataClass implements Insertable<ChallengePro
       'completedDaysJson': serializer.toJson<String>(completedDaysJson),
       'skippedDaysJson': serializer.toJson<String>(skippedDaysJson),
       'bookmarkedDaysJson': serializer.toJson<String>(bookmarkedDaysJson),
-      'reminderEnabled': serializer.toJson<bool>(reminderEnabled),
-      'reminderHour': serializer.toJson<int>(reminderHour),
-      'reminderMinute': serializer.toJson<int>(reminderMinute),
     };
   }
 
@@ -1180,9 +1094,6 @@ class ChallengeProgressData extends DataClass implements Insertable<ChallengePro
     String? completedDaysJson,
     String? skippedDaysJson,
     String? bookmarkedDaysJson,
-    bool? reminderEnabled,
-    int? reminderHour,
-    int? reminderMinute,
   }) => ChallengeProgressData(
     userId: userId ?? this.userId,
     startedAt: startedAt ?? this.startedAt,
@@ -1190,9 +1101,6 @@ class ChallengeProgressData extends DataClass implements Insertable<ChallengePro
     completedDaysJson: completedDaysJson ?? this.completedDaysJson,
     skippedDaysJson: skippedDaysJson ?? this.skippedDaysJson,
     bookmarkedDaysJson: bookmarkedDaysJson ?? this.bookmarkedDaysJson,
-    reminderEnabled: reminderEnabled ?? this.reminderEnabled,
-    reminderHour: reminderHour ?? this.reminderHour,
-    reminderMinute: reminderMinute ?? this.reminderMinute,
   );
   ChallengeProgressData copyWithCompanion(ChallengeProgressCompanion data) {
     return ChallengeProgressData(
@@ -1208,11 +1116,6 @@ class ChallengeProgressData extends DataClass implements Insertable<ChallengePro
       bookmarkedDaysJson: data.bookmarkedDaysJson.present
           ? data.bookmarkedDaysJson.value
           : this.bookmarkedDaysJson,
-      reminderEnabled: data.reminderEnabled.present
-          ? data.reminderEnabled.value
-          : this.reminderEnabled,
-      reminderHour: data.reminderHour.present ? data.reminderHour.value : this.reminderHour,
-      reminderMinute: data.reminderMinute.present ? data.reminderMinute.value : this.reminderMinute,
     );
   }
 
@@ -1224,10 +1127,7 @@ class ChallengeProgressData extends DataClass implements Insertable<ChallengePro
           ..write('lastActionDate: $lastActionDate, ')
           ..write('completedDaysJson: $completedDaysJson, ')
           ..write('skippedDaysJson: $skippedDaysJson, ')
-          ..write('bookmarkedDaysJson: $bookmarkedDaysJson, ')
-          ..write('reminderEnabled: $reminderEnabled, ')
-          ..write('reminderHour: $reminderHour, ')
-          ..write('reminderMinute: $reminderMinute')
+          ..write('bookmarkedDaysJson: $bookmarkedDaysJson')
           ..write(')'))
         .toString();
   }
@@ -1240,9 +1140,6 @@ class ChallengeProgressData extends DataClass implements Insertable<ChallengePro
     completedDaysJson,
     skippedDaysJson,
     bookmarkedDaysJson,
-    reminderEnabled,
-    reminderHour,
-    reminderMinute,
   );
   @override
   bool operator ==(Object other) =>
@@ -1253,10 +1150,7 @@ class ChallengeProgressData extends DataClass implements Insertable<ChallengePro
           other.lastActionDate == this.lastActionDate &&
           other.completedDaysJson == this.completedDaysJson &&
           other.skippedDaysJson == this.skippedDaysJson &&
-          other.bookmarkedDaysJson == this.bookmarkedDaysJson &&
-          other.reminderEnabled == this.reminderEnabled &&
-          other.reminderHour == this.reminderHour &&
-          other.reminderMinute == this.reminderMinute);
+          other.bookmarkedDaysJson == this.bookmarkedDaysJson);
 }
 
 class ChallengeProgressCompanion extends UpdateCompanion<ChallengeProgressData> {
@@ -1266,9 +1160,6 @@ class ChallengeProgressCompanion extends UpdateCompanion<ChallengeProgressData> 
   final Value<String> completedDaysJson;
   final Value<String> skippedDaysJson;
   final Value<String> bookmarkedDaysJson;
-  final Value<bool> reminderEnabled;
-  final Value<int> reminderHour;
-  final Value<int> reminderMinute;
   final Value<int> rowid;
   const ChallengeProgressCompanion({
     this.userId = const Value.absent(),
@@ -1277,9 +1168,6 @@ class ChallengeProgressCompanion extends UpdateCompanion<ChallengeProgressData> 
     this.completedDaysJson = const Value.absent(),
     this.skippedDaysJson = const Value.absent(),
     this.bookmarkedDaysJson = const Value.absent(),
-    this.reminderEnabled = const Value.absent(),
-    this.reminderHour = const Value.absent(),
-    this.reminderMinute = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   ChallengeProgressCompanion.insert({
@@ -1289,9 +1177,6 @@ class ChallengeProgressCompanion extends UpdateCompanion<ChallengeProgressData> 
     this.completedDaysJson = const Value.absent(),
     this.skippedDaysJson = const Value.absent(),
     this.bookmarkedDaysJson = const Value.absent(),
-    this.reminderEnabled = const Value.absent(),
-    this.reminderHour = const Value.absent(),
-    this.reminderMinute = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : userId = Value(userId),
        startedAt = Value(startedAt);
@@ -1302,9 +1187,6 @@ class ChallengeProgressCompanion extends UpdateCompanion<ChallengeProgressData> 
     Expression<String>? completedDaysJson,
     Expression<String>? skippedDaysJson,
     Expression<String>? bookmarkedDaysJson,
-    Expression<bool>? reminderEnabled,
-    Expression<int>? reminderHour,
-    Expression<int>? reminderMinute,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -1314,9 +1196,6 @@ class ChallengeProgressCompanion extends UpdateCompanion<ChallengeProgressData> 
       if (completedDaysJson != null) 'completed_days_json': completedDaysJson,
       if (skippedDaysJson != null) 'skipped_days_json': skippedDaysJson,
       if (bookmarkedDaysJson != null) 'bookmarked_days_json': bookmarkedDaysJson,
-      if (reminderEnabled != null) 'reminder_enabled': reminderEnabled,
-      if (reminderHour != null) 'reminder_hour': reminderHour,
-      if (reminderMinute != null) 'reminder_minute': reminderMinute,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -1328,9 +1207,6 @@ class ChallengeProgressCompanion extends UpdateCompanion<ChallengeProgressData> 
     Value<String>? completedDaysJson,
     Value<String>? skippedDaysJson,
     Value<String>? bookmarkedDaysJson,
-    Value<bool>? reminderEnabled,
-    Value<int>? reminderHour,
-    Value<int>? reminderMinute,
     Value<int>? rowid,
   }) {
     return ChallengeProgressCompanion(
@@ -1340,9 +1216,6 @@ class ChallengeProgressCompanion extends UpdateCompanion<ChallengeProgressData> 
       completedDaysJson: completedDaysJson ?? this.completedDaysJson,
       skippedDaysJson: skippedDaysJson ?? this.skippedDaysJson,
       bookmarkedDaysJson: bookmarkedDaysJson ?? this.bookmarkedDaysJson,
-      reminderEnabled: reminderEnabled ?? this.reminderEnabled,
-      reminderHour: reminderHour ?? this.reminderHour,
-      reminderMinute: reminderMinute ?? this.reminderMinute,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -1368,15 +1241,6 @@ class ChallengeProgressCompanion extends UpdateCompanion<ChallengeProgressData> 
     if (bookmarkedDaysJson.present) {
       map['bookmarked_days_json'] = Variable<String>(bookmarkedDaysJson.value);
     }
-    if (reminderEnabled.present) {
-      map['reminder_enabled'] = Variable<bool>(reminderEnabled.value);
-    }
-    if (reminderHour.present) {
-      map['reminder_hour'] = Variable<int>(reminderHour.value);
-    }
-    if (reminderMinute.present) {
-      map['reminder_minute'] = Variable<int>(reminderMinute.value);
-    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -1392,9 +1256,908 @@ class ChallengeProgressCompanion extends UpdateCompanion<ChallengeProgressData> 
           ..write('completedDaysJson: $completedDaysJson, ')
           ..write('skippedDaysJson: $skippedDaysJson, ')
           ..write('bookmarkedDaysJson: $bookmarkedDaysJson, ')
-          ..write('reminderEnabled: $reminderEnabled, ')
-          ..write('reminderHour: $reminderHour, ')
-          ..write('reminderMinute: $reminderMinute, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ReminderPreferenceTable extends ReminderPreference
+    with TableInfo<$ReminderPreferenceTable, ReminderPreferenceData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ReminderPreferenceTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<String> userId = GeneratedColumn<String>(
+    'user_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _enabledMeta = const VerificationMeta('enabled');
+  @override
+  late final GeneratedColumn<bool> enabled = GeneratedColumn<bool>(
+    'enabled',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('CHECK ("enabled" IN (0, 1))'),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _hourMeta = const VerificationMeta('hour');
+  @override
+  late final GeneratedColumn<int> hour = GeneratedColumn<int>(
+    'hour',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(19),
+  );
+  static const VerificationMeta _minuteMeta = const VerificationMeta('minute');
+  @override
+  late final GeneratedColumn<int> minute = GeneratedColumn<int>(
+    'minute',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _timezoneIdMeta = const VerificationMeta('timezoneId');
+  @override
+  late final GeneratedColumn<String> timezoneId = GeneratedColumn<String>(
+    'timezone_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _lastNotifiedDateMeta = const VerificationMeta('lastNotifiedDate');
+  @override
+  late final GeneratedColumn<DateTime> lastNotifiedDate = GeneratedColumn<DateTime>(
+    'last_notified_date',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    userId,
+    enabled,
+    hour,
+    minute,
+    timezoneId,
+    lastNotifiedDate,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'reminder_preference';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ReminderPreferenceData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('user_id')) {
+      context.handle(_userIdMeta, userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
+    } else if (isInserting) {
+      context.missing(_userIdMeta);
+    }
+    if (data.containsKey('enabled')) {
+      context.handle(_enabledMeta, enabled.isAcceptableOrUnknown(data['enabled']!, _enabledMeta));
+    }
+    if (data.containsKey('hour')) {
+      context.handle(_hourMeta, hour.isAcceptableOrUnknown(data['hour']!, _hourMeta));
+    }
+    if (data.containsKey('minute')) {
+      context.handle(_minuteMeta, minute.isAcceptableOrUnknown(data['minute']!, _minuteMeta));
+    }
+    if (data.containsKey('timezone_id')) {
+      context.handle(
+        _timezoneIdMeta,
+        timezoneId.isAcceptableOrUnknown(data['timezone_id']!, _timezoneIdMeta),
+      );
+    }
+    if (data.containsKey('last_notified_date')) {
+      context.handle(
+        _lastNotifiedDateMeta,
+        lastNotifiedDate.isAcceptableOrUnknown(data['last_notified_date']!, _lastNotifiedDateMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {userId};
+  @override
+  ReminderPreferenceData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ReminderPreferenceData(
+      userId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}user_id'],
+      )!,
+      enabled: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}enabled'],
+      )!,
+      hour: attachedDatabase.typeMapping.read(DriftSqlType.int, data['${effectivePrefix}hour'])!,
+      minute: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}minute'],
+      )!,
+      timezoneId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}timezone_id'],
+      ),
+      lastNotifiedDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}last_notified_date'],
+      ),
+    );
+  }
+
+  @override
+  $ReminderPreferenceTable createAlias(String alias) {
+    return $ReminderPreferenceTable(attachedDatabase, alias);
+  }
+}
+
+class ReminderPreferenceData extends DataClass implements Insertable<ReminderPreferenceData> {
+  final String userId;
+  final bool enabled;
+  final int hour;
+  final int minute;
+
+  /// The IANA timezone identifier the daily notification was last
+  /// scheduled against — compared to the device's current timezone on
+  /// every app resume so travel across timezones triggers a reschedule
+  /// instead of silently firing at the wrong local time.
+  final String? timezoneId;
+
+  /// The last calendar date (local, time-of-day stripped) a reminder
+  /// notification was actually shown for — local-schedule fire, FCM
+  /// fallback, or missed-reminder catch-up alike. Drives both
+  /// duplicate-suppression (don't catch-up twice in one day) and
+  /// missed-reminder detection (today's slot passed with nothing logged).
+  final DateTime? lastNotifiedDate;
+  const ReminderPreferenceData({
+    required this.userId,
+    required this.enabled,
+    required this.hour,
+    required this.minute,
+    this.timezoneId,
+    this.lastNotifiedDate,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['user_id'] = Variable<String>(userId);
+    map['enabled'] = Variable<bool>(enabled);
+    map['hour'] = Variable<int>(hour);
+    map['minute'] = Variable<int>(minute);
+    if (!nullToAbsent || timezoneId != null) {
+      map['timezone_id'] = Variable<String>(timezoneId);
+    }
+    if (!nullToAbsent || lastNotifiedDate != null) {
+      map['last_notified_date'] = Variable<DateTime>(lastNotifiedDate);
+    }
+    return map;
+  }
+
+  ReminderPreferenceCompanion toCompanion(bool nullToAbsent) {
+    return ReminderPreferenceCompanion(
+      userId: Value(userId),
+      enabled: Value(enabled),
+      hour: Value(hour),
+      minute: Value(minute),
+      timezoneId: timezoneId == null && nullToAbsent ? const Value.absent() : Value(timezoneId),
+      lastNotifiedDate: lastNotifiedDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastNotifiedDate),
+    );
+  }
+
+  factory ReminderPreferenceData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ReminderPreferenceData(
+      userId: serializer.fromJson<String>(json['userId']),
+      enabled: serializer.fromJson<bool>(json['enabled']),
+      hour: serializer.fromJson<int>(json['hour']),
+      minute: serializer.fromJson<int>(json['minute']),
+      timezoneId: serializer.fromJson<String?>(json['timezoneId']),
+      lastNotifiedDate: serializer.fromJson<DateTime?>(json['lastNotifiedDate']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'userId': serializer.toJson<String>(userId),
+      'enabled': serializer.toJson<bool>(enabled),
+      'hour': serializer.toJson<int>(hour),
+      'minute': serializer.toJson<int>(minute),
+      'timezoneId': serializer.toJson<String?>(timezoneId),
+      'lastNotifiedDate': serializer.toJson<DateTime?>(lastNotifiedDate),
+    };
+  }
+
+  ReminderPreferenceData copyWith({
+    String? userId,
+    bool? enabled,
+    int? hour,
+    int? minute,
+    Value<String?> timezoneId = const Value.absent(),
+    Value<DateTime?> lastNotifiedDate = const Value.absent(),
+  }) => ReminderPreferenceData(
+    userId: userId ?? this.userId,
+    enabled: enabled ?? this.enabled,
+    hour: hour ?? this.hour,
+    minute: minute ?? this.minute,
+    timezoneId: timezoneId.present ? timezoneId.value : this.timezoneId,
+    lastNotifiedDate: lastNotifiedDate.present ? lastNotifiedDate.value : this.lastNotifiedDate,
+  );
+  ReminderPreferenceData copyWithCompanion(ReminderPreferenceCompanion data) {
+    return ReminderPreferenceData(
+      userId: data.userId.present ? data.userId.value : this.userId,
+      enabled: data.enabled.present ? data.enabled.value : this.enabled,
+      hour: data.hour.present ? data.hour.value : this.hour,
+      minute: data.minute.present ? data.minute.value : this.minute,
+      timezoneId: data.timezoneId.present ? data.timezoneId.value : this.timezoneId,
+      lastNotifiedDate: data.lastNotifiedDate.present
+          ? data.lastNotifiedDate.value
+          : this.lastNotifiedDate,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ReminderPreferenceData(')
+          ..write('userId: $userId, ')
+          ..write('enabled: $enabled, ')
+          ..write('hour: $hour, ')
+          ..write('minute: $minute, ')
+          ..write('timezoneId: $timezoneId, ')
+          ..write('lastNotifiedDate: $lastNotifiedDate')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(userId, enabled, hour, minute, timezoneId, lastNotifiedDate);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ReminderPreferenceData &&
+          other.userId == this.userId &&
+          other.enabled == this.enabled &&
+          other.hour == this.hour &&
+          other.minute == this.minute &&
+          other.timezoneId == this.timezoneId &&
+          other.lastNotifiedDate == this.lastNotifiedDate);
+}
+
+class ReminderPreferenceCompanion extends UpdateCompanion<ReminderPreferenceData> {
+  final Value<String> userId;
+  final Value<bool> enabled;
+  final Value<int> hour;
+  final Value<int> minute;
+  final Value<String?> timezoneId;
+  final Value<DateTime?> lastNotifiedDate;
+  final Value<int> rowid;
+  const ReminderPreferenceCompanion({
+    this.userId = const Value.absent(),
+    this.enabled = const Value.absent(),
+    this.hour = const Value.absent(),
+    this.minute = const Value.absent(),
+    this.timezoneId = const Value.absent(),
+    this.lastNotifiedDate = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ReminderPreferenceCompanion.insert({
+    required String userId,
+    this.enabled = const Value.absent(),
+    this.hour = const Value.absent(),
+    this.minute = const Value.absent(),
+    this.timezoneId = const Value.absent(),
+    this.lastNotifiedDate = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : userId = Value(userId);
+  static Insertable<ReminderPreferenceData> custom({
+    Expression<String>? userId,
+    Expression<bool>? enabled,
+    Expression<int>? hour,
+    Expression<int>? minute,
+    Expression<String>? timezoneId,
+    Expression<DateTime>? lastNotifiedDate,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (userId != null) 'user_id': userId,
+      if (enabled != null) 'enabled': enabled,
+      if (hour != null) 'hour': hour,
+      if (minute != null) 'minute': minute,
+      if (timezoneId != null) 'timezone_id': timezoneId,
+      if (lastNotifiedDate != null) 'last_notified_date': lastNotifiedDate,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ReminderPreferenceCompanion copyWith({
+    Value<String>? userId,
+    Value<bool>? enabled,
+    Value<int>? hour,
+    Value<int>? minute,
+    Value<String?>? timezoneId,
+    Value<DateTime?>? lastNotifiedDate,
+    Value<int>? rowid,
+  }) {
+    return ReminderPreferenceCompanion(
+      userId: userId ?? this.userId,
+      enabled: enabled ?? this.enabled,
+      hour: hour ?? this.hour,
+      minute: minute ?? this.minute,
+      timezoneId: timezoneId ?? this.timezoneId,
+      lastNotifiedDate: lastNotifiedDate ?? this.lastNotifiedDate,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (userId.present) {
+      map['user_id'] = Variable<String>(userId.value);
+    }
+    if (enabled.present) {
+      map['enabled'] = Variable<bool>(enabled.value);
+    }
+    if (hour.present) {
+      map['hour'] = Variable<int>(hour.value);
+    }
+    if (minute.present) {
+      map['minute'] = Variable<int>(minute.value);
+    }
+    if (timezoneId.present) {
+      map['timezone_id'] = Variable<String>(timezoneId.value);
+    }
+    if (lastNotifiedDate.present) {
+      map['last_notified_date'] = Variable<DateTime>(lastNotifiedDate.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ReminderPreferenceCompanion(')
+          ..write('userId: $userId, ')
+          ..write('enabled: $enabled, ')
+          ..write('hour: $hour, ')
+          ..write('minute: $minute, ')
+          ..write('timezoneId: $timezoneId, ')
+          ..write('lastNotifiedDate: $lastNotifiedDate, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $NotificationLogTable extends NotificationLog
+    with TableInfo<$NotificationLogTable, NotificationLogData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $NotificationLogTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<String> userId = GeneratedColumn<String>(
+    'user_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+    'type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _bodyMeta = const VerificationMeta('body');
+  @override
+  late final GeneratedColumn<String> body = GeneratedColumn<String>(
+    'body',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _payloadJsonMeta = const VerificationMeta('payloadJson');
+  @override
+  late final GeneratedColumn<String> payloadJson = GeneratedColumn<String>(
+    'payload_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('{}'),
+  );
+  static const VerificationMeta _deepLinkMeta = const VerificationMeta('deepLink');
+  @override
+  late final GeneratedColumn<String> deepLink = GeneratedColumn<String>(
+    'deep_link',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _receivedAtMeta = const VerificationMeta('receivedAt');
+  @override
+  late final GeneratedColumn<DateTime> receivedAt = GeneratedColumn<DateTime>(
+    'received_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _readAtMeta = const VerificationMeta('readAt');
+  @override
+  late final GeneratedColumn<DateTime> readAt = GeneratedColumn<DateTime>(
+    'read_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    userId,
+    type,
+    title,
+    body,
+    payloadJson,
+    deepLink,
+    receivedAt,
+    readAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'notification_log';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<NotificationLogData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('user_id')) {
+      context.handle(_userIdMeta, userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
+    } else if (isInserting) {
+      context.missing(_userIdMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(_typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('title')) {
+      context.handle(_titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('body')) {
+      context.handle(_bodyMeta, body.isAcceptableOrUnknown(data['body']!, _bodyMeta));
+    } else if (isInserting) {
+      context.missing(_bodyMeta);
+    }
+    if (data.containsKey('payload_json')) {
+      context.handle(
+        _payloadJsonMeta,
+        payloadJson.isAcceptableOrUnknown(data['payload_json']!, _payloadJsonMeta),
+      );
+    }
+    if (data.containsKey('deep_link')) {
+      context.handle(
+        _deepLinkMeta,
+        deepLink.isAcceptableOrUnknown(data['deep_link']!, _deepLinkMeta),
+      );
+    }
+    if (data.containsKey('received_at')) {
+      context.handle(
+        _receivedAtMeta,
+        receivedAt.isAcceptableOrUnknown(data['received_at']!, _receivedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_receivedAtMeta);
+    }
+    if (data.containsKey('read_at')) {
+      context.handle(_readAtMeta, readAt.isAcceptableOrUnknown(data['read_at']!, _readAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  NotificationLogData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return NotificationLogData(
+      id: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      userId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}user_id'],
+      )!,
+      type: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}type'])!,
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      )!,
+      body: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}body'])!,
+      payloadJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}payload_json'],
+      )!,
+      deepLink: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}deep_link'],
+      ),
+      receivedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}received_at'],
+      )!,
+      readAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}read_at'],
+      ),
+    );
+  }
+
+  @override
+  $NotificationLogTable createAlias(String alias) {
+    return $NotificationLogTable(attachedDatabase, alias);
+  }
+}
+
+class NotificationLogData extends DataClass implements Insertable<NotificationLogData> {
+  final String id;
+  final String userId;
+
+  /// `daily_reminder | streak_risk | achievement | billing` — only
+  /// `daily_reminder` is actually produced by this codebase today.
+  final String type;
+  final String title;
+  final String body;
+  final String payloadJson;
+  final String? deepLink;
+  final DateTime receivedAt;
+  final DateTime? readAt;
+  const NotificationLogData({
+    required this.id,
+    required this.userId,
+    required this.type,
+    required this.title,
+    required this.body,
+    required this.payloadJson,
+    this.deepLink,
+    required this.receivedAt,
+    this.readAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['user_id'] = Variable<String>(userId);
+    map['type'] = Variable<String>(type);
+    map['title'] = Variable<String>(title);
+    map['body'] = Variable<String>(body);
+    map['payload_json'] = Variable<String>(payloadJson);
+    if (!nullToAbsent || deepLink != null) {
+      map['deep_link'] = Variable<String>(deepLink);
+    }
+    map['received_at'] = Variable<DateTime>(receivedAt);
+    if (!nullToAbsent || readAt != null) {
+      map['read_at'] = Variable<DateTime>(readAt);
+    }
+    return map;
+  }
+
+  NotificationLogCompanion toCompanion(bool nullToAbsent) {
+    return NotificationLogCompanion(
+      id: Value(id),
+      userId: Value(userId),
+      type: Value(type),
+      title: Value(title),
+      body: Value(body),
+      payloadJson: Value(payloadJson),
+      deepLink: deepLink == null && nullToAbsent ? const Value.absent() : Value(deepLink),
+      receivedAt: Value(receivedAt),
+      readAt: readAt == null && nullToAbsent ? const Value.absent() : Value(readAt),
+    );
+  }
+
+  factory NotificationLogData.fromJson(Map<String, dynamic> json, {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return NotificationLogData(
+      id: serializer.fromJson<String>(json['id']),
+      userId: serializer.fromJson<String>(json['userId']),
+      type: serializer.fromJson<String>(json['type']),
+      title: serializer.fromJson<String>(json['title']),
+      body: serializer.fromJson<String>(json['body']),
+      payloadJson: serializer.fromJson<String>(json['payloadJson']),
+      deepLink: serializer.fromJson<String?>(json['deepLink']),
+      receivedAt: serializer.fromJson<DateTime>(json['receivedAt']),
+      readAt: serializer.fromJson<DateTime?>(json['readAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'userId': serializer.toJson<String>(userId),
+      'type': serializer.toJson<String>(type),
+      'title': serializer.toJson<String>(title),
+      'body': serializer.toJson<String>(body),
+      'payloadJson': serializer.toJson<String>(payloadJson),
+      'deepLink': serializer.toJson<String?>(deepLink),
+      'receivedAt': serializer.toJson<DateTime>(receivedAt),
+      'readAt': serializer.toJson<DateTime?>(readAt),
+    };
+  }
+
+  NotificationLogData copyWith({
+    String? id,
+    String? userId,
+    String? type,
+    String? title,
+    String? body,
+    String? payloadJson,
+    Value<String?> deepLink = const Value.absent(),
+    DateTime? receivedAt,
+    Value<DateTime?> readAt = const Value.absent(),
+  }) => NotificationLogData(
+    id: id ?? this.id,
+    userId: userId ?? this.userId,
+    type: type ?? this.type,
+    title: title ?? this.title,
+    body: body ?? this.body,
+    payloadJson: payloadJson ?? this.payloadJson,
+    deepLink: deepLink.present ? deepLink.value : this.deepLink,
+    receivedAt: receivedAt ?? this.receivedAt,
+    readAt: readAt.present ? readAt.value : this.readAt,
+  );
+  NotificationLogData copyWithCompanion(NotificationLogCompanion data) {
+    return NotificationLogData(
+      id: data.id.present ? data.id.value : this.id,
+      userId: data.userId.present ? data.userId.value : this.userId,
+      type: data.type.present ? data.type.value : this.type,
+      title: data.title.present ? data.title.value : this.title,
+      body: data.body.present ? data.body.value : this.body,
+      payloadJson: data.payloadJson.present ? data.payloadJson.value : this.payloadJson,
+      deepLink: data.deepLink.present ? data.deepLink.value : this.deepLink,
+      receivedAt: data.receivedAt.present ? data.receivedAt.value : this.receivedAt,
+      readAt: data.readAt.present ? data.readAt.value : this.readAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('NotificationLogData(')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('type: $type, ')
+          ..write('title: $title, ')
+          ..write('body: $body, ')
+          ..write('payloadJson: $payloadJson, ')
+          ..write('deepLink: $deepLink, ')
+          ..write('receivedAt: $receivedAt, ')
+          ..write('readAt: $readAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, userId, type, title, body, payloadJson, deepLink, receivedAt, readAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is NotificationLogData &&
+          other.id == this.id &&
+          other.userId == this.userId &&
+          other.type == this.type &&
+          other.title == this.title &&
+          other.body == this.body &&
+          other.payloadJson == this.payloadJson &&
+          other.deepLink == this.deepLink &&
+          other.receivedAt == this.receivedAt &&
+          other.readAt == this.readAt);
+}
+
+class NotificationLogCompanion extends UpdateCompanion<NotificationLogData> {
+  final Value<String> id;
+  final Value<String> userId;
+  final Value<String> type;
+  final Value<String> title;
+  final Value<String> body;
+  final Value<String> payloadJson;
+  final Value<String?> deepLink;
+  final Value<DateTime> receivedAt;
+  final Value<DateTime?> readAt;
+  final Value<int> rowid;
+  const NotificationLogCompanion({
+    this.id = const Value.absent(),
+    this.userId = const Value.absent(),
+    this.type = const Value.absent(),
+    this.title = const Value.absent(),
+    this.body = const Value.absent(),
+    this.payloadJson = const Value.absent(),
+    this.deepLink = const Value.absent(),
+    this.receivedAt = const Value.absent(),
+    this.readAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  NotificationLogCompanion.insert({
+    required String id,
+    required String userId,
+    required String type,
+    required String title,
+    required String body,
+    this.payloadJson = const Value.absent(),
+    this.deepLink = const Value.absent(),
+    required DateTime receivedAt,
+    this.readAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       userId = Value(userId),
+       type = Value(type),
+       title = Value(title),
+       body = Value(body),
+       receivedAt = Value(receivedAt);
+  static Insertable<NotificationLogData> custom({
+    Expression<String>? id,
+    Expression<String>? userId,
+    Expression<String>? type,
+    Expression<String>? title,
+    Expression<String>? body,
+    Expression<String>? payloadJson,
+    Expression<String>? deepLink,
+    Expression<DateTime>? receivedAt,
+    Expression<DateTime>? readAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (userId != null) 'user_id': userId,
+      if (type != null) 'type': type,
+      if (title != null) 'title': title,
+      if (body != null) 'body': body,
+      if (payloadJson != null) 'payload_json': payloadJson,
+      if (deepLink != null) 'deep_link': deepLink,
+      if (receivedAt != null) 'received_at': receivedAt,
+      if (readAt != null) 'read_at': readAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  NotificationLogCompanion copyWith({
+    Value<String>? id,
+    Value<String>? userId,
+    Value<String>? type,
+    Value<String>? title,
+    Value<String>? body,
+    Value<String>? payloadJson,
+    Value<String?>? deepLink,
+    Value<DateTime>? receivedAt,
+    Value<DateTime?>? readAt,
+    Value<int>? rowid,
+  }) {
+    return NotificationLogCompanion(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      type: type ?? this.type,
+      title: title ?? this.title,
+      body: body ?? this.body,
+      payloadJson: payloadJson ?? this.payloadJson,
+      deepLink: deepLink ?? this.deepLink,
+      receivedAt: receivedAt ?? this.receivedAt,
+      readAt: readAt ?? this.readAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (userId.present) {
+      map['user_id'] = Variable<String>(userId.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (body.present) {
+      map['body'] = Variable<String>(body.value);
+    }
+    if (payloadJson.present) {
+      map['payload_json'] = Variable<String>(payloadJson.value);
+    }
+    if (deepLink.present) {
+      map['deep_link'] = Variable<String>(deepLink.value);
+    }
+    if (receivedAt.present) {
+      map['received_at'] = Variable<DateTime>(receivedAt.value);
+    }
+    if (readAt.present) {
+      map['read_at'] = Variable<DateTime>(readAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('NotificationLogCompanion(')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('type: $type, ')
+          ..write('title: $title, ')
+          ..write('body: $body, ')
+          ..write('payloadJson: $payloadJson, ')
+          ..write('deepLink: $deepLink, ')
+          ..write('receivedAt: $receivedAt, ')
+          ..write('readAt: $readAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -1407,11 +2170,19 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $OutboxTable outbox = $OutboxTable(this);
   late final $SyncStateTable syncState = $SyncStateTable(this);
   late final $ChallengeProgressTable challengeProgress = $ChallengeProgressTable(this);
+  late final $ReminderPreferenceTable reminderPreference = $ReminderPreferenceTable(this);
+  late final $NotificationLogTable notificationLog = $NotificationLogTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [outbox, syncState, challengeProgress];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+    outbox,
+    syncState,
+    challengeProgress,
+    reminderPreference,
+    notificationLog,
+  ];
 }
 
 typedef $$OutboxTableCreateCompanionBuilder =
@@ -1805,9 +2576,6 @@ typedef $$ChallengeProgressTableCreateCompanionBuilder =
       Value<String> completedDaysJson,
       Value<String> skippedDaysJson,
       Value<String> bookmarkedDaysJson,
-      Value<bool> reminderEnabled,
-      Value<int> reminderHour,
-      Value<int> reminderMinute,
       Value<int> rowid,
     });
 typedef $$ChallengeProgressTableUpdateCompanionBuilder =
@@ -1818,9 +2586,6 @@ typedef $$ChallengeProgressTableUpdateCompanionBuilder =
       Value<String> completedDaysJson,
       Value<String> skippedDaysJson,
       Value<String> bookmarkedDaysJson,
-      Value<bool> reminderEnabled,
-      Value<int> reminderHour,
-      Value<int> reminderMinute,
       Value<int> rowid,
     });
 
@@ -1856,17 +2621,6 @@ class $$ChallengeProgressTableFilterComposer
     column: $table.bookmarkedDaysJson,
     builder: (column) => ColumnFilters(column),
   );
-
-  ColumnFilters<bool> get reminderEnabled => $composableBuilder(
-    column: $table.reminderEnabled,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<int> get reminderHour =>
-      $composableBuilder(column: $table.reminderHour, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<int> get reminderMinute =>
-      $composableBuilder(column: $table.reminderMinute, builder: (column) => ColumnFilters(column));
 }
 
 class $$ChallengeProgressTableOrderingComposer
@@ -1903,19 +2657,6 @@ class $$ChallengeProgressTableOrderingComposer
     column: $table.bookmarkedDaysJson,
     builder: (column) => ColumnOrderings(column),
   );
-
-  ColumnOrderings<bool> get reminderEnabled => $composableBuilder(
-    column: $table.reminderEnabled,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<int> get reminderHour =>
-      $composableBuilder(column: $table.reminderHour, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<int> get reminderMinute => $composableBuilder(
-    column: $table.reminderMinute,
-    builder: (column) => ColumnOrderings(column),
-  );
 }
 
 class $$ChallengeProgressTableAnnotationComposer
@@ -1944,15 +2685,6 @@ class $$ChallengeProgressTableAnnotationComposer
 
   GeneratedColumn<String> get bookmarkedDaysJson =>
       $composableBuilder(column: $table.bookmarkedDaysJson, builder: (column) => column);
-
-  GeneratedColumn<bool> get reminderEnabled =>
-      $composableBuilder(column: $table.reminderEnabled, builder: (column) => column);
-
-  GeneratedColumn<int> get reminderHour =>
-      $composableBuilder(column: $table.reminderHour, builder: (column) => column);
-
-  GeneratedColumn<int> get reminderMinute =>
-      $composableBuilder(column: $table.reminderMinute, builder: (column) => column);
 }
 
 class $$ChallengeProgressTableTableManager
@@ -1992,9 +2724,6 @@ class $$ChallengeProgressTableTableManager
                 Value<String> completedDaysJson = const Value.absent(),
                 Value<String> skippedDaysJson = const Value.absent(),
                 Value<String> bookmarkedDaysJson = const Value.absent(),
-                Value<bool> reminderEnabled = const Value.absent(),
-                Value<int> reminderHour = const Value.absent(),
-                Value<int> reminderMinute = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ChallengeProgressCompanion(
                 userId: userId,
@@ -2003,9 +2732,6 @@ class $$ChallengeProgressTableTableManager
                 completedDaysJson: completedDaysJson,
                 skippedDaysJson: skippedDaysJson,
                 bookmarkedDaysJson: bookmarkedDaysJson,
-                reminderEnabled: reminderEnabled,
-                reminderHour: reminderHour,
-                reminderMinute: reminderMinute,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -2016,9 +2742,6 @@ class $$ChallengeProgressTableTableManager
                 Value<String> completedDaysJson = const Value.absent(),
                 Value<String> skippedDaysJson = const Value.absent(),
                 Value<String> bookmarkedDaysJson = const Value.absent(),
-                Value<bool> reminderEnabled = const Value.absent(),
-                Value<int> reminderHour = const Value.absent(),
-                Value<int> reminderMinute = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ChallengeProgressCompanion.insert(
                 userId: userId,
@@ -2027,9 +2750,6 @@ class $$ChallengeProgressTableTableManager
                 completedDaysJson: completedDaysJson,
                 skippedDaysJson: skippedDaysJson,
                 bookmarkedDaysJson: bookmarkedDaysJson,
-                reminderEnabled: reminderEnabled,
-                reminderHour: reminderHour,
-                reminderMinute: reminderMinute,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) =>
@@ -2056,6 +2776,442 @@ typedef $$ChallengeProgressTableProcessedTableManager =
       ChallengeProgressData,
       PrefetchHooks Function()
     >;
+typedef $$ReminderPreferenceTableCreateCompanionBuilder =
+    ReminderPreferenceCompanion Function({
+      required String userId,
+      Value<bool> enabled,
+      Value<int> hour,
+      Value<int> minute,
+      Value<String?> timezoneId,
+      Value<DateTime?> lastNotifiedDate,
+      Value<int> rowid,
+    });
+typedef $$ReminderPreferenceTableUpdateCompanionBuilder =
+    ReminderPreferenceCompanion Function({
+      Value<String> userId,
+      Value<bool> enabled,
+      Value<int> hour,
+      Value<int> minute,
+      Value<String?> timezoneId,
+      Value<DateTime?> lastNotifiedDate,
+      Value<int> rowid,
+    });
+
+class $$ReminderPreferenceTableFilterComposer
+    extends Composer<_$AppDatabase, $ReminderPreferenceTable> {
+  $$ReminderPreferenceTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get enabled =>
+      $composableBuilder(column: $table.enabled, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get hour =>
+      $composableBuilder(column: $table.hour, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get minute =>
+      $composableBuilder(column: $table.minute, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get timezoneId =>
+      $composableBuilder(column: $table.timezoneId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get lastNotifiedDate => $composableBuilder(
+    column: $table.lastNotifiedDate,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$ReminderPreferenceTableOrderingComposer
+    extends Composer<_$AppDatabase, $ReminderPreferenceTable> {
+  $$ReminderPreferenceTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get enabled =>
+      $composableBuilder(column: $table.enabled, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get hour =>
+      $composableBuilder(column: $table.hour, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get minute =>
+      $composableBuilder(column: $table.minute, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get timezoneId =>
+      $composableBuilder(column: $table.timezoneId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get lastNotifiedDate => $composableBuilder(
+    column: $table.lastNotifiedDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$ReminderPreferenceTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ReminderPreferenceTable> {
+  $$ReminderPreferenceTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => column);
+
+  GeneratedColumn<bool> get enabled =>
+      $composableBuilder(column: $table.enabled, builder: (column) => column);
+
+  GeneratedColumn<int> get hour =>
+      $composableBuilder(column: $table.hour, builder: (column) => column);
+
+  GeneratedColumn<int> get minute =>
+      $composableBuilder(column: $table.minute, builder: (column) => column);
+
+  GeneratedColumn<String> get timezoneId =>
+      $composableBuilder(column: $table.timezoneId, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get lastNotifiedDate =>
+      $composableBuilder(column: $table.lastNotifiedDate, builder: (column) => column);
+}
+
+class $$ReminderPreferenceTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ReminderPreferenceTable,
+          ReminderPreferenceData,
+          $$ReminderPreferenceTableFilterComposer,
+          $$ReminderPreferenceTableOrderingComposer,
+          $$ReminderPreferenceTableAnnotationComposer,
+          $$ReminderPreferenceTableCreateCompanionBuilder,
+          $$ReminderPreferenceTableUpdateCompanionBuilder,
+          (
+            ReminderPreferenceData,
+            BaseReferences<_$AppDatabase, $ReminderPreferenceTable, ReminderPreferenceData>,
+          ),
+          ReminderPreferenceData,
+          PrefetchHooks Function()
+        > {
+  $$ReminderPreferenceTableTableManager(_$AppDatabase db, $ReminderPreferenceTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ReminderPreferenceTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ReminderPreferenceTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ReminderPreferenceTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> userId = const Value.absent(),
+                Value<bool> enabled = const Value.absent(),
+                Value<int> hour = const Value.absent(),
+                Value<int> minute = const Value.absent(),
+                Value<String?> timezoneId = const Value.absent(),
+                Value<DateTime?> lastNotifiedDate = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ReminderPreferenceCompanion(
+                userId: userId,
+                enabled: enabled,
+                hour: hour,
+                minute: minute,
+                timezoneId: timezoneId,
+                lastNotifiedDate: lastNotifiedDate,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String userId,
+                Value<bool> enabled = const Value.absent(),
+                Value<int> hour = const Value.absent(),
+                Value<int> minute = const Value.absent(),
+                Value<String?> timezoneId = const Value.absent(),
+                Value<DateTime?> lastNotifiedDate = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ReminderPreferenceCompanion.insert(
+                userId: userId,
+                enabled: enabled,
+                hour: hour,
+                minute: minute,
+                timezoneId: timezoneId,
+                lastNotifiedDate: lastNotifiedDate,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) =>
+              p0.map((e) => (e.readTable(table), BaseReferences(db, table, e))).toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$ReminderPreferenceTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ReminderPreferenceTable,
+      ReminderPreferenceData,
+      $$ReminderPreferenceTableFilterComposer,
+      $$ReminderPreferenceTableOrderingComposer,
+      $$ReminderPreferenceTableAnnotationComposer,
+      $$ReminderPreferenceTableCreateCompanionBuilder,
+      $$ReminderPreferenceTableUpdateCompanionBuilder,
+      (
+        ReminderPreferenceData,
+        BaseReferences<_$AppDatabase, $ReminderPreferenceTable, ReminderPreferenceData>,
+      ),
+      ReminderPreferenceData,
+      PrefetchHooks Function()
+    >;
+typedef $$NotificationLogTableCreateCompanionBuilder =
+    NotificationLogCompanion Function({
+      required String id,
+      required String userId,
+      required String type,
+      required String title,
+      required String body,
+      Value<String> payloadJson,
+      Value<String?> deepLink,
+      required DateTime receivedAt,
+      Value<DateTime?> readAt,
+      Value<int> rowid,
+    });
+typedef $$NotificationLogTableUpdateCompanionBuilder =
+    NotificationLogCompanion Function({
+      Value<String> id,
+      Value<String> userId,
+      Value<String> type,
+      Value<String> title,
+      Value<String> body,
+      Value<String> payloadJson,
+      Value<String?> deepLink,
+      Value<DateTime> receivedAt,
+      Value<DateTime?> readAt,
+      Value<int> rowid,
+    });
+
+class $$NotificationLogTableFilterComposer extends Composer<_$AppDatabase, $NotificationLogTable> {
+  $$NotificationLogTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get body =>
+      $composableBuilder(column: $table.body, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get payloadJson =>
+      $composableBuilder(column: $table.payloadJson, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get deepLink =>
+      $composableBuilder(column: $table.deepLink, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get receivedAt =>
+      $composableBuilder(column: $table.receivedAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get readAt =>
+      $composableBuilder(column: $table.readAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$NotificationLogTableOrderingComposer
+    extends Composer<_$AppDatabase, $NotificationLogTable> {
+  $$NotificationLogTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get body =>
+      $composableBuilder(column: $table.body, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get payloadJson =>
+      $composableBuilder(column: $table.payloadJson, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get deepLink =>
+      $composableBuilder(column: $table.deepLink, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get receivedAt =>
+      $composableBuilder(column: $table.receivedAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get readAt =>
+      $composableBuilder(column: $table.readAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$NotificationLogTableAnnotationComposer
+    extends Composer<_$AppDatabase, $NotificationLogTable> {
+  $$NotificationLogTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => column);
+
+  GeneratedColumn<String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get body =>
+      $composableBuilder(column: $table.body, builder: (column) => column);
+
+  GeneratedColumn<String> get payloadJson =>
+      $composableBuilder(column: $table.payloadJson, builder: (column) => column);
+
+  GeneratedColumn<String> get deepLink =>
+      $composableBuilder(column: $table.deepLink, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get receivedAt =>
+      $composableBuilder(column: $table.receivedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get readAt =>
+      $composableBuilder(column: $table.readAt, builder: (column) => column);
+}
+
+class $$NotificationLogTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $NotificationLogTable,
+          NotificationLogData,
+          $$NotificationLogTableFilterComposer,
+          $$NotificationLogTableOrderingComposer,
+          $$NotificationLogTableAnnotationComposer,
+          $$NotificationLogTableCreateCompanionBuilder,
+          $$NotificationLogTableUpdateCompanionBuilder,
+          (
+            NotificationLogData,
+            BaseReferences<_$AppDatabase, $NotificationLogTable, NotificationLogData>,
+          ),
+          NotificationLogData,
+          PrefetchHooks Function()
+        > {
+  $$NotificationLogTableTableManager(_$AppDatabase db, $NotificationLogTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$NotificationLogTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$NotificationLogTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$NotificationLogTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> userId = const Value.absent(),
+                Value<String> type = const Value.absent(),
+                Value<String> title = const Value.absent(),
+                Value<String> body = const Value.absent(),
+                Value<String> payloadJson = const Value.absent(),
+                Value<String?> deepLink = const Value.absent(),
+                Value<DateTime> receivedAt = const Value.absent(),
+                Value<DateTime?> readAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => NotificationLogCompanion(
+                id: id,
+                userId: userId,
+                type: type,
+                title: title,
+                body: body,
+                payloadJson: payloadJson,
+                deepLink: deepLink,
+                receivedAt: receivedAt,
+                readAt: readAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String userId,
+                required String type,
+                required String title,
+                required String body,
+                Value<String> payloadJson = const Value.absent(),
+                Value<String?> deepLink = const Value.absent(),
+                required DateTime receivedAt,
+                Value<DateTime?> readAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => NotificationLogCompanion.insert(
+                id: id,
+                userId: userId,
+                type: type,
+                title: title,
+                body: body,
+                payloadJson: payloadJson,
+                deepLink: deepLink,
+                receivedAt: receivedAt,
+                readAt: readAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) =>
+              p0.map((e) => (e.readTable(table), BaseReferences(db, table, e))).toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$NotificationLogTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $NotificationLogTable,
+      NotificationLogData,
+      $$NotificationLogTableFilterComposer,
+      $$NotificationLogTableOrderingComposer,
+      $$NotificationLogTableAnnotationComposer,
+      $$NotificationLogTableCreateCompanionBuilder,
+      $$NotificationLogTableUpdateCompanionBuilder,
+      (
+        NotificationLogData,
+        BaseReferences<_$AppDatabase, $NotificationLogTable, NotificationLogData>,
+      ),
+      NotificationLogData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -2064,4 +3220,8 @@ class $AppDatabaseManager {
   $$SyncStateTableTableManager get syncState => $$SyncStateTableTableManager(_db, _db.syncState);
   $$ChallengeProgressTableTableManager get challengeProgress =>
       $$ChallengeProgressTableTableManager(_db, _db.challengeProgress);
+  $$ReminderPreferenceTableTableManager get reminderPreference =>
+      $$ReminderPreferenceTableTableManager(_db, _db.reminderPreference);
+  $$NotificationLogTableTableManager get notificationLog =>
+      $$NotificationLogTableTableManager(_db, _db.notificationLog);
 }

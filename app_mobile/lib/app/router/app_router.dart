@@ -14,6 +14,7 @@ import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/app_shell.dart';
 import '../../shared/widgets/placeholder_screen.dart';
 import '../../shared/widgets/route_error_screen.dart';
+import '../notifications/reminder_lifecycle_gate.dart';
 
 /// Route names as constants — screens navigate by name
 /// (`context.goNamed(AppRoute.home)`), never by hand-built path strings,
@@ -103,7 +104,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const RegisterScreen(),
       ),
       StatefulShellRoute.indexedStack(
-        builder: (context, state, navigationShell) => AppShell(navigationShell: navigationShell),
+        builder: (context, state, navigationShell) =>
+            ReminderLifecycleGate(child: AppShell(navigationShell: navigationShell)),
         branches: [
           StatefulShellBranch(
             routes: [

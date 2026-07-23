@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/error/failure.dart';
-import '../../../../core/session/current_user.dart';
 import '../../challenge_providers.dart';
 import '../../domain/entities/challenge_state.dart';
 
@@ -78,30 +77,6 @@ class ChallengeViewModel extends Notifier<ChallengeUiState> {
   Future<Failure?> toggleBookmark(int day) async {
     final result = await ref.read(toggleBookmarkUseCaseProvider)(day);
     return result.failureOrNull;
-  }
-
-  String get _userId => ref.read(currentUserProvider).userId ?? guestScopeId;
-
-  Future<({bool enabled, int hour, int minute})> reminderSettings() {
-    return ref.read(challengeLocalDataSourceProvider).getReminderSettings(_userId);
-  }
-
-  /// Requests OS notification permission, then schedules or cancels the
-  /// daily reminder to match [enabled] — the permission prompt only ever
-  /// fires from this direct user interaction, never proactively.
-  Future<bool> setReminder({required bool enabled, required int hour, required int minute}) async {
-    final scheduler = ref.read(challengeReminderSchedulerProvider);
-    if (enabled) {
-      final granted = await scheduler.requestPermission();
-      if (!granted) return false;
-      await scheduler.scheduleDaily(hour: hour, minute: minute);
-    } else {
-      await scheduler.cancel();
-    }
-    await ref
-        .read(challengeLocalDataSourceProvider)
-        .setReminderSettings(_userId, enabled: enabled, hour: hour, minute: minute);
-    return true;
   }
 }
 
