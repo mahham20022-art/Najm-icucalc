@@ -2164,6 +2164,393 @@ class NotificationLogCompanion extends UpdateCompanion<NotificationLogData> {
   }
 }
 
+class $AiCacheLocalTable extends AiCacheLocal with TableInfo<$AiCacheLocalTable, AiCacheLocalData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $AiCacheLocalTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _cacheKeyMeta = const VerificationMeta('cacheKey');
+  @override
+  late final GeneratedColumn<String> cacheKey = GeneratedColumn<String>(
+    'cache_key',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _itemTypeMeta = const VerificationMeta('itemType');
+  @override
+  late final GeneratedColumn<String> itemType = GeneratedColumn<String>(
+    'item_type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _itemIdMeta = const VerificationMeta('itemId');
+  @override
+  late final GeneratedColumn<String> itemId = GeneratedColumn<String>(
+    'item_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _contentMeta = const VerificationMeta('content');
+  @override
+  late final GeneratedColumn<String> content = GeneratedColumn<String>(
+    'content',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _fetchedAtMeta = const VerificationMeta('fetchedAt');
+  @override
+  late final GeneratedColumn<DateTime> fetchedAt = GeneratedColumn<DateTime>(
+    'fetched_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _expiresAtMeta = const VerificationMeta('expiresAt');
+  @override
+  late final GeneratedColumn<DateTime> expiresAt = GeneratedColumn<DateTime>(
+    'expires_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [cacheKey, itemType, itemId, content, fetchedAt, expiresAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'ai_cache_local';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<AiCacheLocalData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('cache_key')) {
+      context.handle(
+        _cacheKeyMeta,
+        cacheKey.isAcceptableOrUnknown(data['cache_key']!, _cacheKeyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_cacheKeyMeta);
+    }
+    if (data.containsKey('item_type')) {
+      context.handle(
+        _itemTypeMeta,
+        itemType.isAcceptableOrUnknown(data['item_type']!, _itemTypeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_itemTypeMeta);
+    }
+    if (data.containsKey('item_id')) {
+      context.handle(_itemIdMeta, itemId.isAcceptableOrUnknown(data['item_id']!, _itemIdMeta));
+    } else if (isInserting) {
+      context.missing(_itemIdMeta);
+    }
+    if (data.containsKey('content')) {
+      context.handle(_contentMeta, content.isAcceptableOrUnknown(data['content']!, _contentMeta));
+    } else if (isInserting) {
+      context.missing(_contentMeta);
+    }
+    if (data.containsKey('fetched_at')) {
+      context.handle(
+        _fetchedAtMeta,
+        fetchedAt.isAcceptableOrUnknown(data['fetched_at']!, _fetchedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_fetchedAtMeta);
+    }
+    if (data.containsKey('expires_at')) {
+      context.handle(
+        _expiresAtMeta,
+        expiresAt.isAcceptableOrUnknown(data['expires_at']!, _expiresAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_expiresAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {cacheKey};
+  @override
+  AiCacheLocalData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return AiCacheLocalData(
+      cacheKey: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}cache_key'],
+      )!,
+      itemType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}item_type'],
+      )!,
+      itemId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}item_id'],
+      )!,
+      content: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}content'],
+      )!,
+      fetchedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}fetched_at'],
+      )!,
+      expiresAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}expires_at'],
+      )!,
+    );
+  }
+
+  @override
+  $AiCacheLocalTable createAlias(String alias) {
+    return $AiCacheLocalTable(attachedDatabase, alias);
+  }
+}
+
+class AiCacheLocalData extends DataClass implements Insertable<AiCacheLocalData> {
+  final String cacheKey;
+
+  /// `mcq | topic | flashcard` — mirrors the docs' `itemType`.
+  final String itemType;
+  final String itemId;
+  final String content;
+  final DateTime fetchedAt;
+  final DateTime expiresAt;
+  const AiCacheLocalData({
+    required this.cacheKey,
+    required this.itemType,
+    required this.itemId,
+    required this.content,
+    required this.fetchedAt,
+    required this.expiresAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['cache_key'] = Variable<String>(cacheKey);
+    map['item_type'] = Variable<String>(itemType);
+    map['item_id'] = Variable<String>(itemId);
+    map['content'] = Variable<String>(content);
+    map['fetched_at'] = Variable<DateTime>(fetchedAt);
+    map['expires_at'] = Variable<DateTime>(expiresAt);
+    return map;
+  }
+
+  AiCacheLocalCompanion toCompanion(bool nullToAbsent) {
+    return AiCacheLocalCompanion(
+      cacheKey: Value(cacheKey),
+      itemType: Value(itemType),
+      itemId: Value(itemId),
+      content: Value(content),
+      fetchedAt: Value(fetchedAt),
+      expiresAt: Value(expiresAt),
+    );
+  }
+
+  factory AiCacheLocalData.fromJson(Map<String, dynamic> json, {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return AiCacheLocalData(
+      cacheKey: serializer.fromJson<String>(json['cacheKey']),
+      itemType: serializer.fromJson<String>(json['itemType']),
+      itemId: serializer.fromJson<String>(json['itemId']),
+      content: serializer.fromJson<String>(json['content']),
+      fetchedAt: serializer.fromJson<DateTime>(json['fetchedAt']),
+      expiresAt: serializer.fromJson<DateTime>(json['expiresAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'cacheKey': serializer.toJson<String>(cacheKey),
+      'itemType': serializer.toJson<String>(itemType),
+      'itemId': serializer.toJson<String>(itemId),
+      'content': serializer.toJson<String>(content),
+      'fetchedAt': serializer.toJson<DateTime>(fetchedAt),
+      'expiresAt': serializer.toJson<DateTime>(expiresAt),
+    };
+  }
+
+  AiCacheLocalData copyWith({
+    String? cacheKey,
+    String? itemType,
+    String? itemId,
+    String? content,
+    DateTime? fetchedAt,
+    DateTime? expiresAt,
+  }) => AiCacheLocalData(
+    cacheKey: cacheKey ?? this.cacheKey,
+    itemType: itemType ?? this.itemType,
+    itemId: itemId ?? this.itemId,
+    content: content ?? this.content,
+    fetchedAt: fetchedAt ?? this.fetchedAt,
+    expiresAt: expiresAt ?? this.expiresAt,
+  );
+  AiCacheLocalData copyWithCompanion(AiCacheLocalCompanion data) {
+    return AiCacheLocalData(
+      cacheKey: data.cacheKey.present ? data.cacheKey.value : this.cacheKey,
+      itemType: data.itemType.present ? data.itemType.value : this.itemType,
+      itemId: data.itemId.present ? data.itemId.value : this.itemId,
+      content: data.content.present ? data.content.value : this.content,
+      fetchedAt: data.fetchedAt.present ? data.fetchedAt.value : this.fetchedAt,
+      expiresAt: data.expiresAt.present ? data.expiresAt.value : this.expiresAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AiCacheLocalData(')
+          ..write('cacheKey: $cacheKey, ')
+          ..write('itemType: $itemType, ')
+          ..write('itemId: $itemId, ')
+          ..write('content: $content, ')
+          ..write('fetchedAt: $fetchedAt, ')
+          ..write('expiresAt: $expiresAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(cacheKey, itemType, itemId, content, fetchedAt, expiresAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is AiCacheLocalData &&
+          other.cacheKey == this.cacheKey &&
+          other.itemType == this.itemType &&
+          other.itemId == this.itemId &&
+          other.content == this.content &&
+          other.fetchedAt == this.fetchedAt &&
+          other.expiresAt == this.expiresAt);
+}
+
+class AiCacheLocalCompanion extends UpdateCompanion<AiCacheLocalData> {
+  final Value<String> cacheKey;
+  final Value<String> itemType;
+  final Value<String> itemId;
+  final Value<String> content;
+  final Value<DateTime> fetchedAt;
+  final Value<DateTime> expiresAt;
+  final Value<int> rowid;
+  const AiCacheLocalCompanion({
+    this.cacheKey = const Value.absent(),
+    this.itemType = const Value.absent(),
+    this.itemId = const Value.absent(),
+    this.content = const Value.absent(),
+    this.fetchedAt = const Value.absent(),
+    this.expiresAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  AiCacheLocalCompanion.insert({
+    required String cacheKey,
+    required String itemType,
+    required String itemId,
+    required String content,
+    required DateTime fetchedAt,
+    required DateTime expiresAt,
+    this.rowid = const Value.absent(),
+  }) : cacheKey = Value(cacheKey),
+       itemType = Value(itemType),
+       itemId = Value(itemId),
+       content = Value(content),
+       fetchedAt = Value(fetchedAt),
+       expiresAt = Value(expiresAt);
+  static Insertable<AiCacheLocalData> custom({
+    Expression<String>? cacheKey,
+    Expression<String>? itemType,
+    Expression<String>? itemId,
+    Expression<String>? content,
+    Expression<DateTime>? fetchedAt,
+    Expression<DateTime>? expiresAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (cacheKey != null) 'cache_key': cacheKey,
+      if (itemType != null) 'item_type': itemType,
+      if (itemId != null) 'item_id': itemId,
+      if (content != null) 'content': content,
+      if (fetchedAt != null) 'fetched_at': fetchedAt,
+      if (expiresAt != null) 'expires_at': expiresAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  AiCacheLocalCompanion copyWith({
+    Value<String>? cacheKey,
+    Value<String>? itemType,
+    Value<String>? itemId,
+    Value<String>? content,
+    Value<DateTime>? fetchedAt,
+    Value<DateTime>? expiresAt,
+    Value<int>? rowid,
+  }) {
+    return AiCacheLocalCompanion(
+      cacheKey: cacheKey ?? this.cacheKey,
+      itemType: itemType ?? this.itemType,
+      itemId: itemId ?? this.itemId,
+      content: content ?? this.content,
+      fetchedAt: fetchedAt ?? this.fetchedAt,
+      expiresAt: expiresAt ?? this.expiresAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (cacheKey.present) {
+      map['cache_key'] = Variable<String>(cacheKey.value);
+    }
+    if (itemType.present) {
+      map['item_type'] = Variable<String>(itemType.value);
+    }
+    if (itemId.present) {
+      map['item_id'] = Variable<String>(itemId.value);
+    }
+    if (content.present) {
+      map['content'] = Variable<String>(content.value);
+    }
+    if (fetchedAt.present) {
+      map['fetched_at'] = Variable<DateTime>(fetchedAt.value);
+    }
+    if (expiresAt.present) {
+      map['expires_at'] = Variable<DateTime>(expiresAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AiCacheLocalCompanion(')
+          ..write('cacheKey: $cacheKey, ')
+          ..write('itemType: $itemType, ')
+          ..write('itemId: $itemId, ')
+          ..write('content: $content, ')
+          ..write('fetchedAt: $fetchedAt, ')
+          ..write('expiresAt: $expiresAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -2172,6 +2559,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $ChallengeProgressTable challengeProgress = $ChallengeProgressTable(this);
   late final $ReminderPreferenceTable reminderPreference = $ReminderPreferenceTable(this);
   late final $NotificationLogTable notificationLog = $NotificationLogTable(this);
+  late final $AiCacheLocalTable aiCacheLocal = $AiCacheLocalTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2182,6 +2570,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     challengeProgress,
     reminderPreference,
     notificationLog,
+    aiCacheLocal,
   ];
 }
 
@@ -3212,6 +3601,189 @@ typedef $$NotificationLogTableProcessedTableManager =
       NotificationLogData,
       PrefetchHooks Function()
     >;
+typedef $$AiCacheLocalTableCreateCompanionBuilder =
+    AiCacheLocalCompanion Function({
+      required String cacheKey,
+      required String itemType,
+      required String itemId,
+      required String content,
+      required DateTime fetchedAt,
+      required DateTime expiresAt,
+      Value<int> rowid,
+    });
+typedef $$AiCacheLocalTableUpdateCompanionBuilder =
+    AiCacheLocalCompanion Function({
+      Value<String> cacheKey,
+      Value<String> itemType,
+      Value<String> itemId,
+      Value<String> content,
+      Value<DateTime> fetchedAt,
+      Value<DateTime> expiresAt,
+      Value<int> rowid,
+    });
+
+class $$AiCacheLocalTableFilterComposer extends Composer<_$AppDatabase, $AiCacheLocalTable> {
+  $$AiCacheLocalTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get cacheKey =>
+      $composableBuilder(column: $table.cacheKey, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get itemType =>
+      $composableBuilder(column: $table.itemType, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get itemId =>
+      $composableBuilder(column: $table.itemId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get content =>
+      $composableBuilder(column: $table.content, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get fetchedAt =>
+      $composableBuilder(column: $table.fetchedAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get expiresAt =>
+      $composableBuilder(column: $table.expiresAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$AiCacheLocalTableOrderingComposer extends Composer<_$AppDatabase, $AiCacheLocalTable> {
+  $$AiCacheLocalTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get cacheKey =>
+      $composableBuilder(column: $table.cacheKey, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get itemType =>
+      $composableBuilder(column: $table.itemType, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get itemId =>
+      $composableBuilder(column: $table.itemId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get content =>
+      $composableBuilder(column: $table.content, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get fetchedAt =>
+      $composableBuilder(column: $table.fetchedAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get expiresAt =>
+      $composableBuilder(column: $table.expiresAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$AiCacheLocalTableAnnotationComposer extends Composer<_$AppDatabase, $AiCacheLocalTable> {
+  $$AiCacheLocalTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get cacheKey =>
+      $composableBuilder(column: $table.cacheKey, builder: (column) => column);
+
+  GeneratedColumn<String> get itemType =>
+      $composableBuilder(column: $table.itemType, builder: (column) => column);
+
+  GeneratedColumn<String> get itemId =>
+      $composableBuilder(column: $table.itemId, builder: (column) => column);
+
+  GeneratedColumn<String> get content =>
+      $composableBuilder(column: $table.content, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get fetchedAt =>
+      $composableBuilder(column: $table.fetchedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get expiresAt =>
+      $composableBuilder(column: $table.expiresAt, builder: (column) => column);
+}
+
+class $$AiCacheLocalTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $AiCacheLocalTable,
+          AiCacheLocalData,
+          $$AiCacheLocalTableFilterComposer,
+          $$AiCacheLocalTableOrderingComposer,
+          $$AiCacheLocalTableAnnotationComposer,
+          $$AiCacheLocalTableCreateCompanionBuilder,
+          $$AiCacheLocalTableUpdateCompanionBuilder,
+          (AiCacheLocalData, BaseReferences<_$AppDatabase, $AiCacheLocalTable, AiCacheLocalData>),
+          AiCacheLocalData,
+          PrefetchHooks Function()
+        > {
+  $$AiCacheLocalTableTableManager(_$AppDatabase db, $AiCacheLocalTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () => $$AiCacheLocalTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () => $$AiCacheLocalTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AiCacheLocalTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> cacheKey = const Value.absent(),
+                Value<String> itemType = const Value.absent(),
+                Value<String> itemId = const Value.absent(),
+                Value<String> content = const Value.absent(),
+                Value<DateTime> fetchedAt = const Value.absent(),
+                Value<DateTime> expiresAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => AiCacheLocalCompanion(
+                cacheKey: cacheKey,
+                itemType: itemType,
+                itemId: itemId,
+                content: content,
+                fetchedAt: fetchedAt,
+                expiresAt: expiresAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String cacheKey,
+                required String itemType,
+                required String itemId,
+                required String content,
+                required DateTime fetchedAt,
+                required DateTime expiresAt,
+                Value<int> rowid = const Value.absent(),
+              }) => AiCacheLocalCompanion.insert(
+                cacheKey: cacheKey,
+                itemType: itemType,
+                itemId: itemId,
+                content: content,
+                fetchedAt: fetchedAt,
+                expiresAt: expiresAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) =>
+              p0.map((e) => (e.readTable(table), BaseReferences(db, table, e))).toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$AiCacheLocalTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $AiCacheLocalTable,
+      AiCacheLocalData,
+      $$AiCacheLocalTableFilterComposer,
+      $$AiCacheLocalTableOrderingComposer,
+      $$AiCacheLocalTableAnnotationComposer,
+      $$AiCacheLocalTableCreateCompanionBuilder,
+      $$AiCacheLocalTableUpdateCompanionBuilder,
+      (AiCacheLocalData, BaseReferences<_$AppDatabase, $AiCacheLocalTable, AiCacheLocalData>),
+      AiCacheLocalData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -3224,4 +3796,6 @@ class $AppDatabaseManager {
       $$ReminderPreferenceTableTableManager(_db, _db.reminderPreference);
   $$NotificationLogTableTableManager get notificationLog =>
       $$NotificationLogTableTableManager(_db, _db.notificationLog);
+  $$AiCacheLocalTableTableManager get aiCacheLocal =>
+      $$AiCacheLocalTableTableManager(_db, _db.aiCacheLocal);
 }

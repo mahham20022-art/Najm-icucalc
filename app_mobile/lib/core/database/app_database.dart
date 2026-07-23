@@ -126,7 +126,31 @@ class NotificationLog extends Table {
   Set<Column> get primaryKey => {id};
 }
 
-@DriftDatabase(tables: [Outbox, SyncState, ChallengeProgress, ReminderPreference, NotificationLog])
+/// Mirrors `MED100_DATABASE_DESIGN.md` §10's `ai_cache_local` table — the
+/// AI Engine's on-device cache of generated content (topic summaries,
+/// MCQ explanations). Deliberately *not* per-user scoped: unlike
+/// Challenge Progress or Reminder Preferences, an AI summary for a given
+/// topic/model/prompt combination is identical for every user, so the
+/// cache key (`core/ai`'s `sha256(promptType + inputHash + modelVersion)`,
+/// same formula as the server-side `aiCache` collection) is the whole
+/// identity — there is nothing to scope per user.
+class AiCacheLocal extends Table {
+  TextColumn get cacheKey => text()();
+
+  /// `mcq | topic | flashcard` — mirrors the docs' `itemType`.
+  TextColumn get itemType => text()();
+  TextColumn get itemId => text()();
+  TextColumn get content => text()();
+  DateTimeColumn get fetchedAt => dateTime()();
+  DateTimeColumn get expiresAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {cacheKey};
+}
+
+@DriftDatabase(
+  tables: [Outbox, SyncState, ChallengeProgress, ReminderPreference, NotificationLog, AiCacheLocal],
+)
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
@@ -138,7 +162,7 @@ class AppDatabase extends _$AppDatabase {
   /// `MED100_DATABASE_DESIGN.md` §0 for the schema-versioning convention
   /// this project follows on both the Firestore and Drift sides.
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -155,6 +179,9 @@ class AppDatabase extends _$AppDatabase {
         await m.alterTable(TableMigration(challengeProgress));
         await m.createTable(reminderPreference);
         await m.createTable(notificationLog);
+      }
+      if (from < 4) {
+        await m.createTable(aiCacheLocal);
       }
     },
   );

@@ -98,3 +98,22 @@ class AlreadyActionedTodayFailure extends Failure {
     super.message = "You've already completed today's challenge — come back tomorrow!",
   ]);
 }
+
+/// The AI Engine's own rate limiter rejected this request — too many
+/// calls to the selected provider in the current window. Distinct from
+/// [TooManyRequestsFailure] (which is a vendor/Firebase-reported
+/// rejection): this one is enforced client-side, before a request is
+/// ever sent, specifically to protect API budget and vendor ToS limits.
+class AiRateLimitedFailure extends Failure {
+  const AiRateLimitedFailure([
+    super.message = 'Too many AI requests right now — please wait a moment and try again.',
+  ]);
+}
+
+/// The selected AI provider returned an error after exhausting retries,
+/// or has no API key configured — never a raw HTTP status code or vendor
+/// error body, per the same "no raw provider error to the UI" rule
+/// `AuthFailure` follows for Firebase.
+class AiProviderFailure extends Failure {
+  const AiProviderFailure([super.message = 'The AI assistant is unavailable right now.']);
+}
