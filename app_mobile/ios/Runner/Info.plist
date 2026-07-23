@@ -26,6 +26,21 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Use Face ID to sign back in quickly and securely.</string>
+	<!--
+	  Google Sign-In requires a URL scheme equal to the REVERSED_CLIENT_ID
+	  from GoogleService-Info.plist (produced by `flutterfire configure`
+	  against a real Firebase project). Placeholder omitted rather than
+	  guessed — add it here once that file exists, e.g.:
+	  <key>CFBundleURLTypes</key>
+	  <array>
+	    <dict>
+	      <key>CFBundleURLSchemes</key>
+	      <array><string>com.googleusercontent.apps.YOUR_REVERSED_CLIENT_ID</string></array>
+	    </dict>
+	  </array>
+	-->
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

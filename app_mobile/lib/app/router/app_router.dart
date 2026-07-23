@@ -1,6 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/auth_onboarding/presentation/screens/login_screen.dart';
+import '../../features/auth_onboarding/presentation/screens/profile_screen.dart';
+import '../../features/auth_onboarding/presentation/screens/register_screen.dart';
+import '../../features/auth_onboarding/presentation/screens/splash_screen.dart';
+import '../../features/auth_onboarding/presentation/viewmodels/auth_view_model.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/app_shell.dart';
 import '../../shared/widgets/placeholder_screen.dart';
@@ -29,18 +35,36 @@ abstract final class AppRoute {
   static const flashcards = 'flashcards';
 }
 
-/// One route per screen requested — Splash, Onboarding, Login, Register,
-/// Home, Topics, Progress, Bookmarks, Profile, Settings, Subscription —
-/// plus a handful of routes already scaffolded before this pass (topic
-/// detail, MCQs, Flashcards, Teaching Mode) that this change doesn't
-/// remove. Every leaf is a [PlaceholderScreen]: no business logic, no
-/// data, no auth — [PlaceholderAction] buttons exist purely so the graph
-/// is actually tappable end-to-end (Splash → Onboarding → Login/Register
-/// → Home, Profile → Settings/Subscription), not to simulate real
-/// sign-in or onboarding behavior.
+/// Locations reachable without a fully authenticated session — Splash
+/// (it decides where everyone else goes), Onboarding, Login, Register.
+const _publicLocations = {'/splash', '/onboarding', '/login', '/register'};
+
 final appRouterProvider = Provider<GoRouter>((ref) {
+  final refreshNotifier = _AuthRefreshNotifier(ref);
+  ref.onDispose(refreshNotifier.dispose);
+
   return GoRouter(
     initialLocation: '/splash',
+    refreshListenable: refreshNotifier,
+    // Gates every shell route (Home, Topics, Progress, Bookmarks,
+    // Profile and anything nested under them) behind a fully
+    // authenticated session — `AuthLocked` (biometric gate not yet
+    // passed) does *not* count, same as fully signed out. Splash is
+    // exempt: it's the one place that runs the check and decides where
+    // to send everyone else, so redirecting away from it before it's
+    // had a chance to run would create a redirect loop.
+    redirect: (context, state) {
+      final location = state.matchedLocation;
+      if (location == '/splash') return null;
+
+      final authState = ref.read(authViewModelProvider);
+      final isAuthenticated = authState is AuthAuthenticated;
+      final isPublicLocation = _publicLocations.contains(location);
+
+      if (!isAuthenticated && !isPublicLocation) return '/login';
+      if (isAuthenticated && isPublicLocation) return '/home';
+      return null;
+    },
     // A malformed/stale deep link (push notification, universal link) is
     // an expected occurrence at scale, not a developer-only concern — see
     // `shared/widgets/route_error_screen.dart`.
@@ -49,16 +73,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/splash',
         name: AppRoute.splash,
-        builder: (context, state) => PlaceholderScreen(
-          screenName: 'Splash',
-          showAppBar: false,
-          actions: [
-            PlaceholderAction(
-              label: AppLocalizations.of(context).continueLabel,
-              onPressed: () => context.goNamed(AppRoute.onboarding),
-            ),
-          ],
-        ),
+        builder: (context, state) => const SplashScreen(),
       ),
       GoRoute(
         path: '/onboarding',
@@ -77,59 +92,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/login',
         name: AppRoute.login,
-        builder: (context, state) {
-          final l10n = AppLocalizations.of(context);
-          return PlaceholderScreen(
-            screenName: 'Login',
-            showAppBar: false,
-            actions: [
-              PlaceholderAction(label: l10n.logIn, onPressed: () => context.goNamed(AppRoute.home)),
-              // pushNamed, not goNamed: /login and /register are sibling
-              // routes with no shared path segment, so go() would replace
-              // rather than stack — leaving no back-stack entry for
-              // Register's system-back/swipe-back gesture to return to.
-              // Pushing here is what makes that gesture land on Login
-              // instead of exiting the app.
-              PlaceholderAction(
-                label: l10n.goToRegister,
-                emphasized: false,
-                onPressed: () => context.pushNamed(AppRoute.register),
-              ),
-            ],
-          );
-        },
+        builder: (context, state) => const LoginScreen(),
       ),
       GoRoute(
         path: '/register',
         name: AppRoute.register,
-        builder: (context, state) {
-          final l10n = AppLocalizations.of(context);
-          return PlaceholderScreen(
-            screenName: 'Register',
-            showAppBar: false,
-            actions: [
-              PlaceholderAction(
-                label: l10n.register,
-                onPressed: () => context.goNamed(AppRoute.home),
-              ),
-              // Pop back to Login if we arrived here via the push above
-              // (the common case); fall back to go() only if Register was
-              // reached directly (e.g. a deep link) and there's nothing
-              // to pop to.
-              PlaceholderAction(
-                label: l10n.goToLogin,
-                emphasized: false,
-                onPressed: () {
-                  if (context.canPop()) {
-                    context.pop();
-                  } else {
-                    context.goNamed(AppRoute.login);
-                  }
-                },
-              ),
-            ],
-          );
-        },
+        builder: (context, state) => const RegisterScreen(),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) => AppShell(navigationShell: navigationShell),
@@ -183,29 +151,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: '/profile',
                 name: AppRoute.profile,
-                builder: (context, state) {
-                  final l10n = AppLocalizations.of(context);
-                  return PlaceholderScreen(
-                    screenName: 'Profile',
-                    actions: [
-                      PlaceholderAction(
-                        label: l10n.openSettings,
-                        emphasized: false,
-                        onPressed: () => context.goNamed(AppRoute.settings),
-                      ),
-                      PlaceholderAction(
-                        label: l10n.openSubscription,
-                        emphasized: false,
-                        onPressed: () => context.goNamed(AppRoute.subscription),
-                      ),
-                      PlaceholderAction(
-                        label: l10n.openTeachingMode,
-                        emphasized: false,
-                        onPressed: () => context.goNamed(AppRoute.teachingMode),
-                      ),
-                    ],
-                  );
-                },
+                builder: (context, state) => const ProfileScreen(),
                 routes: [
                   GoRoute(
                     path: 'settings',
@@ -253,3 +199,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     ],
   );
 });
+
+/// Bridges Riverpod's `authViewModelProvider` into a [Listenable]
+/// go_router can watch — `GoRouter.refreshListenable` is how the
+/// `redirect` callback above gets re-evaluated the moment auth state
+/// changes, rather than only on the next explicit navigation.
+class _AuthRefreshNotifier extends ChangeNotifier {
+  _AuthRefreshNotifier(Ref ref) {
+    ref.listen(authViewModelProvider, (previous, next) => notifyListeners());
+  }
+}

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Provider-agnostic session contract — repositories depend on this, not
@@ -29,4 +30,22 @@ class NoAuthCurrentUser implements CurrentUser {
   String? get userId => null;
 }
 
-final currentUserProvider = Provider<CurrentUser>((ref) => const NoAuthCurrentUser());
+/// Reads straight off `FirebaseAuth.instance` rather than through
+/// `features/auth_onboarding`'s repository — `core` sits below every
+/// feature (`MED100_ARCHITECTURE.md` §3), so it can depend on the
+/// Firebase SDK directly (same as `core/database`, `core/analytics`
+/// depending on their own SDKs) but never on another feature's
+/// abstractions. The actual sign-in/sign-out *behavior* still lives
+/// entirely in `features/auth_onboarding` — this only ever reads.
+class FirebaseCurrentUser implements CurrentUser {
+  const FirebaseCurrentUser(this._firebaseAuth);
+
+  final FirebaseAuth _firebaseAuth;
+
+  @override
+  String? get userId => _firebaseAuth.currentUser?.uid;
+}
+
+final currentUserProvider = Provider<CurrentUser>((ref) {
+  return FirebaseCurrentUser(FirebaseAuth.instance);
+});
