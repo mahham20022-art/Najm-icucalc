@@ -6,5 +6,7 @@
   "navBookmarks": "المحفوظات",
   "navProgress": "التقدم",
   "navProfile": "الملف الشخصي",
-  "screenNotImplemented": "{screenName} — الأساس فقط، لم يُنفَّذ بعد"
+  "screenNotImplemented": "{screenName} — الأساس فقط، لم يُنفَّذ بعد",
+  "routeNotFoundMessage": "تعذّر العثور على هذه الصفحة.",
+  "goToHome": "الذهاب إلى الرئيسية"
 }

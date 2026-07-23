@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/session/current_user.dart';
 import 'data/datasources/topic_local_datasource.dart';
 import 'data/datasources/topic_remote_datasource.dart';
 import 'data/repositories/topic_repository_impl.dart';
@@ -25,6 +26,7 @@ final topicRepositoryProvider = Provider<TopicRepository>((ref) {
   return TopicRepositoryImpl(
     local: ref.watch(topicLocalDataSourceProvider),
     remote: ref.watch(topicRemoteDataSourceProvider),
+    currentUser: ref.watch(currentUserProvider),
   );
 });
 

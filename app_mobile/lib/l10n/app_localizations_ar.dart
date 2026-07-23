@@ -30,4 +30,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String screenNotImplemented(String screenName) {
     return '$screenName — الأساس فقط، لم يُنفَّذ بعد';
   }
+
+  @override
+  String get routeNotFoundMessage => 'تعذّر العثور على هذه الصفحة.';
+
+  @override
+  String get goToHome => 'الذهاب إلى الرئيسية';
 }

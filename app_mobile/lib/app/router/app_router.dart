@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../shared/widgets/app_shell.dart';
 import '../../shared/widgets/placeholder_screen.dart';
+import '../../shared/widgets/route_error_screen.dart';
 
 /// Route names as constants — screens navigate by name
 /// (`context.goNamed(AppRoute.home)`), never by hand-built path strings,
@@ -32,6 +33,10 @@ abstract final class AppRoute {
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: '/splash',
+    // A malformed/stale deep link (push notification, universal link) is
+    // an expected occurrence at scale, not a developer-only concern — see
+    // `shared/widgets/route_error_screen.dart`.
+    errorBuilder: (context, state) => const RouteErrorScreen(),
     routes: [
       GoRoute(
         path: '/splash',

@@ -6,9 +6,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// the package directly — the offline-first sync worker (`core/sync`)
 /// and the UI's non-intrusive sync-status indicator
 /// (`MED100_UI_UX_SPEC.md` §11 Offline Strategy) both consume this.
-final connectivityProvider = StreamProvider<bool>((ref) {
+final connectivityProvider = StreamProvider<bool>((ref) async* {
   final connectivity = Connectivity();
-  return connectivity.onConnectivityChanged.map(
+
+  // `onConnectivityChanged` only emits on a *future* change — it does not
+  // push the connectivity state that already holds at subscription time.
+  // Without seeding an initial value here, `isOnlineProvider` below would
+  // sit in `AsyncLoading` (and fall back to its optimistic default)
+  // indefinitely on any device whose connection doesn't happen to change
+  // state after launch, which defeats the point of an offline-aware UI.
+  yield !(await connectivity.checkConnectivity()).contains(ConnectivityResult.none);
+
+  yield* connectivity.onConnectivityChanged.map(
     (results) => !results.contains(ConnectivityResult.none),
   );
 });

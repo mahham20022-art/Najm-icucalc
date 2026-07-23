@@ -22,7 +22,11 @@ Clean Architecture + MVVM + Repository Pattern, per `MED100_ARCHITECTURE.md`
 
 - `lib/core/` — cross-cutting infrastructure shared by every feature:
   error/`Result` types, the offline-first `Outbox`/`SyncState` Drift tables,
-  connectivity, responsive breakpoints, analytics facade.
+  connectivity (seeded with the current state, not just future changes),
+  responsive breakpoints, the analytics facade, and a provider-agnostic
+  `CurrentUser` session contract that per-user repository caching should key
+  off of (see `core/session/current_user.dart`) so a shared/re-logged-in
+  device can't leak one user's cached data into another's session.
 - `lib/app/` — the composition root: theme (built from
   `MED100_DESIGN_SYSTEM.md`'s tokens), router, and bootstrap.
 - `lib/features/<feature>/{data,domain,presentation}` — one folder per
@@ -53,6 +57,13 @@ flutterfire configure
 Per `MED100_ARCHITECTURE.md` §12, the Editorial Console uses a **separate**
 Firebase project from this consumer app — make sure `flutterfire configure`
 points at the consumer-app project.
+
+Crashlytics error reporting and App Check activation are already wired in
+`app/bootstrap/bootstrap.dart` (both guarded — they no-op safely against the
+placeholder config), so both start working the moment real credentials are in
+place. App Check's web provider still needs a real reCAPTCHA site key
+(`REPLACE_WITH_RECAPTCHA_SITE_KEY` in `bootstrap.dart`) even after
+`flutterfire configure`, since that value isn't part of `flutterfire`'s output.
 
 ### Flavors
 

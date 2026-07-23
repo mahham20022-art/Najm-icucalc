@@ -20,5 +20,10 @@
         "type": "String"
       }
     }
-  }
+  },
+  "routeNotFoundMessage": "We couldn't find that page.",
+  "@routeNotFoundMessage": {
+    "description": "Shown when GoRouter can't match a location, e.g. a stale deep link."
+  },
+  "goToHome": "Go to Home"
 }

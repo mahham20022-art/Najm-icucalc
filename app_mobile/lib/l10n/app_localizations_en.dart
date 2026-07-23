@@ -30,4 +30,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String screenNotImplemented(String screenName) {
     return '$screenName — foundation only, not yet implemented';
   }
+
+  @override
+  String get routeNotFoundMessage => 'We couldn\'t find that page.';
+
+  @override
+  String get goToHome => 'Go to Home';
 }
