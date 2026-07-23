@@ -199,6 +199,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Subscription'**
   String get openSubscription;
+
+  /// No description provided for @openTeachingMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Teaching Mode'**
+  String get openTeachingMode;
 }
 
 class _AppLocalizationsDelegate

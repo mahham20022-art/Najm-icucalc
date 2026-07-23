@@ -33,5 +33,6 @@
   "goToRegister": "Don't have an account? Register",
   "goToLogin": "Already have an account? Log In",
   "openSettings": "Settings",
-  "openSubscription": "Subscription"
+  "openSubscription": "Subscription",
+  "openTeachingMode": "Teaching Mode"
 }

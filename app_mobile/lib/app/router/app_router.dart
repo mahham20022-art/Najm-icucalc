@@ -84,10 +84,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             showAppBar: false,
             actions: [
               PlaceholderAction(label: l10n.logIn, onPressed: () => context.goNamed(AppRoute.home)),
+              // pushNamed, not goNamed: /login and /register are sibling
+              // routes with no shared path segment, so go() would replace
+              // rather than stack — leaving no back-stack entry for
+              // Register's system-back/swipe-back gesture to return to.
+              // Pushing here is what makes that gesture land on Login
+              // instead of exiting the app.
               PlaceholderAction(
                 label: l10n.goToRegister,
                 emphasized: false,
-                onPressed: () => context.goNamed(AppRoute.register),
+                onPressed: () => context.pushNamed(AppRoute.register),
               ),
             ],
           );
@@ -106,10 +112,20 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 label: l10n.register,
                 onPressed: () => context.goNamed(AppRoute.home),
               ),
+              // Pop back to Login if we arrived here via the push above
+              // (the common case); fall back to go() only if Register was
+              // reached directly (e.g. a deep link) and there's nothing
+              // to pop to.
               PlaceholderAction(
                 label: l10n.goToLogin,
                 emphasized: false,
-                onPressed: () => context.goNamed(AppRoute.login),
+                onPressed: () {
+                  if (context.canPop()) {
+                    context.pop();
+                  } else {
+                    context.goNamed(AppRoute.login);
+                  }
+                },
               ),
             ],
           );
@@ -181,6 +197,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                         label: l10n.openSubscription,
                         emphasized: false,
                         onPressed: () => context.goNamed(AppRoute.subscription),
+                      ),
+                      PlaceholderAction(
+                        label: l10n.openTeachingMode,
+                        emphasized: false,
+                        onPressed: () => context.goNamed(AppRoute.teachingMode),
                       ),
                     ],
                   );

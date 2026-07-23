@@ -60,4 +60,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get openSubscription => 'الاشتراك';
+
+  @override
+  String get openTeachingMode => 'وضع التدريس';
 }

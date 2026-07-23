@@ -16,5 +16,6 @@
   "goToRegister": "ليس لديك حساب؟ أنشئ حسابًا",
   "goToLogin": "لديك حساب بالفعل؟ سجّل الدخول",
   "openSettings": "الإعدادات",
-  "openSubscription": "الاشتراك"
+  "openSubscription": "الاشتراك",
+  "openTeachingMode": "وضع التدريس"
 }

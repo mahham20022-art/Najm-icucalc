@@ -60,4 +60,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get openSubscription => 'Subscription';
+
+  @override
+  String get openTeachingMode => 'Teaching Mode';
 }
