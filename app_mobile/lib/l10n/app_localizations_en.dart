@@ -18,6 +18,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navHome => 'Home';
 
   @override
+  String get navTopics => 'Topics';
+
+  @override
   String get navBookmarks => 'Bookmarks';
 
   @override
@@ -36,4 +39,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get goToHome => 'Go to Home';
+
+  @override
+  String get continueLabel => 'Continue';
+
+  @override
+  String get logIn => 'Log In';
+
+  @override
+  String get register => 'Register';
+
+  @override
+  String get goToRegister => 'Don\'t have an account? Register';
+
+  @override
+  String get goToLogin => 'Already have an account? Log In';
+
+  @override
+  String get openSettings => 'Settings';
+
+  @override
+  String get openSubscription => 'Subscription';
 }

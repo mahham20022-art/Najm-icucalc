@@ -116,6 +116,12 @@ abstract class AppLocalizations {
   /// **'Home'**
   String get navHome;
 
+  /// No description provided for @navTopics.
+  ///
+  /// In en, this message translates to:
+  /// **'Topics'**
+  String get navTopics;
+
   /// No description provided for @navBookmarks.
   ///
   /// In en, this message translates to:
@@ -151,6 +157,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Go to Home'**
   String get goToHome;
+
+  /// No description provided for @continueLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueLabel;
+
+  /// No description provided for @logIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Log In'**
+  String get logIn;
+
+  /// No description provided for @register.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get register;
+
+  /// No description provided for @goToRegister.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have an account? Register'**
+  String get goToRegister;
+
+  /// No description provided for @goToLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account? Log In'**
+  String get goToLogin;
+
+  /// No description provided for @openSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get openSettings;
+
+  /// No description provided for @openSubscription.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscription'**
+  String get openSubscription;
 }
 
 class _AppLocalizationsDelegate

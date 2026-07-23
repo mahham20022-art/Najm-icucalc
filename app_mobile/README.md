@@ -36,6 +36,24 @@ Clean Architecture + MVVM + Repository Pattern, per `MED100_ARCHITECTURE.md`
   folder is scaffolded but empty — building them out is feature work, not
   foundation work.
 
+## Navigation
+
+Every screen is a [`PlaceholderScreen`](lib/shared/widgets/placeholder_screen.dart)
+— no business logic, no data, no auth — but the graph between them is real and
+tappable, not just routes that exist in isolation:
+
+- `Splash → Onboarding → Login ⇄ Register → Home` (`PlaceholderAction` buttons
+  drive each step; none of them do anything but navigate).
+- A 5-tab shell (`Home`, `Topics`, `Progress`, `Bookmarks`, `Profile`) — bottom
+  `NavigationBar` on phone, side `NavigationRail` on tablet
+  (`shared/widgets/app_shell.dart`). Five tabs is one more than the four-tab
+  cap `MED100_UI_UX_SPEC.md` §4 recommends; that's this app's explicit
+  navigation list, not an oversight.
+- `Profile → Settings` / `Profile → Subscription` are pushed routes, reachable
+  from buttons on the Profile placeholder itself, not just addressable by URL.
+- A themed `RouteErrorScreen` (not go_router's generic default) handles any
+  path that doesn't match, per `shared/widgets/route_error_screen.dart`.
+
 ## Getting started
 
 ```bash

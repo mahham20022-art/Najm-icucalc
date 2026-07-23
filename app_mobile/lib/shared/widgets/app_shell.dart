@@ -4,10 +4,13 @@ import 'package:go_router/go_router.dart';
 import '../../core/responsive/breakpoints.dart';
 import '../../l10n/app_localizations.dart';
 
-/// The four tab-bar-rooted destinations, per `MED100_UI_UX_SPEC.md` §4
-/// and `MED100_DESIGN_SYSTEM.md` §10 — kept to exactly four per HIG
-/// guidance; Settings lives inside Profile rather than claiming a fifth
-/// slot.
+/// The five tab-bar-rooted destinations, per the explicit navigation
+/// list this app was asked to implement (Home, Topics, Progress,
+/// Bookmarks, Profile). This is one more than the four-tab cap
+/// `MED100_UI_UX_SPEC.md` §4 recommends per HIG guidance — a deliberate,
+/// explicitly-requested deviation, not an oversight. Settings and
+/// Subscription still live inside Profile rather than claiming their own
+/// tab slots.
 ///
 /// Renders as a bottom [NavigationBar] on phone widths and a left-edge
 /// [NavigationRail] on tablet/regular widths (`MED100_UI_UX_SPEC.md`
@@ -23,8 +26,9 @@ class AppShell extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final destinations = [
       (icon: Icons.home_outlined, selectedIcon: Icons.home, label: l10n.navHome),
-      (icon: Icons.bookmark_outline, selectedIcon: Icons.bookmark, label: l10n.navBookmarks),
+      (icon: Icons.menu_book_outlined, selectedIcon: Icons.menu_book, label: l10n.navTopics),
       (icon: Icons.trending_up_outlined, selectedIcon: Icons.trending_up, label: l10n.navProgress),
+      (icon: Icons.bookmark_outline, selectedIcon: Icons.bookmark, label: l10n.navBookmarks),
       (icon: Icons.person_outline, selectedIcon: Icons.person, label: l10n.navProfile),
     ];
 

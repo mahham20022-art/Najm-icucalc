@@ -18,6 +18,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get navHome => 'الرئيسية';
 
   @override
+  String get navTopics => 'المواضيع';
+
+  @override
   String get navBookmarks => 'المحفوظات';
 
   @override
@@ -36,4 +39,25 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get goToHome => 'الذهاب إلى الرئيسية';
+
+  @override
+  String get continueLabel => 'متابعة';
+
+  @override
+  String get logIn => 'تسجيل الدخول';
+
+  @override
+  String get register => 'إنشاء حساب';
+
+  @override
+  String get goToRegister => 'ليس لديك حساب؟ أنشئ حسابًا';
+
+  @override
+  String get goToLogin => 'لديك حساب بالفعل؟ سجّل الدخول';
+
+  @override
+  String get openSettings => 'الإعدادات';
+
+  @override
+  String get openSubscription => 'الاشتراك';
 }

@@ -9,6 +9,7 @@
     "description": "PRD tagline, shown beneath the wordmark on Splash (MED100_UI_UX_SPEC.md §1)."
   },
   "navHome": "Home",
+  "navTopics": "Topics",
   "navBookmarks": "Bookmarks",
   "navProgress": "Progress",
   "navProfile": "Profile",
@@ -25,5 +26,12 @@
   "@routeNotFoundMessage": {
     "description": "Shown when GoRouter can't match a location, e.g. a stale deep link."
   },
-  "goToHome": "Go to Home"
+  "goToHome": "Go to Home",
+  "continueLabel": "Continue",
+  "logIn": "Log In",
+  "register": "Register",
+  "goToRegister": "Don't have an account? Register",
+  "goToLogin": "Already have an account? Log In",
+  "openSettings": "Settings",
+  "openSubscription": "Subscription"
 }

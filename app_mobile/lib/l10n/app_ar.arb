@@ -3,10 +3,18 @@
   "appName": "ميد١٠٠",
   "tagline": "موضوع واحد. كل يوم. أتقن تخصصك.",
   "navHome": "الرئيسية",
+  "navTopics": "المواضيع",
   "navBookmarks": "المحفوظات",
   "navProgress": "التقدم",
   "navProfile": "الملف الشخصي",
   "screenNotImplemented": "{screenName} — الأساس فقط، لم يُنفَّذ بعد",
   "routeNotFoundMessage": "تعذّر العثور على هذه الصفحة.",
-  "goToHome": "الذهاب إلى الرئيسية"
+  "goToHome": "الذهاب إلى الرئيسية",
+  "continueLabel": "متابعة",
+  "logIn": "تسجيل الدخول",
+  "register": "إنشاء حساب",
+  "goToRegister": "ليس لديك حساب؟ أنشئ حسابًا",
+  "goToLogin": "لديك حساب بالفعل؟ سجّل الدخول",
+  "openSettings": "الإعدادات",
+  "openSubscription": "الاشتراك"
 }

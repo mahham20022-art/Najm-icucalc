@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/app_shell.dart';
 import '../../shared/widgets/placeholder_screen.dart';
 import '../../shared/widgets/route_error_screen.dart';
@@ -12,8 +13,10 @@ import '../../shared/widgets/route_error_screen.dart';
 abstract final class AppRoute {
   static const splash = 'splash';
   static const onboarding = 'onboarding';
-  static const auth = 'auth';
+  static const login = 'login';
+  static const register = 'register';
   static const home = 'home';
+  static const topics = 'topics';
   static const bookmarks = 'bookmarks';
   static const progress = 'progress';
   static const profile = 'profile';
@@ -26,10 +29,15 @@ abstract final class AppRoute {
   static const flashcards = 'flashcards';
 }
 
-/// One route per screen named in `MED100_UI_UX_SPEC.md`. Every leaf is a
-/// [PlaceholderScreen] — this router exists to prove the navigation graph
-/// (including the tablet/phone adaptive shell) is wired correctly, not to
-/// implement any screen's behavior.
+/// One route per screen requested — Splash, Onboarding, Login, Register,
+/// Home, Topics, Progress, Bookmarks, Profile, Settings, Subscription —
+/// plus a handful of routes already scaffolded before this pass (topic
+/// detail, MCQs, Flashcards, Teaching Mode) that this change doesn't
+/// remove. Every leaf is a [PlaceholderScreen]: no business logic, no
+/// data, no auth — [PlaceholderAction] buttons exist purely so the graph
+/// is actually tappable end-to-end (Splash → Onboarding → Login/Register
+/// → Home, Profile → Settings/Subscription), not to simulate real
+/// sign-in or onboarding behavior.
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: '/splash',
@@ -41,20 +49,71 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/splash',
         name: AppRoute.splash,
-        builder: (context, state) =>
-            const PlaceholderScreen(screenName: 'Splash', showAppBar: false),
+        builder: (context, state) => PlaceholderScreen(
+          screenName: 'Splash',
+          showAppBar: false,
+          actions: [
+            PlaceholderAction(
+              label: AppLocalizations.of(context).continueLabel,
+              onPressed: () => context.goNamed(AppRoute.onboarding),
+            ),
+          ],
+        ),
       ),
       GoRoute(
         path: '/onboarding',
         name: AppRoute.onboarding,
-        builder: (context, state) =>
-            const PlaceholderScreen(screenName: 'Onboarding', showAppBar: false),
+        builder: (context, state) => PlaceholderScreen(
+          screenName: 'Onboarding',
+          showAppBar: false,
+          actions: [
+            PlaceholderAction(
+              label: AppLocalizations.of(context).continueLabel,
+              onPressed: () => context.goNamed(AppRoute.login),
+            ),
+          ],
+        ),
       ),
       GoRoute(
-        path: '/auth',
-        name: AppRoute.auth,
-        builder: (context, state) =>
-            const PlaceholderScreen(screenName: 'Authentication', showAppBar: false),
+        path: '/login',
+        name: AppRoute.login,
+        builder: (context, state) {
+          final l10n = AppLocalizations.of(context);
+          return PlaceholderScreen(
+            screenName: 'Login',
+            showAppBar: false,
+            actions: [
+              PlaceholderAction(label: l10n.logIn, onPressed: () => context.goNamed(AppRoute.home)),
+              PlaceholderAction(
+                label: l10n.goToRegister,
+                emphasized: false,
+                onPressed: () => context.goNamed(AppRoute.register),
+              ),
+            ],
+          );
+        },
+      ),
+      GoRoute(
+        path: '/register',
+        name: AppRoute.register,
+        builder: (context, state) {
+          final l10n = AppLocalizations.of(context);
+          return PlaceholderScreen(
+            screenName: 'Register',
+            showAppBar: false,
+            actions: [
+              PlaceholderAction(
+                label: l10n.register,
+                onPressed: () => context.goNamed(AppRoute.home),
+              ),
+              PlaceholderAction(
+                label: l10n.goToLogin,
+                emphasized: false,
+                onPressed: () => context.goNamed(AppRoute.login),
+              ),
+            ],
+          );
+        },
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) => AppShell(navigationShell: navigationShell),
@@ -72,9 +131,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/bookmarks',
-                name: AppRoute.bookmarks,
-                builder: (context, state) => const PlaceholderScreen(screenName: 'Bookmarks'),
+                path: '/topics',
+                name: AppRoute.topics,
+                builder: (context, state) => const PlaceholderScreen(screenName: 'Topics'),
               ),
             ],
           ),
@@ -97,9 +156,35 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(
+                path: '/bookmarks',
+                name: AppRoute.bookmarks,
+                builder: (context, state) => const PlaceholderScreen(screenName: 'Bookmarks'),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
                 path: '/profile',
                 name: AppRoute.profile,
-                builder: (context, state) => const PlaceholderScreen(screenName: 'Profile'),
+                builder: (context, state) {
+                  final l10n = AppLocalizations.of(context);
+                  return PlaceholderScreen(
+                    screenName: 'Profile',
+                    actions: [
+                      PlaceholderAction(
+                        label: l10n.openSettings,
+                        emphasized: false,
+                        onPressed: () => context.goNamed(AppRoute.settings),
+                      ),
+                      PlaceholderAction(
+                        label: l10n.openSubscription,
+                        emphasized: false,
+                        onPressed: () => context.goNamed(AppRoute.subscription),
+                      ),
+                    ],
+                  );
+                },
                 routes: [
                   GoRoute(
                     path: 'settings',
