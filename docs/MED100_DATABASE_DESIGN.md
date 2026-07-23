@@ -2,7 +2,7 @@
 
 **Based on:** `MED100_PRD.md`, `MED100_ARCHITECTURE.md`
 **Author:** Senior Database Engineer
-**Status:** Draft v1.0 — schema design only, no implementation
+**Status:** Draft v1.1 — revised after self-review pass
 **Last updated:** 2026-07-23
 
 This document supersedes the illustrative Firestore sketch in the architecture doc's Section 7.2 with a fully worked schema, and closes three gaps flagged in the architecture review:
@@ -11,7 +11,7 @@ This document supersedes the illustrative Firestore sketch in the architecture d
 - **Streak/Mastery as derived state** (`Streaks`, `Mastery Scores`, below): both are server-computed projections, not client-synced scalars, with an explicit optimistic-local-preview mechanism so offline UX stays instant.
 - **Multi-tenancy reserved at MVP** (`Users`, below): `institutionId` is in the schema from day one, unused until Phase 3.
 
-It also introduces a schema-versioning/migration convention, which neither prior document defined.
+It also introduces a schema-versioning/migration convention, which neither prior document defined, and — as of this revision — closes four further gaps found in this document's own self-review: a missing path-enrollment anchor entity (Section 3), an unresolved MCQ answer-key exposure risk (Section 9), unspecified consistency for derived-state recomputation (Section 0b), and inconsistent per-user scoping across local tables (Section 0a).
 
 ---
 
@@ -24,6 +24,16 @@ These apply to every entity below and are not repeated per-section:
 - **Soft delete**: user-generated content (bookmarks, settings) hard-deletes; catalog/content entities (topics, MCQs, flashcards) use `status: 'active' | 'archived'` instead of deletion, since a topic a user has history against can't simply disappear without orphaning their progress records.
 - **Idempotency**: every client-originated write that isn't naturally idempotent carries a client-generated `clientOpId` (UUID v4), deduplicated server-side — this is the mechanism the `outbox`/`Sync` design (Section 16) depends on.
 - **Write ownership**: each section states whether the client or a Cloud Function is the sole writer. This is enforced in Firestore Security Rules, not by convention — see the ownership matrix in Section 17.
+
+### 0a. Local per-user table scoping (closes a self-review gap)
+
+Every local (Drift) table holding per-user data — not just `settings`, but also `progress`, `bookmarks`, `quiz_attempts_log`, `streaks_cache`, `mastery_cache`, `path_enrollments`, `flashcard_schedule`, `unlocked_achievements`, `statistics_cache`, and `outbox` — carries a `userId` column as part of its key, consistently, not only where it happened to be convenient. This matters concretely for a shared or re-logged-in device (a hospital-issued tablet passed between shifts, or a family device) where a second user's session must not silently read or write over the first user's cached rows. In addition: **on account switch or logout, every per-user local table is wiped for rows not matching the newly-authenticated `userId`** before the new session's data is pulled — the app does not attempt to keep multiple users' caches resident simultaneously on one device.
+
+### 0b. Derived-state recomputation: one function, incremental aggregation (closes a self-review gap)
+
+Streaks, Mastery Scores, Statistics, and Achievement-unlock evaluation are all described as "server-computed" in their respective sections below. To avoid four independently-triggered functions racing or partially failing against the same event, all four are recomputed by a **single Cloud Function**, `recomputeUserDerivedState`, triggered once per `quizAttempts`/`flashcardSchedule` write, executed inside one Firestore transaction so a partial failure (e.g., achievement evaluation throws) rolls back rather than leaving streaks updated but mastery stale.
+
+This function does **not** replay a user's entire historical log on every event — that cost grows without bound the longer a user stays engaged, which is the opposite of what should happen for the most active users. Instead, each user maintains a hidden incremental aggregate document (`users/{userId}/derivedState/aggregate`: running totals — correct-answer count, attempt count, per-specialty rolling sums, last-12-weeks activity buckets) that the function updates incrementally from the single new event, then projects the public-facing `streaks`, `mastery`, and `statistics` documents from that aggregate. A separate, infrequent (e.g., monthly) reconciliation job recomputes the aggregate from the full log for a sample of accounts to detect and correct any incremental-update drift — the standard safeguard for any denormalized running aggregate.
 
 ---
 
@@ -139,7 +149,21 @@ Subcollection instead of an array field to avoid the 1MB document ceiling on lon
 
 **Write owner:** server-only (Editorial Console).
 
-### SQLite — `learning_paths` and `learning_path_items`
+### Firestore — `users/{userId}/pathEnrollments/{pathId}` (closes a gap from the architecture review)
+
+`releaseOffsetDays` on a path item is meaningless without a reference point — the previous draft of this schema had no per-user record of *when* a path actually started, which meant "what's due today" for a `self_paced` or `exam_mode` path could not actually be computed. This subcollection is that anchor.
+
+| Field | Type | Notes |
+|---|---|---|
+| `enrolledAt` | timestamp | server-set at enrollment; `releaseOffsetDays` is computed relative to this |
+| `active` | boolean | supports pausing/resuming a path without losing the original anchor date |
+| `examDate` | date \| null | for `exam_mode` paths, overrides pure offset-based unlocking with countdown-based pacing (e.g., unlock faster as the exam nears) |
+
+**Write owner:** server-only — created by a Cloud Function when a user enrolls in a path (e.g., selects a specialty track during onboarding, or starts an exam-mode countdown), never client-writable directly, so the anchor date can't be manipulated to unlock content early.
+
+With this in place, "what's due for me today" resolves as: for each active `pathEnrollments` entry, `today - enrolledAt` in days, matched against `learningPaths/{pathId}/items` where `releaseOffsetDays <= that number` and not yet completed in `progress`. This is also the record the daily-notification fan-out (`MED100_ARCHITECTURE.md` §7.3) needs to resolve *which* topic to reference when it fires off `users.notificationTime` — previously an unresolved link between the two documents.
+
+### SQLite — `learning_paths`, `learning_path_items`, and `path_enrollments`
 
 | `learning_paths` column | Type |
 |---|---|
@@ -155,7 +179,15 @@ Subcollection instead of an array field to avoid the 1MB document ceiling on lon
 | `topicId` | TEXT (FK → topics.id) |
 | `order`, `releaseOffsetDays` | INTEGER |
 
-Relational storage here is deliberate: "what's unlocked for me today, across all my enrolled paths" is exactly the kind of join Drift handles cleanly and a local KV store would not.
+| `path_enrollments` column | Type |
+|---|---|
+| `userId` | TEXT — see Section 0a on local per-user scoping |
+| `pathId` | TEXT (FK → learning_paths.id) |
+| `enrolledAt` | INTEGER |
+| `active` | INTEGER (bool) |
+| `examDate` | INTEGER \| NULL |
+
+Relational storage here is deliberate: "what's unlocked for me today, across all my enrolled paths" (a join across `path_enrollments`, `learning_path_items`, and `progress`) is exactly the kind of query Drift handles cleanly and a local KV store would not.
 
 ---
 
@@ -179,12 +211,15 @@ Polymorphic user-curated saves — a learner can bookmark a topic, a specific MC
 | Column | Type |
 |---|---|
 | `id` | TEXT PK (client UUID) |
+| `userId` | TEXT — see §0a |
 | `itemType`, `itemId` | TEXT |
 | `note` | TEXT NULL |
 | `createdAt` | INTEGER |
 | `syncStatus` | TEXT — `pending \| synced` |
 
 Client-writable locally first, pushed through the outbox (Section 16) — simple last-write-wins is fine here since it's single-user-authored data with no gamification stakes.
+
+**Dangling references:** if a bookmarked topic/MCQ/flashcard is later archived (soft-deleted per §0's convention), the bookmark itself is left in place but the UI resolves it to an explicit "this item is no longer available" state rather than a broken link — a monthly cleanup job also prunes bookmarks pointing to items archived for over 90 days.
 
 ---
 
@@ -213,13 +248,14 @@ The aggregate learning record per topic, plus the append-only granular log that 
 | `clientOpId` | string | idempotency key — a retried submission after a timeout never double-counts |
 | `source` | enum | `initial \| spaced_review \| exam_mode` |
 
-**Write owner:** client submits attempts through a Cloud Function (`submitQuizAttempt`), which validates the answer server-side (never trust a client-reported `isCorrect`), writes the immutable log entry, and updates the `progress` aggregate — this is also the trigger point for streak/mastery recompute (Sections 6–7).
+**Write owner:** client submits attempts through a Cloud Function (`submitQuizAttempt`), which validates the answer server-side against the server-only `mcqAnswers` document (§9 — never trust a client-reported `isCorrect`), writes the immutable log entry, and updates the `progress` aggregate — this is also the trigger point for the consolidated `recomputeUserDerivedState` function (§0b) that updates streaks, mastery, statistics, and achievements together. The Firestore document ID for each `quizAttempts` entry **is** the `clientOpId` itself (not a separate field plus a generated ID) — a retried write with the same ID is naturally a no-op/overwrite-safe create, which is the simplest correct idempotency mechanism and was left implicit in the prior draft.
 
 ### SQLite — `progress` and `quiz_attempts_log`
 
 | `progress` column | Type |
 |---|---|
 | `topicId` | TEXT PK |
+| `userId` | TEXT — see §0a |
 | `status` | TEXT |
 | `attemptsCount` | INTEGER |
 | `lastQuizScorePercent` | REAL |
@@ -228,7 +264,8 @@ The aggregate learning record per topic, plus the append-only granular log that 
 
 | `quiz_attempts_log` column | Type |
 |---|---|
-| `id` | TEXT PK (= `clientOpId`) |
+| `id` | TEXT PK (= `clientOpId`, matching the Firestore document ID) |
+| `userId` | TEXT — see §0a |
 | `mcqId`, `topicId`, `selectedChoiceId` | TEXT |
 | `answeredAtLocal` | INTEGER — device-clock time, for instant UI; not trusted as the record of truth |
 | `source` | TEXT |
@@ -246,7 +283,7 @@ This is the table the offline outbox drains from. `isCorrect` is deliberately **
 
 | Field | Type | Notes |
 |---|---|---|
-| `currentStreak` | int | recomputed by Cloud Function from `quizAttempts`/topic-completion events, never incremented directly by a client write |
+| `currentStreak` | int | recomputed by the consolidated `recomputeUserDerivedState` function (§0b) from the incremental aggregate, never incremented directly by a client write |
 | `longestStreak` | int | |
 | `lastActiveDate` | date | |
 | `freezesAvailable`, `freezesUsedThisMonth` | int | streak-freeze grace mechanic from the PRD's habit-fatigue mitigation |
@@ -258,7 +295,8 @@ This is the table the offline outbox drains from. `isCorrect` is deliberately **
 
 | Column | Type | Notes |
 |---|---|---|
-| `trackId` | TEXT PK | |
+| `trackId` | TEXT PK (composite with `userId`) | |
+| `userId` | TEXT — see §0a | |
 | `currentStreak`, `longestStreak` | INTEGER | last value **confirmed by server** |
 | `lastActiveDate` | INTEGER | |
 | `optimisticStreak` | INTEGER \| NULL | see below |
@@ -281,13 +319,14 @@ Same pattern as Streaks: **server-computed**, per specialty/track, derived from 
 | `trend` | enum | `up \| down \| flat` vs. prior computation |
 | `computedAt` | timestamp | |
 
-**Write owner:** server only (same Cloud Function that recomputes streaks, triggered off the same quiz-attempt/flashcard-grade events).
+**Write owner:** server only — the same `recomputeUserDerivedState` function (§0b) that recomputes streaks, so the two can never drift relative to each other within one event.
 
 ### SQLite — `mastery_cache`
 
 | Column | Type |
 |---|---|
-| `specialtyId` | TEXT PK |
+| `specialtyId` | TEXT PK (composite with `userId`) |
+| `userId` | TEXT — see §0a |
 | `masteryPercent` | REAL |
 | `contributingTopicsCount` | INTEGER |
 | `trend` | TEXT |
@@ -342,7 +381,8 @@ Where per-item spaced repetition (SM-2-style) actually lives — a refinement ov
 
 | `flashcard_schedule` column | Type |
 |---|---|
-| `flashcardId` | TEXT PK |
+| `flashcardId` | TEXT PK (composite with `userId`) |
+| `userId` | TEXT — see §0a |
 | `nextReviewDate` | INTEGER |
 | `intervalDays` | INTEGER |
 | `easeFactor` | REAL |
@@ -358,23 +398,30 @@ This is the table behind the "cards due today, across all tracks, ordered by pri
 
 Assessment content, distinct from Flashcards (graded correct/incorrect against a fixed answer, feeds quiz score and mastery; not individually SM-2-scheduled, though a topic containing them can still be resurfaced for review).
 
-### Firestore — `mcqs/{mcqId}`
+### Firestore — `mcqs/{mcqId}` (public projection) and `mcqAnswers/{mcqId}` (server-only)
+
+**Resolved mechanism (previously left as "a separate projection, or server-side validation" — an unpicked choice):** Firestore Security Rules are document-level allow/deny only and cannot redact a single field within one document, so "the client can read the question but not the answer key" cannot be achieved with one document under any rule. This is split into two documents instead:
+
+`mcqs/{mcqId}` — public, client-readable, contains everything needed to *render* the question:
 
 | Field | Type | Notes |
 |---|---|---|
 | `topicId` | string | |
 | `questionText` | string | |
-| `choices` | array\<map\> | `[{id, text}]` |
-| `correctChoiceId` | string | **never sent to the client** in the content payload used for rendering — see note below |
-| `explanationText` | string | shown after answering |
-| `aiExplanationCacheKey` | string \| null | optional pointer into `aiCache` (Section 10) for an AI-elaborated explanation |
+| `choices` | array\<map\> | `[{id, text}]` — no correctness indicator anywhere in this document |
 | `difficulty` | enum | |
 | `examMappings` | array\<string\> | |
 | `isFree`, `version` | boolean / int | |
 
-**Security note:** `correctChoiceId` must be excluded from the document the client fetches for *rendering* the question (a separate read-optimized projection, or validated purely server-side in `submitQuizAttempt`) — otherwise a learner can inspect network traffic and read the answer key before answering. This is a correctness/integrity requirement the architecture doc didn't call out, being added here.
+`mcqAnswers/{mcqId}` — **server-only**, Firestore rule `allow read, write: if false` for every client role, read exclusively by the `submitQuizAttempt` Cloud Function:
 
-**Write owner:** server-only.
+| Field | Type | Notes |
+|---|---|---|
+| `correctChoiceId` | string | |
+| `explanationText` | string | released to the client only in the `submitQuizAttempt` response, after an answer is recorded — never pre-fetched with the question |
+| `aiExplanationCacheKey` | string \| null | optional pointer into `aiCache` (Section 10) for an AI-elaborated explanation, also only released post-answer |
+
+**Write owner:** both documents server-only (editorial pipeline writes both halves atomically on publish).
 
 ### SQLite — `mcqs`
 
@@ -410,6 +457,8 @@ Serves two purposes: (a) a server-side cost-control cache so repeated AI calls (
 | `expiresAt` | timestamp | |
 
 **Access:** never read or written directly by any client — only by Cloud Functions (`ai_bridge` module). Firestore rules deny all client access to this collection entirely; it's an internal implementation detail of the AI Layer, not user data.
+
+**Expiry (previously an unenforced field):** `expiresAt` is wired to a native **Firestore TTL policy** on this collection, so expired entries are actually deleted by the platform rather than merely marked stale — without this, a cost-control cache ironically grows without bound and becomes its own cost problem.
 
 ### SQLite — `ai_cache_local`
 
@@ -453,6 +502,7 @@ Powers both the server-side delivery record and the in-app notification center. 
 | Column | Type |
 |---|---|
 | `id` | TEXT PK |
+| `userId` | TEXT — see §0a |
 | `type`, `title`, `body` | TEXT |
 | `payloadJson`, `deepLink` | TEXT |
 | `receivedAt`, `readAt` | INTEGER |
@@ -483,6 +533,7 @@ Also the log target for the offline-strategy's **local-notification fallback** (
 
 | Column | Type |
 |---|---|
+| `userId` | TEXT PK — see §0a |
 | `tier`, `status` | TEXT |
 | `currentPeriodEnd` | INTEGER |
 | `gracePeriodActive` | INTEGER (bool) |
@@ -508,7 +559,7 @@ Read-only cache gating premium UI/content offline. A device offline through its 
 
 | Field | Type | Notes |
 |---|---|---|
-| `unlockedAt` | timestamp | server-set, evaluated in the same recompute pass as streaks/mastery |
+| `unlockedAt` | timestamp | server-set, evaluated within the same `recomputeUserDerivedState` transaction (§0b) as streaks/mastery/statistics — a partial failure can't unlock an achievement based on a streak value that itself failed to save |
 | `seenByUser` | boolean | the one client-writable field on this document (marks the "new!" badge as viewed) |
 
 **Write owner:** unlock event is server-only; `seenByUser` toggle is client-writable.
@@ -524,7 +575,8 @@ Read-only cache gating premium UI/content offline. A device offline through its 
 
 | `unlocked_achievements` column | Type |
 |---|---|
-| `achievementId` | TEXT PK |
+| `achievementId` | TEXT PK (composite with `userId`) |
+| `userId` | TEXT — see §0a |
 | `unlockedAt` | INTEGER |
 | `seenByUser` | INTEGER (bool) |
 | `syncStatus` | TEXT — only relevant for the `seenByUser` field |
@@ -545,12 +597,15 @@ User-facing aggregate stats — distinct from `Mastery` (specialty-scoped compet
 | `weeklyActivity` | array\<int\> | last 12 weeks, denormalized for instant chart rendering without a client-side aggregation query |
 | `computedAt` | timestamp | |
 
-**Write owner:** server-only, recomputed on the same trigger as streaks/mastery.
+**Write owner:** server-only, recomputed within the same `recomputeUserDerivedState` transaction (§0b) as streaks/mastery/achievements, from the incremental aggregate rather than a full log replay.
+
+**Rolling-window maintenance (previously unspecified):** `weeklyActivity`'s 12-week window is maintained incrementally — each new event increments the current week's bucket, and a scheduled weekly job shifts the array (drops week 13, appends a new zeroed week) for all active users. The same monthly reconciliation job mentioned in §0b that re-derives the incremental aggregate from the full log also re-derives `weeklyActivity` for a sampled audit set, catching any drift between the incrementally-shifted array and ground truth.
 
 ### SQLite — `statistics_cache`
 
 | Column | Type |
 |---|---|
+| `userId` | TEXT PK — see §0a |
 | `totalTopicsCompleted` | INTEGER |
 | `totalStudyTimeSeconds` | INTEGER |
 | `quizAccuracyOverall` | REAL |
@@ -599,6 +654,7 @@ The mechanics underpinning every "client-writable" entity above.
 | Column | Type | Notes |
 |---|---|---|
 | `id` | TEXT PK | = `clientOpId`, UUID v4 |
+| `userId` | TEXT | see §0a — ensures a second user's session on a shared device never drains or is blocked by the first user's pending outbox entries |
 | `entityType` | TEXT | `quiz_attempt \| flashcard_grade \| bookmark \| settings \| achievement_seen` |
 | `entityId` | TEXT | |
 | `operation` | TEXT | `create \| update` |
@@ -634,13 +690,14 @@ The mechanics underpinning every "client-writable" entity above.
 | Users | `users/{uid}` | `users` | Client (profile fields) / Server (`role`, `institutionId`) | Pull + selective push |
 | Topics | `topics/{id}` | `topics` | Server only | Pull (CDN for free, signed URL for premium) |
 | Learning Paths | `learningPaths/{id}` (+`items` subcol) | `learning_paths`, `learning_path_items` | Server only | Pull |
+| Path Enrollments | `users/{uid}/pathEnrollments/{pathId}` | `path_enrollments` | Server only (set at enrollment) | Pull only |
 | Bookmarks | `users/{uid}/bookmarks/{id}` | `bookmarks` | Client | Outbox push + pull |
 | Progress | `users/{uid}/progress/{topicId}`, `.../quizAttempts/{id}` | `progress`, `quiz_attempts_log` | Client submits → Server validates & aggregates | Outbox push, server-authoritative |
 | Streaks | `users/{uid}/streaks/{trackId}` | `streaks_cache` | Server only (derived) | Pull only; client shows local optimistic preview |
 | Mastery Scores | `users/{uid}/mastery/{specialtyId}` | `mastery_cache` | Server only (derived) | Pull only |
 | Flashcards | `flashcards/{id}` | `flashcards` | Server only | Pull |
 | Flashcard Schedule | `users/{uid}/flashcardSchedule/{id}` | `flashcard_schedule` | Client submits grade → Server computes SM-2 | Outbox push, server-authoritative |
-| MCQs | `mcqs/{id}` | `mcqs` | Server only (answer key excluded from client payload) | Pull |
+| MCQs | `mcqs/{id}` (public) + `mcqAnswers/{id}` (server-only) | `mcqs` | Server only (answer key lives only in the server-only Firestore doc, never synced locally) | Pull (public doc only) |
 | AI Cache | `aiCache/{key}` | `ai_cache_local` | Server only (server cache); client cache is a read-through copy | No client sync — server cache is internal; client cache is fetch-and-store |
 | Notifications | `users/{uid}/notificationTokens`, `.../notificationLog` | `notifications_local` | Mixed (`sentAt` server, `readAt` client) | Push (FCM) + local fallback log |
 | Subscriptions | `subscriptions/{uid}` | `subscription_cache` | Server only (billing webhook) | Pull only, read-only client |
@@ -649,8 +706,8 @@ The mechanics underpinning every "client-writable" entity above.
 | Settings | `users/{uid}/settings/preferences` | `settings` | Client | Local-write-first + outbox push |
 | Sync meta | `users/{uid}/syncMeta/summary` | `outbox`, `sync_state` | Client (outbox) / Server (syncMeta) | N/A — this *is* the sync machinery |
 
-**Rule of thumb encoded in this matrix:** anything that affects a gamified or trust-sensitive number (streaks, mastery, statistics, achievements, subscriptions) is server-computed and client-read-only, even though it *feels* like user data. Anything purely preferential (settings, bookmarks) is client-owned with simple sync. This split is the direct fix for the streak-conflict flaw identified in the architecture review, generalized as a consistent rule across the whole schema rather than a one-off patch.
+**Rule of thumb encoded in this matrix:** anything that affects a gamified or trust-sensitive number (streaks, mastery, statistics, achievements, subscriptions) is server-computed and client-read-only, even though it *feels* like user data. Anything purely preferential (settings, bookmarks) is client-owned with simple sync. This split is the direct fix for the streak-conflict flaw identified in the architecture review, generalized as a consistent rule across the whole schema rather than a one-off patch. Streaks, Mastery Scores, Achievements, and Statistics are additionally consolidated behind one recompute function (§0b) rather than four independent ones, so this whole derived-state family updates atomically per event.
 
 ---
 
-*This document defines schema only. No queries, indexes, migrations, or implementation code are included. Next phase: Firestore Security Rules per collection (enforcing the write-ownership matrix above) and Firestore composite index planning per known query pattern.*
+*This document defines schema only. No queries, indexes, migrations, or implementation code are included. Next phase: Firestore Security Rules per collection (enforcing the write-ownership matrix above, including the `mcqs`/`mcqAnswers` split and the server-only paths) and Firestore composite index planning per known query pattern — including the `path_enrollments` + `learning_path_items` + `progress` join introduced in this revision.*

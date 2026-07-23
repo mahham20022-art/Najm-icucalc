@@ -267,18 +267,21 @@ Repositories are the *only* place that knows both data sources exist; domain and
 
 ```
 users/{userId}
-  profile: { role, specialties[], notificationTime, locale }
+  profile: { role, specialties[], notificationTime, locale, institutionId: null }   # reserved from MVP, unused until Phase 3
   users/{userId}/progress/{topicId}
     { quizScore, attempts[], masteryDelta, lastReviewedAt }
-  users/{userId}/streaks/{trackId}
+  users/{userId}/streaks/{trackId}                 # SERVER-COMPUTED, client read-only
     { currentStreak, longestStreak, lastActiveDate }
+  users/{userId}/mastery/{specialtyId}              # SERVER-COMPUTED, client read-only
+    { masteryPercent, computedAt }
   users/{userId}/sreSchedule/{topicId}
     { nextReviewDate, intervalDays, easeFactor }
 
-specialties/{specialtyId}/tracks/{trackId}
-  { name, isFree, order }
-  specialties/{specialtyId}/tracks/{trackId}/topics/{topicId}
-    { title, version, isFree, contentRef (CDN path), publishedAt, examMappings[] }
+topics/{topicId}                    # top-level, not nested under a track — a topic can belong to multiple learning paths
+  { title, version, isFree, bodyRef, publishedAt, examMappings[] }
+
+learningPaths/{pathId}              # sequencing layer, references topics by id (see full model in MED100_DATABASE_DESIGN.md §3)
+  { name, type, specialtyId, pacing }
 
 contentDrafts/{draftId}          # editorial workflow, not learner-facing
   { status: draft|in_review|approved|published, authorId, reviewerIds[] }
@@ -290,7 +293,13 @@ institutions/{institutionId}/cohorts/{cohortId}   # Phase 3
   { memberIds[], assignedTracks[], complianceStats }
 ```
 
+*(This is an illustrative summary — the authoritative, fully-worked schema for all entities, including Flashcards, MCQs, Bookmarks, AI Cache, Notifications, Achievements, Statistics, and Settings, lives in `MED100_DATABASE_DESIGN.md`.)*
+
 Design principle: **denormalize for reads, centralize writes in Cloud Functions.** Firestore is not relationally joined at read time; anything requiring aggregation (mastery rollups, institutional compliance %) is computed server-side and written to a denormalized field, never computed client-side from multiple collections.
+
+**Derived vs. owned state (resolves an earlier draft's conflict-resolution flaw):** `streaks` and `mastery` are **server-computed projections** off the immutable `quizAttempts`/flashcard-grade log, recomputed by a single consolidated Cloud Function per event (not several independently-triggered functions) so they can't drift out of sync with each other. They are never client-writable and never subject to last-write-wins merge — an earlier design that treated streak count as a synced mutable scalar risked a stale value silently overwriting a legitimate higher streak on an out-of-order multi-device reconnect. The client-side offline experience still feels instant via a locally-computed **optimistic preview**, reconciled to the server value on next sync (full mechanism in `MED100_DATABASE_DESIGN.md` §6–7).
+
+**Content delivery split (resolves the CDN-vs-signed-URL contradiction below):** a topic's `bodyRef` resolves two different ways depending on `isFree`. Free topics point to a stable, versioned public CDN path (Section 13's scalability optimization applies here, where read volume is highest). Premium topics point to a private Cloud Storage object, fetched only through a callable Function that checks the caller's subscription status and mints a short-TTL signed URL — this is the "signed, short-TTL URLs for premium content" referenced in Section 12, and it deliberately does **not** apply to free content, which is why the two sections previously read as contradictory.
 
 ### 7.3 Cloud Functions (domain-organized, 2nd gen, TypeScript)
 
@@ -301,7 +310,14 @@ Design principle: **denormalize for reads, centralize writes in Cloud Functions.
 - `institutional` (Phase 3): cohort compliance aggregation, scheduled nightly.
 - `ai_bridge`: thin async trigger forwarding to the Cloud Run AI services; never called synchronously from the client.
 
-### 7.4 Supporting Firebase services
+### 7.4 API / schema versioning strategy
+
+Mobile releases lag behind backend deploys by days to weeks (app store review), so a Cloud Functions request/response shape change can't assume every client is on the latest app version. Two rules apply:
+
+- **Callable Functions are explicitly versioned** (`submitQuizAttemptV1`, and a `V2` added alongside — never mutated in place) whenever a breaking request/response change is needed; a Function version is only retired once analytics show negligible traffic from app versions old enough to call it.
+- **Firestore documents carry a `schemaVersion` field** (see `MED100_DATABASE_DESIGN.md` §0), read defensively by both old and new clients — an old client ignores fields it doesn't recognize, a new client fills in defaults for fields an old-written document lacks. This is what lets a document shape evolve without a forced simultaneous client update.
+
+### 7.5 Supporting Firebase services
 
 - **Cloud Storage** — media assets, offline bundle archives, generated CME certificate PDFs. Served via signed, short-TTL URLs for premium content.
 - **Remote Config** — feature flags, paywall/entitlement experiments, staged track rollouts.
@@ -377,15 +393,16 @@ Both subsystems sit behind an internal interface (`ContentGenerationPort`, `Sche
 ## 12. Security
 
 - **Transport:** TLS everywhere by default (Firebase); certificate pinning evaluated for the mobile client given frequent use on hospital/public Wi-Fi.
-- **AuthZ enforcement point:** **Firestore Security Rules**, not client-side role checks — every rule keyed off custom claims and resource ownership (`request.auth.uid == resource.data.userId`, `request.auth.token.role in [...]`). The client-side RBAC in the UI is a UX convenience only, never the security boundary.
-- **Editorial isolation:** the Editorial Console authenticates against a more restrictive auth surface than the consumer app (separate custom-claim scope, considered for a separate GCP project) so a consumer-app compromise can't cascade into content-publishing access.
+- **AuthZ enforcement point:** **Firestore Security Rules**, not client-side role checks — every rule keyed off custom claims and resource ownership (`request.auth.uid == resource.data.userId`, `request.auth.token.role in [...]`). The client-side RBAC in the UI is a UX convenience only, never the security boundary. Note that rules are document-level allow/deny, not field-level — `mcqs` documents are split into a public projection and a server-only answer document specifically because rules can't redact a single field within one document (see `MED100_DATABASE_DESIGN.md` §9).
+- **Editorial isolation (decided, not deferred):** the Editorial Console runs in its **own dedicated GCP/Firebase project**, separate from the consumer app's project, with its own Auth tenant. This is a firm decision rather than "considered" — a consumer-app compromise (the higher-exposure, higher-traffic surface) must not be able to cascade into content-publishing access under any circumstance, and cross-project isolation is the only guarantee strong enough for that. The Editorial project reads/writes the main project's `topics`/`mcqs`/`flashcards`/`contentDrafts` collections via a narrowly-scoped service account, never direct end-user credentials.
 - **Data classification:** Med100 holds no patient data (PHI) — it holds clinicians'/students' own learning records and professional identity, which is still sensitive and is encrypted at rest by default (Firestore) with field-level rule restrictions.
-- **App Check:** mandatory on every Function/Firestore path, blocking scripted scraping of specialist-authored content and abuse of gamification endpoints.
+- **App Check:** mandatory on every Function/Firestore path, blocking scripted scraping of specialist-authored content and abuse of gamification endpoints. Note this guarantee is materially weaker on Flutter Web (reCAPTCHA-based attestation) than on native mobile (Play Integrity / DeviceCheck) — content-scraping resistance for the web surface should be treated as a deterrent, not a hard guarantee.
 - **Secrets:** Google Secret Manager for all provider keys (AI, payment webhooks) — never in client bundles or plaintext Function env vars.
 - **Payments:** PCI scope fully delegated to RevenueCat/Stripe; Med100 backend only ever consumes signed webhook events, never raw card data.
 - **Abuse/rate limiting:** Function-level throttling plus Firestore rules capping write frequency (e.g., max quiz submissions/minute) to prevent scripted streak/mastery gaming.
-- **Content protection:** signed, short-TTL Cloud Storage URLs for premium media, reducing casual redistribution of paid content.
-- **Compliance:** GDPR-aligned data export/delete via a dedicated Cloud Function; data residency/multi-region evaluated per-contract once institutional (Phase 3) customers require it — not built speculatively into MVP.
+- **Content protection:** premium media served via signed, short-TTL Cloud Storage URLs (Section 7.2's content-delivery split); free content is intentionally public/CDN-cached and not protected this way, since it isn't meant to be gated.
+- **Compliance:** GDPR-aligned data export/delete via a dedicated Cloud Function, sweeping every subcollection enumerated in `MED100_DATABASE_DESIGN.md` (progress, streaks, mastery, both schedule subcollections, bookmarks, quizAttempts, notification tokens/log, settings, statistics, unlocked achievements, sync meta); data residency/multi-region evaluated per-contract once institutional (Phase 3) customers require it — noting that Firestore's region is fixed at project creation, so this is a project migration if deferred too long, not a later config change, and a deliberate starting region should be chosen now with that cost in mind.
+- **Firestore Rules testing & CI (previously unspecified):** every rules change is validated in the Firebase Emulator Suite with a dedicated rules-unit-test file per collection (asserting both the allowed and denied cases from the write-ownership matrix in `MED100_DATABASE_DESIGN.md` §17) before merge; CI blocks deployment on a failing rules test. Because rules are the actual authorization boundary (not a UI nicety), a bad rules deploy is a real security incident, not just a bug — it gets the same test-gate rigor as application code, not less.
 
 ---
 
