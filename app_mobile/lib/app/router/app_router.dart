@@ -11,6 +11,7 @@ import '../../features/auth_onboarding/presentation/viewmodels/auth_view_model.d
 import '../../features/challenge_mode/presentation/screens/challenge_bookmarks_screen.dart';
 import '../../features/challenge_mode/presentation/screens/challenge_home_screen.dart';
 import '../../features/challenge_mode/presentation/screens/challenge_statistics_screen.dart';
+import '../../features/subscription/presentation/screens/subscription_screen.dart';
 import '../../features/teaching_mode/presentation/screens/teaching_route_screen.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/app_shell.dart';
@@ -168,8 +169,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   GoRoute(
                     path: 'subscription',
                     name: AppRoute.subscription,
-                    builder: (context, state) =>
-                        const PlaceholderScreen(screenName: 'Subscription'),
+                    builder: (context, state) => const SubscriptionScreen(),
                   ),
                   GoRoute(
                     path: 'teaching-mode',

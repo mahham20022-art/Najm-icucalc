@@ -3386,6 +3386,438 @@ class TeachingSessionsCompanion extends UpdateCompanion<TeachingSessionRow> {
   }
 }
 
+class $SubscriptionCacheTable extends SubscriptionCache
+    with TableInfo<$SubscriptionCacheTable, SubscriptionCacheData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SubscriptionCacheTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<String> userId = GeneratedColumn<String>(
+    'user_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _tierMeta = const VerificationMeta('tier');
+  @override
+  late final GeneratedColumn<String> tier = GeneratedColumn<String>(
+    'tier',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+    'status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _currentPeriodEndMeta = const VerificationMeta('currentPeriodEnd');
+  @override
+  late final GeneratedColumn<DateTime> currentPeriodEnd = GeneratedColumn<DateTime>(
+    'current_period_end',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _autoRenewMeta = const VerificationMeta('autoRenew');
+  @override
+  late final GeneratedColumn<bool> autoRenew = GeneratedColumn<bool>(
+    'auto_renew',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('CHECK ("auto_renew" IN (0, 1))'),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _sourceMeta = const VerificationMeta('source');
+  @override
+  late final GeneratedColumn<String> source = GeneratedColumn<String>(
+    'source',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _lastSyncedAtMeta = const VerificationMeta('lastSyncedAt');
+  @override
+  late final GeneratedColumn<DateTime> lastSyncedAt = GeneratedColumn<DateTime>(
+    'last_synced_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    userId,
+    tier,
+    status,
+    currentPeriodEnd,
+    autoRenew,
+    source,
+    lastSyncedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'subscription_cache';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<SubscriptionCacheData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('user_id')) {
+      context.handle(_userIdMeta, userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
+    } else if (isInserting) {
+      context.missing(_userIdMeta);
+    }
+    if (data.containsKey('tier')) {
+      context.handle(_tierMeta, tier.isAcceptableOrUnknown(data['tier']!, _tierMeta));
+    } else if (isInserting) {
+      context.missing(_tierMeta);
+    }
+    if (data.containsKey('status')) {
+      context.handle(_statusMeta, status.isAcceptableOrUnknown(data['status']!, _statusMeta));
+    } else if (isInserting) {
+      context.missing(_statusMeta);
+    }
+    if (data.containsKey('current_period_end')) {
+      context.handle(
+        _currentPeriodEndMeta,
+        currentPeriodEnd.isAcceptableOrUnknown(data['current_period_end']!, _currentPeriodEndMeta),
+      );
+    }
+    if (data.containsKey('auto_renew')) {
+      context.handle(
+        _autoRenewMeta,
+        autoRenew.isAcceptableOrUnknown(data['auto_renew']!, _autoRenewMeta),
+      );
+    }
+    if (data.containsKey('source')) {
+      context.handle(_sourceMeta, source.isAcceptableOrUnknown(data['source']!, _sourceMeta));
+    } else if (isInserting) {
+      context.missing(_sourceMeta);
+    }
+    if (data.containsKey('last_synced_at')) {
+      context.handle(
+        _lastSyncedAtMeta,
+        lastSyncedAt.isAcceptableOrUnknown(data['last_synced_at']!, _lastSyncedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_lastSyncedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {userId};
+  @override
+  SubscriptionCacheData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SubscriptionCacheData(
+      userId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}user_id'],
+      )!,
+      tier: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}tier'])!,
+      status: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}status'],
+      )!,
+      currentPeriodEnd: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}current_period_end'],
+      ),
+      autoRenew: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}auto_renew'],
+      )!,
+      source: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source'],
+      )!,
+      lastSyncedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}last_synced_at'],
+      )!,
+    );
+  }
+
+  @override
+  $SubscriptionCacheTable createAlias(String alias) {
+    return $SubscriptionCacheTable(attachedDatabase, alias);
+  }
+}
+
+class SubscriptionCacheData extends DataClass implements Insertable<SubscriptionCacheData> {
+  final String userId;
+  final String tier;
+  final String status;
+  final DateTime? currentPeriodEnd;
+  final bool autoRenew;
+  final String source;
+  final DateTime lastSyncedAt;
+  const SubscriptionCacheData({
+    required this.userId,
+    required this.tier,
+    required this.status,
+    this.currentPeriodEnd,
+    required this.autoRenew,
+    required this.source,
+    required this.lastSyncedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['user_id'] = Variable<String>(userId);
+    map['tier'] = Variable<String>(tier);
+    map['status'] = Variable<String>(status);
+    if (!nullToAbsent || currentPeriodEnd != null) {
+      map['current_period_end'] = Variable<DateTime>(currentPeriodEnd);
+    }
+    map['auto_renew'] = Variable<bool>(autoRenew);
+    map['source'] = Variable<String>(source);
+    map['last_synced_at'] = Variable<DateTime>(lastSyncedAt);
+    return map;
+  }
+
+  SubscriptionCacheCompanion toCompanion(bool nullToAbsent) {
+    return SubscriptionCacheCompanion(
+      userId: Value(userId),
+      tier: Value(tier),
+      status: Value(status),
+      currentPeriodEnd: currentPeriodEnd == null && nullToAbsent
+          ? const Value.absent()
+          : Value(currentPeriodEnd),
+      autoRenew: Value(autoRenew),
+      source: Value(source),
+      lastSyncedAt: Value(lastSyncedAt),
+    );
+  }
+
+  factory SubscriptionCacheData.fromJson(Map<String, dynamic> json, {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SubscriptionCacheData(
+      userId: serializer.fromJson<String>(json['userId']),
+      tier: serializer.fromJson<String>(json['tier']),
+      status: serializer.fromJson<String>(json['status']),
+      currentPeriodEnd: serializer.fromJson<DateTime?>(json['currentPeriodEnd']),
+      autoRenew: serializer.fromJson<bool>(json['autoRenew']),
+      source: serializer.fromJson<String>(json['source']),
+      lastSyncedAt: serializer.fromJson<DateTime>(json['lastSyncedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'userId': serializer.toJson<String>(userId),
+      'tier': serializer.toJson<String>(tier),
+      'status': serializer.toJson<String>(status),
+      'currentPeriodEnd': serializer.toJson<DateTime?>(currentPeriodEnd),
+      'autoRenew': serializer.toJson<bool>(autoRenew),
+      'source': serializer.toJson<String>(source),
+      'lastSyncedAt': serializer.toJson<DateTime>(lastSyncedAt),
+    };
+  }
+
+  SubscriptionCacheData copyWith({
+    String? userId,
+    String? tier,
+    String? status,
+    Value<DateTime?> currentPeriodEnd = const Value.absent(),
+    bool? autoRenew,
+    String? source,
+    DateTime? lastSyncedAt,
+  }) => SubscriptionCacheData(
+    userId: userId ?? this.userId,
+    tier: tier ?? this.tier,
+    status: status ?? this.status,
+    currentPeriodEnd: currentPeriodEnd.present ? currentPeriodEnd.value : this.currentPeriodEnd,
+    autoRenew: autoRenew ?? this.autoRenew,
+    source: source ?? this.source,
+    lastSyncedAt: lastSyncedAt ?? this.lastSyncedAt,
+  );
+  SubscriptionCacheData copyWithCompanion(SubscriptionCacheCompanion data) {
+    return SubscriptionCacheData(
+      userId: data.userId.present ? data.userId.value : this.userId,
+      tier: data.tier.present ? data.tier.value : this.tier,
+      status: data.status.present ? data.status.value : this.status,
+      currentPeriodEnd: data.currentPeriodEnd.present
+          ? data.currentPeriodEnd.value
+          : this.currentPeriodEnd,
+      autoRenew: data.autoRenew.present ? data.autoRenew.value : this.autoRenew,
+      source: data.source.present ? data.source.value : this.source,
+      lastSyncedAt: data.lastSyncedAt.present ? data.lastSyncedAt.value : this.lastSyncedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SubscriptionCacheData(')
+          ..write('userId: $userId, ')
+          ..write('tier: $tier, ')
+          ..write('status: $status, ')
+          ..write('currentPeriodEnd: $currentPeriodEnd, ')
+          ..write('autoRenew: $autoRenew, ')
+          ..write('source: $source, ')
+          ..write('lastSyncedAt: $lastSyncedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(userId, tier, status, currentPeriodEnd, autoRenew, source, lastSyncedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SubscriptionCacheData &&
+          other.userId == this.userId &&
+          other.tier == this.tier &&
+          other.status == this.status &&
+          other.currentPeriodEnd == this.currentPeriodEnd &&
+          other.autoRenew == this.autoRenew &&
+          other.source == this.source &&
+          other.lastSyncedAt == this.lastSyncedAt);
+}
+
+class SubscriptionCacheCompanion extends UpdateCompanion<SubscriptionCacheData> {
+  final Value<String> userId;
+  final Value<String> tier;
+  final Value<String> status;
+  final Value<DateTime?> currentPeriodEnd;
+  final Value<bool> autoRenew;
+  final Value<String> source;
+  final Value<DateTime> lastSyncedAt;
+  final Value<int> rowid;
+  const SubscriptionCacheCompanion({
+    this.userId = const Value.absent(),
+    this.tier = const Value.absent(),
+    this.status = const Value.absent(),
+    this.currentPeriodEnd = const Value.absent(),
+    this.autoRenew = const Value.absent(),
+    this.source = const Value.absent(),
+    this.lastSyncedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  SubscriptionCacheCompanion.insert({
+    required String userId,
+    required String tier,
+    required String status,
+    this.currentPeriodEnd = const Value.absent(),
+    this.autoRenew = const Value.absent(),
+    required String source,
+    required DateTime lastSyncedAt,
+    this.rowid = const Value.absent(),
+  }) : userId = Value(userId),
+       tier = Value(tier),
+       status = Value(status),
+       source = Value(source),
+       lastSyncedAt = Value(lastSyncedAt);
+  static Insertable<SubscriptionCacheData> custom({
+    Expression<String>? userId,
+    Expression<String>? tier,
+    Expression<String>? status,
+    Expression<DateTime>? currentPeriodEnd,
+    Expression<bool>? autoRenew,
+    Expression<String>? source,
+    Expression<DateTime>? lastSyncedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (userId != null) 'user_id': userId,
+      if (tier != null) 'tier': tier,
+      if (status != null) 'status': status,
+      if (currentPeriodEnd != null) 'current_period_end': currentPeriodEnd,
+      if (autoRenew != null) 'auto_renew': autoRenew,
+      if (source != null) 'source': source,
+      if (lastSyncedAt != null) 'last_synced_at': lastSyncedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  SubscriptionCacheCompanion copyWith({
+    Value<String>? userId,
+    Value<String>? tier,
+    Value<String>? status,
+    Value<DateTime?>? currentPeriodEnd,
+    Value<bool>? autoRenew,
+    Value<String>? source,
+    Value<DateTime>? lastSyncedAt,
+    Value<int>? rowid,
+  }) {
+    return SubscriptionCacheCompanion(
+      userId: userId ?? this.userId,
+      tier: tier ?? this.tier,
+      status: status ?? this.status,
+      currentPeriodEnd: currentPeriodEnd ?? this.currentPeriodEnd,
+      autoRenew: autoRenew ?? this.autoRenew,
+      source: source ?? this.source,
+      lastSyncedAt: lastSyncedAt ?? this.lastSyncedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (userId.present) {
+      map['user_id'] = Variable<String>(userId.value);
+    }
+    if (tier.present) {
+      map['tier'] = Variable<String>(tier.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
+    if (currentPeriodEnd.present) {
+      map['current_period_end'] = Variable<DateTime>(currentPeriodEnd.value);
+    }
+    if (autoRenew.present) {
+      map['auto_renew'] = Variable<bool>(autoRenew.value);
+    }
+    if (source.present) {
+      map['source'] = Variable<String>(source.value);
+    }
+    if (lastSyncedAt.present) {
+      map['last_synced_at'] = Variable<DateTime>(lastSyncedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SubscriptionCacheCompanion(')
+          ..write('userId: $userId, ')
+          ..write('tier: $tier, ')
+          ..write('status: $status, ')
+          ..write('currentPeriodEnd: $currentPeriodEnd, ')
+          ..write('autoRenew: $autoRenew, ')
+          ..write('source: $source, ')
+          ..write('lastSyncedAt: $lastSyncedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -3396,6 +3828,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $NotificationLogTable notificationLog = $NotificationLogTable(this);
   late final $AiCacheLocalTable aiCacheLocal = $AiCacheLocalTable(this);
   late final $TeachingSessionsTable teachingSessions = $TeachingSessionsTable(this);
+  late final $SubscriptionCacheTable subscriptionCache = $SubscriptionCacheTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3408,6 +3841,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     notificationLog,
     aiCacheLocal,
     teachingSessions,
+    subscriptionCache,
   ];
 }
 
@@ -4976,6 +5410,219 @@ typedef $$TeachingSessionsTableProcessedTableManager =
       TeachingSessionRow,
       PrefetchHooks Function()
     >;
+typedef $$SubscriptionCacheTableCreateCompanionBuilder =
+    SubscriptionCacheCompanion Function({
+      required String userId,
+      required String tier,
+      required String status,
+      Value<DateTime?> currentPeriodEnd,
+      Value<bool> autoRenew,
+      required String source,
+      required DateTime lastSyncedAt,
+      Value<int> rowid,
+    });
+typedef $$SubscriptionCacheTableUpdateCompanionBuilder =
+    SubscriptionCacheCompanion Function({
+      Value<String> userId,
+      Value<String> tier,
+      Value<String> status,
+      Value<DateTime?> currentPeriodEnd,
+      Value<bool> autoRenew,
+      Value<String> source,
+      Value<DateTime> lastSyncedAt,
+      Value<int> rowid,
+    });
+
+class $$SubscriptionCacheTableFilterComposer
+    extends Composer<_$AppDatabase, $SubscriptionCacheTable> {
+  $$SubscriptionCacheTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get tier =>
+      $composableBuilder(column: $table.tier, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get currentPeriodEnd => $composableBuilder(
+    column: $table.currentPeriodEnd,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get autoRenew =>
+      $composableBuilder(column: $table.autoRenew, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get source =>
+      $composableBuilder(column: $table.source, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get lastSyncedAt =>
+      $composableBuilder(column: $table.lastSyncedAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$SubscriptionCacheTableOrderingComposer
+    extends Composer<_$AppDatabase, $SubscriptionCacheTable> {
+  $$SubscriptionCacheTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get tier =>
+      $composableBuilder(column: $table.tier, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get currentPeriodEnd => $composableBuilder(
+    column: $table.currentPeriodEnd,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get autoRenew =>
+      $composableBuilder(column: $table.autoRenew, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get source =>
+      $composableBuilder(column: $table.source, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get lastSyncedAt =>
+      $composableBuilder(column: $table.lastSyncedAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$SubscriptionCacheTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SubscriptionCacheTable> {
+  $$SubscriptionCacheTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => column);
+
+  GeneratedColumn<String> get tier =>
+      $composableBuilder(column: $table.tier, builder: (column) => column);
+
+  GeneratedColumn<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get currentPeriodEnd =>
+      $composableBuilder(column: $table.currentPeriodEnd, builder: (column) => column);
+
+  GeneratedColumn<bool> get autoRenew =>
+      $composableBuilder(column: $table.autoRenew, builder: (column) => column);
+
+  GeneratedColumn<String> get source =>
+      $composableBuilder(column: $table.source, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get lastSyncedAt =>
+      $composableBuilder(column: $table.lastSyncedAt, builder: (column) => column);
+}
+
+class $$SubscriptionCacheTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $SubscriptionCacheTable,
+          SubscriptionCacheData,
+          $$SubscriptionCacheTableFilterComposer,
+          $$SubscriptionCacheTableOrderingComposer,
+          $$SubscriptionCacheTableAnnotationComposer,
+          $$SubscriptionCacheTableCreateCompanionBuilder,
+          $$SubscriptionCacheTableUpdateCompanionBuilder,
+          (
+            SubscriptionCacheData,
+            BaseReferences<_$AppDatabase, $SubscriptionCacheTable, SubscriptionCacheData>,
+          ),
+          SubscriptionCacheData,
+          PrefetchHooks Function()
+        > {
+  $$SubscriptionCacheTableTableManager(_$AppDatabase db, $SubscriptionCacheTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SubscriptionCacheTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SubscriptionCacheTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SubscriptionCacheTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> userId = const Value.absent(),
+                Value<String> tier = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<DateTime?> currentPeriodEnd = const Value.absent(),
+                Value<bool> autoRenew = const Value.absent(),
+                Value<String> source = const Value.absent(),
+                Value<DateTime> lastSyncedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => SubscriptionCacheCompanion(
+                userId: userId,
+                tier: tier,
+                status: status,
+                currentPeriodEnd: currentPeriodEnd,
+                autoRenew: autoRenew,
+                source: source,
+                lastSyncedAt: lastSyncedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String userId,
+                required String tier,
+                required String status,
+                Value<DateTime?> currentPeriodEnd = const Value.absent(),
+                Value<bool> autoRenew = const Value.absent(),
+                required String source,
+                required DateTime lastSyncedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => SubscriptionCacheCompanion.insert(
+                userId: userId,
+                tier: tier,
+                status: status,
+                currentPeriodEnd: currentPeriodEnd,
+                autoRenew: autoRenew,
+                source: source,
+                lastSyncedAt: lastSyncedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) =>
+              p0.map((e) => (e.readTable(table), BaseReferences(db, table, e))).toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$SubscriptionCacheTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $SubscriptionCacheTable,
+      SubscriptionCacheData,
+      $$SubscriptionCacheTableFilterComposer,
+      $$SubscriptionCacheTableOrderingComposer,
+      $$SubscriptionCacheTableAnnotationComposer,
+      $$SubscriptionCacheTableCreateCompanionBuilder,
+      $$SubscriptionCacheTableUpdateCompanionBuilder,
+      (
+        SubscriptionCacheData,
+        BaseReferences<_$AppDatabase, $SubscriptionCacheTable, SubscriptionCacheData>,
+      ),
+      SubscriptionCacheData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -4992,4 +5639,6 @@ class $AppDatabaseManager {
       $$AiCacheLocalTableTableManager(_db, _db.aiCacheLocal);
   $$TeachingSessionsTableTableManager get teachingSessions =>
       $$TeachingSessionsTableTableManager(_db, _db.teachingSessions);
+  $$SubscriptionCacheTableTableManager get subscriptionCache =>
+      $$SubscriptionCacheTableTableManager(_db, _db.subscriptionCache);
 }

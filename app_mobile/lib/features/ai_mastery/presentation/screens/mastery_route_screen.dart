@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../shared/widgets/async_value_section.dart';
 import '../../../daily_topic/daily_topic_providers.dart';
+import '../../../subscription/presentation/widgets/paywall_gate.dart';
 import 'mastery_home_screen.dart';
 
 /// The actual `/topic/:topicId` route target — resolves the path
@@ -22,7 +23,10 @@ class MasteryRouteScreen extends ConsumerWidget {
       body: AsyncValueSection(
         value: topicAsync,
         onRetry: () => ref.invalidate(topicByIdProvider(topicId)),
-        builder: (context, topic) => MasteryHomeScreen(topic: topic),
+        builder: (context, topic) => PaywallGate(
+          isFree: topic.isFree,
+          child: MasteryHomeScreen(topic: topic),
+        ),
       ),
     );
   }

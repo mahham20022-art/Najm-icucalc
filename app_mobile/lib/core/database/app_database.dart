@@ -186,6 +186,24 @@ class TeachingSessions extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+/// Mirrors `MED100_DATABASE_DESIGN.md` §12's `subscription_cache` — a
+/// read-only local mirror of server-computed entitlement (see
+/// `Subscription`'s and `SubscriptionRepositoryImpl`'s doc comments for
+/// how this foundation-stage client stands in for the real
+/// billing-webhook write path).
+class SubscriptionCache extends Table {
+  TextColumn get userId => text()();
+  TextColumn get tier => text()();
+  TextColumn get status => text()();
+  DateTimeColumn get currentPeriodEnd => dateTime().nullable()();
+  BoolColumn get autoRenew => boolean().withDefault(const Constant(false))();
+  TextColumn get source => text()();
+  DateTimeColumn get lastSyncedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {userId};
+}
+
 @DriftDatabase(
   tables: [
     Outbox,
@@ -195,6 +213,7 @@ class TeachingSessions extends Table {
     NotificationLog,
     AiCacheLocal,
     TeachingSessions,
+    SubscriptionCache,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -208,7 +227,7 @@ class AppDatabase extends _$AppDatabase {
   /// `MED100_DATABASE_DESIGN.md` §0 for the schema-versioning convention
   /// this project follows on both the Firestore and Drift sides.
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -231,6 +250,9 @@ class AppDatabase extends _$AppDatabase {
       }
       if (from < 5) {
         await m.createTable(teachingSessions);
+      }
+      if (from < 6) {
+        await m.createTable(subscriptionCache);
       }
     },
   );

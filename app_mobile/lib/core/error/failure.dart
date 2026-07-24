@@ -128,3 +128,24 @@ class AiMalformedResponseFailure extends Failure {
     super.message = "The AI assistant's response couldn't be understood — please try again.",
   ]);
 }
+
+/// The user backed out of the platform purchase sheet themselves — same
+/// "not really an error" treatment as [SignInCancelledFailure]: a
+/// ViewModel checks for this type specifically to return to idle state
+/// silently instead of showing an error banner.
+class PurchaseCancelledFailure extends Failure {
+  const PurchaseCancelledFailure([super.message = 'Purchase was cancelled.']);
+}
+
+/// The store reported an error completing the purchase (declined
+/// payment method, product misconfiguration, etc.) — never the raw
+/// platform error code shown to the user.
+class PurchaseFailure extends Failure {
+  const PurchaseFailure([super.message = 'Something went wrong completing your purchase.']);
+}
+
+/// `restorePurchases()` found nothing to restore, or the store call
+/// itself failed.
+class RestoreFailure extends Failure {
+  const RestoreFailure([super.message = 'Could not restore purchases.']);
+}
