@@ -4,9 +4,11 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/network/connectivity_provider.dart';
 import '../../core/notifications/notification_providers.dart';
 import '../../core/session/current_user.dart';
 import '../../features/challenge_mode/challenge_providers.dart';
+import '../../features/notes/notes_providers.dart';
 import '../../features/spaced_repetition/spaced_repetition_providers.dart';
 
 /// Wraps the authenticated app shell to drive the reminder engine's two
@@ -43,6 +45,15 @@ class _ReminderLifecycleGateState extends ConsumerState<ReminderLifecycleGate>
         .read(fcmDataSourceProvider)
         .onForegroundMessage
         .listen(_showForegroundMessage);
+    // Notes' cloud sync is opportunistic, not just resume-driven — a note
+    // written while offline should reach Firestore the moment
+    // connectivity comes back, not wait for the user to background and
+    // reopen the app.
+    ref.listenManual(isOnlineProvider, (previous, isOnline) {
+      if (isOnline && previous != true) {
+        unawaited(triggerNotesSync(ref));
+      }
+    });
   }
 
   @override
@@ -64,6 +75,9 @@ class _ReminderLifecycleGateState extends ConsumerState<ReminderLifecycleGate>
     await reminderRepository.rescheduleIfNeeded();
     await reminderRepository.checkMissedReminder(isTodayDone: _isChallengeTodayDone);
     await _checkSpacedRepetitionDue();
+    // Fire-and-forget: a potentially slow multi-request Firestore sync
+    // pass shouldn't delay the notification checks above it.
+    unawaited(triggerNotesSync(ref));
   }
 
   /// Mirrors Challenge Mode's missed-reminder catch-up above: same

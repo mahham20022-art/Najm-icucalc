@@ -20,11 +20,17 @@ class Outbox extends Table {
   /// two users' pending writes.
   TextColumn get userId => text()();
 
-  /// `quiz_attempt | flashcard_grade | bookmark | settings | achievement_seen`
+  /// `quiz_attempt | flashcard_grade | bookmark | settings |
+  /// achievement_seen | note | note_folder`
   TextColumn get entityType => text()();
   TextColumn get entityId => text()();
 
-  /// `create | update`
+  /// `create | update | delete` — `delete` added for `features/notes`
+  /// (the first real drainer of this table, see `NotesSyncWorker`):
+  /// unlike every entity type above, a note or folder can actually be
+  /// deleted, not just created/edited, so the vocabulary needed a third
+  /// value to tell the sync worker to remove the remote document rather
+  /// than upsert it.
   TextColumn get operation => text()();
   TextColumn get payloadJson => text()();
 
@@ -42,14 +48,25 @@ class Outbox extends Table {
 /// Per-entity-type sync watermarks, per `MED100_DATABASE_DESIGN.md` §16 —
 /// lets incremental pull-sync resume from where it left off instead of
 /// re-pulling an entire collection on every app open.
+///
+/// `userId` was added in schema v8, alongside `features/notes` becoming
+/// the first real consumer of this table (every table added before it
+/// went unused by any actual sync worker — see `core/sync/sync_worker.dart`).
+/// Without it, a shared/re-logged-in device would carry one user's pull
+/// watermark into another user's sync, same class of bug §0a's per-user
+/// local-table scoping rule exists to prevent everywhere else — worth
+/// fixing now, before any real data depends on the old shape, rather than
+/// carrying it forward as a known gap.
 class SyncState extends Table {
-  /// e.g. `topics`, `flashcards`, `mcqs`, `progress`.
+  TextColumn get userId => text()();
+
+  /// e.g. `topics`, `flashcards`, `mcqs`, `progress`, `notes`.
   TextColumn get entityType => text()();
   DateTimeColumn get lastPulledAt => dateTime().nullable()();
   DateTimeColumn get lastPushedAt => dateTime().nullable()();
 
   @override
-  Set<Column> get primaryKey => {entityType};
+  Set<Column> get primaryKey => {userId, entityType};
 }
 
 /// Challenge Mode's entire persisted state (100-day journey) — one row
@@ -243,6 +260,54 @@ class FlashcardSchedules extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+/// A user-created folder for organizing Notes — deliberately flat (no
+/// nesting): this feature's scope is folders as a single-level
+/// organizational tool, not a full nested-directory tree.
+///
+/// `@DataClassName` avoids Drift's default row-class name colliding with
+/// `features/notes/domain/entities/note_folder.dart`'s `NoteFolder`
+/// domain entity.
+@DataClassName('NoteFolderRow')
+class NoteFolders extends Table {
+  TextColumn get id => text()();
+  TextColumn get userId => text()();
+  TextColumn get name => text()();
+  DateTimeColumn get createdAt => dateTime()();
+  DateTimeColumn get updatedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+/// A user's note — Markdown body (with a `==highlight==` inline
+/// extension, see `HighlightSyntax`), optionally filed into a
+/// [NoteFolders] folder, optionally bookmarked. `imagesJson` is a
+/// JSON-encoded array of `{id, localPath, remoteUrl}` maps — same
+/// JSON-array-column convention as `ChallengeProgress`'s day lists and
+/// `TeachingSessions`'s concept lists — resolved to `NoteImage` domain
+/// values by `NotesLocalDataSource`, never decoded outside the data
+/// layer. A note's Markdown references an image by stable id
+/// (`![alt](med100-image:<id>)`), never by raw device path, since a raw
+/// local path is meaningless once the note syncs to another device.
+///
+/// `@DataClassName` avoids Drift's default row-class name colliding with
+/// `features/notes/domain/entities/note.dart`'s `Note` domain entity.
+@DataClassName('NoteRow')
+class Notes extends Table {
+  TextColumn get id => text()();
+  TextColumn get userId => text()();
+  TextColumn get folderId => text().nullable()();
+  TextColumn get title => text().withDefault(const Constant(''))();
+  TextColumn get bodyMarkdown => text().withDefault(const Constant(''))();
+  TextColumn get imagesJson => text().withDefault(const Constant('[]'))();
+  BoolColumn get isBookmarked => boolean().withDefault(const Constant(false))();
+  DateTimeColumn get createdAt => dateTime()();
+  DateTimeColumn get updatedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 @DriftDatabase(
   tables: [
     Outbox,
@@ -254,6 +319,8 @@ class FlashcardSchedules extends Table {
     TeachingSessions,
     SubscriptionCache,
     FlashcardSchedules,
+    NoteFolders,
+    Notes,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -267,7 +334,7 @@ class AppDatabase extends _$AppDatabase {
   /// `MED100_DATABASE_DESIGN.md` §0 for the schema-versioning convention
   /// this project follows on both the Firestore and Drift sides.
   @override
-  int get schemaVersion => 7;
+  int get schemaVersion => 8;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -296,6 +363,15 @@ class AppDatabase extends _$AppDatabase {
       }
       if (from < 7) {
         await m.createTable(flashcardSchedules);
+      }
+      if (from < 8) {
+        // SyncState has had no real reader/writer until features/notes
+        // (see that table's doc comment) — safe to reshape its primary
+        // key wholesale rather than needing a data-preserving column
+        // add, since no installation has ever written a row to it.
+        await m.alterTable(TableMigration(syncState));
+        await m.createTable(noteFolders);
+        await m.createTable(notes);
       }
     },
   );

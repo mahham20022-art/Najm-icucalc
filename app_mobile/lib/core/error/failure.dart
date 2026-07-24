@@ -149,3 +149,15 @@ class PurchaseFailure extends Failure {
 class RestoreFailure extends Failure {
   const RestoreFailure([super.message = 'Could not restore purchases.']);
 }
+
+/// The image picker was denied permission, the user cancelled, or the
+/// picked file could not be copied into local storage.
+class ImagePickFailure extends Failure {
+  const ImagePickFailure([super.message = 'Could not add that image.']);
+}
+
+/// Rendering a note to PDF failed (image bytes unreadable, `pdf` package
+/// layout error) — never the raw exception message.
+class NotePdfExportFailure extends Failure {
+  const NotePdfExportFailure([super.message = 'Could not export this note as a PDF.']);
+}

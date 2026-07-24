@@ -42,6 +42,11 @@ class ProfileScreen extends ConsumerWidget {
             trailing: const Icon(Icons.chevron_right),
             onTap: () => context.goNamed(AppRoute.teachingMode),
           ),
+          ListTile(
+            title: const Text('Notes'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.goNamed(AppRoute.notes),
+          ),
           const Divider(height: 32),
           biometricEnabled.when(
             data: (enabled) => SwitchListTile(

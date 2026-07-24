@@ -34,6 +34,11 @@
 	<string>Med100 uses your microphone so you can explain a topic out loud in Teaching Mode.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>Med100 transcribes your spoken explanation in Teaching Mode so it can be evaluated.</string>
+	<!-- Required by image_picker for Notes' image attachments. -->
+	<key>NSCameraUsageDescription</key>
+	<string>Med100 uses your camera so you can attach a photo to a note.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Med100 uses your photo library so you can attach an image to a note.</string>
 	<!--
 	  Google Sign-In requires a URL scheme equal to the REVERSED_CLIENT_ID
 	  from GoogleService-Info.plist (produced by `flutterfire configure`

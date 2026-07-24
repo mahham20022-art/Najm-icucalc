@@ -11,6 +11,8 @@ import '../../features/auth_onboarding/presentation/viewmodels/auth_view_model.d
 import '../../features/challenge_mode/presentation/screens/challenge_bookmarks_screen.dart';
 import '../../features/challenge_mode/presentation/screens/challenge_home_screen.dart';
 import '../../features/challenge_mode/presentation/screens/challenge_statistics_screen.dart';
+import '../../features/notes/presentation/screens/note_editor_screen.dart';
+import '../../features/notes/presentation/screens/notes_list_screen.dart';
 import '../../features/spaced_repetition/presentation/screens/review_queue_screen.dart';
 import '../../features/subscription/presentation/screens/subscription_screen.dart';
 import '../../features/teaching_mode/presentation/screens/teaching_route_screen.dart';
@@ -42,6 +44,8 @@ abstract final class AppRoute {
   static const mcqs = 'mcqs';
   static const flashcards = 'flashcards';
   static const teachTopic = 'teach-topic'; // Teaching Mode's real, topic-scoped flow
+  static const notes = 'notes';
+  static const noteEditor = 'note-editor';
 }
 
 /// Locations reachable without a fully authenticated session — Splash
@@ -209,6 +213,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/flashcards',
         name: AppRoute.flashcards,
         builder: (context, state) => const ReviewQueueScreen(),
+      ),
+      GoRoute(
+        path: '/notes',
+        name: AppRoute.notes,
+        builder: (context, state) => const NotesListScreen(),
+      ),
+      GoRoute(
+        path: '/notes/:noteId',
+        name: AppRoute.noteEditor,
+        builder: (context, state) => NoteEditorScreen(noteId: state.pathParameters['noteId']!),
       ),
     ],
   );
