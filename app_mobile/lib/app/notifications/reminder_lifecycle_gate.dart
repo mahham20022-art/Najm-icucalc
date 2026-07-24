@@ -10,6 +10,7 @@ import '../../core/session/current_user.dart';
 import '../../features/challenge_mode/challenge_providers.dart';
 import '../../features/notes/notes_providers.dart';
 import '../../features/spaced_repetition/spaced_repetition_providers.dart';
+import '../../features/teaching_mode/teaching_providers.dart';
 
 /// Wraps the authenticated app shell to drive the reminder engine's two
 /// time-based checks — rescheduling and the missed-reminder catch-up —
@@ -53,6 +54,7 @@ class _ReminderLifecycleGateState extends ConsumerState<ReminderLifecycleGate>
       if (isOnline && previous != true) {
         unawaited(triggerNotesSync(ref));
         unawaited(triggerChallengeSync(ref));
+        unawaited(triggerTeachingSync(ref));
       }
     });
   }
@@ -80,6 +82,7 @@ class _ReminderLifecycleGateState extends ConsumerState<ReminderLifecycleGate>
     // pass shouldn't delay the notification checks above it.
     unawaited(triggerNotesSync(ref));
     unawaited(triggerChallengeSync(ref));
+    unawaited(triggerTeachingSync(ref));
   }
 
   /// Mirrors Challenge Mode's missed-reminder catch-up above: same

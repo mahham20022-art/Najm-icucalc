@@ -13,6 +13,7 @@ import '../../../../core/ai/domain/repositories/ai_engine_repository.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../core/error/result.dart';
 import '../../../../core/session/current_user.dart';
+import '../../../../core/sync/data/outbox_local_datasource.dart';
 import '../../../daily_topic/domain/entities/topic.dart';
 import '../../domain/entities/explanation_mode.dart';
 import '../../domain/entities/teaching_evaluation.dart';
@@ -20,18 +21,22 @@ import '../../domain/entities/teaching_session.dart';
 import '../../domain/repositories/teaching_repository.dart';
 import '../datasources/teaching_sessions_local_datasource.dart';
 import '../teaching_prompt_templates.dart';
+import '../teaching_sync_worker.dart' show TeachingSyncWorker;
 
 class TeachingRepositoryImpl implements TeachingRepository {
   TeachingRepositoryImpl({
     required AiEngineRepository aiEngine,
     required TeachingSessionsLocalDataSource localDataSource,
+    required OutboxLocalDataSource outbox,
     required CurrentUser currentUser,
   }) : _aiEngine = aiEngine,
        _localDataSource = localDataSource,
+       _outbox = outbox,
        _currentUser = currentUser;
 
   final AiEngineRepository _aiEngine;
   final TeachingSessionsLocalDataSource _localDataSource;
+  final OutboxLocalDataSource _outbox;
   final CurrentUser _currentUser;
 
   static const _uuid = Uuid();
@@ -83,6 +88,12 @@ class TeachingRepositoryImpl implements TeachingRepository {
       completedAt: DateTime.now(),
     );
     await _localDataSource.insert(_userId, session);
+    await _outbox.enqueue(
+      userId: _userId,
+      entityType: TeachingSyncWorker.entityType,
+      entityId: session.id,
+      operation: 'create',
+    );
     return Result.success(session);
   }
 

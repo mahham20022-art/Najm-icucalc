@@ -44,6 +44,42 @@ class TeachingSessionsLocalDataSource {
     return query.watch().map((rows) => rows.map(_toEntity).toList());
   }
 
+  Future<TeachingSession?> getById(String userId, String sessionId) async {
+    final query = _db.select(_db.teachingSessions)
+      ..where((t) => t.id.equals(sessionId) & t.userId.equals(userId));
+    final row = await query.getSingleOrNull();
+    return row == null ? null : _toEntity(row);
+  }
+
+  /// Used only by [TeachingSyncWorker]'s pull path — a session created on
+  /// another device and downloaded to this one. Sessions are otherwise
+  /// append-only ([insert] fails on an id collision), so this is the one
+  /// path that tolerates re-writing an existing row (the same remote
+  /// session pulled twice is idempotent, not a conflict).
+  Future<void> upsertFromRemote(String userId, TeachingSession session) async {
+    await _db
+        .into(_db.teachingSessions)
+        .insertOnConflictUpdate(
+          TeachingSessionsCompanion.insert(
+            id: session.id,
+            userId: userId,
+            topicId: session.topicId,
+            topicTitle: session.topicTitle,
+            mode: session.mode.name,
+            explanationText: session.explanationText,
+            accuracyScore: session.evaluation.accuracyScore,
+            clinicalReasoningScore: session.evaluation.clinicalReasoningScore,
+            completenessScore: session.evaluation.completenessScore,
+            confidenceScore: session.evaluation.confidenceScore,
+            missingConceptsJson: Value(jsonEncode(session.evaluation.missingConcepts)),
+            hallucinationsJson: Value(jsonEncode(session.evaluation.hallucinations)),
+            feedback: session.evaluation.feedback,
+            masteryScore: session.masteryScore,
+            completedAt: session.completedAt,
+          ),
+        );
+  }
+
   TeachingSession _toEntity(TeachingSessionRow row) {
     return TeachingSession(
       id: row.id,
