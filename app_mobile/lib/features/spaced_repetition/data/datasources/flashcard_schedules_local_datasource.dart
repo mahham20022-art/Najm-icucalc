@@ -17,11 +17,25 @@ class FlashcardSchedulesLocalDataSource {
     return query.getSingleOrNull();
   }
 
-  Future<void> insertIfAbsent({
+  /// Used only by [SpacedRepetitionSyncWorker]'s drain path, which pushes
+  /// the domain entity rather than the raw Drift row.
+  Future<FlashcardSchedule?> getEntityByFlashcardId(String userId, String flashcardId) async {
+    final row = await getByFlashcardId(userId, flashcardId);
+    return row == null ? null : _toEntity(row);
+  }
+
+  /// Returns whether a row was actually inserted — `false` when one
+  /// already existed for this flashcard, so the repository knows not to
+  /// enqueue a redundant sync (this is called as a side effect every time
+  /// a topic's flashcards are fetched, so most calls are no-ops).
+  Future<bool> insertIfAbsent({
     required String userId,
     required String flashcardId,
     required String topicId,
   }) async {
+    final existing = await getByFlashcardId(userId, flashcardId);
+    if (existing != null) return false;
+
     final now = DateTime.now();
     await _db
         .into(_db.flashcardSchedules)
@@ -37,6 +51,7 @@ class FlashcardSchedulesLocalDataSource {
           ),
           mode: InsertMode.insertOrIgnore,
         );
+    return true;
   }
 
   /// The "is it due" cutoff is deliberately *not* passed in and baked
@@ -71,6 +86,28 @@ class FlashcardSchedulesLocalDataSource {
 
   Future<void> update(FlashcardScheduleRow row) async {
     await _db.update(_db.flashcardSchedules).replace(row);
+  }
+
+  /// Used only by [SpacedRepetitionSyncWorker]'s pull path — blindly
+  /// overwrites this device's row with the remote copy, same
+  /// last-writer-wins simplicity as `NotesSyncWorker.pullIncremental`.
+  Future<void> upsertFromRemote(String userId, FlashcardSchedule schedule) async {
+    await _db
+        .into(_db.flashcardSchedules)
+        .insertOnConflictUpdate(
+          FlashcardSchedulesCompanion.insert(
+            id: _rowId(userId, schedule.flashcardId),
+            userId: userId,
+            flashcardId: schedule.flashcardId,
+            topicId: schedule.topicId,
+            stage: schedule.stage.name,
+            dueDate: schedule.dueDate,
+            lastReviewedAt: Value(schedule.lastReviewedAt),
+            timesReviewed: Value(schedule.timesReviewed),
+            timesLapsed: Value(schedule.timesLapsed),
+            createdAt: schedule.createdAt,
+          ),
+        );
   }
 
   Stream<List<FlashcardScheduleRow>> watchAll(String userId) {

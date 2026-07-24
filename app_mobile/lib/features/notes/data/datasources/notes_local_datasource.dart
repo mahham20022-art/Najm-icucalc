@@ -58,14 +58,14 @@ class NotesLocalDataSource {
   /// `upsertNote`/`saveNote` entirely, so without this the affected
   /// notes' cleared `folderId` would never reach Firestore.
   Future<List<String>> clearFolderReferences(String userId, String folderId) async {
-    final affected = await (_db.select(_db.notes)..where(
-          (t) => t.folderId.equals(folderId) & t.userId.equals(userId),
-        )).map((row) => row.id).get();
-    await (_db.update(
-      _db.notes,
-    )..where((t) => t.folderId.equals(folderId) & t.userId.equals(userId))).write(
-      const NotesCompanion(folderId: Value(null)),
-    );
+    final affected =
+        await (_db.select(_db.notes)
+              ..where((t) => t.folderId.equals(folderId) & t.userId.equals(userId)))
+            .map((row) => row.id)
+            .get();
+    await (_db.update(_db.notes)
+          ..where((t) => t.folderId.equals(folderId) & t.userId.equals(userId)))
+        .write(const NotesCompanion(folderId: Value(null)));
     return affected;
   }
 
@@ -124,9 +124,7 @@ class NotesLocalDataSource {
   }
 
   Future<void> deleteNote(String userId, String noteId) async {
-    await (_db.delete(
-      _db.notes,
-    )..where((t) => t.id.equals(noteId) & t.userId.equals(userId))).go();
+    await (_db.delete(_db.notes)..where((t) => t.id.equals(noteId) & t.userId.equals(userId))).go();
   }
 
   // ---------------------------------------------------------------- Mapping

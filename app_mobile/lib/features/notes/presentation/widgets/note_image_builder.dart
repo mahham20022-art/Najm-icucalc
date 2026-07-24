@@ -35,10 +35,9 @@ class NoteImageBuilder {
       return Image.file(
         File(localPath),
         cacheWidth: _cacheWidth,
-        errorBuilder: (context, error, stackTrace) =>
-            image.remoteUrl != null
-                ? Image.network(image.remoteUrl!, cacheWidth: _cacheWidth)
-                : _placeholder(),
+        errorBuilder: (context, error, stackTrace) => image.remoteUrl != null
+            ? Image.network(image.remoteUrl!, cacheWidth: _cacheWidth)
+            : _placeholder(),
       );
     }
     if (image.remoteUrl != null) {

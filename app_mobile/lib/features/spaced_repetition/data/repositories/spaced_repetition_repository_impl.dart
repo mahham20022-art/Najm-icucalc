@@ -7,12 +7,14 @@
 import 'package:drift/drift.dart';
 
 import '../../../../core/session/current_user.dart';
+import '../../../../core/sync/data/outbox_local_datasource.dart';
 import '../../domain/entities/flashcard_schedule.dart';
 import '../../domain/entities/repetition_stage.dart';
 import '../../domain/entities/review_grade.dart';
 import '../../domain/entities/spaced_repetition_statistics.dart';
 import '../../domain/repositories/spaced_repetition_repository.dart';
 import '../datasources/flashcard_schedules_local_datasource.dart';
+import '../spaced_repetition_sync_worker.dart' show SpacedRepetitionSyncWorker;
 
 /// The 7/30/90-day Leitner-style ladder: a `good` grade advances a card
 /// to the next stage and pushes its due date out by that stage's
@@ -23,22 +25,28 @@ import '../datasources/flashcard_schedules_local_datasource.dart';
 class SpacedRepetitionRepositoryImpl implements SpacedRepetitionRepository {
   SpacedRepetitionRepositoryImpl({
     required FlashcardSchedulesLocalDataSource localDataSource,
+    required OutboxLocalDataSource outbox,
     required CurrentUser currentUser,
   }) : _localDataSource = localDataSource,
+       _outbox = outbox,
        _currentUser = currentUser;
 
   final FlashcardSchedulesLocalDataSource _localDataSource;
+  final OutboxLocalDataSource _outbox;
   final CurrentUser _currentUser;
 
   String get _userId => _currentUser.userId ?? guestScopeId;
 
   @override
-  Future<void> ensureScheduled({required String flashcardId, required String topicId}) {
-    return _localDataSource.insertIfAbsent(
+  Future<void> ensureScheduled({required String flashcardId, required String topicId}) async {
+    final inserted = await _localDataSource.insertIfAbsent(
       userId: _userId,
       flashcardId: flashcardId,
       topicId: topicId,
     );
+    if (inserted) {
+      await _enqueueSync(flashcardId);
+    }
   }
 
   @override
@@ -75,7 +83,15 @@ class SpacedRepetitionRepositoryImpl implements SpacedRepetitionRepository {
         timesLapsed: grade == ReviewGrade.again ? row.timesLapsed + 1 : row.timesLapsed,
       ),
     );
+    await _enqueueSync(flashcardId);
   }
+
+  Future<void> _enqueueSync(String flashcardId) => _outbox.enqueue(
+    userId: _userId,
+    entityType: SpacedRepetitionSyncWorker.entityType,
+    entityId: flashcardId,
+    operation: 'update',
+  );
 
   @override
   Stream<SpacedRepetitionStatistics> watchStatistics() {

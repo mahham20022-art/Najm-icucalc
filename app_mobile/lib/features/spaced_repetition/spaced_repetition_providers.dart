@@ -2,8 +2,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/bootstrap/bootstrap.dart';
 import '../../core/session/current_user.dart';
+import '../../core/sync/sync_providers.dart';
 import 'data/datasources/flashcard_schedules_local_datasource.dart';
+import 'data/datasources/flashcard_schedules_remote_datasource.dart';
 import 'data/repositories/spaced_repetition_repository_impl.dart';
+import 'data/spaced_repetition_sync_worker.dart';
 import 'domain/entities/flashcard_schedule.dart';
 import 'domain/entities/spaced_repetition_statistics.dart';
 import 'domain/repositories/spaced_repetition_repository.dart';
@@ -19,9 +22,26 @@ final flashcardSchedulesLocalDataSourceProvider = Provider<FlashcardSchedulesLoc
   return FlashcardSchedulesLocalDataSource(ref.watch(appDatabaseProvider));
 });
 
+final flashcardSchedulesRemoteDataSourceProvider = Provider<FlashcardSchedulesRemoteDataSource>((
+  ref,
+) {
+  return FlashcardSchedulesRemoteDataSource();
+});
+
+final spacedRepetitionSyncWorkerProvider = Provider<SpacedRepetitionSyncWorker>((ref) {
+  return SpacedRepetitionSyncWorker(
+    localDataSource: ref.watch(flashcardSchedulesLocalDataSourceProvider),
+    remoteDataSource: ref.watch(flashcardSchedulesRemoteDataSourceProvider),
+    outbox: ref.watch(outboxLocalDataSourceProvider),
+    syncState: ref.watch(syncStateLocalDataSourceProvider),
+    currentUser: ref.watch(currentUserProvider),
+  );
+});
+
 final spacedRepetitionRepositoryProvider = Provider<SpacedRepetitionRepository>((ref) {
   return SpacedRepetitionRepositoryImpl(
     localDataSource: ref.watch(flashcardSchedulesLocalDataSourceProvider),
+    outbox: ref.watch(outboxLocalDataSourceProvider),
     currentUser: ref.watch(currentUserProvider),
   );
 });
@@ -58,3 +78,16 @@ final dueQueueProvider = StreamProvider<List<FlashcardSchedule>>((ref) {
 final spacedRepetitionStatisticsProvider = StreamProvider<SpacedRepetitionStatistics>((ref) {
   return ref.watch(watchStatisticsUseCaseProvider)();
 });
+
+/// Pulls any schedule changes from another device, then drains this
+/// device's pending grades/new-schedules — safe to call opportunistically
+/// (app resume, connectivity restore); a no-op for a guest session.
+/// Mirrors `notes_providers.dart`'s `triggerNotesSync`.
+Future<void> triggerSpacedRepetitionSync(WidgetRef ref) async {
+  final userId = ref.read(currentUserProvider).userId;
+  if (userId == null) return;
+
+  final worker = ref.read(spacedRepetitionSyncWorkerProvider);
+  await worker.pullIncremental(SpacedRepetitionSyncWorker.entityType);
+  await worker.drainOutbox(userId);
+}

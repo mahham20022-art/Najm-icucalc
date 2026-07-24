@@ -55,6 +55,7 @@ class _ReminderLifecycleGateState extends ConsumerState<ReminderLifecycleGate>
         unawaited(triggerNotesSync(ref));
         unawaited(triggerChallengeSync(ref));
         unawaited(triggerTeachingSync(ref));
+        unawaited(triggerSpacedRepetitionSync(ref));
       }
     });
   }
@@ -83,6 +84,7 @@ class _ReminderLifecycleGateState extends ConsumerState<ReminderLifecycleGate>
     unawaited(triggerNotesSync(ref));
     unawaited(triggerChallengeSync(ref));
     unawaited(triggerTeachingSync(ref));
+    unawaited(triggerSpacedRepetitionSync(ref));
   }
 
   /// Mirrors Challenge Mode's missed-reminder catch-up above: same
