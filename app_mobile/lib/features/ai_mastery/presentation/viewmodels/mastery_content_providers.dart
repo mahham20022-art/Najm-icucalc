@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../daily_topic/domain/entities/topic.dart';
+import '../../../spaced_repetition/spaced_repetition_providers.dart';
 import '../../domain/entities/clinical_algorithm.dart';
 import '../../domain/entities/comparison_table.dart';
 import '../../domain/entities/flashcard.dart';
@@ -53,7 +56,24 @@ final mcqsProvider = FutureProvider.family<List<Mcq>, Topic>((ref, topic) async 
 
 final flashcardsProvider = FutureProvider.family<List<Flashcard>, Topic>((ref, topic) async {
   final result = await ref.watch(getFlashcardsUseCaseProvider)(topic);
-  return result.when(success: (cards) => cards, failure: (failure) => throw failure);
+  return result.when(
+    success: (cards) {
+      // A flashcard without a review schedule is just static content —
+      // `features/spaced_repetition` needs a schedule row per card to
+      // ever surface it in the due queue, so this is created as a side
+      // effect the moment a topic's flashcards are fetched, rather than
+      // needing an app-layer mediator the way Challenge Mode/Reminder
+      // Engine do (that coupling exists to keep unrelated features from
+      // depending on each other directly; this one is a much tighter,
+      // more natural dependency).
+      final ensureScheduled = ref.read(ensureScheduledUseCaseProvider);
+      for (final card in cards) {
+        unawaited(ensureScheduled(flashcardId: card.id, topicId: topic.id));
+      }
+      return cards;
+    },
+    failure: (failure) => throw failure,
+  );
 });
 
 final referencesProvider = FutureProvider.family<List<ReferenceEntry>, Topic>((ref, topic) async {

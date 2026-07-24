@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/notifications/notification_providers.dart';
+import '../../core/session/current_user.dart';
 import '../../features/challenge_mode/challenge_providers.dart';
+import '../../features/spaced_repetition/spaced_repetition_providers.dart';
 
 /// Wraps the authenticated app shell to drive the reminder engine's two
 /// time-based checks — rescheduling and the missed-reminder catch-up —
@@ -61,6 +63,38 @@ class _ReminderLifecycleGateState extends ConsumerState<ReminderLifecycleGate>
     final reminderRepository = ref.read(reminderRepositoryProvider);
     await reminderRepository.rescheduleIfNeeded();
     await reminderRepository.checkMissedReminder(isTodayDone: _isChallengeTodayDone);
+    await _checkSpacedRepetitionDue();
+  }
+
+  /// Mirrors Challenge Mode's missed-reminder catch-up above: same
+  /// once-per-day dedup via `NotificationLogDataSource.hasLoggedOn`, its
+  /// own notification `type` so the two checks never suppress each
+  /// other, distinct from the daily-reminder's fixed notification id so
+  /// they never overwrite each other's platform notification either.
+  static const _srsDueNotificationId = 1002;
+  static const _srsDueType = 'srs_due';
+
+  Future<void> _checkSpacedRepetitionDue() async {
+    final userId = ref.read(currentUserProvider).userId ?? guestScopeId;
+    final notificationLog = ref.read(notificationLogDataSourceProvider);
+    final today = DateTime.now();
+    final todayDate = DateTime(today.year, today.month, today.day);
+
+    if (await notificationLog.hasLoggedOn(userId: userId, type: _srsDueType, date: todayDate)) {
+      return;
+    }
+
+    final dueCount = await ref.read(getDueCountUseCaseProvider)();
+    if (dueCount == 0) return;
+
+    final title = 'Flashcards are due for review';
+    final body = dueCount == 1
+        ? '1 flashcard is due for review.'
+        : '$dueCount flashcards are due for review.';
+    await ref
+        .read(localNotificationDataSourceProvider)
+        .showNow(id: _srsDueNotificationId, title: title, body: body);
+    await notificationLog.record(userId: userId, type: _srsDueType, title: title, body: body);
   }
 
   /// Awaits the repository's stream directly rather than reading

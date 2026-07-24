@@ -165,12 +165,15 @@ class MasteryRepositoryImpl implements MasteryRepository {
       success: (response) {
         try {
           final json = _decodeJsonObject(response.content);
-          final cards = (json['cards'] as List)
-              .cast<Map<String, dynamic>>()
-              .map(
-                (card) => Flashcard(front: card['front'] as String, back: card['back'] as String),
-              )
-              .toList();
+          final rawCards = (json['cards'] as List).cast<Map<String, dynamic>>();
+          final cards = [
+            for (var i = 0; i < rawCards.length; i++)
+              Flashcard(
+                id: '${topic.id}_$i',
+                front: rawCards[i]['front'] as String,
+                back: rawCards[i]['back'] as String,
+              ),
+          ];
           return Result.success(cards);
         } catch (_) {
           return const Result.failure(AiMalformedResponseFailure());

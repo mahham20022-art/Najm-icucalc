@@ -3818,6 +3818,581 @@ class SubscriptionCacheCompanion extends UpdateCompanion<SubscriptionCacheData> 
   }
 }
 
+class $FlashcardSchedulesTable extends FlashcardSchedules
+    with TableInfo<$FlashcardSchedulesTable, FlashcardScheduleRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $FlashcardSchedulesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<String> userId = GeneratedColumn<String>(
+    'user_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _flashcardIdMeta = const VerificationMeta('flashcardId');
+  @override
+  late final GeneratedColumn<String> flashcardId = GeneratedColumn<String>(
+    'flashcard_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _topicIdMeta = const VerificationMeta('topicId');
+  @override
+  late final GeneratedColumn<String> topicId = GeneratedColumn<String>(
+    'topic_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _stageMeta = const VerificationMeta('stage');
+  @override
+  late final GeneratedColumn<String> stage = GeneratedColumn<String>(
+    'stage',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _dueDateMeta = const VerificationMeta('dueDate');
+  @override
+  late final GeneratedColumn<DateTime> dueDate = GeneratedColumn<DateTime>(
+    'due_date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _lastReviewedAtMeta = const VerificationMeta('lastReviewedAt');
+  @override
+  late final GeneratedColumn<DateTime> lastReviewedAt = GeneratedColumn<DateTime>(
+    'last_reviewed_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _timesReviewedMeta = const VerificationMeta('timesReviewed');
+  @override
+  late final GeneratedColumn<int> timesReviewed = GeneratedColumn<int>(
+    'times_reviewed',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _timesLapsedMeta = const VerificationMeta('timesLapsed');
+  @override
+  late final GeneratedColumn<int> timesLapsed = GeneratedColumn<int>(
+    'times_lapsed',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    userId,
+    flashcardId,
+    topicId,
+    stage,
+    dueDate,
+    lastReviewedAt,
+    timesReviewed,
+    timesLapsed,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'flashcard_schedules';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<FlashcardScheduleRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('user_id')) {
+      context.handle(_userIdMeta, userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
+    } else if (isInserting) {
+      context.missing(_userIdMeta);
+    }
+    if (data.containsKey('flashcard_id')) {
+      context.handle(
+        _flashcardIdMeta,
+        flashcardId.isAcceptableOrUnknown(data['flashcard_id']!, _flashcardIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_flashcardIdMeta);
+    }
+    if (data.containsKey('topic_id')) {
+      context.handle(_topicIdMeta, topicId.isAcceptableOrUnknown(data['topic_id']!, _topicIdMeta));
+    } else if (isInserting) {
+      context.missing(_topicIdMeta);
+    }
+    if (data.containsKey('stage')) {
+      context.handle(_stageMeta, stage.isAcceptableOrUnknown(data['stage']!, _stageMeta));
+    } else if (isInserting) {
+      context.missing(_stageMeta);
+    }
+    if (data.containsKey('due_date')) {
+      context.handle(_dueDateMeta, dueDate.isAcceptableOrUnknown(data['due_date']!, _dueDateMeta));
+    } else if (isInserting) {
+      context.missing(_dueDateMeta);
+    }
+    if (data.containsKey('last_reviewed_at')) {
+      context.handle(
+        _lastReviewedAtMeta,
+        lastReviewedAt.isAcceptableOrUnknown(data['last_reviewed_at']!, _lastReviewedAtMeta),
+      );
+    }
+    if (data.containsKey('times_reviewed')) {
+      context.handle(
+        _timesReviewedMeta,
+        timesReviewed.isAcceptableOrUnknown(data['times_reviewed']!, _timesReviewedMeta),
+      );
+    }
+    if (data.containsKey('times_lapsed')) {
+      context.handle(
+        _timesLapsedMeta,
+        timesLapsed.isAcceptableOrUnknown(data['times_lapsed']!, _timesLapsedMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  FlashcardScheduleRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return FlashcardScheduleRow(
+      id: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      userId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}user_id'],
+      )!,
+      flashcardId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}flashcard_id'],
+      )!,
+      topicId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}topic_id'],
+      )!,
+      stage: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}stage'],
+      )!,
+      dueDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}due_date'],
+      )!,
+      lastReviewedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}last_reviewed_at'],
+      ),
+      timesReviewed: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}times_reviewed'],
+      )!,
+      timesLapsed: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}times_lapsed'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $FlashcardSchedulesTable createAlias(String alias) {
+    return $FlashcardSchedulesTable(attachedDatabase, alias);
+  }
+}
+
+class FlashcardScheduleRow extends DataClass implements Insertable<FlashcardScheduleRow> {
+  /// `'<userId>_<flashcardId>'` — composite identity as a single text
+  /// primary key, since Drift's `primaryKey` set doesn't compose cleanly
+  /// with the per-user scoping queries this table needs (watch/count by
+  /// `userId` alone, look up by `userId` + `flashcardId` together).
+  final String id;
+  final String userId;
+  final String flashcardId;
+  final String topicId;
+
+  /// `newCard | day7 | day30 | day90 | mastered` — see `RepetitionStage`.
+  final String stage;
+  final DateTime dueDate;
+  final DateTime? lastReviewedAt;
+  final int timesReviewed;
+  final int timesLapsed;
+  final DateTime createdAt;
+  const FlashcardScheduleRow({
+    required this.id,
+    required this.userId,
+    required this.flashcardId,
+    required this.topicId,
+    required this.stage,
+    required this.dueDate,
+    this.lastReviewedAt,
+    required this.timesReviewed,
+    required this.timesLapsed,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['user_id'] = Variable<String>(userId);
+    map['flashcard_id'] = Variable<String>(flashcardId);
+    map['topic_id'] = Variable<String>(topicId);
+    map['stage'] = Variable<String>(stage);
+    map['due_date'] = Variable<DateTime>(dueDate);
+    if (!nullToAbsent || lastReviewedAt != null) {
+      map['last_reviewed_at'] = Variable<DateTime>(lastReviewedAt);
+    }
+    map['times_reviewed'] = Variable<int>(timesReviewed);
+    map['times_lapsed'] = Variable<int>(timesLapsed);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  FlashcardSchedulesCompanion toCompanion(bool nullToAbsent) {
+    return FlashcardSchedulesCompanion(
+      id: Value(id),
+      userId: Value(userId),
+      flashcardId: Value(flashcardId),
+      topicId: Value(topicId),
+      stage: Value(stage),
+      dueDate: Value(dueDate),
+      lastReviewedAt: lastReviewedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastReviewedAt),
+      timesReviewed: Value(timesReviewed),
+      timesLapsed: Value(timesLapsed),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory FlashcardScheduleRow.fromJson(Map<String, dynamic> json, {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return FlashcardScheduleRow(
+      id: serializer.fromJson<String>(json['id']),
+      userId: serializer.fromJson<String>(json['userId']),
+      flashcardId: serializer.fromJson<String>(json['flashcardId']),
+      topicId: serializer.fromJson<String>(json['topicId']),
+      stage: serializer.fromJson<String>(json['stage']),
+      dueDate: serializer.fromJson<DateTime>(json['dueDate']),
+      lastReviewedAt: serializer.fromJson<DateTime?>(json['lastReviewedAt']),
+      timesReviewed: serializer.fromJson<int>(json['timesReviewed']),
+      timesLapsed: serializer.fromJson<int>(json['timesLapsed']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'userId': serializer.toJson<String>(userId),
+      'flashcardId': serializer.toJson<String>(flashcardId),
+      'topicId': serializer.toJson<String>(topicId),
+      'stage': serializer.toJson<String>(stage),
+      'dueDate': serializer.toJson<DateTime>(dueDate),
+      'lastReviewedAt': serializer.toJson<DateTime?>(lastReviewedAt),
+      'timesReviewed': serializer.toJson<int>(timesReviewed),
+      'timesLapsed': serializer.toJson<int>(timesLapsed),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  FlashcardScheduleRow copyWith({
+    String? id,
+    String? userId,
+    String? flashcardId,
+    String? topicId,
+    String? stage,
+    DateTime? dueDate,
+    Value<DateTime?> lastReviewedAt = const Value.absent(),
+    int? timesReviewed,
+    int? timesLapsed,
+    DateTime? createdAt,
+  }) => FlashcardScheduleRow(
+    id: id ?? this.id,
+    userId: userId ?? this.userId,
+    flashcardId: flashcardId ?? this.flashcardId,
+    topicId: topicId ?? this.topicId,
+    stage: stage ?? this.stage,
+    dueDate: dueDate ?? this.dueDate,
+    lastReviewedAt: lastReviewedAt.present ? lastReviewedAt.value : this.lastReviewedAt,
+    timesReviewed: timesReviewed ?? this.timesReviewed,
+    timesLapsed: timesLapsed ?? this.timesLapsed,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  FlashcardScheduleRow copyWithCompanion(FlashcardSchedulesCompanion data) {
+    return FlashcardScheduleRow(
+      id: data.id.present ? data.id.value : this.id,
+      userId: data.userId.present ? data.userId.value : this.userId,
+      flashcardId: data.flashcardId.present ? data.flashcardId.value : this.flashcardId,
+      topicId: data.topicId.present ? data.topicId.value : this.topicId,
+      stage: data.stage.present ? data.stage.value : this.stage,
+      dueDate: data.dueDate.present ? data.dueDate.value : this.dueDate,
+      lastReviewedAt: data.lastReviewedAt.present ? data.lastReviewedAt.value : this.lastReviewedAt,
+      timesReviewed: data.timesReviewed.present ? data.timesReviewed.value : this.timesReviewed,
+      timesLapsed: data.timesLapsed.present ? data.timesLapsed.value : this.timesLapsed,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FlashcardScheduleRow(')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('flashcardId: $flashcardId, ')
+          ..write('topicId: $topicId, ')
+          ..write('stage: $stage, ')
+          ..write('dueDate: $dueDate, ')
+          ..write('lastReviewedAt: $lastReviewedAt, ')
+          ..write('timesReviewed: $timesReviewed, ')
+          ..write('timesLapsed: $timesLapsed, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    userId,
+    flashcardId,
+    topicId,
+    stage,
+    dueDate,
+    lastReviewedAt,
+    timesReviewed,
+    timesLapsed,
+    createdAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is FlashcardScheduleRow &&
+          other.id == this.id &&
+          other.userId == this.userId &&
+          other.flashcardId == this.flashcardId &&
+          other.topicId == this.topicId &&
+          other.stage == this.stage &&
+          other.dueDate == this.dueDate &&
+          other.lastReviewedAt == this.lastReviewedAt &&
+          other.timesReviewed == this.timesReviewed &&
+          other.timesLapsed == this.timesLapsed &&
+          other.createdAt == this.createdAt);
+}
+
+class FlashcardSchedulesCompanion extends UpdateCompanion<FlashcardScheduleRow> {
+  final Value<String> id;
+  final Value<String> userId;
+  final Value<String> flashcardId;
+  final Value<String> topicId;
+  final Value<String> stage;
+  final Value<DateTime> dueDate;
+  final Value<DateTime?> lastReviewedAt;
+  final Value<int> timesReviewed;
+  final Value<int> timesLapsed;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const FlashcardSchedulesCompanion({
+    this.id = const Value.absent(),
+    this.userId = const Value.absent(),
+    this.flashcardId = const Value.absent(),
+    this.topicId = const Value.absent(),
+    this.stage = const Value.absent(),
+    this.dueDate = const Value.absent(),
+    this.lastReviewedAt = const Value.absent(),
+    this.timesReviewed = const Value.absent(),
+    this.timesLapsed = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  FlashcardSchedulesCompanion.insert({
+    required String id,
+    required String userId,
+    required String flashcardId,
+    required String topicId,
+    required String stage,
+    required DateTime dueDate,
+    this.lastReviewedAt = const Value.absent(),
+    this.timesReviewed = const Value.absent(),
+    this.timesLapsed = const Value.absent(),
+    required DateTime createdAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       userId = Value(userId),
+       flashcardId = Value(flashcardId),
+       topicId = Value(topicId),
+       stage = Value(stage),
+       dueDate = Value(dueDate),
+       createdAt = Value(createdAt);
+  static Insertable<FlashcardScheduleRow> custom({
+    Expression<String>? id,
+    Expression<String>? userId,
+    Expression<String>? flashcardId,
+    Expression<String>? topicId,
+    Expression<String>? stage,
+    Expression<DateTime>? dueDate,
+    Expression<DateTime>? lastReviewedAt,
+    Expression<int>? timesReviewed,
+    Expression<int>? timesLapsed,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (userId != null) 'user_id': userId,
+      if (flashcardId != null) 'flashcard_id': flashcardId,
+      if (topicId != null) 'topic_id': topicId,
+      if (stage != null) 'stage': stage,
+      if (dueDate != null) 'due_date': dueDate,
+      if (lastReviewedAt != null) 'last_reviewed_at': lastReviewedAt,
+      if (timesReviewed != null) 'times_reviewed': timesReviewed,
+      if (timesLapsed != null) 'times_lapsed': timesLapsed,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  FlashcardSchedulesCompanion copyWith({
+    Value<String>? id,
+    Value<String>? userId,
+    Value<String>? flashcardId,
+    Value<String>? topicId,
+    Value<String>? stage,
+    Value<DateTime>? dueDate,
+    Value<DateTime?>? lastReviewedAt,
+    Value<int>? timesReviewed,
+    Value<int>? timesLapsed,
+    Value<DateTime>? createdAt,
+    Value<int>? rowid,
+  }) {
+    return FlashcardSchedulesCompanion(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      flashcardId: flashcardId ?? this.flashcardId,
+      topicId: topicId ?? this.topicId,
+      stage: stage ?? this.stage,
+      dueDate: dueDate ?? this.dueDate,
+      lastReviewedAt: lastReviewedAt ?? this.lastReviewedAt,
+      timesReviewed: timesReviewed ?? this.timesReviewed,
+      timesLapsed: timesLapsed ?? this.timesLapsed,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (userId.present) {
+      map['user_id'] = Variable<String>(userId.value);
+    }
+    if (flashcardId.present) {
+      map['flashcard_id'] = Variable<String>(flashcardId.value);
+    }
+    if (topicId.present) {
+      map['topic_id'] = Variable<String>(topicId.value);
+    }
+    if (stage.present) {
+      map['stage'] = Variable<String>(stage.value);
+    }
+    if (dueDate.present) {
+      map['due_date'] = Variable<DateTime>(dueDate.value);
+    }
+    if (lastReviewedAt.present) {
+      map['last_reviewed_at'] = Variable<DateTime>(lastReviewedAt.value);
+    }
+    if (timesReviewed.present) {
+      map['times_reviewed'] = Variable<int>(timesReviewed.value);
+    }
+    if (timesLapsed.present) {
+      map['times_lapsed'] = Variable<int>(timesLapsed.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FlashcardSchedulesCompanion(')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('flashcardId: $flashcardId, ')
+          ..write('topicId: $topicId, ')
+          ..write('stage: $stage, ')
+          ..write('dueDate: $dueDate, ')
+          ..write('lastReviewedAt: $lastReviewedAt, ')
+          ..write('timesReviewed: $timesReviewed, ')
+          ..write('timesLapsed: $timesLapsed, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -3829,6 +4404,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $AiCacheLocalTable aiCacheLocal = $AiCacheLocalTable(this);
   late final $TeachingSessionsTable teachingSessions = $TeachingSessionsTable(this);
   late final $SubscriptionCacheTable subscriptionCache = $SubscriptionCacheTable(this);
+  late final $FlashcardSchedulesTable flashcardSchedules = $FlashcardSchedulesTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3842,6 +4418,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     aiCacheLocal,
     teachingSessions,
     subscriptionCache,
+    flashcardSchedules,
   ];
 }
 
@@ -5623,6 +6200,264 @@ typedef $$SubscriptionCacheTableProcessedTableManager =
       SubscriptionCacheData,
       PrefetchHooks Function()
     >;
+typedef $$FlashcardSchedulesTableCreateCompanionBuilder =
+    FlashcardSchedulesCompanion Function({
+      required String id,
+      required String userId,
+      required String flashcardId,
+      required String topicId,
+      required String stage,
+      required DateTime dueDate,
+      Value<DateTime?> lastReviewedAt,
+      Value<int> timesReviewed,
+      Value<int> timesLapsed,
+      required DateTime createdAt,
+      Value<int> rowid,
+    });
+typedef $$FlashcardSchedulesTableUpdateCompanionBuilder =
+    FlashcardSchedulesCompanion Function({
+      Value<String> id,
+      Value<String> userId,
+      Value<String> flashcardId,
+      Value<String> topicId,
+      Value<String> stage,
+      Value<DateTime> dueDate,
+      Value<DateTime?> lastReviewedAt,
+      Value<int> timesReviewed,
+      Value<int> timesLapsed,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+
+class $$FlashcardSchedulesTableFilterComposer
+    extends Composer<_$AppDatabase, $FlashcardSchedulesTable> {
+  $$FlashcardSchedulesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get flashcardId =>
+      $composableBuilder(column: $table.flashcardId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get topicId =>
+      $composableBuilder(column: $table.topicId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get stage =>
+      $composableBuilder(column: $table.stage, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get dueDate =>
+      $composableBuilder(column: $table.dueDate, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get lastReviewedAt =>
+      $composableBuilder(column: $table.lastReviewedAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get timesReviewed =>
+      $composableBuilder(column: $table.timesReviewed, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get timesLapsed =>
+      $composableBuilder(column: $table.timesLapsed, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$FlashcardSchedulesTableOrderingComposer
+    extends Composer<_$AppDatabase, $FlashcardSchedulesTable> {
+  $$FlashcardSchedulesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get flashcardId =>
+      $composableBuilder(column: $table.flashcardId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get topicId =>
+      $composableBuilder(column: $table.topicId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get stage =>
+      $composableBuilder(column: $table.stage, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get dueDate =>
+      $composableBuilder(column: $table.dueDate, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get lastReviewedAt => $composableBuilder(
+    column: $table.lastReviewedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get timesReviewed => $composableBuilder(
+    column: $table.timesReviewed,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get timesLapsed =>
+      $composableBuilder(column: $table.timesLapsed, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$FlashcardSchedulesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $FlashcardSchedulesTable> {
+  $$FlashcardSchedulesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => column);
+
+  GeneratedColumn<String> get flashcardId =>
+      $composableBuilder(column: $table.flashcardId, builder: (column) => column);
+
+  GeneratedColumn<String> get topicId =>
+      $composableBuilder(column: $table.topicId, builder: (column) => column);
+
+  GeneratedColumn<String> get stage =>
+      $composableBuilder(column: $table.stage, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get dueDate =>
+      $composableBuilder(column: $table.dueDate, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get lastReviewedAt =>
+      $composableBuilder(column: $table.lastReviewedAt, builder: (column) => column);
+
+  GeneratedColumn<int> get timesReviewed =>
+      $composableBuilder(column: $table.timesReviewed, builder: (column) => column);
+
+  GeneratedColumn<int> get timesLapsed =>
+      $composableBuilder(column: $table.timesLapsed, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$FlashcardSchedulesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $FlashcardSchedulesTable,
+          FlashcardScheduleRow,
+          $$FlashcardSchedulesTableFilterComposer,
+          $$FlashcardSchedulesTableOrderingComposer,
+          $$FlashcardSchedulesTableAnnotationComposer,
+          $$FlashcardSchedulesTableCreateCompanionBuilder,
+          $$FlashcardSchedulesTableUpdateCompanionBuilder,
+          (
+            FlashcardScheduleRow,
+            BaseReferences<_$AppDatabase, $FlashcardSchedulesTable, FlashcardScheduleRow>,
+          ),
+          FlashcardScheduleRow,
+          PrefetchHooks Function()
+        > {
+  $$FlashcardSchedulesTableTableManager(_$AppDatabase db, $FlashcardSchedulesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$FlashcardSchedulesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$FlashcardSchedulesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$FlashcardSchedulesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> userId = const Value.absent(),
+                Value<String> flashcardId = const Value.absent(),
+                Value<String> topicId = const Value.absent(),
+                Value<String> stage = const Value.absent(),
+                Value<DateTime> dueDate = const Value.absent(),
+                Value<DateTime?> lastReviewedAt = const Value.absent(),
+                Value<int> timesReviewed = const Value.absent(),
+                Value<int> timesLapsed = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => FlashcardSchedulesCompanion(
+                id: id,
+                userId: userId,
+                flashcardId: flashcardId,
+                topicId: topicId,
+                stage: stage,
+                dueDate: dueDate,
+                lastReviewedAt: lastReviewedAt,
+                timesReviewed: timesReviewed,
+                timesLapsed: timesLapsed,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String userId,
+                required String flashcardId,
+                required String topicId,
+                required String stage,
+                required DateTime dueDate,
+                Value<DateTime?> lastReviewedAt = const Value.absent(),
+                Value<int> timesReviewed = const Value.absent(),
+                Value<int> timesLapsed = const Value.absent(),
+                required DateTime createdAt,
+                Value<int> rowid = const Value.absent(),
+              }) => FlashcardSchedulesCompanion.insert(
+                id: id,
+                userId: userId,
+                flashcardId: flashcardId,
+                topicId: topicId,
+                stage: stage,
+                dueDate: dueDate,
+                lastReviewedAt: lastReviewedAt,
+                timesReviewed: timesReviewed,
+                timesLapsed: timesLapsed,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) =>
+              p0.map((e) => (e.readTable(table), BaseReferences(db, table, e))).toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$FlashcardSchedulesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $FlashcardSchedulesTable,
+      FlashcardScheduleRow,
+      $$FlashcardSchedulesTableFilterComposer,
+      $$FlashcardSchedulesTableOrderingComposer,
+      $$FlashcardSchedulesTableAnnotationComposer,
+      $$FlashcardSchedulesTableCreateCompanionBuilder,
+      $$FlashcardSchedulesTableUpdateCompanionBuilder,
+      (
+        FlashcardScheduleRow,
+        BaseReferences<_$AppDatabase, $FlashcardSchedulesTable, FlashcardScheduleRow>,
+      ),
+      FlashcardScheduleRow,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -5641,4 +6476,6 @@ class $AppDatabaseManager {
       $$TeachingSessionsTableTableManager(_db, _db.teachingSessions);
   $$SubscriptionCacheTableTableManager get subscriptionCache =>
       $$SubscriptionCacheTableTableManager(_db, _db.subscriptionCache);
+  $$FlashcardSchedulesTableTableManager get flashcardSchedules =>
+      $$FlashcardSchedulesTableTableManager(_db, _db.flashcardSchedules);
 }

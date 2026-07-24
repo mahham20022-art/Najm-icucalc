@@ -204,6 +204,45 @@ class SubscriptionCache extends Table {
   Set<Column> get primaryKey => {userId};
 }
 
+/// A single flashcard's spaced-repetition schedule state —
+/// `features/spaced_repetition`'s persisted ladder position for one
+/// `Flashcard.id` (see that entity's doc comment for how the id is
+/// derived). Per-user, per `MED100_DATABASE_DESIGN.md` §0a.
+///
+/// Deliberately a simpler fixed 7/30/90-day Leitner-style ladder rather
+/// than `MED100_DATABASE_DESIGN.md`'s documented full SM-2 scheme
+/// (ease factor, repetition count, 4-way grading) — this feature's
+/// concrete build instructions asked specifically for "review after 7
+/// days / 30 days / 90 days," so that's what's implemented; see
+/// `RepetitionStage` for the stage/interval table.
+///
+/// `@DataClassName` avoids Drift's default row-class name colliding with
+/// `features/spaced_repetition/domain/entities/flashcard_schedule.dart`'s
+/// `FlashcardSchedule` domain entity — Drift would otherwise strip the
+/// table name's trailing "s" and generate a class of that exact name.
+@DataClassName('FlashcardScheduleRow')
+class FlashcardSchedules extends Table {
+  /// `'<userId>_<flashcardId>'` — composite identity as a single text
+  /// primary key, since Drift's `primaryKey` set doesn't compose cleanly
+  /// with the per-user scoping queries this table needs (watch/count by
+  /// `userId` alone, look up by `userId` + `flashcardId` together).
+  TextColumn get id => text()();
+  TextColumn get userId => text()();
+  TextColumn get flashcardId => text()();
+  TextColumn get topicId => text()();
+
+  /// `newCard | day7 | day30 | day90 | mastered` — see `RepetitionStage`.
+  TextColumn get stage => text()();
+  DateTimeColumn get dueDate => dateTime()();
+  DateTimeColumn get lastReviewedAt => dateTime().nullable()();
+  IntColumn get timesReviewed => integer().withDefault(const Constant(0))();
+  IntColumn get timesLapsed => integer().withDefault(const Constant(0))();
+  DateTimeColumn get createdAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 @DriftDatabase(
   tables: [
     Outbox,
@@ -214,6 +253,7 @@ class SubscriptionCache extends Table {
     AiCacheLocal,
     TeachingSessions,
     SubscriptionCache,
+    FlashcardSchedules,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -227,7 +267,7 @@ class AppDatabase extends _$AppDatabase {
   /// `MED100_DATABASE_DESIGN.md` §0 for the schema-versioning convention
   /// this project follows on both the Firestore and Drift sides.
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 7;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -253,6 +293,9 @@ class AppDatabase extends _$AppDatabase {
       }
       if (from < 6) {
         await m.createTable(subscriptionCache);
+      }
+      if (from < 7) {
+        await m.createTable(flashcardSchedules);
       }
     },
   );
