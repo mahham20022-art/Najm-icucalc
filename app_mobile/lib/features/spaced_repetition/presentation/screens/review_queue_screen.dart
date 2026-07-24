@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
@@ -81,18 +83,24 @@ class _ReviewCardSection extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: OutlinedButton(
-                      onPressed: () => ref
-                          .read(reviewQueueViewModelProvider.notifier)
-                          .grade(content.flashcard.id, ReviewGrade.again),
+                      onPressed: () {
+                        unawaited(HapticFeedback.lightImpact());
+                        ref
+                            .read(reviewQueueViewModelProvider.notifier)
+                            .grade(content.flashcard.id, ReviewGrade.again);
+                      },
                       child: const Text('Again'),
                     ),
                   ),
                   const SizedBox(width: AppSpacing.space4),
                   Expanded(
                     child: FilledButton(
-                      onPressed: () => ref
-                          .read(reviewQueueViewModelProvider.notifier)
-                          .grade(content.flashcard.id, ReviewGrade.good),
+                      onPressed: () {
+                        unawaited(HapticFeedback.mediumImpact());
+                        ref
+                            .read(reviewQueueViewModelProvider.notifier)
+                            .grade(content.flashcard.id, ReviewGrade.good);
+                      },
                       child: const Text('Good'),
                     ),
                   ),

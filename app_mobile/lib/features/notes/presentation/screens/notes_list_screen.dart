@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -295,7 +298,10 @@ class _NoteListTile extends ConsumerWidget {
                 color: note.isBookmarked ? colors.warning : colors.labelTertiary,
               ),
               tooltip: note.isBookmarked ? 'Remove bookmark' : 'Add bookmark',
-              onPressed: () => ref.read(toggleBookmarkUseCaseProvider)(note.id),
+              onPressed: () {
+                unawaited(HapticFeedback.selectionClick());
+                ref.read(toggleBookmarkUseCaseProvider)(note.id);
+              },
             ),
             Text(
               DateFormat.MMMd().format(note.updatedAt),

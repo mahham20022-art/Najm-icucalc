@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:printing/printing.dart';
@@ -80,6 +81,7 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
                 icon: Icon(note.isBookmarked ? Icons.bookmark : Icons.bookmark_border),
                 tooltip: note.isBookmarked ? 'Remove bookmark' : 'Add bookmark',
                 onPressed: () async {
+                  unawaited(HapticFeedback.selectionClick());
                   final failure = await _viewModel.toggleBookmark();
                   if (failure != null && context.mounted) {
                     ScaffoldMessenger.of(

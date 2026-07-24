@@ -64,7 +64,7 @@ class _PremiumStatusView extends StatelessWidget {
               ),
             if (subscription.isInGracePeriod) ...[
               const SizedBox(height: AppSpacing.space4),
-              _GracePeriodBanner(),
+              const _GracePeriodBanner(),
             ],
             const SizedBox(height: AppSpacing.space5),
             Text(
@@ -85,6 +85,8 @@ class _PremiumStatusView extends StatelessWidget {
 /// but the user needs to know *why* so they can fix their payment
 /// method before it actually lapses.
 class _GracePeriodBanner extends StatelessWidget {
+  const _GracePeriodBanner();
+
   @override
   Widget build(BuildContext context) {
     final colors = AppColors.of(context);
@@ -152,11 +154,11 @@ class _PaywallViewState extends ConsumerState<_PaywallView> {
           style: textTheme.bodyMedium?.copyWith(color: colors.labelSecondary),
         ),
         const SizedBox(height: AppSpacing.space5),
-        _FeatureRow(text: 'All specialty tracks'),
-        _FeatureRow(text: 'Exam Mode'),
-        _FeatureRow(text: 'Full adaptive spaced repetition'),
-        _FeatureRow(text: 'Advanced analytics'),
-        _FeatureRow(text: 'Offline full library'),
+        const _FeatureRow(text: 'All specialty tracks'),
+        const _FeatureRow(text: 'Exam Mode'),
+        const _FeatureRow(text: 'Full adaptive spaced repetition'),
+        const _FeatureRow(text: 'Advanced analytics'),
+        const _FeatureRow(text: 'Offline full library'),
         const SizedBox(height: AppSpacing.space5),
         productsAsync.when(
           data: (products) => _PlanPicker(

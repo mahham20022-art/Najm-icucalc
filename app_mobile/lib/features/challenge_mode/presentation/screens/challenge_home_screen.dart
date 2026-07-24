@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
@@ -58,8 +61,10 @@ class _ChallengeHomeScreenState extends ConsumerState<ChallengeHomeScreen> {
               busy: _busy,
               onDone: () => _markDone(context),
               onSkip: () => _skip(context),
-              onToggleBookmark: () =>
-                  ref.read(challengeViewModelProvider.notifier).toggleBookmark(state.currentDay),
+              onToggleBookmark: () {
+                unawaited(HapticFeedback.selectionClick());
+                ref.read(challengeViewModelProvider.notifier).toggleBookmark(state.currentDay);
+              },
             ),
           },
           if (_showCelebration)
@@ -80,6 +85,7 @@ class _ChallengeHomeScreenState extends ConsumerState<ChallengeHomeScreen> {
     if (failure != null) {
       _showFailure(context, failure);
     } else {
+      unawaited(HapticFeedback.mediumImpact());
       setState(() => _showCelebration = true);
     }
     setState(() => _busy = false);

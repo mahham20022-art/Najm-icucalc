@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
@@ -58,8 +61,10 @@ class ChallengeBookmarksScreen extends ConsumerWidget {
                 trailing: IconButton(
                   icon: const Icon(Icons.bookmark_remove_outlined),
                   tooltip: 'Remove bookmark',
-                  onPressed: () =>
-                      ref.read(challengeViewModelProvider.notifier).toggleBookmark(day),
+                  onPressed: () {
+                    unawaited(HapticFeedback.selectionClick());
+                    ref.read(challengeViewModelProvider.notifier).toggleBookmark(day);
+                  },
                 ),
               );
             },
