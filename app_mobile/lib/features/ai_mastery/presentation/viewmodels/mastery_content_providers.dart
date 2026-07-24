@@ -28,7 +28,7 @@ import '../../mastery_providers.dart';
 /// `consultant_view_model.dart`.
 typedef ProseSectionKey = ({Topic topic, MasterySectionType section});
 
-final proseSectionProvider = FutureProvider.family<MasteryContent, ProseSectionKey>((
+final proseSectionProvider = FutureProvider.autoDispose.family<MasteryContent, ProseSectionKey>((
   ref,
   key,
 ) async {
@@ -39,22 +39,31 @@ final proseSectionProvider = FutureProvider.family<MasteryContent, ProseSectionK
   return result.when(success: (content) => content, failure: (failure) => throw failure);
 });
 
-final comparisonTableProvider = FutureProvider.family<ComparisonTable, Topic>((ref, topic) async {
+final comparisonTableProvider = FutureProvider.autoDispose.family<ComparisonTable, Topic>((
+  ref,
+  topic,
+) async {
   final result = await ref.watch(getComparisonTableUseCaseProvider)(topic);
   return result.when(success: (table) => table, failure: (failure) => throw failure);
 });
 
-final algorithmProvider = FutureProvider.family<ClinicalAlgorithm, Topic>((ref, topic) async {
+final algorithmProvider = FutureProvider.autoDispose.family<ClinicalAlgorithm, Topic>((
+  ref,
+  topic,
+) async {
   final result = await ref.watch(getAlgorithmUseCaseProvider)(topic);
   return result.when(success: (algorithm) => algorithm, failure: (failure) => throw failure);
 });
 
-final mcqsProvider = FutureProvider.family<List<Mcq>, Topic>((ref, topic) async {
+final mcqsProvider = FutureProvider.autoDispose.family<List<Mcq>, Topic>((ref, topic) async {
   final result = await ref.watch(getMcqsUseCaseProvider)(topic);
   return result.when(success: (mcqs) => mcqs, failure: (failure) => throw failure);
 });
 
-final flashcardsProvider = FutureProvider.family<List<Flashcard>, Topic>((ref, topic) async {
+final flashcardsProvider = FutureProvider.autoDispose.family<List<Flashcard>, Topic>((
+  ref,
+  topic,
+) async {
   final result = await ref.watch(getFlashcardsUseCaseProvider)(topic);
   return result.when(
     success: (cards) {
@@ -76,7 +85,10 @@ final flashcardsProvider = FutureProvider.family<List<Flashcard>, Topic>((ref, t
   );
 });
 
-final referencesProvider = FutureProvider.family<List<ReferenceEntry>, Topic>((ref, topic) async {
+final referencesProvider = FutureProvider.autoDispose.family<List<ReferenceEntry>, Topic>((
+  ref,
+  topic,
+) async {
   final result = await ref.watch(getReferencesUseCaseProvider)(topic);
   return result.when(success: (references) => references, failure: (failure) => throw failure);
 });

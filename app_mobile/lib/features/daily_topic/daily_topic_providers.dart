@@ -43,7 +43,7 @@ final getTopicByIdUseCaseProvider = Provider<GetTopicByIdUseCase>((ref) {
 /// Resolves a route's `:topicId` param into a [Topic] — used by
 /// `features/ai_mastery`'s routed screen, which needs the full entity
 /// (title/body) a path parameter alone can't provide.
-final topicByIdProvider = FutureProvider.family<Topic, String>((ref, topicId) async {
+final topicByIdProvider = FutureProvider.autoDispose.family<Topic, String>((ref, topicId) async {
   final result = await ref.watch(getTopicByIdUseCaseProvider)(topicId);
   return result.when(success: (topic) => topic, failure: (failure) => throw failure);
 });

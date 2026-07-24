@@ -53,12 +53,13 @@ class _ReviewCardSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final contentAsync = ref.watch(reviewCardContentProvider(schedule));
+    final key = (topicId: schedule.topicId, flashcardId: schedule.flashcardId);
+    final contentAsync = ref.watch(reviewCardContentProvider(key));
     final isFlipped = ref.watch(reviewQueueViewModelProvider);
 
     return AsyncValueSection(
       value: contentAsync,
-      onRetry: () => ref.invalidate(reviewCardContentProvider(schedule)),
+      onRetry: () => ref.invalidate(reviewCardContentProvider(key)),
       builder: (context, content) => Padding(
         padding: const EdgeInsets.all(AppSpacing.space5),
         child: Column(

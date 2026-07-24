@@ -143,5 +143,5 @@ class NoteEditorViewModel extends Notifier<NoteEditorState> {
   }
 }
 
-final noteEditorViewModelProvider =
-    NotifierProvider.family<NoteEditorViewModel, NoteEditorState, String>(NoteEditorViewModel.new);
+final noteEditorViewModelProvider = NotifierProvider.autoDispose
+    .family<NoteEditorViewModel, NoteEditorState, String>(NoteEditorViewModel.new);

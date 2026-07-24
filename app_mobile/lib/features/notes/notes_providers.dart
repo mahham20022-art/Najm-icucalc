@@ -127,7 +127,7 @@ final noteFoldersProvider = StreamProvider<List<NoteFolder>>((ref) {
 
 typedef NotesFilter = ({String? folderId, bool unfiledOnly, bool onlyBookmarked});
 
-final notesListProvider = StreamProvider.family<List<Note>, NotesFilter>((ref, filter) {
+final notesListProvider = StreamProvider.autoDispose.family<List<Note>, NotesFilter>((ref, filter) {
   return ref.watch(watchNotesUseCaseProvider)(
     folderId: filter.folderId,
     unfiledOnly: filter.unfiledOnly,
@@ -135,7 +135,7 @@ final notesListProvider = StreamProvider.family<List<Note>, NotesFilter>((ref, f
   );
 });
 
-final noteByIdProvider = StreamProvider.family<Note?, String>((ref, noteId) {
+final noteByIdProvider = StreamProvider.autoDispose.family<Note?, String>((ref, noteId) {
   return ref.watch(watchNoteByIdUseCaseProvider)(noteId);
 });
 

@@ -156,5 +156,5 @@ class TeachingViewModel extends Notifier<TeachingUiState> {
   void restart() => state = const TeachingModeSelection();
 }
 
-final teachingViewModelProvider =
-    NotifierProvider.family<TeachingViewModel, TeachingUiState, Topic>(TeachingViewModel.new);
+final teachingViewModelProvider = NotifierProvider.autoDispose
+    .family<TeachingViewModel, TeachingUiState, Topic>(TeachingViewModel.new);

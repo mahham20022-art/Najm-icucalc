@@ -98,5 +98,5 @@ class ConsultantViewModel extends Notifier<ConsultantUiState> {
   }
 }
 
-final consultantViewModelProvider =
-    NotifierProvider.family<ConsultantViewModel, ConsultantUiState, Topic>(ConsultantViewModel.new);
+final consultantViewModelProvider = NotifierProvider.autoDispose
+    .family<ConsultantViewModel, ConsultantUiState, Topic>(ConsultantViewModel.new);

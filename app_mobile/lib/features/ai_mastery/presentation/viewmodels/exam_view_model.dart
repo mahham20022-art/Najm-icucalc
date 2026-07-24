@@ -65,6 +65,5 @@ class ExamViewModel extends Notifier<ExamUiState> {
   void restart() => state = const ExamNotStarted();
 }
 
-final examViewModelProvider = NotifierProvider.family<ExamViewModel, ExamUiState, Topic>(
-  ExamViewModel.new,
-);
+final examViewModelProvider = NotifierProvider.autoDispose
+    .family<ExamViewModel, ExamUiState, Topic>(ExamViewModel.new);
