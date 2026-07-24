@@ -217,6 +217,12 @@ class SubscriptionCache extends Table {
   TextColumn get source => text()();
   DateTimeColumn get lastSyncedAt => dateTime()();
 
+  /// `monthly | annual | lifetime` — `null` for the free tier. Added in
+  /// schema v9 alongside RevenueCat's Lifetime plan, so the UI can show
+  /// "Lifetime access" (no expiry/renewal) instead of misreading a
+  /// lifetime entitlement's null `currentPeriodEnd` as an error.
+  TextColumn get activePlan => text().nullable()();
+
   @override
   Set<Column> get primaryKey => {userId};
 }
@@ -334,7 +340,7 @@ class AppDatabase extends _$AppDatabase {
   /// `MED100_DATABASE_DESIGN.md` §0 for the schema-versioning convention
   /// this project follows on both the Firestore and Drift sides.
   @override
-  int get schemaVersion => 8;
+  int get schemaVersion => 9;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -372,6 +378,9 @@ class AppDatabase extends _$AppDatabase {
         await m.alterTable(TableMigration(syncState));
         await m.createTable(noteFolders);
         await m.createTable(notes);
+      }
+      if (from < 9) {
+        await m.addColumn(subscriptionCache, subscriptionCache.activePlan);
       }
     },
   );

@@ -3,10 +3,10 @@ import 'dart:typed_data';
 import 'package:image_picker/image_picker.dart';
 
 /// Wraps `image_picker` so nothing outside the data layer depends on the
-/// plugin directly (same convention as `PurchaseDataSource` wrapping
-/// `in_app_purchase`). Returns raw bytes + a file extension rather than
-/// an `XFile`/path — the caller (`NotesRepositoryImpl.addImage`) only
-/// ever needs to persist bytes into this app's own local storage.
+/// plugin directly (same convention as `RevenueCatDataSource` wrapping
+/// `purchases_flutter`). Returns raw bytes + a file extension rather
+/// than an `XFile`/path — the caller (`NotesRepositoryImpl.addImage`)
+/// only ever needs to persist bytes into this app's own local storage.
 class NoteImagePickerDataSource {
   NoteImagePickerDataSource({ImagePicker? picker}) : _picker = picker ?? ImagePicker();
 

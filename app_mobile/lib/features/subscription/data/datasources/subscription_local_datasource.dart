@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 
 import '../../../../core/database/app_database.dart';
 import '../../domain/entities/subscription.dart';
+import '../../domain/entities/subscription_product.dart';
 import '../../domain/entities/subscription_status.dart';
 import '../../domain/entities/subscription_tier.dart';
 
@@ -26,6 +27,7 @@ class SubscriptionLocalDataSource {
             currentPeriodEnd: Value(subscription.currentPeriodEnd),
             autoRenew: Value(subscription.autoRenew),
             source: Value(subscription.source.name),
+            activePlan: Value(subscription.activePlan?.name),
             lastSyncedAt: Value(DateTime.now()),
           ),
         );
@@ -39,6 +41,7 @@ class SubscriptionLocalDataSource {
       source: SubscriptionSource.values.byName(row.source),
       currentPeriodEnd: row.currentPeriodEnd,
       autoRenew: row.autoRenew,
+      activePlan: row.activePlan == null ? null : BillingPeriod.values.byName(row.activePlan!),
     );
   }
 }

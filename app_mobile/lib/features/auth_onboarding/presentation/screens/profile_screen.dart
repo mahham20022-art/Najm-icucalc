@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'dart:async';
+
 import '../../../../app/router/app_router.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../subscription/subscription_providers.dart';
 import '../../auth_providers.dart';
 import '../viewmodels/auth_view_model.dart';
 
@@ -101,6 +104,12 @@ class ProfileScreen extends ConsumerWidget {
     );
 
     if (confirmed == true && context.mounted) {
+      // Fire-and-forget: resets RevenueCat's local identity so a shared
+      // device signing in as someone else afterwards doesn't inherit
+      // this user's entitlement cache. Nothing for the UI to react to
+      // either way — see `SubscriptionRepository.handleSignOut`'s doc
+      // comment.
+      unawaited(ref.read(signOutOfSubscriptionUseCaseProvider)());
       await ref.read(authViewModelProvider.notifier).signOut();
       if (context.mounted) context.goNamed(AppRoute.login);
     }

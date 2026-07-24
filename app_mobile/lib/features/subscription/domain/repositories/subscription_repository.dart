@@ -13,4 +13,12 @@ abstract interface class SubscriptionRepository {
   Future<Result<void>> purchase(String productId);
 
   Future<Result<void>> restorePurchases();
+
+  /// Resets RevenueCat's local identity back to a fresh anonymous user —
+  /// called when Med100 itself signs the user out, so a shared device
+  /// signing in as a different account afterwards doesn't inherit the
+  /// previous user's RevenueCat identity/entitlement cache. Fire-and-
+  /// forget from the caller's perspective: nothing actionable for the
+  /// user if this fails, so it never surfaces a [Result].
+  Future<void> handleSignOut();
 }

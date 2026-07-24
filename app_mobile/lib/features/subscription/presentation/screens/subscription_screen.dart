@@ -50,13 +50,22 @@ class _PremiumStatusView extends StatelessWidget {
             const SizedBox(height: AppSpacing.space4),
             Text('You\'re on Premium', style: textTheme.headlineMedium),
             const SizedBox(height: AppSpacing.space2),
-            if (periodEnd != null)
+            if (subscription.isLifetime)
+              Text(
+                'Lifetime access',
+                style: textTheme.bodyMedium?.copyWith(color: colors.labelSecondary),
+              )
+            else if (periodEnd != null)
               Text(
                 subscription.autoRenew
                     ? 'Renews ${DateFormat.yMMMd().format(periodEnd)}'
                     : 'Expires ${DateFormat.yMMMd().format(periodEnd)}',
                 style: textTheme.bodyMedium?.copyWith(color: colors.labelSecondary),
               ),
+            if (subscription.isInGracePeriod) ...[
+              const SizedBox(height: AppSpacing.space4),
+              _GracePeriodBanner(),
+            ],
             const SizedBox(height: AppSpacing.space5),
             Text(
               'All specialty tracks, Exam Mode, full adaptive review, and advanced '
@@ -66,6 +75,39 @@ class _PremiumStatusView extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Surfaces RevenueCat's grace period distinctly from a plain "Premium"
+/// state — access continues while the store retries a failed charge,
+/// but the user needs to know *why* so they can fix their payment
+/// method before it actually lapses.
+class _GracePeriodBanner extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
+    final textTheme = Theme.of(context).textTheme;
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.space3),
+      decoration: BoxDecoration(
+        color: colors.warning.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(AppSpacing.radiusControlSm),
+        border: Border.all(color: colors.warning.withValues(alpha: 0.4)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.warning_amber_rounded, color: colors.warning, size: 20),
+          const SizedBox(width: AppSpacing.space2),
+          Flexible(
+            child: Text(
+              "There's a problem with your payment method — update it to keep Premium.",
+              style: textTheme.bodySmall?.copyWith(color: colors.warning),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -138,9 +180,10 @@ class _PaywallViewState extends ConsumerState<_PaywallView> {
             return FilledButton(
               // No purchase attempt is ever made against a guessed
               // product id — if the store hasn't returned a real
-              // product yet (foundation-stage: no App Store Connect/
-              // Play Console products configured), the button simply
-              // stays disabled rather than pretending to work.
+              // product yet (foundation-stage: no RevenueCat project/
+              // App Store Connect/Play Console products configured),
+              // the button simply stays disabled rather than pretending
+              // to work.
               onPressed: processing || selectedProduct == null
                   ? null
                   : () => ref
@@ -152,7 +195,7 @@ class _PaywallViewState extends ConsumerState<_PaywallView> {
                       height: 20,
                       child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                     )
-                  : const Text('Subscribe'),
+                  : Text(_selected == BillingPeriod.lifetime ? 'Buy Lifetime Access' : 'Subscribe'),
             );
           },
         ),
@@ -210,25 +253,38 @@ class _PlanPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       children: [
-        Expanded(
-          child: _PlanCard(
-            label: 'Monthly',
-            priceLabel: _productFor(BillingPeriod.monthly)?.priceLabel ?? '~\$9.99/mo',
-            selected: selected == BillingPeriod.monthly,
-            onTap: () => onSelect(BillingPeriod.monthly),
-          ),
+        Row(
+          children: [
+            Expanded(
+              child: _PlanCard(
+                label: 'Monthly',
+                priceLabel: _productFor(BillingPeriod.monthly)?.priceLabel ?? '~\$9.99/mo',
+                selected: selected == BillingPeriod.monthly,
+                onTap: () => onSelect(BillingPeriod.monthly),
+              ),
+            ),
+            const SizedBox(width: AppSpacing.space3),
+            Expanded(
+              child: _PlanCard(
+                label: 'Yearly',
+                priceLabel: _productFor(BillingPeriod.annual)?.priceLabel ?? '~\$89.99/yr',
+                selected: selected == BillingPeriod.annual,
+                badge: 'Best Value',
+                onTap: () => onSelect(BillingPeriod.annual),
+              ),
+            ),
+          ],
         ),
-        const SizedBox(width: AppSpacing.space3),
-        Expanded(
-          child: _PlanCard(
-            label: 'Annual',
-            priceLabel: _productFor(BillingPeriod.annual)?.priceLabel ?? '~\$89.99/yr',
-            selected: selected == BillingPeriod.annual,
-            badge: 'Best Value',
-            onTap: () => onSelect(BillingPeriod.annual),
-          ),
+        const SizedBox(height: AppSpacing.space3),
+        _PlanCard(
+          label: 'Lifetime',
+          priceLabel: _productFor(BillingPeriod.lifetime)?.priceLabel ?? '~\$199.99 once',
+          selected: selected == BillingPeriod.lifetime,
+          badge: 'Pay Once',
+          fullWidth: true,
+          onTap: () => onSelect(BillingPeriod.lifetime),
         ),
       ],
     );
@@ -242,12 +298,14 @@ class _PlanCard extends StatelessWidget {
     required this.selected,
     required this.onTap,
     this.badge,
+    this.fullWidth = false,
   });
 
   final String label;
   final String priceLabel;
   final bool selected;
   final String? badge;
+  final bool fullWidth;
   final VoidCallback onTap;
 
   @override
@@ -255,10 +313,36 @@ class _PlanCard extends StatelessWidget {
     final colors = AppColors.of(context);
     final textTheme = Theme.of(context).textTheme;
 
+    final content = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (badge != null)
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.space2, vertical: 2),
+            decoration: BoxDecoration(
+              color: colors.warning.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(AppSpacing.radiusControlSm),
+            ),
+            child: Text(
+              badge!,
+              style: textTheme.labelSmall?.copyWith(
+                color: colors.warning,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        const SizedBox(height: AppSpacing.space2),
+        Text(label, style: textTheme.titleMedium),
+        Text(priceLabel, style: textTheme.bodyMedium?.copyWith(color: colors.labelSecondary)),
+      ],
+    );
+
     return InkWell(
       borderRadius: BorderRadius.circular(AppSpacing.radiusCard),
       onTap: onTap,
       child: Container(
+        width: fullWidth ? double.infinity : null,
         padding: const EdgeInsets.all(AppSpacing.space4),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(AppSpacing.radiusCard),
@@ -267,29 +351,7 @@ class _PlanCard extends StatelessWidget {
             width: selected ? 2 : 1,
           ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (badge != null)
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.space2, vertical: 2),
-                decoration: BoxDecoration(
-                  color: colors.warning.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(AppSpacing.radiusControlSm),
-                ),
-                child: Text(
-                  badge!,
-                  style: textTheme.labelSmall?.copyWith(
-                    color: colors.warning,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            const SizedBox(height: AppSpacing.space2),
-            Text(label, style: textTheme.titleMedium),
-            Text(priceLabel, style: textTheme.bodyMedium?.copyWith(color: colors.labelSecondary)),
-          ],
-        ),
+        child: content,
       ),
     );
   }

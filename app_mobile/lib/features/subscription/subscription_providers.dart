@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/bootstrap/bootstrap.dart';
 import '../../core/session/current_user.dart';
-import 'data/datasources/purchase_datasource.dart';
+import 'data/datasources/revenue_cat_datasource.dart';
 import 'data/datasources/subscription_local_datasource.dart';
 import 'data/repositories/subscription_repository_impl.dart';
 import 'domain/entities/subscription.dart';
@@ -10,10 +10,11 @@ import 'domain/repositories/subscription_repository.dart';
 import 'domain/usecases/get_available_products_usecase.dart';
 import 'domain/usecases/purchase_usecase.dart';
 import 'domain/usecases/restore_purchases_usecase.dart';
+import 'domain/usecases/sign_out_of_subscription_usecase.dart';
 import 'domain/usecases/watch_subscription_usecase.dart';
 
-final purchaseDataSourceProvider = Provider<PurchaseDataSource>((ref) {
-  return PurchaseDataSource();
+final revenueCatDataSourceProvider = Provider<RevenueCatDataSource>((ref) {
+  return RevenueCatDataSource();
 });
 
 final subscriptionLocalDataSourceProvider = Provider<SubscriptionLocalDataSource>((ref) {
@@ -22,7 +23,7 @@ final subscriptionLocalDataSourceProvider = Provider<SubscriptionLocalDataSource
 
 final subscriptionRepositoryProvider = Provider<SubscriptionRepository>((ref) {
   final repository = SubscriptionRepositoryImpl(
-    purchaseDataSource: ref.watch(purchaseDataSourceProvider),
+    revenueCat: ref.watch(revenueCatDataSourceProvider),
     localDataSource: ref.watch(subscriptionLocalDataSourceProvider),
     currentUser: ref.watch(currentUserProvider),
   );
@@ -44,6 +45,10 @@ final purchaseUseCaseProvider = Provider<PurchaseUseCase>((ref) {
 
 final restorePurchasesUseCaseProvider = Provider<RestorePurchasesUseCase>((ref) {
   return RestorePurchasesUseCase(ref.watch(subscriptionRepositoryProvider));
+});
+
+final signOutOfSubscriptionUseCaseProvider = Provider<SignOutOfSubscriptionUseCase>((ref) {
+  return SignOutOfSubscriptionUseCase(ref.watch(subscriptionRepositoryProvider));
 });
 
 /// The app-wide "is this signed-in user premium?" read — every

@@ -3509,6 +3509,15 @@ class $SubscriptionCacheTable extends SubscriptionCache
     type: DriftSqlType.dateTime,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _activePlanMeta = const VerificationMeta('activePlan');
+  @override
+  late final GeneratedColumn<String> activePlan = GeneratedColumn<String>(
+    'active_plan',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     userId,
@@ -3518,6 +3527,7 @@ class $SubscriptionCacheTable extends SubscriptionCache
     autoRenew,
     source,
     lastSyncedAt,
+    activePlan,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -3571,6 +3581,12 @@ class $SubscriptionCacheTable extends SubscriptionCache
     } else if (isInserting) {
       context.missing(_lastSyncedAtMeta);
     }
+    if (data.containsKey('active_plan')) {
+      context.handle(
+        _activePlanMeta,
+        activePlan.isAcceptableOrUnknown(data['active_plan']!, _activePlanMeta),
+      );
+    }
     return context;
   }
 
@@ -3605,6 +3621,10 @@ class $SubscriptionCacheTable extends SubscriptionCache
         DriftSqlType.dateTime,
         data['${effectivePrefix}last_synced_at'],
       )!,
+      activePlan: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}active_plan'],
+      ),
     );
   }
 
@@ -3622,6 +3642,12 @@ class SubscriptionCacheData extends DataClass implements Insertable<Subscription
   final bool autoRenew;
   final String source;
   final DateTime lastSyncedAt;
+
+  /// `monthly | annual | lifetime` — `null` for the free tier. Added in
+  /// schema v9 alongside RevenueCat's Lifetime plan, so the UI can show
+  /// "Lifetime access" (no expiry/renewal) instead of misreading a
+  /// lifetime entitlement's null `currentPeriodEnd` as an error.
+  final String? activePlan;
   const SubscriptionCacheData({
     required this.userId,
     required this.tier,
@@ -3630,6 +3656,7 @@ class SubscriptionCacheData extends DataClass implements Insertable<Subscription
     required this.autoRenew,
     required this.source,
     required this.lastSyncedAt,
+    this.activePlan,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -3643,6 +3670,9 @@ class SubscriptionCacheData extends DataClass implements Insertable<Subscription
     map['auto_renew'] = Variable<bool>(autoRenew);
     map['source'] = Variable<String>(source);
     map['last_synced_at'] = Variable<DateTime>(lastSyncedAt);
+    if (!nullToAbsent || activePlan != null) {
+      map['active_plan'] = Variable<String>(activePlan);
+    }
     return map;
   }
 
@@ -3657,6 +3687,7 @@ class SubscriptionCacheData extends DataClass implements Insertable<Subscription
       autoRenew: Value(autoRenew),
       source: Value(source),
       lastSyncedAt: Value(lastSyncedAt),
+      activePlan: activePlan == null && nullToAbsent ? const Value.absent() : Value(activePlan),
     );
   }
 
@@ -3670,6 +3701,7 @@ class SubscriptionCacheData extends DataClass implements Insertable<Subscription
       autoRenew: serializer.fromJson<bool>(json['autoRenew']),
       source: serializer.fromJson<String>(json['source']),
       lastSyncedAt: serializer.fromJson<DateTime>(json['lastSyncedAt']),
+      activePlan: serializer.fromJson<String?>(json['activePlan']),
     );
   }
   @override
@@ -3683,6 +3715,7 @@ class SubscriptionCacheData extends DataClass implements Insertable<Subscription
       'autoRenew': serializer.toJson<bool>(autoRenew),
       'source': serializer.toJson<String>(source),
       'lastSyncedAt': serializer.toJson<DateTime>(lastSyncedAt),
+      'activePlan': serializer.toJson<String?>(activePlan),
     };
   }
 
@@ -3694,6 +3727,7 @@ class SubscriptionCacheData extends DataClass implements Insertable<Subscription
     bool? autoRenew,
     String? source,
     DateTime? lastSyncedAt,
+    Value<String?> activePlan = const Value.absent(),
   }) => SubscriptionCacheData(
     userId: userId ?? this.userId,
     tier: tier ?? this.tier,
@@ -3702,6 +3736,7 @@ class SubscriptionCacheData extends DataClass implements Insertable<Subscription
     autoRenew: autoRenew ?? this.autoRenew,
     source: source ?? this.source,
     lastSyncedAt: lastSyncedAt ?? this.lastSyncedAt,
+    activePlan: activePlan.present ? activePlan.value : this.activePlan,
   );
   SubscriptionCacheData copyWithCompanion(SubscriptionCacheCompanion data) {
     return SubscriptionCacheData(
@@ -3714,6 +3749,7 @@ class SubscriptionCacheData extends DataClass implements Insertable<Subscription
       autoRenew: data.autoRenew.present ? data.autoRenew.value : this.autoRenew,
       source: data.source.present ? data.source.value : this.source,
       lastSyncedAt: data.lastSyncedAt.present ? data.lastSyncedAt.value : this.lastSyncedAt,
+      activePlan: data.activePlan.present ? data.activePlan.value : this.activePlan,
     );
   }
 
@@ -3726,14 +3762,23 @@ class SubscriptionCacheData extends DataClass implements Insertable<Subscription
           ..write('currentPeriodEnd: $currentPeriodEnd, ')
           ..write('autoRenew: $autoRenew, ')
           ..write('source: $source, ')
-          ..write('lastSyncedAt: $lastSyncedAt')
+          ..write('lastSyncedAt: $lastSyncedAt, ')
+          ..write('activePlan: $activePlan')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(userId, tier, status, currentPeriodEnd, autoRenew, source, lastSyncedAt);
+  int get hashCode => Object.hash(
+    userId,
+    tier,
+    status,
+    currentPeriodEnd,
+    autoRenew,
+    source,
+    lastSyncedAt,
+    activePlan,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3744,7 +3789,8 @@ class SubscriptionCacheData extends DataClass implements Insertable<Subscription
           other.currentPeriodEnd == this.currentPeriodEnd &&
           other.autoRenew == this.autoRenew &&
           other.source == this.source &&
-          other.lastSyncedAt == this.lastSyncedAt);
+          other.lastSyncedAt == this.lastSyncedAt &&
+          other.activePlan == this.activePlan);
 }
 
 class SubscriptionCacheCompanion extends UpdateCompanion<SubscriptionCacheData> {
@@ -3755,6 +3801,7 @@ class SubscriptionCacheCompanion extends UpdateCompanion<SubscriptionCacheData> 
   final Value<bool> autoRenew;
   final Value<String> source;
   final Value<DateTime> lastSyncedAt;
+  final Value<String?> activePlan;
   final Value<int> rowid;
   const SubscriptionCacheCompanion({
     this.userId = const Value.absent(),
@@ -3764,6 +3811,7 @@ class SubscriptionCacheCompanion extends UpdateCompanion<SubscriptionCacheData> 
     this.autoRenew = const Value.absent(),
     this.source = const Value.absent(),
     this.lastSyncedAt = const Value.absent(),
+    this.activePlan = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   SubscriptionCacheCompanion.insert({
@@ -3774,6 +3822,7 @@ class SubscriptionCacheCompanion extends UpdateCompanion<SubscriptionCacheData> 
     this.autoRenew = const Value.absent(),
     required String source,
     required DateTime lastSyncedAt,
+    this.activePlan = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : userId = Value(userId),
        tier = Value(tier),
@@ -3788,6 +3837,7 @@ class SubscriptionCacheCompanion extends UpdateCompanion<SubscriptionCacheData> 
     Expression<bool>? autoRenew,
     Expression<String>? source,
     Expression<DateTime>? lastSyncedAt,
+    Expression<String>? activePlan,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -3798,6 +3848,7 @@ class SubscriptionCacheCompanion extends UpdateCompanion<SubscriptionCacheData> 
       if (autoRenew != null) 'auto_renew': autoRenew,
       if (source != null) 'source': source,
       if (lastSyncedAt != null) 'last_synced_at': lastSyncedAt,
+      if (activePlan != null) 'active_plan': activePlan,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -3810,6 +3861,7 @@ class SubscriptionCacheCompanion extends UpdateCompanion<SubscriptionCacheData> 
     Value<bool>? autoRenew,
     Value<String>? source,
     Value<DateTime>? lastSyncedAt,
+    Value<String?>? activePlan,
     Value<int>? rowid,
   }) {
     return SubscriptionCacheCompanion(
@@ -3820,6 +3872,7 @@ class SubscriptionCacheCompanion extends UpdateCompanion<SubscriptionCacheData> 
       autoRenew: autoRenew ?? this.autoRenew,
       source: source ?? this.source,
       lastSyncedAt: lastSyncedAt ?? this.lastSyncedAt,
+      activePlan: activePlan ?? this.activePlan,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -3848,6 +3901,9 @@ class SubscriptionCacheCompanion extends UpdateCompanion<SubscriptionCacheData> 
     if (lastSyncedAt.present) {
       map['last_synced_at'] = Variable<DateTime>(lastSyncedAt.value);
     }
+    if (activePlan.present) {
+      map['active_plan'] = Variable<String>(activePlan.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -3864,6 +3920,7 @@ class SubscriptionCacheCompanion extends UpdateCompanion<SubscriptionCacheData> 
           ..write('autoRenew: $autoRenew, ')
           ..write('source: $source, ')
           ..write('lastSyncedAt: $lastSyncedAt, ')
+          ..write('activePlan: $activePlan, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -6919,6 +6976,7 @@ typedef $$SubscriptionCacheTableCreateCompanionBuilder =
       Value<bool> autoRenew,
       required String source,
       required DateTime lastSyncedAt,
+      Value<String?> activePlan,
       Value<int> rowid,
     });
 typedef $$SubscriptionCacheTableUpdateCompanionBuilder =
@@ -6930,6 +6988,7 @@ typedef $$SubscriptionCacheTableUpdateCompanionBuilder =
       Value<bool> autoRenew,
       Value<String> source,
       Value<DateTime> lastSyncedAt,
+      Value<String?> activePlan,
       Value<int> rowid,
     });
 
@@ -6964,6 +7023,9 @@ class $$SubscriptionCacheTableFilterComposer
 
   ColumnFilters<DateTime> get lastSyncedAt =>
       $composableBuilder(column: $table.lastSyncedAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get activePlan =>
+      $composableBuilder(column: $table.activePlan, builder: (column) => ColumnFilters(column));
 }
 
 class $$SubscriptionCacheTableOrderingComposer
@@ -6997,6 +7059,9 @@ class $$SubscriptionCacheTableOrderingComposer
 
   ColumnOrderings<DateTime> get lastSyncedAt =>
       $composableBuilder(column: $table.lastSyncedAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get activePlan =>
+      $composableBuilder(column: $table.activePlan, builder: (column) => ColumnOrderings(column));
 }
 
 class $$SubscriptionCacheTableAnnotationComposer
@@ -7028,6 +7093,9 @@ class $$SubscriptionCacheTableAnnotationComposer
 
   GeneratedColumn<DateTime> get lastSyncedAt =>
       $composableBuilder(column: $table.lastSyncedAt, builder: (column) => column);
+
+  GeneratedColumn<String> get activePlan =>
+      $composableBuilder(column: $table.activePlan, builder: (column) => column);
 }
 
 class $$SubscriptionCacheTableTableManager
@@ -7068,6 +7136,7 @@ class $$SubscriptionCacheTableTableManager
                 Value<bool> autoRenew = const Value.absent(),
                 Value<String> source = const Value.absent(),
                 Value<DateTime> lastSyncedAt = const Value.absent(),
+                Value<String?> activePlan = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => SubscriptionCacheCompanion(
                 userId: userId,
@@ -7077,6 +7146,7 @@ class $$SubscriptionCacheTableTableManager
                 autoRenew: autoRenew,
                 source: source,
                 lastSyncedAt: lastSyncedAt,
+                activePlan: activePlan,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -7088,6 +7158,7 @@ class $$SubscriptionCacheTableTableManager
                 Value<bool> autoRenew = const Value.absent(),
                 required String source,
                 required DateTime lastSyncedAt,
+                Value<String?> activePlan = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => SubscriptionCacheCompanion.insert(
                 userId: userId,
@@ -7097,6 +7168,7 @@ class $$SubscriptionCacheTableTableManager
                 autoRenew: autoRenew,
                 source: source,
                 lastSyncedAt: lastSyncedAt,
+                activePlan: activePlan,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) =>

@@ -1,6 +1,10 @@
 import 'package:equatable/equatable.dart';
 
-enum BillingPeriod { monthly, annual }
+/// `lifetime` is a one-time, non-recurring purchase modeled alongside
+/// the two recurring periods for plan-picker symmetry (Free / Monthly /
+/// Yearly / Lifetime are presented as one set of choices), not because
+/// it's actually a "billing period."
+enum BillingPeriod { monthly, annual, lifetime }
 
 /// A purchasable plan, as returned by the platform store — `priceLabel`
 /// is the store's own formatted, localized price string (e.g. `"$9.99"`),
