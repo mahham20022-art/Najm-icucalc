@@ -1,0 +1,10 @@
+# Firebase Emulator Suite artifacts (see firebase-rules-tests/README).
+firestore-debug.log
+storage-debug.log
+firebase-debug.log
+ui-debug.log
+database-debug.log
+.firebase/
+
+# Node dependencies for the rules-unit-testing project.
+firebase-rules-tests/node_modules/
