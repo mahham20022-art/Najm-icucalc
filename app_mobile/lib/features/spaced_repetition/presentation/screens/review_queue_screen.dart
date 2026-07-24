@@ -1,8 +1,11 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_spacing.dart';
+import '../../../../core/accessibility/motion.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../shared/widgets/async_value_section.dart';
 import '../../domain/entities/flashcard_schedule.dart';
@@ -65,7 +68,8 @@ class _ReviewCardSection extends ConsumerWidget {
                 onTap: () => ref.read(reviewQueueViewModelProvider.notifier).flip(),
                 child: _FlipCard(
                   topicTitle: content.topic.title,
-                  text: isFlipped ? content.flashcard.back : content.flashcard.front,
+                  front: content.flashcard.front,
+                  back: content.flashcard.back,
                   isFlipped: isFlipped,
                 ),
               ),
@@ -107,12 +111,100 @@ class _ReviewCardSection extends ConsumerWidget {
   }
 }
 
-class _FlipCard extends StatelessWidget {
-  const _FlipCard({required this.topicTitle, required this.text, required this.isFlipped});
+/// A 3D flip between [front] and [back] driven by the parent's
+/// [isFlipped] flag — matches `ai_mastery`'s `_FlipCard` in
+/// `flashcard_stack_view.dart` (the same interaction living in two
+/// features previously looked and animated differently; this one had no
+/// animation and no screen-reader label at all).
+class _FlipCard extends StatefulWidget {
+  const _FlipCard({
+    required this.topicTitle,
+    required this.front,
+    required this.back,
+    required this.isFlipped,
+  });
+
+  final String topicTitle;
+  final String front;
+  final String back;
+  final bool isFlipped;
+
+  @override
+  State<_FlipCard> createState() => _FlipCardState();
+}
+
+class _FlipCardState extends State<_FlipCard> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+      value: widget.isFlipped ? 1 : 0,
+    );
+  }
+
+  @override
+  void didUpdateWidget(covariant _FlipCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.isFlipped == widget.isFlipped) return;
+
+    if (prefersReducedMotion(context)) {
+      _controller.value = widget.isFlipped ? 1 : 0;
+    } else if (widget.isFlipped) {
+      _controller.forward();
+    } else {
+      _controller.reverse();
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: widget.isFlipped ? 'Answer: ${widget.back}' : 'Question: ${widget.front}',
+      hint: widget.isFlipped ? 'Double tap to flip back' : 'Double tap to reveal the answer',
+      child: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          final angle = _controller.value * math.pi;
+          final showBack = angle > math.pi / 2;
+          return Transform(
+            alignment: Alignment.center,
+            transform: Matrix4.identity()
+              ..setEntry(3, 2, 0.001)
+              ..rotateY(angle),
+            child: showBack
+                ? Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.identity()..rotateY(math.pi),
+                    child: _CardFace(
+                      topicTitle: widget.topicTitle,
+                      text: widget.back,
+                      isBack: true,
+                    ),
+                  )
+                : _CardFace(topicTitle: widget.topicTitle, text: widget.front, isBack: false),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _CardFace extends StatelessWidget {
+  const _CardFace({required this.topicTitle, required this.text, required this.isBack});
 
   final String topicTitle;
   final String text;
-  final bool isFlipped;
+  final bool isBack;
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +214,7 @@ class _FlipCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(AppSpacing.space5),
       decoration: BoxDecoration(
-        color: isFlipped ? colors.accentFill.withValues(alpha: 0.08) : colors.surfaceElevated,
+        color: isBack ? colors.accentFill.withValues(alpha: 0.08) : colors.surfaceElevated,
         borderRadius: BorderRadius.circular(AppSpacing.radiusCard),
         border: Border.all(color: colors.separator),
       ),

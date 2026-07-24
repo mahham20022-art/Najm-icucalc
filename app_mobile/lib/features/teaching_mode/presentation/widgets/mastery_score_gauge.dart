@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../../../../app/theme/app_colors.dart';
+import '../../../../core/accessibility/motion.dart';
 
 /// A circular 0-100 gauge for a Teaching Mode result — animates from 0
 /// up to [score] on first build, the same "grow into place" treatment
@@ -19,18 +20,21 @@ class MasteryScoreGauge extends StatefulWidget {
 }
 
 class _MasteryScoreGaugeState extends State<MasteryScoreGauge> with SingleTickerProviderStateMixin {
-  late final AnimationController _controller = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 1100),
-  );
-  late final Animation<double> _animation = Tween<double>(
-    begin: 0,
-    end: widget.score / 100,
-  ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
+  late final AnimationController _controller;
+  late final Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
+    final reduceMotion = prefersReducedMotion(context);
+    _controller = AnimationController(
+      vsync: this,
+      duration: reduceMotion ? Duration.zero : const Duration(milliseconds: 1100),
+    );
+    _animation = Tween<double>(
+      begin: 0,
+      end: widget.score / 100,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
     _controller.forward();
   }
 

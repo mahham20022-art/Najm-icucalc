@@ -254,6 +254,7 @@ class _ChallengeBody extends StatelessWidget {
                         IconButton(
                           icon: Icon(isBookmarked ? Icons.bookmark : Icons.bookmark_outline),
                           color: isBookmarked ? colors.accentFill : colors.labelSecondary,
+                          tooltip: isBookmarked ? 'Remove bookmark' : 'Add bookmark',
                           onPressed: onToggleBookmark,
                         ),
                       ],

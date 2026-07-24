@@ -68,12 +68,17 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
       onPopInvokedWithResult: (didPop, _) => unawaited(_handleBack()),
       child: Scaffold(
         appBar: AppBar(
-          leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: _handleBack),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            tooltip: 'Back',
+            onPressed: _handleBack,
+          ),
           title: const Text('Note'),
           actions: switch (state) {
             NoteEditorLoaded(:final note, :final isPreviewMode) => [
               IconButton(
                 icon: Icon(note.isBookmarked ? Icons.bookmark : Icons.bookmark_border),
+                tooltip: note.isBookmarked ? 'Remove bookmark' : 'Add bookmark',
                 onPressed: () async {
                   final failure = await _viewModel.toggleBookmark();
                   if (failure != null && context.mounted) {

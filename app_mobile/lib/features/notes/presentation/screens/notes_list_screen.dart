@@ -96,6 +96,7 @@ class _NotesListScreenState extends ConsumerState<NotesListScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _createNote(context),
+        tooltip: 'New note',
         child: const Icon(Icons.add),
       ),
     );
@@ -213,14 +214,17 @@ class _FilterChipRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 48,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.space3,
-          vertical: AppSpacing.space2,
-        ),
+    // A fixed-height `SizedBox` previously wrapped this row — at large
+    // accessibility text sizes the `ChoiceChip` labels grow taller than
+    // 48px and were clipped. `SingleChildScrollView` + `Row` lets the
+    // row's height follow its children's actual (scaled) size instead.
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.space3,
+        vertical: AppSpacing.space2,
+      ),
+      child: Row(
         children: [
           _chip(context, label: 'All', selection: const _AllFilter()),
           const SizedBox(width: AppSpacing.space2),
@@ -290,6 +294,7 @@ class _NoteListTile extends ConsumerWidget {
                 note.isBookmarked ? Icons.bookmark : Icons.bookmark_border,
                 color: note.isBookmarked ? colors.warning : colors.labelTertiary,
               ),
+              tooltip: note.isBookmarked ? 'Remove bookmark' : 'Add bookmark',
               onPressed: () => ref.read(toggleBookmarkUseCaseProvider)(note.id),
             ),
             Text(

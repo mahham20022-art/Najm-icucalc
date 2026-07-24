@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_spacing.dart';
+import '../../../../core/accessibility/motion.dart';
 import '../../domain/entities/flashcard.dart';
 
 class FlashcardStackView extends StatefulWidget {
@@ -92,7 +93,10 @@ class _FlipCardState extends State<_FlipCard> with SingleTickerProviderStateMixi
   bool _showingFront = true;
 
   void _flip() {
-    if (_showingFront) {
+    final flippingToBack = _showingFront;
+    if (prefersReducedMotion(context)) {
+      _controller.value = flippingToBack ? 1 : 0;
+    } else if (flippingToBack) {
       _controller.forward();
     } else {
       _controller.reverse();

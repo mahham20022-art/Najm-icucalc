@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../../../../app/theme/app_colors.dart';
+import '../../../../core/accessibility/motion.dart';
 
 /// The Home screen's centerpiece — an animated ring showing how far
 /// through the 100-day journey the user is, with the current day number
@@ -36,7 +37,10 @@ class _ChallengeProgressCircleState extends State<ChallengeProgressCircle>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 900));
+    _controller = AnimationController(
+      vsync: this,
+      duration: prefersReducedMotion(context) ? Duration.zero : const Duration(milliseconds: 900),
+    );
     _animation = Tween<double>(
       begin: 0,
       end: widget.progress,
@@ -52,9 +56,13 @@ class _ChallengeProgressCircleState extends State<ChallengeProgressCircle>
         begin: oldWidget.progress,
         end: widget.progress,
       ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
-      _controller
-        ..reset()
-        ..forward();
+      if (prefersReducedMotion(context)) {
+        _controller.value = 1;
+      } else {
+        _controller
+          ..reset()
+          ..forward();
+      }
     }
   }
 

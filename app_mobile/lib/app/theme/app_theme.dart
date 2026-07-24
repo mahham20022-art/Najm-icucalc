@@ -140,9 +140,13 @@ class AppTheme {
         unselectedIconTheme: IconThemeData(color: colors.labelSecondary),
       ),
       dividerTheme: DividerThemeData(color: colors.separator, space: 1, thickness: 1),
-      // Reduce Motion is honored globally via `MediaQuery.disableAnimations`
-      // — see `app/app.dart` for the page-transition builder that checks it,
-      // per `MED100_DESIGN_SYSTEM.md` §18.
+      // Reduce Motion is honored per-widget, not globally: every decorative
+      // `AnimationController` in the app (progress rings, gauges, the flip
+      // cards, the challenge-done celebration, the voice-input pulse) reads
+      // `core/accessibility/motion.dart`'s `prefersReducedMotion` before
+      // playing, per `MED100_DESIGN_SYSTEM.md` §18. Route *transitions*
+      // below are platform-default (`PredictiveBack`/`Cupertino`), which
+      // Flutter does not offer a built-in Reduce-Motion variant for.
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: <TargetPlatform, PageTransitionsBuilder>{
           TargetPlatform.android: PredictiveBackPageTransitionsBuilder(),

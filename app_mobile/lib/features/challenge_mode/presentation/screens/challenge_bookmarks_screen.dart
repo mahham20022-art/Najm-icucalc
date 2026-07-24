@@ -57,6 +57,7 @@ class ChallengeBookmarksScreen extends ConsumerWidget {
                 subtitle: Text(content.body, maxLines: 2, overflow: TextOverflow.ellipsis),
                 trailing: IconButton(
                   icon: const Icon(Icons.bookmark_remove_outlined),
+                  tooltip: 'Remove bookmark',
                   onPressed: () =>
                       ref.read(challengeViewModelProvider.notifier).toggleBookmark(day),
                 ),

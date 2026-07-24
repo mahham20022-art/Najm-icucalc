@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../app/theme/app_colors.dart';
+import '../../../../core/accessibility/motion.dart';
 
 /// A brief full-screen celebration shown once when a day is marked
 /// Done — scales and fades in a checkmark, holds briefly, then fades
@@ -25,7 +26,10 @@ class _ChallengeDoneCelebrationState extends State<ChallengeDoneCelebration>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 1400));
+    _controller = AnimationController(
+      vsync: this,
+      duration: prefersReducedMotion(context) ? Duration.zero : const Duration(milliseconds: 1400),
+    );
     _scale = TweenSequence<double>([
       TweenSequenceItem(
         tween: Tween(begin: 0.4, end: 1.15).chain(CurveTween(curve: Curves.easeOutBack)),

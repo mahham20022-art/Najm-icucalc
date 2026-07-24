@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_spacing.dart';
+import '../../../../core/accessibility/motion.dart';
 import '../../domain/entities/explanation_mode.dart';
 
 class ExplanationInputView extends StatefulWidget {
@@ -127,14 +128,16 @@ class _VoiceInputState extends State<_VoiceInput> with SingleTickerProviderState
   @override
   void initState() {
     super.initState();
-    if (widget.isListening) _pulseController.repeat(reverse: true);
+    if (widget.isListening && !prefersReducedMotion(context)) {
+      _pulseController.repeat(reverse: true);
+    }
   }
 
   @override
   void didUpdateWidget(covariant _VoiceInput oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.isListening && !oldWidget.isListening) {
-      _pulseController.repeat(reverse: true);
+      if (!prefersReducedMotion(context)) _pulseController.repeat(reverse: true);
     } else if (!widget.isListening && oldWidget.isListening) {
       _pulseController.stop();
       _pulseController.reset();
