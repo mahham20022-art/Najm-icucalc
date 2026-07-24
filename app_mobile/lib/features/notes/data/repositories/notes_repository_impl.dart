@@ -85,7 +85,7 @@ class NotesRepositoryImpl implements NotesRepository {
       return const Result.failure(ValidationFailure('Folder name cannot be empty.'));
     }
     try {
-      final existing = await _local.getFolder(folderId);
+      final existing = await _local.getFolder(_userId, folderId);
       if (existing == null) return const Result.failure(CacheFailure('Folder no longer exists.'));
       final updated = existing.copyWith(name: trimmed, updatedAt: DateTime.now());
       await _local.upsertFolder(updated, userId: _userId);
@@ -99,8 +99,8 @@ class NotesRepositoryImpl implements NotesRepository {
   @override
   Future<Result<void>> deleteFolder(String folderId) async {
     try {
-      final unfiledNoteIds = await _local.clearFolderReferences(folderId);
-      await _local.deleteFolder(folderId);
+      final unfiledNoteIds = await _local.clearFolderReferences(_userId, folderId);
+      await _local.deleteFolder(_userId, folderId);
       for (final noteId in unfiledNoteIds) {
         await _enqueueNote(noteId, 'update');
       }
@@ -133,7 +133,7 @@ class NotesRepositoryImpl implements NotesRepository {
   );
 
   @override
-  Stream<Note?> watchNoteById(String noteId) => _local.watchNoteById(noteId);
+  Stream<Note?> watchNoteById(String noteId) => _local.watchNoteById(_userId, noteId);
 
   @override
   Future<Result<Note>> createNote({String? folderId}) async {
@@ -172,14 +172,14 @@ class NotesRepositoryImpl implements NotesRepository {
   @override
   Future<Result<void>> deleteNote(String noteId) async {
     try {
-      final existing = await _local.getNoteById(noteId);
+      final existing = await _local.getNoteById(_userId, noteId);
       if (existing != null) {
         for (final image in existing.images) {
           final localPath = image.localPath;
           if (localPath != null) await _imageFiles.delete(localPath);
         }
       }
-      await _local.deleteNote(noteId);
+      await _local.deleteNote(_userId, noteId);
       await _enqueueNote(noteId, 'delete');
       return const Result.success(null);
     } catch (_) {
@@ -190,7 +190,7 @@ class NotesRepositoryImpl implements NotesRepository {
   @override
   Future<Result<void>> toggleBookmark(String noteId) async {
     try {
-      final existing = await _local.getNoteById(noteId);
+      final existing = await _local.getNoteById(_userId, noteId);
       if (existing == null) return const Result.failure(CacheFailure('Note no longer exists.'));
       final updated = existing.copyWith(
         isBookmarked: !existing.isBookmarked,

@@ -1,0 +1,278 @@
+rules_version = '2';
+
+// Med100 Firestore Security Rules.
+//
+// **This file did not exist before this review.** Every repository in
+// `app_mobile/` and `admin_dashboard/` was written assuming server-side
+// rule enforcement (see e.g. `SubscriptionRepositoryImpl`'s and
+// `admin_dashboard`'s `AdminAuthRepositoryImpl`'s doc comments, which say
+// so explicitly) — until this file is deployed, every collection below
+// was actually wide open to any authenticated Firebase user. This is the
+// real security boundary; the client-side role/ownership checks in both
+// apps are a UX convenience only, per `MED100_ARCHITECTURE.md` §12.
+//
+// Modeled directly on `MED100_DATABASE_DESIGN.md` §17's write-ownership
+// matrix — one `match` block per row, `allow write: if false` wherever
+// the matrix says "Server only" (that data is meant to arrive via a
+// trusted Cloud Function/Admin SDK, which bypasses these rules entirely,
+// so denying client writes here is exactly the intended boundary, not an
+// accidental lockout).
+//
+// `notes`/`noteFolders` aren't in that matrix (Notes was built after the
+// original design doc) but follow the same "client-owned, per-user"
+// shape as `bookmarks`/`settings`.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------------------------------------------------------- Helpers
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Custom claims are parsed client-side by the app for UX only; here,
+    // read server-side from the verified ID token, this *is* the real
+    // check — see `MED100_ARCHITECTURE.md` §7 for the claim shape.
+    function role() {
+      return (isSignedIn() && ('role' in request.auth.token)) ? request.auth.token.role : null;
+    }
+
+    function isAdmin() {
+      return role() == 'admin';
+    }
+
+    // Editors get the same read access as admins (they need to see what
+    // they're editing/reviewing) but never the account-management writes
+    // `isAdmin()`-gated rules below grant.
+    function isStaff() {
+      return role() == 'admin' || role() == 'editor';
+    }
+
+    function onlyChanged(fields) {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(fields);
+    }
+
+    // ------------------------------------------------------------ Users
+
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isStaff();
+
+      // Profile creation: the owner only, and only with the safe
+      // defaults — `role`/`accountStatus`/`institutionId` can never be
+      // self-assigned at signup.
+      allow create: if isOwner(userId)
+        && request.resource.data.uid == userId
+        && request.resource.data.role == 'learner'
+        && request.resource.data.accountStatus == 'active'
+        && !('institutionId' in request.resource.data);
+
+      // Owner may edit their own profile fields (displayName, locale,
+      // notificationTime, specialties, timezone) but never the
+      // server-owned ones. Admin may flip *only* `accountStatus`
+      // (suspend/reactivate, per `admin_dashboard`'s Users screen) — not
+      // `role`, which is also a Firebase Auth custom claim and can only
+      // ever be set by the Admin SDK (a Cloud Function), never a
+      // Firestore write, by anyone, rules included.
+      allow update: if (isOwner(userId) && !request.resource.data.diff(resource.data)
+            .affectedKeys().hasAny(['uid', 'role', 'institutionId', 'accountStatus']))
+          || (isAdmin() && onlyChanged(['accountStatus']));
+
+      allow delete: if false;
+
+      match /notes/{noteId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /noteFolders/{folderId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /bookmarks/{bookmarkId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /settings/{docId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /notificationTokens/{tokenId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /notificationLog/{notificationId} {
+        allow read: if isOwner(userId);
+        allow create: if false; // server/FCM-authored only.
+        // Client may only mark its own notification read.
+        allow update: if isOwner(userId) && onlyChanged(['readAt']);
+        allow delete: if false;
+      }
+
+      // Not in `MED100_DATABASE_DESIGN.md` (Challenge Mode and Teaching
+      // Mode were both added after that document) — client-owned,
+      // same shape as `bookmarks`/`settings` above: this is a personal
+      // 100-day self-study journey, not a competitive/leaderboard
+      // number, so it doesn't need the "streaks"-style
+      // server-derived-only treatment below.
+      match /challengeProgress/{docId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      // Teaching Mode's "teach it back" sessions — append-only, same
+      // shape as `quizAttempts`: the AI evaluation is generated
+      // client-side (see `TeachingRepositoryImpl`'s doc comment) and
+      // stored as-is, never edited after submission.
+      match /teachingSessions/{sessionId} {
+        allow read: if isOwner(userId) || isStaff();
+        allow create: if isOwner(userId);
+        allow update, delete: if false;
+      }
+
+      // Everything below is server-computed/server-authoritative per
+      // the write-ownership matrix — the client submits raw events
+      // (a quiz answer, a flashcard grade) to a Cloud Function, which
+      // validates and writes the derived state itself. A direct client
+      // write to any of these would let a device forge its own streak,
+      // mastery score, or spaced-repetition schedule.
+      match /progress/{topicId} {
+        allow read: if isOwner(userId) || isStaff();
+        allow write: if false;
+      }
+
+      match /quizAttempts/{attemptId} {
+        allow read: if isOwner(userId) || isStaff();
+        // Append-only submission of the raw attempt; the Cloud Function
+        // that validates/aggregates it does so out-of-band and writes
+        // `progress`/`streaks`/`mastery` itself — never edited/deleted
+        // by the client afterwards.
+        allow create: if isOwner(userId);
+        allow update, delete: if false;
+      }
+
+      match /streaks/{trackId} {
+        allow read: if isOwner(userId) || isStaff();
+        allow write: if false;
+      }
+
+      match /mastery/{specialtyId} {
+        allow read: if isOwner(userId) || isStaff();
+        allow write: if false;
+      }
+
+      // Deviates from the matrix's "server computes SM-2 via a Cloud
+      // Function" design: `features/spaced_repetition`'s concrete build
+      // instructions asked for a simpler fixed 7/30/90-day ladder
+      // instead of full SM-2 (see `RepetitionStage`'s doc comment for
+      // that decision) — with no Cloud Function in this codebase at
+      // all yet, client-computed-and-pushed is the only implementation
+      // that actually exists, so this is client-owned rather than
+      // `allow write: if false`, matching that already-accepted
+      // deviation rather than silently blocking the one sync path that
+      // was actually built.
+      match /flashcardSchedule/{flashcardId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /pathEnrollments/{pathId} {
+        allow read: if isOwner(userId) || isStaff();
+        allow write: if false; // set at enrollment by a Cloud Function.
+      }
+
+      match /unlockedAchievements/{achievementId} {
+        allow read: if isOwner(userId) || isStaff();
+        allow create: if false; // server unlocks.
+        allow update: if isOwner(userId) && onlyChanged(['seenByUser']);
+        allow delete: if false;
+      }
+
+      match /statistics/{docId} {
+        allow read: if isOwner(userId) || isStaff();
+        allow write: if false;
+      }
+
+      match /syncMeta/{docId} {
+        allow read: if isOwner(userId);
+        allow write: if false; // this *is* the sync machinery's own state.
+      }
+    }
+
+    // ----------------------------------------------------- Public content
+
+    // Topic *metadata* only (title, isFree flag, tags, etc.) is public —
+    // per `MED100_DATABASE_DESIGN.md` §2, premium `bodyRef` content is
+    // never stored in this document; it's served via a short-TTL signed
+    // Cloud Storage URL minted by a Cloud Function that checks
+    // `subscriptions/{uid}` server-side, so gating reads of this
+    // metadata document itself would gain nothing.
+    match /topics/{topicId} {
+      allow read: if true;
+      allow write: if false; // Editorial Console -> Cloud Function publish pipeline only.
+    }
+
+    match /learningPaths/{pathId} {
+      allow read: if true;
+      allow write: if false;
+
+      match /items/{itemId} {
+        allow read: if true;
+        allow write: if false;
+      }
+    }
+
+    match /flashcards/{flashcardId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Public MCQ projection — no answer key.
+    match /mcqs/{mcqId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // The answer key lives only here, and is never exposed to *any*
+    // client — not even staff — so a signed-in device can never fetch
+    // the correct answer ahead of grading. Only a Cloud Function (Admin
+    // SDK, bypasses rules) reads this to grade a submitted attempt.
+    match /mcqAnswers/{mcqId} {
+      allow read, write: if false;
+    }
+
+    match /achievements/{achievementId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Internal server-side AI response cache (distinct from each
+    // device's own local `ai_cache_local` Drift table) — not something
+    // any client reads or writes directly.
+    match /aiCache/{cacheKey} {
+      allow read, write: if false;
+    }
+
+    // ------------------------------------------------------ Subscriptions
+
+    // Exclusively the billing webhook Cloud Function's to write, per
+    // `MED100_DATABASE_DESIGN.md` §12 — no client write path at all,
+    // `admin_dashboard` included, even though that app's UI currently
+    // only ever reads this collection (for the Users list join and
+    // Analytics' premium-count aggregation).
+    match /subscriptions/{userId} {
+      allow read: if isOwner(userId) || isStaff();
+      allow write: if false;
+    }
+
+    // ------------------------------------------------------- Default deny
+
+    // Firestore already default-denies anything unmatched; this is
+    // explicit only so a future added collection is safely closed until
+    // someone deliberately writes a rule for it, rather than silently
+    // inheriting whatever the nearest ancestor `match` happens to allow.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

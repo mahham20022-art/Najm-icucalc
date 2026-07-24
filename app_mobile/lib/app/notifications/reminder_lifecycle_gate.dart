@@ -52,6 +52,7 @@ class _ReminderLifecycleGateState extends ConsumerState<ReminderLifecycleGate>
     ref.listenManual(isOnlineProvider, (previous, isOnline) {
       if (isOnline && previous != true) {
         unawaited(triggerNotesSync(ref));
+        unawaited(triggerChallengeSync(ref));
       }
     });
   }
@@ -78,6 +79,7 @@ class _ReminderLifecycleGateState extends ConsumerState<ReminderLifecycleGate>
     // Fire-and-forget: a potentially slow multi-request Firestore sync
     // pass shouldn't delay the notification checks above it.
     unawaited(triggerNotesSync(ref));
+    unawaited(triggerChallengeSync(ref));
   }
 
   /// Mirrors Challenge Mode's missed-reminder catch-up above: same

@@ -1,0 +1,54 @@
+rules_version = '2';
+
+// Med100 Firebase Storage Security Rules.
+//
+// Like `firestore.rules`, this file did not exist before this review —
+// every Storage object this app writes (Notes' image attachments, via
+// `NotesRemoteDataSource.uploadImage`/`deleteAllImages`) was previously
+// reachable by any authenticated user with the right path, since nothing
+// enforced object ownership server-side.
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Matches `note_image_file_datasource.dart`'s local naming and
+    // `notes_remote_datasource.dart`'s upload path
+    // (`users/$userId/notes/$noteId/images/$imageId.$fileExtension`) —
+    // capped size and an image-only content-type allowlist here is the
+    // server-side backstop for the same validation now enforced
+    // client-side in `NoteImagePickerDataSource`/`NoteImageFileDataSource`
+    // (extension allowlist, no path separators, size cap) — a modified
+    // or non-Med100 client can't bypass either check by skipping the
+    // client-side one.
+    match /users/{userId}/notes/{noteId}/images/{imageFile} {
+      allow read: if isOwner(userId);
+      allow write: if isOwner(userId)
+        && request.resource.size < 10 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+      allow delete: if isOwner(userId);
+    }
+
+    // Premium topic content (`MED100_DATABASE_DESIGN.md` §2) is served
+    // exclusively via a short-TTL signed URL minted by the
+    // `getTopicContentUrl` Cloud Function, which itself checks
+    // `subscriptions/{userId}` server-side before signing — a signed URL
+    // is validated by its signature, not by these rules, so denying
+    // direct access here (no signed URL) is exactly the intended
+    // boundary, not an oversight.
+    match /topics/{topicId}/{allPaths=**} {
+      allow read, write: if false;
+    }
+
+    // Default deny — same reasoning as `firestore.rules`' catch-all.
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

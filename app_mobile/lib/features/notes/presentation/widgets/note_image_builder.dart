@@ -16,6 +16,15 @@ class NoteImageBuilder {
 
   static const _scheme = 'med100-image';
 
+  /// A note image is an inline markdown attachment, never a full-screen
+  /// viewer — decoding at the picker's already-capped 1600px source
+  /// resolution just to paint a few hundred logical pixels wastes
+  /// decode time and memory on every render. `imageBuilder` has no
+  /// `BuildContext` to size this against the actual layout width, so a
+  /// fixed value that comfortably covers this app's inline display size
+  /// (including higher-DPI devices) is used instead of a dynamic one.
+  static const _cacheWidth = 800;
+
   Widget build(Uri uri, String? title, String? alt) {
     if (uri.scheme != _scheme) return const SizedBox.shrink();
     final image = images[uri.path];
@@ -25,11 +34,16 @@ class NoteImageBuilder {
     if (localPath != null) {
       return Image.file(
         File(localPath),
+        cacheWidth: _cacheWidth,
         errorBuilder: (context, error, stackTrace) =>
-            image.remoteUrl != null ? Image.network(image.remoteUrl!) : _placeholder(),
+            image.remoteUrl != null
+                ? Image.network(image.remoteUrl!, cacheWidth: _cacheWidth)
+                : _placeholder(),
       );
     }
-    if (image.remoteUrl != null) return Image.network(image.remoteUrl!);
+    if (image.remoteUrl != null) {
+      return Image.network(image.remoteUrl!, cacheWidth: _cacheWidth);
+    }
     return _placeholder();
   }
 

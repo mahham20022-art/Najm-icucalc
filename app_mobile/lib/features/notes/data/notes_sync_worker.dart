@@ -99,7 +99,7 @@ class NotesSyncWorker implements SyncWorker {
       await _remote.deleteFolder(userId, row.entityId);
       return;
     }
-    final folder = await _local.getFolder(row.entityId);
+    final folder = await _local.getFolder(userId, row.entityId);
     if (folder == null) return; // Deleted locally again before the drain ran.
     await _remote.pushFolder(userId, folder);
   }
@@ -111,7 +111,7 @@ class NotesSyncWorker implements SyncWorker {
       return;
     }
 
-    final note = await _local.getNoteById(row.entityId);
+    final note = await _local.getNoteById(userId, row.entityId);
     if (note == null) return;
 
     var imagesChanged = false;

@@ -1,15 +1,26 @@
 import '../../../../core/error/failure.dart';
 import '../../../../core/error/result.dart';
 import '../../../../core/session/current_user.dart';
+import '../../../../core/sync/data/outbox_local_datasource.dart';
 import '../../domain/entities/challenge_state.dart';
 import '../../domain/repositories/challenge_repository.dart';
+import '../challenge_sync_worker.dart' show ChallengeSyncWorker;
 import '../datasources/challenge_local_datasource.dart';
 
+/// Local-first, same convention as `NotesRepositoryImpl`: every write
+/// lands in Drift first (so `watchState()` reflects it immediately
+/// regardless of connectivity) and enqueues an `Outbox` entry;
+/// `ChallengeSyncWorker` (triggered from `challenge_providers.dart` on
+/// connectivity restore and app resume) is what actually reaches
+/// Firestore. Added after this feature's own self-review flagged that
+/// "fully offline by construction" meant a 100-day journey was one
+/// reinstall away from being lost forever.
 class ChallengeRepositoryImpl implements ChallengeRepository {
-  ChallengeRepositoryImpl(this._localDataSource, this._currentUser);
+  ChallengeRepositoryImpl(this._localDataSource, this._currentUser, this._outbox);
 
   final ChallengeLocalDataSource _localDataSource;
   final CurrentUser _currentUser;
+  final OutboxLocalDataSource _outbox;
 
   String get _userId => _currentUser.userId ?? guestScopeId;
 
@@ -36,6 +47,7 @@ class ChallengeRepositoryImpl implements ChallengeRepository {
   Future<Result<ChallengeState>> restart() async {
     final fresh = ChallengeState.fresh();
     await _localDataSource.saveState(_userId, fresh);
+    await _enqueueSync();
     return Result.success(fresh);
   }
 
@@ -46,6 +58,7 @@ class ChallengeRepositoryImpl implements ChallengeRepository {
     if (!bookmarks.remove(day)) bookmarks.add(day);
     final next = current.copyWith(bookmarkedDays: bookmarks);
     await _localDataSource.saveState(_userId, next);
+    await _enqueueSync();
     return Result.success(next);
   }
 
@@ -65,6 +78,14 @@ class ChallengeRepositoryImpl implements ChallengeRepository {
     }
     final next = apply(current);
     await _localDataSource.saveState(_userId, next);
+    await _enqueueSync();
     return Result.success(next);
   }
+
+  Future<void> _enqueueSync() => _outbox.enqueue(
+    userId: _userId,
+    entityType: ChallengeSyncWorker.entityType,
+    entityId: ChallengeSyncWorker.entityId,
+    operation: 'update',
+  );
 }

@@ -24,8 +24,9 @@ class NotesLocalDataSource {
     return query.watch().map((rows) => rows.map(_folderToEntity).toList());
   }
 
-  Future<NoteFolder?> getFolder(String folderId) async {
-    final query = _db.select(_db.noteFolders)..where((t) => t.id.equals(folderId));
+  Future<NoteFolder?> getFolder(String userId, String folderId) async {
+    final query = _db.select(_db.noteFolders)
+      ..where((t) => t.id.equals(folderId) & t.userId.equals(userId));
     final row = await query.getSingleOrNull();
     return row == null ? null : _folderToEntity(row);
   }
@@ -44,8 +45,10 @@ class NotesLocalDataSource {
         );
   }
 
-  Future<void> deleteFolder(String folderId) async {
-    await (_db.delete(_db.noteFolders)..where((t) => t.id.equals(folderId))).go();
+  Future<void> deleteFolder(String userId, String folderId) async {
+    await (_db.delete(
+      _db.noteFolders,
+    )..where((t) => t.id.equals(folderId) & t.userId.equals(userId))).go();
   }
 
   /// Unfiles every note that referenced [folderId] — called immediately
@@ -54,11 +57,13 @@ class NotesLocalDataSource {
   /// can enqueue an `Outbox` entry for each — this bulk `UPDATE` bypasses
   /// `upsertNote`/`saveNote` entirely, so without this the affected
   /// notes' cleared `folderId` would never reach Firestore.
-  Future<List<String>> clearFolderReferences(String folderId) async {
-    final affected = await (_db.select(
+  Future<List<String>> clearFolderReferences(String userId, String folderId) async {
+    final affected = await (_db.select(_db.notes)..where(
+          (t) => t.folderId.equals(folderId) & t.userId.equals(userId),
+        )).map((row) => row.id).get();
+    await (_db.update(
       _db.notes,
-    )..where((t) => t.folderId.equals(folderId))).map((row) => row.id).get();
-    await (_db.update(_db.notes)..where((t) => t.folderId.equals(folderId))).write(
+    )..where((t) => t.folderId.equals(folderId) & t.userId.equals(userId))).write(
       const NotesCompanion(folderId: Value(null)),
     );
     return affected;
@@ -87,13 +92,15 @@ class NotesLocalDataSource {
     return query.watch().map((rows) => rows.map(_noteToEntity).toList());
   }
 
-  Stream<Note?> watchNoteById(String noteId) {
-    final query = _db.select(_db.notes)..where((t) => t.id.equals(noteId));
+  Stream<Note?> watchNoteById(String userId, String noteId) {
+    final query = _db.select(_db.notes)
+      ..where((t) => t.id.equals(noteId) & t.userId.equals(userId));
     return query.watchSingleOrNull().map((row) => row == null ? null : _noteToEntity(row));
   }
 
-  Future<Note?> getNoteById(String noteId) async {
-    final query = _db.select(_db.notes)..where((t) => t.id.equals(noteId));
+  Future<Note?> getNoteById(String userId, String noteId) async {
+    final query = _db.select(_db.notes)
+      ..where((t) => t.id.equals(noteId) & t.userId.equals(userId));
     final row = await query.getSingleOrNull();
     return row == null ? null : _noteToEntity(row);
   }
@@ -116,8 +123,10 @@ class NotesLocalDataSource {
         );
   }
 
-  Future<void> deleteNote(String noteId) async {
-    await (_db.delete(_db.notes)..where((t) => t.id.equals(noteId))).go();
+  Future<void> deleteNote(String userId, String noteId) async {
+    await (_db.delete(
+      _db.notes,
+    )..where((t) => t.id.equals(noteId) & t.userId.equals(userId))).go();
   }
 
   // ---------------------------------------------------------------- Mapping
