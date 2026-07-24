@@ -7,7 +7,7 @@ abstract interface class UsersRepository {
   /// prefix (a Firestore range query) — there is no full-text search
   /// here, a deliberate simplification for this first pass.
   /// [cursor] is a previous [UsersPage.cursor]; omit for the first page.
-  Future<UsersPage> fetchUsers({String? searchEmail, Object? cursor, int pageSize = 25});
+  Future<Result<UsersPage>> fetchUsers({String? searchEmail, Object? cursor, int pageSize = 25});
 
   /// A plain Firestore field write (`accountStatus`), not an Auth
   /// custom claim — safe for an authenticated admin client to perform

@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/error/failure.dart';
 import '../../domain/entities/review_grade.dart';
 import '../../spaced_repetition_providers.dart';
 
@@ -15,9 +16,13 @@ class ReviewQueueViewModel extends Notifier<bool> {
 
   void flip() => state = !state;
 
-  Future<void> grade(String flashcardId, ReviewGrade grade) async {
-    await ref.read(recordReviewUseCaseProvider)(flashcardId: flashcardId, grade: grade);
+  Future<Failure?> grade(String flashcardId, ReviewGrade grade) async {
+    final result = await ref.read(recordReviewUseCaseProvider)(
+      flashcardId: flashcardId,
+      grade: grade,
+    );
     state = false;
+    return result.failureOrNull;
   }
 }
 

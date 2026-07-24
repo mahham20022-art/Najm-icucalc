@@ -10,6 +10,7 @@ import '../../../../app/theme/app_spacing.dart';
 import '../../../../core/accessibility/motion.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../shared/widgets/async_value_section.dart';
+import '../../../../shared/widgets/stat_card.dart';
 import '../../domain/entities/flashcard_schedule.dart';
 import '../../domain/entities/review_grade.dart';
 import '../../domain/entities/spaced_repetition_statistics.dart';
@@ -85,9 +86,7 @@ class _ReviewCardSection extends ConsumerWidget {
                     child: OutlinedButton(
                       onPressed: () {
                         unawaited(HapticFeedback.lightImpact());
-                        ref
-                            .read(reviewQueueViewModelProvider.notifier)
-                            .grade(content.flashcard.id, ReviewGrade.again);
+                        unawaited(_grade(context, ref, content.flashcard.id, ReviewGrade.again));
                       },
                       child: const Text('Again'),
                     ),
@@ -97,9 +96,7 @@ class _ReviewCardSection extends ConsumerWidget {
                     child: FilledButton(
                       onPressed: () {
                         unawaited(HapticFeedback.mediumImpact());
-                        ref
-                            .read(reviewQueueViewModelProvider.notifier)
-                            .grade(content.flashcard.id, ReviewGrade.good);
+                        unawaited(_grade(context, ref, content.flashcard.id, ReviewGrade.good));
                       },
                       child: const Text('Good'),
                     ),
@@ -117,6 +114,18 @@ class _ReviewCardSection extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _grade(
+    BuildContext context,
+    WidgetRef ref,
+    String flashcardId,
+    ReviewGrade grade,
+  ) async {
+    final failure = await ref.read(reviewQueueViewModelProvider.notifier).grade(flashcardId, grade);
+    if (failure != null && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(failure.message)));
+    }
   }
 }
 
@@ -292,7 +301,7 @@ class _StatisticsHeader extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: _StatChip(
+            child: StatCard(
               label: 'Due today',
               value: '${stats.dueToday}',
               color: colors.accentFill,
@@ -300,7 +309,7 @@ class _StatisticsHeader extends StatelessWidget {
           ),
           const SizedBox(width: AppSpacing.space3),
           Expanded(
-            child: _StatChip(
+            child: StatCard(
               label: 'Mastered',
               value: '${stats.masteredCount}',
               color: colors.success,
@@ -308,45 +317,11 @@ class _StatisticsHeader extends StatelessWidget {
           ),
           const SizedBox(width: AppSpacing.space3),
           Expanded(
-            child: _StatChip(
+            child: StatCard(
               label: 'Retention',
               value: retention == null ? '—' : '${(retention * 100).round()}%',
               color: colors.warning,
             ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _StatChip extends StatelessWidget {
-  const _StatChip({required this.label, required this.value, required this.color});
-
-  final String label;
-  final String value;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
-    final textTheme = Theme.of(context).textTheme;
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        vertical: AppSpacing.space3,
-        horizontal: AppSpacing.space2,
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(AppSpacing.radiusControlSm),
-        border: Border.all(color: colors.separator),
-      ),
-      child: Column(
-        children: [
-          Text(value, style: textTheme.titleLarge?.copyWith(color: color)),
-          Text(
-            label,
-            style: textTheme.labelSmall?.copyWith(color: colors.labelSecondary),
-            textAlign: TextAlign.center,
           ),
         ],
       ),

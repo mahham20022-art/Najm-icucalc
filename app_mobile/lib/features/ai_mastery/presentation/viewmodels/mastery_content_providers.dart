@@ -77,7 +77,11 @@ final flashcardsProvider = FutureProvider.autoDispose.family<List<Flashcard>, To
       // more natural dependency).
       final ensureScheduled = ref.read(ensureScheduledUseCaseProvider);
       for (final card in cards) {
-        unawaited(ensureScheduled(flashcardId: card.id, topicId: topic.id));
+        // A failure here is a local Drift write that can't succeed
+        // (disk full, corrupted db, etc.) — not something this
+        // fetch-and-display provider can usefully react to, so it's
+        // fire-and-forget rather than surfaced as a UI error.
+        unawaited(ensureScheduled(flashcardId: card.id, topicId: topic.id).then((_) {}));
       }
       return cards;
     },

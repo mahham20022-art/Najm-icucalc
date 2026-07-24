@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_spacing.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/stat_card.dart';
 import '../../domain/challenge_content.dart';
 import '../viewmodels/challenge_view_model.dart';
 
@@ -34,29 +35,33 @@ class ChallengeStatisticsScreen extends ConsumerWidget {
               crossAxisSpacing: AppSpacing.space4,
               childAspectRatio: 1.4,
               children: [
-                _StatCard(
+                StatCard(
                   icon: Icons.check_circle_outline,
                   label: l10n.challengeCompletedLabel,
                   value: '${state.completedDays.length}',
                   color: AppColors.of(context).success,
+                  asCard: true,
                 ),
-                _StatCard(
+                StatCard(
                   icon: Icons.skip_next_outlined,
                   label: l10n.challengeSkippedLabel,
                   value: '${state.skippedDays.length}',
                   color: AppColors.of(context).warning,
+                  asCard: true,
                 ),
-                _StatCard(
+                StatCard(
                   icon: Icons.local_fire_department_outlined,
                   label: l10n.challengeCurrentStreak,
                   value: l10n.challengeStreakDays(state.currentStreak),
                   color: AppColors.of(context).accentFill,
+                  asCard: true,
                 ),
-                _StatCard(
+                StatCard(
                   icon: Icons.donut_large_outlined,
                   label: l10n.challengeCompletionRate,
                   value: '${(state.progressFraction * 100).round()}%',
                   color: AppColors.of(context).accentFill,
+                  asCard: true,
                 ),
               ],
             ),
@@ -74,41 +79,6 @@ class ChallengeStatisticsScreen extends ConsumerWidget {
           ],
         ),
       },
-    );
-  }
-}
-
-class _StatCard extends StatelessWidget {
-  const _StatCard({
-    required this.icon,
-    required this.label,
-    required this.value,
-    required this.color,
-  });
-
-  final IconData icon;
-  final String label;
-  final String value;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
-    final textTheme = Theme.of(context).textTheme;
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.space4),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: color),
-            const SizedBox(height: AppSpacing.space2),
-            Text(value, style: textTheme.headlineSmall),
-            Text(label, style: textTheme.bodySmall?.copyWith(color: colors.labelSecondary)),
-          ],
-        ),
-      ),
     );
   }
 }

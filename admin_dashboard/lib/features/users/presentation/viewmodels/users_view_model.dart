@@ -72,42 +72,40 @@ class UsersViewModel extends Notifier<UsersState> {
 
   Future<void> load({String searchEmail = ''}) async {
     state = const UsersLoading();
-    try {
-      final page = await ref.read(fetchUsersUseCaseProvider)(
-        searchEmail: searchEmail.isEmpty ? null : searchEmail,
-      );
-      state = UsersLoaded(
+    final result = await ref.read(fetchUsersUseCaseProvider)(
+      searchEmail: searchEmail.isEmpty ? null : searchEmail,
+    );
+    state = result.when(
+      success: (page) => UsersLoaded(
         users: page.users,
         cursor: page.cursor,
         hasMore: page.hasMore,
         loadingMore: false,
         searchEmail: searchEmail,
-      );
-    } catch (_) {
-      state = const UsersError(ServerFailure('Could not load users.'));
-    }
+      ),
+      failure: UsersError.new,
+    );
   }
 
   Future<void> loadMore() async {
     final current = state;
     if (current is! UsersLoaded || !current.hasMore || current.loadingMore) return;
     state = current.copyWith(loadingMore: true);
-    try {
-      final page = await ref.read(fetchUsersUseCaseProvider)(
-        searchEmail: current.searchEmail.isEmpty ? null : current.searchEmail,
-        cursor: current.cursor,
-      );
-      state = current.copyWith(
+    final result = await ref.read(fetchUsersUseCaseProvider)(
+      searchEmail: current.searchEmail.isEmpty ? null : current.searchEmail,
+      cursor: current.cursor,
+    );
+    state = result.when(
+      success: (page) => current.copyWith(
         users: [...current.users, ...page.users],
         cursor: page.cursor,
         hasMore: page.hasMore,
         loadingMore: false,
-      );
-    } catch (_) {
+      ),
       // Keep the existing page visible — only the "load more" affordance
       // needs to recover, not the whole screen.
-      state = current.copyWith(loadingMore: false);
-    }
+      failure: (_) => current.copyWith(loadingMore: false),
+    );
   }
 
   String get _currentSearchEmail {

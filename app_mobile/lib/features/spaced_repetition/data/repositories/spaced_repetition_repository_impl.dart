@@ -6,6 +6,8 @@
 
 import 'package:drift/drift.dart';
 
+import '../../../../core/error/failure.dart';
+import '../../../../core/error/result.dart';
 import '../../../../core/session/current_user.dart';
 import '../../../../core/sync/data/outbox_local_datasource.dart';
 import '../../domain/entities/flashcard_schedule.dart';
@@ -38,14 +40,22 @@ class SpacedRepetitionRepositoryImpl implements SpacedRepetitionRepository {
   String get _userId => _currentUser.userId ?? guestScopeId;
 
   @override
-  Future<void> ensureScheduled({required String flashcardId, required String topicId}) async {
-    final inserted = await _localDataSource.insertIfAbsent(
-      userId: _userId,
-      flashcardId: flashcardId,
-      topicId: topicId,
-    );
-    if (inserted) {
-      await _enqueueSync(flashcardId);
+  Future<Result<void>> ensureScheduled({
+    required String flashcardId,
+    required String topicId,
+  }) async {
+    try {
+      final inserted = await _localDataSource.insertIfAbsent(
+        userId: _userId,
+        flashcardId: flashcardId,
+        topicId: topicId,
+      );
+      if (inserted) {
+        await _enqueueSync(flashcardId);
+      }
+      return const Result.success(null);
+    } catch (_) {
+      return const Result.failure(CacheFailure('Could not schedule this flashcard for review.'));
     }
   }
 
@@ -56,34 +66,42 @@ class SpacedRepetitionRepositoryImpl implements SpacedRepetitionRepository {
   Future<int> getDueCount() => _localDataSource.getDueCount(_userId);
 
   @override
-  Future<void> recordReview({required String flashcardId, required ReviewGrade grade}) async {
-    final row = await _localDataSource.getByFlashcardId(_userId, flashcardId);
-    if (row == null) return;
+  Future<Result<void>> recordReview({
+    required String flashcardId,
+    required ReviewGrade grade,
+  }) async {
+    try {
+      final row = await _localDataSource.getByFlashcardId(_userId, flashcardId);
+      if (row == null) return const Result.success(null);
 
-    final currentStage = RepetitionStage.values.byName(row.stage);
-    final now = DateTime.now();
+      final currentStage = RepetitionStage.values.byName(row.stage);
+      final now = DateTime.now();
 
-    final RepetitionStage nextStage;
-    final DateTime nextDueDate;
-    if (grade == ReviewGrade.again) {
-      nextStage = RepetitionStage.newCard;
-      nextDueDate = now;
-    } else {
-      nextStage = currentStage.nextOnGood;
-      final interval = currentStage.intervalToNext;
-      nextDueDate = interval == null ? now : now.add(interval);
+      final RepetitionStage nextStage;
+      final DateTime nextDueDate;
+      if (grade == ReviewGrade.again) {
+        nextStage = RepetitionStage.newCard;
+        nextDueDate = now;
+      } else {
+        nextStage = currentStage.nextOnGood;
+        final interval = currentStage.intervalToNext;
+        nextDueDate = interval == null ? now : now.add(interval);
+      }
+
+      await _localDataSource.update(
+        row.copyWith(
+          stage: nextStage.name,
+          dueDate: nextDueDate,
+          lastReviewedAt: Value(now),
+          timesReviewed: row.timesReviewed + 1,
+          timesLapsed: grade == ReviewGrade.again ? row.timesLapsed + 1 : row.timesLapsed,
+        ),
+      );
+      await _enqueueSync(flashcardId);
+      return const Result.success(null);
+    } catch (_) {
+      return const Result.failure(CacheFailure('Could not record this review.'));
     }
-
-    await _localDataSource.update(
-      row.copyWith(
-        stage: nextStage.name,
-        dueDate: nextDueDate,
-        lastReviewedAt: Value(now),
-        timesReviewed: row.timesReviewed + 1,
-        timesLapsed: grade == ReviewGrade.again ? row.timesLapsed + 1 : row.timesLapsed,
-      ),
-    );
-    await _enqueueSync(flashcardId);
   }
 
   Future<void> _enqueueSync(String flashcardId) => _outbox.enqueue(

@@ -16,23 +16,39 @@ class FirestoreUsersRepositoryImpl implements UsersRepository {
   final FirestoreUsersDataSource _dataSource;
 
   @override
-  Future<UsersPage> fetchUsers({String? searchEmail, Object? cursor, int pageSize = 25}) async {
-    final snapshot = await _dataSource.fetchUsersPage(
-      searchEmail: searchEmail,
-      startAfter: cursor as DocumentSnapshot<Map<String, dynamic>>?,
-      pageSize: pageSize,
-    );
+  Future<Result<UsersPage>> fetchUsers({
+    String? searchEmail,
+    Object? cursor,
+    int pageSize = 25,
+  }) async {
+    try {
+      // `cursor` crosses the domain boundary as `Object?` so
+      // `UsersRepository` doesn't leak a Firestore type — the cast below
+      // can only fail if a caller passes something other than a cursor
+      // this same repository previously handed back, and the try/catch
+      // around it turns that into a `Result.failure` instead of an
+      // uncaught `TypeError`.
+      final snapshot = await _dataSource.fetchUsersPage(
+        searchEmail: searchEmail,
+        startAfter: cursor as DocumentSnapshot<Map<String, dynamic>>?,
+        pageSize: pageSize,
+      );
 
-    final users = <ManagedUser>[];
-    for (final doc in snapshot.docs) {
-      users.add(await _toManagedUser(doc));
+      final users = <ManagedUser>[];
+      for (final doc in snapshot.docs) {
+        users.add(await _toManagedUser(doc));
+      }
+
+      return Result.success(
+        UsersPage(
+          users: users,
+          cursor: snapshot.docs.isEmpty ? null : snapshot.docs.last,
+          hasMore: snapshot.docs.length == pageSize,
+        ),
+      );
+    } catch (_) {
+      return const Result.failure(ServerFailure('Could not load users.'));
     }
-
-    return UsersPage(
-      users: users,
-      cursor: snapshot.docs.isEmpty ? null : snapshot.docs.last,
-      hasMore: snapshot.docs.length == pageSize,
-    );
   }
 
   Future<ManagedUser> _toManagedUser(DocumentSnapshot<Map<String, dynamic>> doc) async {

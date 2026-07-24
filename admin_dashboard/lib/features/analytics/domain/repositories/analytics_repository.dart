@@ -1,5 +1,6 @@
+import '../../../../core/error/result.dart';
 import '../entities/dashboard_metrics.dart';
 
 abstract interface class AnalyticsRepository {
-  Future<DashboardMetrics> fetchMetrics();
+  Future<Result<DashboardMetrics>> fetchMetrics();
 }

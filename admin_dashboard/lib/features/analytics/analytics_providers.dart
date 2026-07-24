@@ -18,6 +18,7 @@ final fetchDashboardMetricsUseCaseProvider = Provider<FetchDashboardMetricsUseCa
   return FetchDashboardMetricsUseCase(ref.watch(analyticsRepositoryProvider));
 });
 
-final dashboardMetricsProvider = FutureProvider.autoDispose<DashboardMetrics>((ref) {
-  return ref.watch(fetchDashboardMetricsUseCaseProvider)();
+final dashboardMetricsProvider = FutureProvider.autoDispose<DashboardMetrics>((ref) async {
+  final result = await ref.watch(fetchDashboardMetricsUseCaseProvider)();
+  return result.when(success: (metrics) => metrics, failure: (failure) => throw failure);
 });
