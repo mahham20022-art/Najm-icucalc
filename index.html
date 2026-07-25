@@ -7,7 +7,18 @@
 <meta name="description" content="Najm ICUCalc — bedside ICU/CCU assistant: infusions, hemodynamics, ventilator, ABG, electrolytes, renal, scores, notes." />
 <title>Najm ICUCalc — ICU/CCU Assistant</title>
 <link rel="manifest" href="manifest.webmanifest" />
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230284c7'/%3E%3Cpath d='M6 34h12l4-10 8 22 6-14 4 6h18' stroke='%23fff' stroke-width='4' fill='none' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E" />
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="ICUCalc" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="application-name" content="Najm ICUCalc" />
+<meta name="format-detection" content="telephone=no" />
+<meta property="og:title" content="Najm ICUCalc — ICU/CCU Assistant" />
+<meta property="og:description" content="Bedside ICU/CCU assistant: infusions, hemodynamics, ventilator, ABG, electrolytes, renal, scores, notes." />
+<meta property="og:type" content="website" />
 <style>
   :root {
     --bg: #07101f;
@@ -650,8 +661,13 @@
 </main>
 
 <footer>
-  <strong>Reference aid only.</strong> Always verify against institutional protocols, drug labels,
-  and the patient's clinical context. Data is stored locally in this browser and never transmitted.
+  <strong>Reference aid only — not a medical device.</strong> Always verify against institutional
+  protocols, drug labels, and the patient's clinical context. Data is stored locally in this
+  browser and never transmitted.
+  <br />
+  <a href="privacy-policy.html" style="color:#38bdf8">Privacy policy</a>
+  &nbsp;·&nbsp;
+  <a href="https://github.com/mahham20022-art/Najm-icucalc" style="color:#38bdf8">Source</a>
 </footer>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -1478,6 +1494,13 @@ document.addEventListener("DOMContentLoaded", () => {
   bindNotes();
   runAll();
 });
+
+/* Register service worker for full offline support (production only). */
+if ("serviceWorker" in navigator && location.protocol !== "file:") {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  });
+}
 </script>
 </body>
 </html>
