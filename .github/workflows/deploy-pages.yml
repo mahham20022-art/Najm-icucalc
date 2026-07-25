@@ -1,62 +1,63 @@
-name: Deploy Najm ICUCalc to Pages
+name: Deploy Najm ICUCalc to GitHub Pages
 
 on:
   push:
     branches:
       - claude/fix-app-links-Sp24p
       - main
-    paths:
-      - 'index.html'
-      - 'manifest.webmanifest'
-      - 'sw.js'
-      - 'privacy-policy.html'
-      - 'icons/**'
   workflow_dispatch:
 
+# Only one deployment at a time
 concurrency:
-  group: pages-deploy
+  group: pages
   cancel-in-progress: true
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source branch
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          path: source
 
-      - name: Checkout gh-pages branch
-        uses: actions/checkout@v4
-        with:
-          ref: gh-pages
-          path: pages
-          fetch-depth: 1
-
-      - name: Sync Najm files to gh-pages root (preserve /ash, /cinemind, /design)
+      - name: Stage site (root + preserve /ash, /cinemind, /design from gh-pages)
         run: |
-          cp source/index.html               pages/index.html
-          cp source/manifest.webmanifest     pages/manifest.webmanifest
-          cp source/sw.js                    pages/sw.js
-          cp source/privacy-policy.html      pages/privacy-policy.html
-          mkdir -p pages/icons
-          cp -r source/icons/*.png           pages/icons/
-
-      - name: Commit and push if changed
-        working-directory: pages
-        run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if [[ -z "$(git status --porcelain)" ]]; then
-            echo "No changes to deploy."
-            exit 0
+          mkdir -p _site
+          # Root Najm files
+          cp index.html               _site/index.html
+          cp manifest.webmanifest     _site/manifest.webmanifest
+          cp sw.js                    _site/sw.js
+          cp privacy-policy.html      _site/privacy-policy.html
+          mkdir -p _site/icons
+          cp icons/*.png              _site/icons/
+          # A .nojekyll so GitHub Pages serves files starting with _ or .
+          touch _site/.nojekyll
+          # Preserve other projects that used to live in gh-pages root
+          git fetch origin gh-pages || true
+          if git show-ref --quiet refs/remotes/origin/gh-pages; then
+            for dir in ash cinemind design; do
+              git archive --format=tar origin/gh-pages -- "$dir" 2>/dev/null \
+                | tar -C _site -xf - 2>/dev/null || true
+            done
           fi
-          git add -A
-          git commit -m "deploy: sync Najm ICUCalc from ${GITHUB_SHA::7}
+          ls -la _site/
 
-          Source: ${GITHUB_REF#refs/heads/}@${GITHUB_SHA}
-          Triggered by: ${GITHUB_ACTOR}"
-          git push origin gh-pages
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
