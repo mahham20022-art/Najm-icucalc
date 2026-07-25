@@ -1,6 +1,6 @@
 /* Najm ICUCalc — Service Worker
-   Cache-first for app shell so the app is fully usable offline. */
-const CACHE = "najm-icu-v5";
+   v6: network-first for HTML so users always get the latest UI. */
+const CACHE = "najm-icu-v6";
 const SHELL = [
   "./",
   "./index.html",
@@ -14,7 +14,9 @@ const SHELL = [
 
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())
+    caches.open(CACHE)
+      .then(c => c.addAll(SHELL))
+      .then(() => self.skipWaiting())
   );
 });
 
@@ -32,6 +34,29 @@ self.addEventListener("fetch", event => {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
 
+  const isHTML = req.destination === "document" ||
+                 req.mode === "navigate" ||
+                 url.pathname.endsWith(".html") ||
+                 url.pathname.endsWith("/");
+
+  if (isHTML) {
+    // Network-first — always try the live copy so About/version/credentials
+    // update the moment we redeploy. Fall back to cache when offline.
+    event.respondWith(
+      fetch(req)
+        .then(res => {
+          if (res && res.status === 200 && res.type === "basic") {
+            const copy = res.clone();
+            caches.open(CACHE).then(c => c.put(req, copy));
+          }
+          return res;
+        })
+        .catch(() => caches.match(req).then(m => m || caches.match("./index.html")))
+    );
+    return;
+  }
+
+  // Cache-first for icons/manifest/etc.
   event.respondWith(
     caches.match(req).then(cached => {
       if (cached) return cached;
