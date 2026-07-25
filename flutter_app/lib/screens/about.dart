@@ -20,7 +20,7 @@ class AboutScreen extends StatelessWidget {
           subtitle: 'Author & clinical lead',
           children: [
             ResultRow('Name', 'Dr. Mohamed Najm', topDivider: false),
-            ResultRow('Role', 'Intensivist · ICU / CCU'),
+            ResultRow('Credentials', 'MBBS · PgDip EM · FEBN · MRCEM SECONDARY'),
             ResultRow('Version', '1.0.0'),
           ],
         ),
