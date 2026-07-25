@@ -1,6 +1,6 @@
 /* Najm ICUCalc — Service Worker
    Cache-first for app shell so the app is fully usable offline. */
-const CACHE = "najm-icu-v3";
+const CACHE = "najm-icu-v4";
 const SHELL = [
   "./",
   "./index.html",

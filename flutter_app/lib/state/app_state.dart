@@ -24,6 +24,8 @@ class AppState extends ChangeNotifier {
   int _tab = 0;
   String _drugCat = 'all';
   String _drugQuery = '';
+  String _abxClass = 'all';
+  String _abxQuery = '';
 
   Patient get patient => _patient;
   Map<String, String> get inputs => _inputs;
@@ -32,6 +34,8 @@ class AppState extends ChangeNotifier {
   int get tab => _tab;
   String get drugCat => _drugCat;
   String get drugQuery => _drugQuery;
+  String get abxClass => _abxClass;
+  String get abxQuery => _abxQuery;
 
   double? input(String k) => double.tryParse(_inputs[k] ?? '');
   String inputStr(String k) => _inputs[k] ?? '';
@@ -58,6 +62,8 @@ class AppState extends ChangeNotifier {
     _tab = _storage.tab();
     _drugCat = _storage.drugCat();
     _drugQuery = _storage.drugQuery();
+    _abxClass = _storage.abxClass();
+    _abxQuery = _storage.abxQuery();
     notifyListeners();
   }
 
@@ -77,6 +83,8 @@ class AppState extends ChangeNotifier {
     await _storage.setTab(_tab);
     await _storage.setDrugCat(_drugCat);
     await _storage.setDrugQuery(_drugQuery);
+    await _storage.setAbxClass(_abxClass);
+    await _storage.setAbxQuery(_abxQuery);
   }
 
   void updatePatient(Patient Function(Patient) mut) {
@@ -90,6 +98,21 @@ class AppState extends ChangeNotifier {
     notifyListeners();
     _scheduleSave();
     Analytics.event('patient_cleared');
+  }
+
+  Future<void> wipe() async {
+    _patient = Patient.empty;
+    _inputs = {};
+    _scores = {};
+    _notes = '';
+    _tab = 0;
+    _drugCat = 'all';
+    _drugQuery = '';
+    _abxClass = 'all';
+    _abxQuery = '';
+    await _storage.wipeAll();
+    notifyListeners();
+    Analytics.event('wipe_all');
   }
 
   void setInput(String key, String value) {
@@ -131,9 +154,21 @@ class AppState extends ChangeNotifier {
     _scheduleSave();
   }
 
+  void setAbxClass(String c) {
+    _abxClass = c;
+    notifyListeners();
+    _scheduleSave();
+  }
+
+  void setAbxQuery(String q) {
+    _abxQuery = q;
+    notifyListeners();
+    _scheduleSave();
+  }
+
   static String _tabName(int i) => const [
-    'infusions','hemo','vent','abg','lytes','renal','scores','notes',
-  ][i.clamp(0, 7)];
+    'infusions','antibiotics','hemo','vent','abg','lytes','renal','scores','notes','about',
+  ][i.clamp(0, 9)];
 
   @override
   void dispose() {

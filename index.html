@@ -139,15 +139,15 @@
   }
   .reset-btn:hover { color: var(--text); border-color: var(--border-2); }
 
-  /* -------- Tabs -------- */
+  /* -------- Tabs (part of the sticky topbar, not sticky itself) -------- */
   .tabs {
-    position: sticky; top: 0; z-index: 40;
-    background: rgba(7,16,31,.92);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--border);
+    background: rgba(7,16,31,.55);
+    border-top: 1px solid var(--border);
     overflow-x: auto;
+    overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
   }
+  .tabs::-webkit-scrollbar { display: none; }
   .tabs-inner {
     max-width: 1200px; margin: 0 auto; padding: 6px 8px;
     display: flex; gap: 4px; white-space: nowrap;
@@ -380,20 +380,22 @@
       <div class="field" style="justify-content:end"><button class="reset-btn" id="resetPt">Clear patient</button></div>
     </div>
   </div>
-</div>
 
-<!-- ============== TABS ============== -->
-<div class="tabs" aria-label="Modules">
-  <div class="tabs-inner" id="tabs">
-    <button class="tab active" data-tab="infusions">Infusions</button>
-    <button class="tab" data-tab="hemo">Hemodynamics</button>
-    <button class="tab" data-tab="vent">Ventilator</button>
-    <button class="tab" data-tab="abg">ABG</button>
-    <button class="tab" data-tab="lytes">Electrolytes</button>
-    <button class="tab" data-tab="renal">Renal / Fluids</button>
-    <button class="tab" data-tab="scores">Scores</button>
-    <button class="tab" data-tab="notes">Notes</button>
-  </div>
+  <!-- ============== TABS (nested inside topbar so one thing is sticky) ============== -->
+  <nav class="tabs" aria-label="Modules">
+    <div class="tabs-inner" id="tabs">
+      <button class="tab active" type="button" data-tab="infusions">💧 Infusions</button>
+      <button class="tab" type="button" data-tab="antibiotics">💊 Antibiotics</button>
+      <button class="tab" type="button" data-tab="hemo">🫀 Hemodynamics</button>
+      <button class="tab" type="button" data-tab="vent">🫁 Ventilator</button>
+      <button class="tab" type="button" data-tab="abg">🧪 ABG</button>
+      <button class="tab" type="button" data-tab="lytes">⚡ Electrolytes</button>
+      <button class="tab" type="button" data-tab="renal">💦 Renal</button>
+      <button class="tab" type="button" data-tab="scores">📊 Scores</button>
+      <button class="tab" type="button" data-tab="notes">📝 Notes</button>
+      <button class="tab" type="button" data-tab="about">ℹ️ About</button>
+    </div>
+  </nav>
 </div>
 
 <main>
@@ -651,9 +653,70 @@
   <div class="card notes">
     <textarea id="notes" placeholder="Patient summary, plan, pending tasks, handover…"></textarea>
     <div class="note-actions">
-      <button class="btn primary" id="copyNotes">Copy</button>
-      <button class="btn" id="exportNotes">Download .txt</button>
-      <button class="btn danger" id="clearNotes">Clear</button>
+      <button class="btn primary" type="button" id="copyNotes">Copy</button>
+      <button class="btn" type="button" id="exportNotes">Download .txt</button>
+      <button class="btn danger" type="button" id="clearNotes">Clear</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============== ANTIBIOTICS ============== -->
+<section class="module" id="m-antibiotics">
+  <div class="module-head">
+    <div>
+      <h2>Common ICU Antibiotics</h2>
+      <p>Empiric doses with renal adjustment based on the patient's CrCl.</p>
+    </div>
+    <span class="pill info" id="abx-crcl-badge">CrCl —</span>
+  </div>
+  <div class="search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+    <input id="abxSearch" type="search" placeholder="Search antibiotic (e.g. mero, vanco)…" autocomplete="off" />
+  </div>
+  <div class="chips" id="abxClassChips"></div>
+  <div class="cards" id="abxCards" aria-live="polite"></div>
+</section>
+
+<!-- ============== ABOUT ============== -->
+<section class="module" id="m-about">
+  <div class="module-head"><div><h2>About</h2><p>Najm ICUCalc — bedside clinical assistant.</p></div></div>
+
+  <div class="card">
+    <h3>Designed by</h3>
+    <div class="sub">Author &amp; clinical lead</div>
+    <div class="row" style="border-top:0;padding-top:4px">
+      <span class="k">Name</span><span class="v">Dr. Mohamed Najm</span>
+    </div>
+    <div class="row">
+      <span class="k">Role</span><span class="v">Intensivist · ICU / CCU</span>
+    </div>
+    <div class="row">
+      <span class="k">Version</span><span class="v" id="app-version">1.0.0</span>
+    </div>
+    <div class="row">
+      <span class="k">Build date</span><span class="v" id="app-build">—</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Clinical References</h3>
+    <div class="sub">Sources consulted for dose ranges, formulas, and score interpretations.</div>
+    <div id="ref-list"></div>
+  </div>
+
+  <div class="card">
+    <h3>Disclaimer</h3>
+    <div class="sub">Reference aid — not a medical device.</div>
+    <div class="verdict warn">
+      All doses, calculations, and score interpretations presented in Najm ICUCalc are for
+      clinical reference only. Every value must be independently verified by a qualified
+      clinician against institutional protocols, drug labels, and the patient's clinical
+      context. The author assumes no liability for clinical decisions made with this tool.
+    </div>
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+      <a class="btn" href="privacy-policy.html">Privacy policy</a>
+      <a class="btn" href="https://github.com/mahham20022-art/Najm-icucalc" target="_blank" rel="noopener">Source on GitHub</a>
+      <button class="btn primary" type="button" id="wipeAllBtn">Wipe all local data</button>
     </div>
   </div>
 </section>
@@ -683,6 +746,8 @@ const state = {
   patient: { weight: "", height: "", age: "", sex: "", cr: "" },
   drugCat: "all",
   drugQuery: "",
+  abxCls: "all",
+  abxQuery: "",
   tab: "infusions",
   inputs: {},   // arbitrary persisted inputs by id
   scores: {},   // score selections by score key
@@ -809,19 +874,37 @@ function renderDerived() {
    TABS
    ============================================================ */
 function bindTabs() {
-  const tabs = $$("#tabs .tab");
+  const container = $("#tabs");
+  const tabButtons = () => $$("#tabs .tab");
+
   function activate(name) {
+    if (!$("#m-" + name)) name = "infusions";
     state.tab = name;
     saveState();
-    tabs.forEach(t => t.classList.toggle("active", t.dataset.tab === name));
+    tabButtons().forEach(t => t.classList.toggle("active", t.dataset.tab === name));
     $$(".module").forEach(m => m.classList.toggle("active", m.id === "m-" + name));
     if (location.hash !== "#" + name) history.replaceState(null, "", "#" + name);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: "auto" });
+    // If activating the About tab, make sure references are rendered
+    if (name === "about") renderAbout();
+    if (name === "antibiotics") renderAntibiotics();
   }
-  tabs.forEach(t => t.addEventListener("click", () => activate(t.dataset.tab)));
+
+  // Event delegation on the container so re-renders don't lose the handler.
+  container.addEventListener("click", e => {
+    const btn = e.target.closest(".tab");
+    if (btn && container.contains(btn)) {
+      activate(btn.dataset.tab);
+    }
+  });
+
+  window.addEventListener("hashchange", () => {
+    const h = location.hash.replace("#", "");
+    if (h && $("#m-" + h)) activate(h);
+  });
+
   const initial = (location.hash || "").replace("#", "") || state.tab || "infusions";
-  if ($("#m-" + initial)) activate(initial);
-  else activate("infusions");
+  activate(initial);
 }
 
 /* ============================================================
@@ -1451,6 +1534,259 @@ function bindNotes() {
 }
 
 /* ============================================================
+   ANTIBIOTICS
+   ============================================================ */
+const ABX = [
+  // β-lactams
+  { id: "pipTazo", name: "Piperacillin-tazobactam", cls: "β-lactam",
+    standard: "4.5 g IV q6h (extended infusion 4 h)",
+    crcl: [[40, Infinity, "4.5 g q6h"], [20, 40, "3.375 g q6h"], [0, 20, "2.25 g q6h"]],
+    ind: "HAP/VAP, complicated intra-abdominal, febrile neutropenia" },
+  { id: "meropenem", name: "Meropenem", cls: "Carbapenem",
+    standard: "1 g IV q8h (2 g q8h for CNS)",
+    crcl: [[51, Infinity, "1 g q8h"], [26, 50, "1 g q12h"], [10, 25, "500 mg q12h"], [0, 10, "500 mg q24h"]],
+    ind: "Severe sepsis, ESBL, mixed nosocomial pneumonia" },
+  { id: "imipenem", name: "Imipenem-cilastatin", cls: "Carbapenem",
+    standard: "500 mg IV q6h",
+    crcl: [[71, Infinity, "500 mg q6h"], [41, 70, "500 mg q8h"], [21, 40, "500 mg q12h"], [0, 20, "500 mg q24h"]],
+    ind: "Similar to meropenem — avoid in seizure risk" },
+  { id: "cefepime", name: "Cefepime", cls: "Cephalosporin",
+    standard: "2 g IV q8h",
+    crcl: [[60, Infinity, "2 g q8h"], [30, 59, "2 g q12h"], [11, 29, "2 g q24h"], [0, 10, "1 g q24h"]],
+    ind: "HAP, pyelonephritis, febrile neutropenia, MDR gram-negatives" },
+  { id: "ceftriaxone", name: "Ceftriaxone", cls: "Cephalosporin",
+    standard: "2 g IV q24h (q12h for meningitis)",
+    crcl: [[0, Infinity, "No renal adjustment"]],
+    ind: "CAP, meningitis, pyelonephritis, gonorrhea" },
+  { id: "ceftazAvi", name: "Ceftazidime-avibactam", cls: "Cephalosporin",
+    standard: "2.5 g IV q8h",
+    crcl: [[51, Infinity, "2.5 g q8h"], [31, 50, "1.25 g q8h"], [16, 30, "0.94 g q12h"], [6, 15, "0.94 g q24h"], [0, 5, "0.94 g q48h"]],
+    ind: "Carbapenem-resistant Enterobacterales (KPC), Pseudomonas" },
+  { id: "ampSulbactam", name: "Ampicillin-sulbactam", cls: "β-lactam",
+    standard: "3 g IV q6h",
+    crcl: [[30, Infinity, "3 g q6h"], [15, 29, "3 g q12h"], [0, 15, "3 g q24h"]],
+    ind: "Aspiration pneumonia, intra-abdominal, skin/soft tissue" },
+  { id: "aztreonam", name: "Aztreonam", cls: "Monobactam",
+    standard: "2 g IV q8h",
+    crcl: [[30, Infinity, "2 g q8h"], [10, 29, "1 g q8h"], [0, 10, "500 mg q8h"]],
+    ind: "Gram-negative coverage in β-lactam allergy" },
+
+  // Anti-MRSA
+  { id: "vanco", name: "Vancomycin", cls: "Anti-MRSA glycopeptide",
+    standard: "15–20 mg/kg IV q8–12h (load 25–30 mg/kg for critical)",
+    crcl: [[80, Infinity, "15–20 mg/kg q8–12h (target AUC 400–600)"], [50, 80, "15–20 mg/kg q12h"], [20, 49, "15 mg/kg q24h"], [0, 20, "By levels only"]],
+    ind: "MRSA, empiric coverage in septic shock",
+    notes: "Follow trough (15–20) or AUC24 (400–600)." },
+  { id: "linezolid", name: "Linezolid", cls: "Oxazolidinone",
+    standard: "600 mg IV / PO q12h",
+    crcl: [[0, Infinity, "No renal adjustment"]],
+    ind: "MRSA pneumonia, VRE",
+    notes: "Watch thrombocytopenia, serotonin syndrome." },
+  { id: "daptomycin", name: "Daptomycin", cls: "Lipopeptide",
+    standard: "6–10 mg/kg IV q24h",
+    crcl: [[30, Infinity, "6–10 mg/kg q24h"], [0, 30, "6–10 mg/kg q48h"]],
+    ind: "MRSA bacteremia, right-sided endocarditis",
+    notes: "Inactivated by surfactant — never use for pneumonia. Monitor CPK." },
+
+  // Fluoroquinolones
+  { id: "levo", name: "Levofloxacin", cls: "Fluoroquinolone",
+    standard: "750 mg IV q24h",
+    crcl: [[50, Infinity, "750 mg q24h"], [20, 49, "750 mg then 750 mg q48h"], [0, 19, "750 mg then 500 mg q48h"]],
+    ind: "CAP, complicated UTI, atypicals" },
+  { id: "cipro", name: "Ciprofloxacin", cls: "Fluoroquinolone",
+    standard: "400 mg IV q8–12h",
+    crcl: [[50, Infinity, "400 mg q8–12h"], [30, 49, "400 mg q12h"], [0, 29, "400 mg q24h"]],
+    ind: "Pseudomonas, complicated intra-abdominal (with metro)" },
+
+  // Others
+  { id: "metro", name: "Metronidazole", cls: "Nitroimidazole",
+    standard: "500 mg IV q8h",
+    crcl: [[0, Infinity, "No renal adjustment (reduce if severe hepatic dysfunction)"]],
+    ind: "Anaerobes, C. difficile (oral)" },
+  { id: "azithro", name: "Azithromycin", cls: "Macrolide",
+    standard: "500 mg IV q24h",
+    crcl: [[0, Infinity, "No renal adjustment"]],
+    ind: "Atypical CAP coverage, Legionella" },
+
+  // Aminoglycosides
+  { id: "amikacin", name: "Amikacin", cls: "Aminoglycoside",
+    standard: "15–20 mg/kg IV q24h (extended interval)",
+    crcl: [[60, Infinity, "15–20 mg/kg q24h"], [40, 59, "15 mg/kg q36h"], [20, 39, "15 mg/kg q48h"], [0, 19, "By levels only"]],
+    ind: "MDR gram-negative synergy",
+    notes: "Monitor trough (< 4 mg/L) + peak (56–64 mg/L)." },
+  { id: "gent", name: "Gentamicin", cls: "Aminoglycoside",
+    standard: "5–7 mg/kg IV q24h",
+    crcl: [[60, Infinity, "5–7 mg/kg q24h"], [40, 59, "5 mg/kg q36h"], [20, 39, "5 mg/kg q48h"], [0, 19, "By levels only"]],
+    ind: "Enterococcal synergy, gram-negative augmentation" },
+  { id: "colistin", name: "Colistin (CBA)", cls: "Polymyxin",
+    standard: "Load 9 MIU then 4.5 MIU q12h (~2.5 mg/kg CBA q12h)",
+    crcl: [[80, Infinity, "4.5 MIU q12h"], [50, 79, "3.5 MIU q12h"], [30, 49, "2.5 MIU q12h"], [0, 29, "1.5–2 MIU q12h"]],
+    ind: "MDR/XDR Acinetobacter, Pseudomonas",
+    notes: "Nephrotoxic — monitor creatinine daily." },
+
+  // Antifungals
+  { id: "fluconazole", name: "Fluconazole", cls: "Antifungal (azole)",
+    standard: "Load 800 mg, then 400 mg IV q24h",
+    crcl: [[50, Infinity, "400–800 mg q24h"], [0, 50, "50% of dose q24h"]],
+    ind: "Candidiasis (non-krusei/non-glabrata)" },
+  { id: "vorico", name: "Voriconazole", cls: "Antifungal (azole)",
+    standard: "Load 6 mg/kg IV q12h × 2, then 4 mg/kg IV q12h",
+    crcl: [[50, Infinity, "4 mg/kg q12h"], [0, 50, "PO if possible (IV vehicle accumulates)"]],
+    ind: "Aspergillosis",
+    notes: "Multiple drug interactions; trough 1–5.5 mg/L." },
+  { id: "caspo", name: "Caspofungin", cls: "Antifungal (echinocandin)",
+    standard: "Load 70 mg, then 50 mg IV q24h",
+    crcl: [[0, Infinity, "No renal adjustment"]],
+    ind: "Invasive candidiasis, empiric for febrile neutropenia" },
+  { id: "mica", name: "Micafungin", cls: "Antifungal (echinocandin)",
+    standard: "100 mg IV q24h (150 mg for esophageal)",
+    crcl: [[0, Infinity, "No renal adjustment"]],
+    ind: "Candidemia, invasive candidiasis" },
+
+  // Antiviral
+  { id: "acyclovir", name: "Acyclovir", cls: "Antiviral",
+    standard: "10 mg/kg IV q8h",
+    crcl: [[50, Infinity, "10 mg/kg q8h"], [25, 49, "10 mg/kg q12h"], [10, 24, "10 mg/kg q24h"], [0, 9, "5 mg/kg q24h"]],
+    ind: "HSV encephalitis, VZV pneumonitis" },
+  { id: "oseltamivir", name: "Oseltamivir", cls: "Antiviral",
+    standard: "75 mg PO q12h",
+    crcl: [[60, Infinity, "75 mg q12h"], [30, 59, "30 mg q12h"], [10, 29, "30 mg q24h"], [0, 9, "30 mg once (or per HD schedule)"]],
+    ind: "Influenza A/B" },
+];
+
+const ABX_CLASSES = ["all", ...Array.from(new Set(ABX.map(a => a.cls)))];
+
+function abxAdjustedDose(abx, crcl) {
+  if (crcl == null) return { label: abx.standard, active: false };
+  for (const [lo, hi, dose] of abx.crcl) {
+    if (crcl >= lo && crcl < hi) return { label: dose, active: true };
+  }
+  return { label: abx.standard, active: false };
+}
+
+function renderAntibiotics() {
+  // Class chips
+  const chipBox = $("#abxClassChips");
+  if (!chipBox) return;
+  const activeClass = state.abxCls || "all";
+  chipBox.innerHTML = ABX_CLASSES.map(c =>
+    `<button class="chip ${activeClass === c ? "active" : ""}" type="button" data-c="${c}">${c === "all" ? "All" : c}</button>`
+  ).join("");
+  chipBox.querySelectorAll(".chip").forEach(btn => {
+    btn.addEventListener("click", () => {
+      state.abxCls = btn.dataset.c;
+      saveState();
+      renderAntibiotics();
+    });
+  });
+
+  // CrCl badge
+  const c = computedCrCl();
+  const badge = $("#abx-crcl-badge");
+  if (badge) {
+    if (c == null) { badge.textContent = "CrCl —"; badge.className = "pill info"; }
+    else { badge.textContent = `CrCl ${fmt(c, 0)} mL/min`;
+      badge.className = "pill " + (c < 30 ? "bad" : c < 60 ? "warn" : "ok"); }
+  }
+
+  const q = (state.abxQuery || "").trim().toLowerCase();
+  const list = ABX.filter(a => {
+    if (activeClass !== "all" && a.cls !== activeClass) return false;
+    if (!q) return true;
+    return (a.name + " " + a.cls + " " + (a.ind || "")).toLowerCase().includes(q);
+  });
+
+  const grid = $("#abxCards");
+  if (!grid) return;
+  if (list.length === 0) {
+    grid.innerHTML = `<div class="card"><h3>No antibiotic matches</h3><div class="sub">Clear the search or change the class.</div></div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map(a => {
+    const dose = abxAdjustedDose(a, c);
+    return `
+      <div class="card">
+        <h3>${a.name} <span class="pill info" style="margin-left:6px">${a.cls}</span></h3>
+        <div class="sub">${a.ind || ""}</div>
+        <div class="row"><span class="k">Standard dose</span><span class="v">${a.standard}</span></div>
+        <div class="row"><span class="k">${dose.active ? `For CrCl ${fmt(c, 0)}` : "Adjusted dose"}</span><span class="v ${dose.active ? "mid" : ""}">${dose.label}</span></div>
+        ${a.notes ? `<div class="verdict warn" style="margin-top:8px">${a.notes}</div>` : ""}
+      </div>
+    `;
+  }).join("");
+}
+
+function computedCrCl() {
+  const p = state.patient;
+  const age = num(p.age), w = num(p.weight), cr = num(p.cr);
+  if (!age || !w || !cr || !p.sex) return null;
+  let v = ((140 - age) * w) / (72 * cr);
+  if (p.sex === "F") v *= 0.85;
+  return v;
+}
+
+function bindAntibioticControls() {
+  const s = $("#abxSearch");
+  if (!s) return;
+  s.value = state.abxQuery || "";
+  s.addEventListener("input", e => {
+    state.abxQuery = e.target.value;
+    saveState();
+    renderAntibiotics();
+  });
+}
+
+/* ============================================================
+   ABOUT / REFERENCES
+   ============================================================ */
+const REFERENCES = [
+  { s: "Marino PL. The ICU Book, 5th ed. Wolters Kluwer, 2023." },
+  { s: "Evans L et al. Surviving Sepsis Campaign: International Guidelines for Management of Sepsis and Septic Shock 2021. Crit Care Med 2021;49(11):e1063–e1143." },
+  { s: "ARDS Definition Task Force. Acute respiratory distress syndrome: the Berlin definition. JAMA 2012;307(23):2526–33." },
+  { s: "ARDSnet. Ventilation with lower tidal volumes as compared with traditional tidal volumes for ALI/ARDS. NEJM 2000;342(18):1301–08." },
+  { s: "Amato MBP et al. Driving pressure and survival in the acute respiratory distress syndrome. NEJM 2015;372(8):747–55." },
+  { s: "Panchal AR et al. Part 3: adult basic and advanced life support: 2020 AHA Guidelines for CPR and ECC. Circulation 2020;142(16_suppl_2):S366–S468." },
+  { s: "Gilbert DN et al. The Sanford Guide to Antimicrobial Therapy 2024." },
+  { s: "Kalil AC et al. Management of adults with HAP/VAP: 2016 IDSA/ATS guidelines. Clin Infect Dis 2016;63(5):e61–e111." },
+  { s: "KDIGO. Clinical practice guideline for acute kidney injury. Kidney Int Suppl 2012;2(1):1–138." },
+  { s: "Hindricks G et al. 2020 ESC Guidelines for AF (CHA₂DS₂-VASc, HAS-BLED). Eur Heart J 2021;42(5):373–498." },
+  { s: "Konstantinides SV et al. 2019 ESC Guidelines for the diagnosis and management of acute pulmonary embolism (Wells). Eur Heart J 2020;41(4):543–603." },
+  { s: "Sessler CN et al. The Richmond Agitation-Sedation Scale (RASS). Am J Respir Crit Care Med 2002;166(10):1338–44." },
+  { s: "Vincent JL et al. The SOFA score to describe organ dysfunction/failure. Intensive Care Med 1996;22(7):707–10." },
+  { s: "Cockcroft DW, Gault MH. Prediction of creatinine clearance from serum creatinine. Nephron 1976;16(1):31–41." },
+  { s: "Winters RW. Terminology of acid-base disorders. Ann NY Acad Sci 1966;133(1):211–24." },
+  { s: "Adrogué HJ, Madias NE. Hypernatremia. NEJM 2000;342(20):1493–99 (free water deficit)." },
+  { s: "Khanna A et al. Angiotensin II for the treatment of vasodilatory shock (norepinephrine equivalents). NEJM 2017;377(5):419–30." },
+];
+
+function renderAbout() {
+  const list = $("#ref-list");
+  if (list && !list.dataset.rendered) {
+    list.innerHTML = REFERENCES.map((r, i) =>
+      `<div class="row"><span class="k">${i + 1}.</span><span class="v" style="text-align:right;font-weight:600;line-height:1.5">${r.s}</span></div>`
+    ).join("");
+    list.dataset.rendered = "1";
+  }
+  const bd = $("#app-build");
+  if (bd && !bd.dataset.set) {
+    bd.textContent = new Date().toISOString().slice(0, 10);
+    bd.dataset.set = "1";
+  }
+}
+
+function bindAbout() {
+  const wipeBtn = $("#wipeAllBtn");
+  if (wipeBtn) {
+    wipeBtn.addEventListener("click", () => {
+      if (!confirm("Erase ALL local data (patient, inputs, scores, notes)? This cannot be undone.")) return;
+      try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+      location.reload();
+    });
+  }
+}
+
+/* ============================================================
    WIRE EVERYTHING
    ============================================================ */
 function bindAllInputs() {
@@ -1474,25 +1810,40 @@ function bindAllInputs() {
   bindInput("uo-vol","uo_vol"); bindInput("uo-hr","uo_hr");
 }
 
+function safeRun(fn, name) {
+  try { fn(); }
+  catch (e) { console.error(`[najm] ${name} failed:`, e); }
+}
+
 function runAll() {
-  renderDerived();
-  renderInfusions();
-  runHemo();
-  runVent();
-  runABG();
-  runLytes();
-  runRenal();
+  safeRun(renderDerived,    "renderDerived");
+  safeRun(renderInfusions,  "renderInfusions");
+  safeRun(runHemo,          "runHemo");
+  safeRun(runVent,          "runVent");
+  safeRun(runABG,           "runABG");
+  safeRun(runLytes,         "runLytes");
+  safeRun(runRenal,         "runRenal");
+  safeRun(renderAntibiotics,"renderAntibiotics");
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  loadState();
-  bindPatient();
-  bindTabs();
-  bindInfusionControls();
-  bindAllInputs();
-  renderAllScores();
-  bindNotes();
-  runAll();
+  try {
+    loadState();
+    bindPatient();
+    bindTabs();
+    bindInfusionControls();
+    bindAntibioticControls();
+    bindAllInputs();
+    renderAllScores();
+    bindNotes();
+    bindAbout();
+    runAll();
+  } catch (e) {
+    console.error("[najm] init failed:", e);
+    // Fall back — force infusions tab to be visible so app remains usable.
+    const inf = document.getElementById("m-infusions");
+    if (inf) inf.classList.add("active");
+  }
 });
 
 /* Register service worker for full offline support (production only). */

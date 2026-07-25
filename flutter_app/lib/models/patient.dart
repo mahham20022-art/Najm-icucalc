@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math' as math;
 
 class Patient {
   final double? weight;
@@ -68,7 +69,7 @@ class Patient {
   /// BSA (Mosteller). Needs height + weight.
   double? get bsa {
     if (height == null || weight == null) return null;
-    return (height! * weight! / 3600).sqrt();
+    return math.sqrt((height! * weight!) / 3600);
   }
 
   /// Cockcroft-Gault CrCl (mL/min). Needs age + weight + sex + creatinine.
@@ -77,19 +78,5 @@ class Patient {
     var v = ((140 - age!) * weight!) / (72 * creatinine!);
     if (sex == 'F') v *= 0.85;
     return v;
-  }
-}
-
-extension on double {
-  double sqrt() {
-    // avoid importing dart:math here — main.dart already imports it if needed
-    // but simpler: use pow-style trick
-    if (this <= 0) return 0;
-    var x = this;
-    var g = x / 2;
-    for (var i = 0; i < 20; i++) {
-      g = (g + x / g) / 2;
-    }
-    return g;
   }
 }

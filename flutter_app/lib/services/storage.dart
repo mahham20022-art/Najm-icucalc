@@ -2,13 +2,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /// Thin wrapper around SharedPreferences with a single JSON blob per key.
 class Storage {
-  static const _patientKey = 'najm.patient';
-  static const _inputsKey  = 'najm.inputs';
-  static const _scoresKey  = 'najm.scores';
-  static const _notesKey   = 'najm.notes';
-  static const _tabKey     = 'najm.tab';
-  static const _drugCatKey = 'najm.drug.cat';
-  static const _drugQKey   = 'najm.drug.q';
+  static const _patientKey  = 'najm.patient';
+  static const _inputsKey   = 'najm.inputs';
+  static const _scoresKey   = 'najm.scores';
+  static const _notesKey    = 'najm.notes';
+  static const _tabKey      = 'najm.tab';
+  static const _drugCatKey  = 'najm.drug.cat';
+  static const _drugQKey    = 'najm.drug.q';
+  static const _abxClassKey = 'najm.abx.class';
+  static const _abxQKey     = 'najm.abx.q';
+
+  static const _allKeys = [
+    _patientKey, _inputsKey, _scoresKey, _notesKey, _tabKey,
+    _drugCatKey, _drugQKey, _abxClassKey, _abxQKey,
+  ];
 
   final SharedPreferences _p;
   Storage(this._p);
@@ -39,7 +46,15 @@ class Storage {
   String drugQuery() => _p.getString(_drugQKey) ?? '';
   Future<void> setDrugQuery(String s) => _p.setString(_drugQKey, s);
 
-  Future<void> clearPatient() async {
-    await _p.remove(_patientKey);
+  String abxClass() => _p.getString(_abxClassKey) ?? 'all';
+  Future<void> setAbxClass(String s) => _p.setString(_abxClassKey, s);
+
+  String abxQuery() => _p.getString(_abxQKey) ?? '';
+  Future<void> setAbxQuery(String s) => _p.setString(_abxQKey, s);
+
+  Future<void> wipeAll() async {
+    for (final k in _allKeys) {
+      await _p.remove(k);
+    }
   }
 }
