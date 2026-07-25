@@ -23,18 +23,29 @@ class _MasteryScoreGaugeState extends State<MasteryScoreGauge> with SingleTicker
   late final AnimationController _controller;
   late final Animation<double> _animation;
 
+  // See ChallengeProgressCircle for why the reduced-motion check can't
+  // happen in initState() — MediaQuery isn't reachable until
+  // didChangeDependencies().
+  bool _started = false;
+
   @override
   void initState() {
     super.initState();
-    final reduceMotion = prefersReducedMotion(context);
-    _controller = AnimationController(
-      vsync: this,
-      duration: reduceMotion ? Duration.zero : const Duration(milliseconds: 1100),
-    );
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 1100));
     _animation = Tween<double>(
       begin: 0,
       end: widget.score / 100,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_started) return;
+    _started = true;
+    if (prefersReducedMotion(context)) {
+      _controller.duration = Duration.zero;
+    }
     _controller.forward();
   }
 

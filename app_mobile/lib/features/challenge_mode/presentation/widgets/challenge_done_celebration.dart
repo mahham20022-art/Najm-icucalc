@@ -23,13 +23,15 @@ class _ChallengeDoneCelebrationState extends State<ChallengeDoneCelebration>
   late final Animation<double> _scale;
   late final Animation<double> _opacity;
 
+  // See ChallengeProgressCircle for why the reduced-motion check can't
+  // happen in initState() — MediaQuery isn't reachable until
+  // didChangeDependencies().
+  bool _started = false;
+
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: prefersReducedMotion(context) ? Duration.zero : const Duration(milliseconds: 1400),
-    );
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 1400));
     _scale = TweenSequence<double>([
       TweenSequenceItem(
         tween: Tween(begin: 0.4, end: 1.15).chain(CurveTween(curve: Curves.easeOutBack)),
@@ -43,7 +45,16 @@ class _ChallengeDoneCelebrationState extends State<ChallengeDoneCelebration>
       TweenSequenceItem(tween: ConstantTween(1.0), weight: 55),
       TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.0), weight: 25),
     ]).animate(_controller);
+  }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_started) return;
+    _started = true;
+    if (prefersReducedMotion(context)) {
+      _controller.duration = Duration.zero;
+    }
     _controller.forward().whenComplete(widget.onCompleted);
   }
 

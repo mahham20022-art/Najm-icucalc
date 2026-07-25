@@ -125,9 +125,15 @@ class _VoiceInputState extends State<_VoiceInput> with SingleTickerProviderState
     duration: const Duration(milliseconds: 900),
   );
 
+  // See ChallengeProgressCircle for why this can't run in initState() —
+  // MediaQuery isn't reachable until didChangeDependencies().
+  bool _started = false;
+
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_started) return;
+    _started = true;
     if (widget.isListening && !prefersReducedMotion(context)) {
       _pulseController.repeat(reverse: true);
     }
