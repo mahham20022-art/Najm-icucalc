@@ -1273,9 +1273,10 @@ const num = v => { const n = parseFloat(v); return isNaN(n) ? null : n; };
 const fmt = (n, d = 1) => {
   if (n === null || n === undefined || isNaN(n)) return "—";
   const abs = Math.abs(n);
-  if (abs >= 100) return n.toFixed(0);
+  if (abs >= 100) return n.toFixed(Math.min(d, 0));
   if (abs >= 10)  return n.toFixed(d);
-  return n.toFixed(Math.max(d, 2));
+  // For small values, only add a second decimal if `d` was already ≥ 2.
+  return n.toFixed(d >= 2 ? d : 1);
 };
 function showToast(msg) {
   const t = $("#toast");
