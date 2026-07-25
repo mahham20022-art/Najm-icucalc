@@ -3,97 +3,362 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#0284c7" />
-<meta name="description" content="Najm ICUCalc — bedside ICU/CCU assistant: infusions, hemodynamics, ventilator, ABG, electrolytes, renal, scores, notes." />
-<title>Najm ICUCalc — ICU/CCU Assistant</title>
+<meta name="theme-color" content="#03080f" />
+<meta name="description" content="Najm ICUCalc — precise, fast, reliable bedside ICU/CCU assistant. Infusions, antibiotics, hemodynamics, ventilator, ABG, electrolytes, renal, scores, notes." />
+<title>Najm ICUCalc — Precise. Fast. Reliable.</title>
 <link rel="manifest" href="manifest.webmanifest" />
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png" />
 <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
 <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch.png" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="ICUCalc" />
+<meta name="apple-mobile-web-app-title" content="Najm" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="application-name" content="Najm ICUCalc" />
 <meta name="format-detection" content="telephone=no" />
-<meta property="og:title" content="Najm ICUCalc — ICU/CCU Assistant" />
-<meta property="og:description" content="Bedside ICU/CCU assistant: infusions, hemodynamics, ventilator, ABG, electrolytes, renal, scores, notes." />
+<meta property="og:title" content="Najm ICUCalc — Precise. Fast. Reliable." />
+<meta property="og:description" content="Bedside ICU/CCU assistant designed by Dr. Mohamed Najm." />
+<meta property="og:image" content="icons/icon-512.png" />
 <meta property="og:type" content="website" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
 <style>
+  /* ============================================================
+     TOKENS — premium ICU palette + 8pt spacing
+     ============================================================ */
   :root {
-    --bg: #07101f;
-    --panel: #0f1b30;
-    --panel-2: #122340;
-    --panel-3: #0b162a;
-    --border: #1f2f4d;
-    --border-2: #2b4675;
-    --text: #e5edf8;
-    --muted: #8aa0bd;
-    --brand: #0ea5e9;
-    --brand-2: #38bdf8;
-    --accent: #22d3ee;
-    --ok: #34d399;
-    --warn: #fbbf24;
-    --danger: #ef4444;
-    --pulse: #f43f5e;
-    --shadow: 0 10px 30px -16px rgba(2, 132, 199, .45);
+    /* Ink palette — deep, calm, monitor-blue */
+    --ink-950: #03080f;
+    --ink-900: #060d19;
+    --ink-800: #0a1424;
+    --ink-700: #0f1e35;
+    --ink-600: #142a48;
+    --ink-500: #1c355a;
+    --line:    #1a2942;
+    --line-2:  #26406b;
+
+    /* Foreground */
+    --text:    #eaf1fb;
+    --text-2:  #b8c6dc;
+    --muted:   #7f92ae;
+    --faint:   #4d5f80;
+
+    /* Brand — refined teal/cyan */
+    --brand:   #22d3ee;
+    --brand-2: #0ea5e9;
+    --brand-3: #38bdf8;
+    --brand-i: #001018;
+
+    /* Semantic */
+    --ok:      #34d399;
+    --warn:    #fbbf24;
+    --danger:  #f87171;
+    --pulse:   #f43f5e;
+
+    /* Elevation & radii */
+    --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-xl: 22px; --r-pill: 999px;
+    --shadow-1: 0 1px 2px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.02) inset;
+    --shadow-2: 0 8px 20px -12px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.03) inset;
+    --shadow-3: 0 24px 60px -30px rgba(14,165,233,.35), 0 0 0 1px rgba(56,189,248,.08) inset;
+
+    /* Spacing (4pt base) */
+    --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 20px;
+    --s-6: 24px; --s-8: 32px; --s-10: 40px; --s-12: 48px;
+
+    /* Type */
+    --f-sans: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+    --f-mono: 'JetBrains Mono', ui-monospace, "SF Mono", Menlo, monospace;
   }
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+
+  /* ============================================================
+     RESET
+     ============================================================ */
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
   body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    background: var(--bg);
+    font-family: var(--f-sans);
+    font-feature-settings: "cv11", "ss01", "ss03";
+    background:
+      radial-gradient(1200px 700px at 70% -10%, rgba(14,165,233,.10), transparent 60%),
+      radial-gradient(900px 600px at -10% 20%, rgba(34,211,238,.05), transparent 60%),
+      var(--ink-950);
     color: var(--text);
     min-height: 100vh;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
     -webkit-tap-highlight-color: transparent;
-    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
-  a { color: var(--brand-2); text-decoration: none; }
+  a { color: var(--brand-3); text-decoration: none; }
   input, select, button, textarea { font: inherit; color: inherit; }
+  button { cursor: pointer; }
 
-  /* -------- Top bar -------- */
+  /* ============================================================
+     SPLASH SCREEN
+     ============================================================ */
+  .splash {
+    position: fixed; inset: 0; z-index: 10000;
+    background:
+      radial-gradient(circle at 50% 40%, #0a2a4a 0%, #030811 55%, #000 100%);
+    display: grid; place-items: center;
+    opacity: 1; transition: opacity .6s ease, visibility .6s;
+    overflow: hidden;
+  }
+  .splash.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+
+  /* Ambient ECG line running across splash */
+  .splash-ecg {
+    position: absolute; left: 0; right: 0; top: 50%;
+    height: 60px; transform: translateY(-50%);
+    opacity: .18;
+  }
+  .splash-ecg svg { width: 200%; height: 100%; animation: ecg 5s linear infinite; }
+  @keyframes ecg { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* Subtle hexagon grid overlay */
+  .splash::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(rgba(56,189,248,.06) 1px, transparent 1px);
+    background-size: 22px 22px;
+    mask-image: radial-gradient(circle at 50% 40%, black 30%, transparent 75%);
+  }
+
+  .splash-inner {
+    position: relative; text-align: center;
+    animation: fadeUp .9s ease-out both .1s;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .splash-logo {
+    width: 140px; height: 140px; margin: 0 auto var(--s-6);
+    animation: pop 1s cubic-bezier(.2,.9,.3,1.4) both;
+  }
+  @keyframes pop {
+    0%   { opacity: 0; transform: scale(.7); }
+    60%  { opacity: 1; transform: scale(1.05); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  .splash h1 {
+    margin: 0; font-size: 44px; font-weight: 800;
+    letter-spacing: 0.32em; line-height: 1;
+    background: linear-gradient(180deg, #ffffff 30%, #a8c8e8 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    padding-left: 0.32em;
+  }
+  .splash h2 {
+    margin: var(--s-3) 0 0; font-size: 12px; letter-spacing: 0.4em;
+    font-weight: 600; color: var(--brand);
+  }
+  .splash .divider {
+    width: 200px; height: 1px; margin: var(--s-5) auto var(--s-4);
+    background: linear-gradient(90deg, transparent, rgba(56,189,248,.5), transparent);
+  }
+  .splash .tag {
+    margin: 0; font-size: 12px; letter-spacing: 0.28em;
+    color: var(--muted); font-weight: 500;
+  }
+  .splash .tag b { color: var(--text-2); font-weight: 700; }
+
+  .splash-spinner {
+    width: 36px; height: 36px; margin: var(--s-8) auto 0;
+    border-radius: 50%;
+    border: 2px solid rgba(56,189,248,.15);
+    border-top-color: var(--brand);
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ============================================================
+     ONBOARDING
+     ============================================================ */
+  .onboarding {
+    position: fixed; inset: 0; z-index: 9000;
+    background:
+      radial-gradient(1000px 600px at 50% -10%, rgba(14,165,233,.15), transparent 60%),
+      var(--ink-950);
+    overflow: auto;
+    display: flex; flex-direction: column;
+    animation: fadeIn .4s ease-out both;
+  }
+  .onboarding.hide { display: none; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .onboarding-inner {
+    max-width: 460px; width: 100%; margin: 0 auto;
+    padding: max(env(safe-area-inset-top), 20px) var(--s-5) 32px;
+    display: flex; flex-direction: column; gap: var(--s-4);
+    min-height: 100%;
+  }
+  .onboarding-skip {
+    align-self: flex-end;
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 8px 14px; border: 1px solid var(--line);
+    background: rgba(255,255,255,.02);
+    color: var(--text-2); border-radius: var(--r-pill);
+    font-size: 13px; font-weight: 600;
+    transition: background .2s, border-color .2s;
+  }
+  .onboarding-skip:hover { background: rgba(255,255,255,.05); border-color: var(--line-2); }
+  .onboarding-hero {
+    display: flex; flex-direction: column; align-items: center;
+    padding: var(--s-4) 0 var(--s-2);
+  }
+  .onboarding-logo {
+    width: 92px; height: 92px;
+    filter: drop-shadow(0 12px 28px rgba(14,165,233,.35));
+  }
+  .onboarding-brand { text-align: center; margin-top: var(--s-4); }
+  .onboarding-brand h1 {
+    margin: 0; font-size: 26px; font-weight: 800;
+    letter-spacing: 0.28em;
+    background: linear-gradient(180deg, #fff 30%, #b0c8e5 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    padding-left: 0.28em;
+  }
+  .onboarding-brand .sub {
+    margin-top: 4px; font-size: 10px; letter-spacing: 0.32em;
+    color: var(--brand); font-weight: 700;
+  }
+
+  .welcome-title {
+    text-align: center; margin: var(--s-4) 0 var(--s-2);
+    font-size: 26px; font-weight: 800; letter-spacing: -0.02em;
+  }
+  .welcome-title span { color: var(--brand); }
+  .welcome-sub {
+    text-align: center; color: var(--muted); font-size: 14px; line-height: 1.55;
+    margin: 0 auto var(--s-4); max-width: 32ch;
+  }
+
+  .feature-list { display: flex; flex-direction: column; gap: var(--s-3); }
+  .feature {
+    display: flex; align-items: center; gap: var(--s-4);
+    padding: var(--s-4);
+    background:
+      linear-gradient(180deg, rgba(15,30,53,.9) 0%, rgba(10,20,36,.9) 100%);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-2);
+    transition: transform .2s, border-color .2s;
+  }
+  .feature:hover { transform: translateY(-1px); border-color: var(--line-2); }
+  .feature-icon {
+    flex-shrink: 0;
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    display: grid; place-items: center;
+    background:
+      radial-gradient(circle at 30% 30%, rgba(34,211,238,.25) 0%, rgba(14,165,233,.10) 70%);
+    border: 1px solid rgba(56,189,248,.2);
+    color: var(--brand);
+  }
+  .feature-icon svg { width: 22px; height: 22px; }
+  .feature-body h3 { margin: 0 0 2px; font-size: 15px; font-weight: 700; letter-spacing: -0.015em; }
+  .feature-body p { margin: 0; font-size: 12.5px; color: var(--muted); line-height: 1.45; }
+
+  .onboarding-cta {
+    margin-top: auto;
+    display: flex; flex-direction: column; gap: var(--s-3);
+    padding-top: var(--s-4);
+  }
+  .btn-primary {
+    appearance: none;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 16px 22px;
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%);
+    color: var(--brand-i);
+    font-weight: 800; font-size: 15px;
+    border: 0; border-radius: var(--r-pill);
+    box-shadow: 0 12px 30px -14px rgba(34,211,238,.7);
+    transition: transform .12s, box-shadow .2s;
+  }
+  .btn-primary:hover { transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-secondary {
+    appearance: none;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 15px 22px;
+    background: transparent; color: var(--brand);
+    border: 1px solid rgba(56,189,248,.35);
+    border-radius: var(--r-pill);
+    font-weight: 700; font-size: 14px;
+    transition: background .2s, border-color .2s;
+  }
+  .btn-secondary:hover { background: rgba(56,189,248,.06); border-color: var(--brand); }
+
+  .onboarding-dots {
+    margin-top: var(--s-3);
+    display: flex; justify-content: center; gap: 6px;
+  }
+  .onboarding-dots span {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--line-2);
+  }
+  .onboarding-dots .active { background: var(--brand); width: 22px; border-radius: 6px; }
+
+  /* ============================================================
+     APP SHELL
+     ============================================================ */
+  .app { display: block; }
+  .app.hide { display: none; }
+
+  /* -------- Top bar (sticky, contains brand + patient + tabs) -------- */
   .topbar {
     position: sticky; top: 0; z-index: 50;
-    background: rgba(7,16,31,.85);
-    backdrop-filter: saturate(140%) blur(10px);
-    border-bottom: 1px solid var(--border);
+    background:
+      linear-gradient(180deg, rgba(6,13,25,.94) 0%, rgba(6,13,25,.86) 100%);
+    backdrop-filter: saturate(160%) blur(14px);
+    -webkit-backdrop-filter: saturate(160%) blur(14px);
+    border-bottom: 1px solid var(--line);
+    padding-top: env(safe-area-inset-top);
   }
   .topbar-inner {
     max-width: 1200px; margin: 0 auto;
     padding: 10px 14px;
-    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    display: flex; align-items: center; gap: 12px;
   }
-  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; }
+  .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
   .brand-mark {
-    width: 32px; height: 32px; border-radius: 9px;
-    background: linear-gradient(135deg, var(--brand), var(--accent));
-    display: grid; place-items: center;
-    box-shadow: 0 4px 14px -4px rgba(14,165,233,.7);
+    width: 34px; height: 34px; border-radius: 10px;
+    background-image: url('icons/icon-192.png');
+    background-size: cover; background-position: center;
+    box-shadow: 0 4px 14px -4px rgba(14,165,233,.5);
+    flex-shrink: 0;
   }
-  .heart-ico {
-    width: 18px; height: 18px; color: #fff;
-    animation: heartbeat 1.1s ease-in-out infinite;
+  .brand-text { line-height: 1.1; min-width: 0; }
+  .brand-text .name {
+    display: block; font-weight: 800; letter-spacing: 0.1em;
+    font-size: 14px;
+    background: linear-gradient(180deg, #fff 30%, #b0c8e5 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
   }
-  @keyframes heartbeat {
-    0%, 60%, 100% { transform: scale(1); }
-    20% { transform: scale(1.18); }
-    40% { transform: scale(.95); }
+  .brand-text small {
+    display: block; font-size: 9.5px; letter-spacing: 0.22em;
+    font-weight: 700; color: var(--brand); margin-top: 2px;
   }
-  .brand-text { line-height: 1.1; }
-  .brand-text small { display: block; color: var(--muted); font-weight: 500; font-size: 11px; margin-top: 2px; }
   .save-dot {
-    margin-left: auto;
+    margin-left: auto; flex-shrink: 0;
     display: inline-flex; align-items: center; gap: 6px;
-    font-size: 11px; font-weight: 700; color: var(--ok);
-    padding: 4px 10px; border-radius: 999px;
-    background: rgba(52,211,153,.1); border: 1px solid rgba(52,211,153,.25);
+    font-size: 10.5px; font-weight: 700; color: var(--ok);
+    padding: 5px 10px; border-radius: var(--r-pill);
+    background: rgba(52,211,153,.08); border: 1px solid rgba(52,211,153,.25);
+    letter-spacing: 0.02em;
   }
   .save-dot::before {
-    content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--ok);
-    box-shadow: 0 0 0 0 rgba(52,211,153,.7); animation: live 1.6s ease-out infinite;
+    content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--ok);
+    box-shadow: 0 0 0 0 rgba(52,211,153,.6); animation: pulse 1.8s ease-out infinite;
   }
-  @keyframes live {
+  @keyframes pulse {
     0% { box-shadow: 0 0 0 0 rgba(52,211,153,.7); }
     70% { box-shadow: 0 0 0 10px rgba(52,211,153,0); }
     100% { box-shadow: 0 0 0 0 rgba(52,211,153,0); }
@@ -101,51 +366,74 @@
 
   /* -------- Patient bar -------- */
   .patient {
-    background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
-    border-bottom: 1px solid var(--border);
+    border-top: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(10,20,36,.6) 0%, rgba(6,13,25,.4) 100%);
   }
   .patient-inner {
-    max-width: 1200px; margin: 0 auto; padding: 12px 14px;
-    display: grid; gap: 10px;
-    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-    align-items: end;
+    max-width: 1200px; margin: 0 auto;
+    padding: 10px 12px;
+    display: grid; gap: 6px;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
-  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
   .field label {
-    font-size: 11px; font-weight: 700; color: var(--muted);
-    text-transform: uppercase; letter-spacing: .6px;
+    font-size: 9px; font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    padding-left: 2px;
   }
   .field .input {
-    display: flex; align-items: center;
-    background: #07101f; border: 1px solid var(--border); border-radius: 10px;
-    padding: 0 10px;
-    transition: border-color .15s, box-shadow .15s;
+    display: flex; align-items: center; min-width: 0;
+    background: var(--ink-900); border: 1px solid var(--line); border-radius: var(--r-md);
+    padding: 0 8px;
+    transition: border-color .15s, box-shadow .15s, background .15s;
   }
-  .field .input:focus-within { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(14,165,233,.18); }
+  .field .input:focus-within {
+    border-color: var(--brand);
+    background: var(--ink-800);
+    box-shadow: 0 0 0 3px rgba(34,211,238,.15);
+  }
   .field input, .field select {
-    flex: 1; min-width: 0; background: transparent; border: 0; outline: 0;
-    padding: 9px 4px; font-size: 15px; font-weight: 700;
+    flex: 1; min-width: 0;
+    background: transparent; border: 0; outline: 0;
+    padding: 8px 2px; font-size: 14px; font-weight: 700;
+    color: var(--text);
   }
   .field input[type="number"] { font-variant-numeric: tabular-nums; }
-  .field .unit { color: var(--muted); font-size: 12px; font-weight: 700; }
-  .field.derived .input { background: rgba(14,165,233,.08); border-color: rgba(14,165,233,.25); }
-  .field.derived .val { font-weight: 800; font-variant-numeric: tabular-nums; color: var(--brand-2); padding: 9px 4px; font-size: 15px; }
-
-  .reset-btn {
-    background: transparent; border: 1px solid var(--border);
-    color: var(--muted); padding: 8px 12px; border-radius: 10px;
-    font-size: 12px; font-weight: 700; cursor: pointer;
-    transition: color .15s, border-color .15s;
+  .field .unit {
+    color: var(--faint); font-size: 10px; font-weight: 700;
+    flex-shrink: 0; padding-left: 4px;
   }
-  .reset-btn:hover { color: var(--text); border-color: var(--border-2); }
+  .field.derived .input {
+    background: linear-gradient(180deg, rgba(34,211,238,.06), rgba(14,165,233,.03));
+    border-color: rgba(56,189,248,.2);
+  }
+  .field.derived .val {
+    font-weight: 800; font-variant-numeric: tabular-nums;
+    color: var(--brand); padding: 8px 2px; font-size: 14px;
+    flex: 1; min-width: 0;
+  }
 
-  /* -------- Tabs (part of the sticky topbar, not sticky itself) -------- */
+  .patient-derived {
+    display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 6px;
+    padding: 0 12px 10px;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .reset-btn {
+    background: transparent; border: 1px solid var(--line);
+    color: var(--muted); padding: 8px 10px; border-radius: var(--r-md);
+    font-size: 10.5px; font-weight: 700;
+    transition: color .15s, border-color .15s, background .15s;
+  }
+  .reset-btn:hover { color: var(--text); border-color: var(--line-2); background: rgba(255,255,255,.02); }
+
+  /* -------- Tabs -------- */
   .tabs {
-    background: rgba(7,16,31,.55);
-    border-top: 1px solid var(--border);
-    overflow-x: auto;
-    overflow-y: hidden;
+    background: rgba(6,13,25,.4);
+    border-top: 1px solid var(--line);
+    overflow-x: auto; overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
   .tabs::-webkit-scrollbar { display: none; }
   .tabs-inner {
@@ -155,583 +443,784 @@
   .tab {
     appearance: none;
     background: transparent; border: 1px solid transparent;
-    color: var(--muted); padding: 9px 14px; border-radius: 10px;
-    font-size: 13.5px; font-weight: 700; cursor: pointer;
-    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--text-2); padding: 8px 14px; border-radius: var(--r-md);
+    font-size: 12.5px; font-weight: 700;
+    display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0;
     transition: color .15s, background .15s, border-color .15s;
   }
-  .tab:hover { color: var(--text); background: rgba(255,255,255,.04); }
-  .tab.active { color: #001018; background: linear-gradient(135deg, var(--brand), var(--accent)); }
+  .tab svg { width: 15px; height: 15px; }
+  .tab:hover { color: var(--text); background: rgba(255,255,255,.03); }
+  .tab.active {
+    color: var(--brand-i);
+    background: linear-gradient(135deg, var(--brand), var(--brand-2));
+    box-shadow: 0 4px 14px -6px rgba(34,211,238,.6);
+  }
 
-  /* -------- Layout -------- */
-  main { max-width: 1200px; margin: 0 auto; padding: 16px 14px 80px; }
-  .module { display: none; }
+  /* ============================================================
+     MAIN
+     ============================================================ */
+  main {
+    max-width: 1200px; margin: 0 auto;
+    padding: var(--s-4) var(--s-3) 60px;
+  }
+  .module { display: none; animation: slideIn .3s ease-out; }
   .module.active { display: block; }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
   .module-head {
     display: flex; align-items: baseline; justify-content: space-between;
-    gap: 12px; flex-wrap: wrap; margin-bottom: 12px;
+    gap: 12px; flex-wrap: wrap; margin-bottom: var(--s-3);
   }
-  .module-head h2 { margin: 0; font-size: 22px; letter-spacing: -.3px; }
-  .module-head p { margin: 0; color: var(--muted); font-size: 13px; }
+  .module-head h2 {
+    margin: 0; font-size: 20px; font-weight: 800; letter-spacing: -0.02em;
+  }
+  .module-head p { margin: 2px 0 0; color: var(--muted); font-size: 12.5px; }
 
+  /* -------- Cards -------- */
   .cards {
-    display: grid; gap: 12px;
-    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    display: grid; gap: var(--s-3);
+    grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
   }
   .card {
-    background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 16px;
-    box-shadow: var(--shadow);
+    background:
+      linear-gradient(180deg, rgba(15,30,53,.7) 0%, rgba(10,20,36,.85) 100%);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    padding: var(--s-4);
+    box-shadow: var(--shadow-2);
+    min-width: 0;
+    position: relative;
+    overflow: hidden;
   }
-  .card h3 { margin: 0 0 4px; font-size: 16px; letter-spacing: -.2px; }
-  .card .sub { color: var(--muted); font-size: 12px; margin-bottom: 12px; }
+  .card::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(56,189,248,.25), transparent);
+  }
+  .card h3 {
+    margin: 0 0 4px; font-size: 15px; font-weight: 700; letter-spacing: -0.015em;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card .sub { color: var(--muted); font-size: 12px; margin-bottom: var(--s-3); line-height: 1.5; }
 
+  /* -------- Result rows -------- */
   .row {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 8px 0; border-top: 1px dashed rgba(138,160,189,.18);
-    font-size: 14px;
+    padding: 8px 0; gap: 12px;
+    border-top: 1px solid rgba(26,41,66,.5);
+    font-size: 13px;
   }
   .row:first-of-type { border-top: 0; }
   .row .k { color: var(--muted); }
-  .row .v { font-weight: 800; font-variant-numeric: tabular-nums; }
-  .v.low  { color: var(--warn); }
-  .v.mid  { color: var(--ok); }
-  .v.high { color: var(--danger); }
+  .row .v {
+    font-weight: 700; font-variant-numeric: tabular-nums;
+    font-family: var(--f-mono); font-size: 12.5px;
+    text-align: right;
+  }
+  .v.low   { color: var(--warn); }
+  .v.mid   { color: var(--ok); }
+  .v.high  { color: var(--danger); }
   .v.muted { color: var(--muted); }
 
+  /* -------- Pills -------- */
   .pill {
     display: inline-flex; align-items: center; gap: 4px;
-    padding: 3px 8px; border-radius: 999px;
-    font-size: 11px; font-weight: 800; letter-spacing: .3px;
+    padding: 3px 9px; border-radius: var(--r-pill);
+    font-size: 10.5px; font-weight: 700; letter-spacing: 0.03em;
   }
-  .pill.ok   { background: rgba(52,211,153,.12);  color: var(--ok);     border: 1px solid rgba(52,211,153,.3); }
-  .pill.warn { background: rgba(251,191,36,.12);  color: var(--warn);   border: 1px solid rgba(251,191,36,.3); }
-  .pill.bad  { background: rgba(239,68,68,.12);   color: var(--danger); border: 1px solid rgba(239,68,68,.3); }
-  .pill.info { background: rgba(56,189,248,.12);  color: var(--brand-2);border: 1px solid rgba(56,189,248,.3); }
+  .pill.ok   { background: rgba(52,211,153,.10); color: var(--ok);     border: 1px solid rgba(52,211,153,.25); }
+  .pill.warn { background: rgba(251,191,36,.10); color: var(--warn);   border: 1px solid rgba(251,191,36,.25); }
+  .pill.bad  { background: rgba(248,113,113,.10);color: var(--danger); border: 1px solid rgba(248,113,113,.25); }
+  .pill.info { background: rgba(56,189,248,.10); color: var(--brand-3);border: 1px solid rgba(56,189,248,.25); }
 
-  /* Inline inputs inside cards */
+  /* -------- Grid inputs inside cards -------- */
   .grid-in { display: grid; gap: 8px; grid-template-columns: 1fr 1fr; margin-bottom: 8px; }
-  .grid-in .field .input { padding: 0 8px; }
-  .grid-in .field input, .grid-in .field select { padding: 8px 4px; font-size: 14px; }
-  .grid-in.full { grid-template-columns: 1fr; }
   .grid-in.three { grid-template-columns: repeat(3, 1fr); }
+  .grid-in.full  { grid-template-columns: 1fr; }
+  .grid-in .field .input { padding: 0 8px; border-radius: var(--r-sm); }
+  .grid-in .field input,
+  .grid-in .field select { padding: 8px 2px; font-size: 13px; }
 
-  /* Verdict block */
+  /* -------- Verdict -------- */
   .verdict {
-    margin-top: 10px;
-    padding: 12px;
-    border-radius: 12px;
-    background: rgba(14,165,233,.08);
-    border: 1px solid rgba(14,165,233,.25);
-    font-size: 14px; line-height: 1.55;
+    margin-top: var(--s-3);
+    padding: var(--s-3);
+    border-radius: var(--r-md);
+    background: rgba(56,189,248,.06);
+    border: 1px solid rgba(56,189,248,.2);
+    font-size: 12.5px; line-height: 1.55;
   }
-  .verdict b { color: var(--brand-2); }
-  .verdict.warn { background: rgba(251,191,36,.08); border-color: rgba(251,191,36,.3); }
+  .verdict b { color: var(--brand-3); }
+  .verdict.warn { background: rgba(251,191,36,.06); border-color: rgba(251,191,36,.25); }
   .verdict.warn b { color: var(--warn); }
-  .verdict.bad  { background: rgba(239,68,68,.08); border-color: rgba(239,68,68,.3); }
-  .verdict.bad b { color: var(--danger); }
-  .verdict.ok   { background: rgba(52,211,153,.08); border-color: rgba(52,211,153,.3); }
-  .verdict.ok b { color: var(--ok); }
+  .verdict.bad  { background: rgba(248,113,113,.06); border-color: rgba(248,113,113,.25); }
+  .verdict.bad b  { color: var(--danger); }
+  .verdict.ok   { background: rgba(52,211,153,.06); border-color: rgba(52,211,153,.25); }
+  .verdict.ok b   { color: var(--ok); }
 
-  /* Search */
-  .search {
-    position: relative;
-    margin: 6px 0 12px;
-  }
+  /* -------- Search / chips -------- */
+  .search { position: relative; margin: var(--s-2) 0 var(--s-3); }
   .search input {
-    width: 100%; background: var(--panel-3); border: 1px solid var(--border);
-    border-radius: 10px; padding: 10px 12px 10px 36px; font-size: 14px; outline: 0;
+    width: 100%; background: var(--ink-800);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md); padding: 11px 12px 11px 38px;
+    font-size: 13.5px; outline: 0;
+    transition: border-color .15s, background .15s, box-shadow .15s;
   }
-  .search input:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(14,165,233,.18); }
-  .search svg { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; color: var(--muted); }
+  .search input:focus {
+    border-color: var(--brand); background: var(--ink-700);
+    box-shadow: 0 0 0 3px rgba(34,211,238,.15);
+  }
+  .search svg {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    width: 16px; height: 16px; color: var(--muted);
+  }
 
-  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: var(--s-3); }
   .chip {
-    appearance: none; background: var(--panel-3); border: 1px solid var(--border);
-    color: var(--text); padding: 6px 10px; border-radius: 999px;
-    font-size: 12.5px; font-weight: 700; cursor: pointer;
+    appearance: none;
+    background: rgba(15,30,53,.6); border: 1px solid var(--line);
+    color: var(--text-2); padding: 6px 12px; border-radius: var(--r-pill);
+    font-size: 12px; font-weight: 700;
+    transition: background .15s, border-color .15s, color .15s;
   }
-  .chip.active { background: linear-gradient(135deg, var(--brand), var(--accent)); color: #001018; border-color: transparent; }
+  .chip:hover { background: var(--ink-700); border-color: var(--line-2); color: var(--text); }
+  .chip.active {
+    background: linear-gradient(135deg, var(--brand), var(--brand-2));
+    color: var(--brand-i); border-color: transparent;
+    box-shadow: 0 4px 12px -6px rgba(34,211,238,.5);
+  }
 
-  /* Scores list */
-  .score-grid { display: grid; gap: 8px; }
+  /* -------- Scores dropdowns -------- */
   .score-row {
     display: flex; align-items: center; justify-content: space-between;
-    gap: 10px; padding: 8px 4px;
-    border-top: 1px dashed rgba(138,160,189,.18);
+    gap: 10px; padding: 8px 0;
+    border-top: 1px solid rgba(26,41,66,.5);
   }
   .score-row:first-child { border-top: 0; }
-  .score-row label { color: var(--muted); font-size: 13px; flex: 1; }
+  .score-row label { color: var(--muted); font-size: 12.5px; flex: 1; min-width: 0; }
   .score-row select {
-    background: var(--panel-3); border: 1px solid var(--border); color: var(--text);
-    padding: 6px 8px; border-radius: 8px; font-size: 13px; font-weight: 700;
-    min-width: 130px;
+    background: var(--ink-800); border: 1px solid var(--line); color: var(--text);
+    padding: 7px 10px; border-radius: var(--r-sm);
+    font-size: 12px; font-weight: 700;
+    min-width: 120px; max-width: 60vw;
   }
   .score-total {
     display: flex; align-items: center; justify-content: space-between;
-    margin-top: 12px; padding: 12px;
-    border-radius: 12px;
-    background: rgba(14,165,233,.1); border: 1px solid rgba(14,165,233,.25);
-    font-weight: 800;
+    margin-top: var(--s-3); padding: var(--s-3);
+    border-radius: var(--r-md);
+    background: rgba(56,189,248,.08); border: 1px solid rgba(56,189,248,.2);
+    font-weight: 800; font-size: 13px; gap: 12px;
   }
-  .score-total .total { font-size: 22px; color: var(--brand-2); font-variant-numeric: tabular-nums; }
+  .score-total .total {
+    font-size: 20px; color: var(--brand); font-variant-numeric: tabular-nums;
+    font-family: var(--f-mono);
+  }
 
-  /* Notes */
+  /* -------- Notes -------- */
   .notes textarea {
     width: 100%; min-height: 220px; resize: vertical;
-    background: var(--panel-3); border: 1px solid var(--border); color: var(--text);
-    border-radius: 12px; padding: 12px; outline: 0;
-    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-    font-size: 14px; line-height: 1.55;
+    background: var(--ink-800); border: 1px solid var(--line); color: var(--text);
+    border-radius: var(--r-md); padding: var(--s-3); outline: 0;
+    font-family: var(--f-mono); font-size: 13px; line-height: 1.6;
   }
-  .notes textarea:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(14,165,233,.18); }
-  .note-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .notes textarea:focus {
+    border-color: var(--brand); box-shadow: 0 0 0 3px rgba(34,211,238,.15);
+  }
+
+  /* -------- Buttons -------- */
   .btn {
-    appearance: none; cursor: pointer;
-    background: var(--panel-3); border: 1px solid var(--border); color: var(--text);
-    padding: 9px 14px; border-radius: 10px; font-size: 13.5px; font-weight: 700;
-    transition: background .15s, border-color .15s, transform .1s;
+    appearance: none;
+    background: rgba(15,30,53,.6); border: 1px solid var(--line);
+    color: var(--text-2); padding: 9px 14px; border-radius: var(--r-md);
+    font-size: 12.5px; font-weight: 700;
+    transition: background .15s, border-color .15s, color .15s, transform .1s;
   }
-  .btn:hover { background: #15264a; border-color: var(--border-2); }
-  .btn.primary { background: linear-gradient(135deg, var(--brand), var(--accent)); color: #001018; border-color: transparent; }
-  .btn.danger { color: var(--danger); border-color: rgba(239,68,68,.3); }
+  .btn:hover { background: var(--ink-700); border-color: var(--line-2); color: var(--text); }
   .btn:active { transform: translateY(1px); }
-
-  footer {
-    border-top: 1px solid var(--border);
-    margin-top: 20px; padding: 18px 14px 40px;
-    text-align: center; color: var(--muted); font-size: 12px; line-height: 1.55;
+  .btn.primary {
+    background: linear-gradient(135deg, var(--brand), var(--brand-2));
+    color: var(--brand-i); border-color: transparent;
+    box-shadow: 0 6px 16px -8px rgba(34,211,238,.5);
   }
+  .btn.danger {
+    color: var(--danger); border-color: rgba(248,113,113,.3);
+  }
+  .btn.danger:hover { background: rgba(248,113,113,.05); }
 
+  .note-actions { display: flex; gap: 8px; margin-top: var(--s-3); flex-wrap: wrap; }
+
+  /* -------- Footer -------- */
+  footer {
+    border-top: 1px solid var(--line); margin-top: var(--s-6);
+    padding: var(--s-4) var(--s-4) 40px;
+    text-align: center; color: var(--faint); font-size: 11.5px; line-height: 1.6;
+  }
+  footer .fine { color: var(--muted); }
+  footer a { color: var(--brand-3); }
+
+  /* -------- Toast -------- */
   .toast {
-    position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(20px);
-    background: #0b1830; border: 1px solid var(--border);
-    color: var(--text); padding: 10px 16px; border-radius: 999px;
-    font-size: 13px; font-weight: 700;
+    position: fixed; left: 50%; bottom: 24px;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--ink-700); border: 1px solid var(--line-2);
+    color: var(--text); padding: 10px 18px; border-radius: var(--r-pill);
+    font-size: 12.5px; font-weight: 700;
     opacity: 0; pointer-events: none;
-    transition: opacity .2s, transform .2s; z-index: 100;
+    transition: opacity .25s ease, transform .25s ease;
+    z-index: 100;
+    box-shadow: var(--shadow-3);
   }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ============================================================
+     RESPONSIVE
+     ============================================================ */
+  @media (max-width: 640px) {
+    .patient-inner { grid-template-columns: repeat(5, minmax(0, 1fr)); padding: 8px 10px; gap: 5px; }
+    .patient-derived { padding: 0 10px 8px; gap: 5px; }
+    .field label { font-size: 8.5px; }
+    .field .input { padding: 0 6px; border-radius: 8px; }
+    .field input, .field select { padding: 7px 2px; font-size: 13px; }
+    .field .unit { font-size: 9.5px; }
+    .field.derived .val { padding: 7px 2px; font-size: 13px; }
+    .reset-btn { padding: 7px 8px; font-size: 10px; }
+
+    .card { padding: 14px; }
+    .grid-in.three { grid-template-columns: 1fr 1fr; }
+    .row { font-size: 12.5px; }
+    .row .v { font-size: 12px; }
+
+    .cards { grid-template-columns: 1fr; }
+    .module-head h2 { font-size: 18px; }
+    .tab { padding: 7px 12px; font-size: 12px; }
+  }
+
+  @media (max-width: 380px) {
+    .patient-inner { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .patient-derived { grid-template-columns: 1fr 1fr 1fr; }
+    .patient-derived .reset-btn { grid-column: 1 / -1; }
+  }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
     html { scroll-behavior: auto; }
   }
-  @media (max-width: 560px) {
-    .grid-in.three { grid-template-columns: 1fr 1fr; }
-  }
 </style>
 </head>
 <body>
 
-<!-- ============== TOP BAR ============== -->
-<div class="topbar">
-  <div class="topbar-inner">
-    <div class="brand">
-      <span class="brand-mark" aria-hidden="true">
-        <svg class="heart-ico" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 21s-7-4.35-9.5-9.04C.9 8.7 2.6 5 6.2 5c2 0 3.4 1.1 4.3 2.6h1C12.4 6.1 13.8 5 15.8 5c3.6 0 5.3 3.7 3.7 6.96C19 16.65 12 21 12 21z"/>
-        </svg>
-      </span>
-      <div class="brand-text">
-        Najm ICUCalc
-        <small>ICU / CCU Assistant</small>
-      </div>
-    </div>
-    <span class="save-dot" id="saveDot">Auto-saved</span>
+<!-- ============== SPLASH ============== -->
+<div class="splash" id="splash">
+  <div class="splash-ecg" aria-hidden="true">
+    <svg viewBox="0 0 800 60" preserveAspectRatio="none">
+      <path d="M0,30 L80,30 L100,30 L110,10 L120,50 L130,5 L140,55 L150,30 L260,30 L280,30 L290,10 L300,50 L310,5 L320,55 L330,30 L460,30 L480,30 L490,10 L500,50 L510,5 L520,55 L530,30 L660,30 L680,30 L690,10 L700,50 L710,5 L720,55 L730,30 L800,30"
+        fill="none" stroke="#22d3ee" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
   </div>
-
-  <!-- Patient -->
-  <div class="patient">
-    <div class="patient-inner">
-      <div class="field">
-        <label for="p-weight">Weight</label>
-        <div class="input"><input id="p-weight" type="number" inputmode="decimal" min="0" max="300" step="0.5" placeholder="kg" /><span class="unit">kg</span></div>
-      </div>
-      <div class="field">
-        <label for="p-height">Height</label>
-        <div class="input"><input id="p-height" type="number" inputmode="decimal" min="0" max="250" step="1" placeholder="cm" /><span class="unit">cm</span></div>
-      </div>
-      <div class="field">
-        <label for="p-age">Age</label>
-        <div class="input"><input id="p-age" type="number" inputmode="numeric" min="0" max="120" step="1" placeholder="yrs" /><span class="unit">yr</span></div>
-      </div>
-      <div class="field">
-        <label for="p-sex">Sex</label>
-        <div class="input">
-          <select id="p-sex">
-            <option value="">—</option>
-            <option value="M">Male</option>
-            <option value="F">Female</option>
-          </select>
-        </div>
-      </div>
-      <div class="field">
-        <label for="p-cr">Creatinine</label>
-        <div class="input"><input id="p-cr" type="number" inputmode="decimal" min="0" max="30" step="0.1" placeholder="mg/dL" /><span class="unit">mg/dL</span></div>
-      </div>
-
-      <div class="field derived"><label>IBW</label><div class="input"><span class="val" id="d-ibw">—</span><span class="unit">kg</span></div></div>
-      <div class="field derived"><label>BSA</label><div class="input"><span class="val" id="d-bsa">—</span><span class="unit">m²</span></div></div>
-      <div class="field derived"><label>CrCl</label><div class="input"><span class="val" id="d-crcl">—</span><span class="unit">mL/min</span></div></div>
-
-      <div class="field" style="justify-content:end"><button class="reset-btn" id="resetPt">Clear patient</button></div>
-    </div>
+  <div class="splash-inner">
+    <img class="splash-logo" src="icons/icon-192.png" alt="Najm ICUCalc" />
+    <h1>NAJM</h1>
+    <h2>ICU CALCULATOR</h2>
+    <div class="divider"></div>
+    <p class="tag"><b>PRECISE</b> · <b>FAST</b> · <b>RELIABLE</b></p>
+    <div class="splash-spinner"></div>
   </div>
-
-  <!-- ============== TABS (nested inside topbar so one thing is sticky) ============== -->
-  <nav class="tabs" aria-label="Modules">
-    <div class="tabs-inner" id="tabs">
-      <button class="tab active" type="button" data-tab="infusions">💧 Infusions</button>
-      <button class="tab" type="button" data-tab="antibiotics">💊 Antibiotics</button>
-      <button class="tab" type="button" data-tab="hemo">🫀 Hemodynamics</button>
-      <button class="tab" type="button" data-tab="vent">🫁 Ventilator</button>
-      <button class="tab" type="button" data-tab="abg">🧪 ABG</button>
-      <button class="tab" type="button" data-tab="lytes">⚡ Electrolytes</button>
-      <button class="tab" type="button" data-tab="renal">💦 Renal</button>
-      <button class="tab" type="button" data-tab="scores">📊 Scores</button>
-      <button class="tab" type="button" data-tab="notes">📝 Notes</button>
-      <button class="tab" type="button" data-tab="about">ℹ️ About</button>
-    </div>
-  </nav>
 </div>
 
-<main>
+<!-- ============== ONBOARDING ============== -->
+<div class="onboarding hide" id="onboarding">
+  <div class="onboarding-inner">
+    <button class="onboarding-skip" type="button" id="onbSkip">Skip
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+    </button>
 
-<!-- ============== INFUSIONS ============== -->
-<section class="module active" id="m-infusions" aria-labelledby="h-infusions">
-  <div class="module-head">
-    <div>
-      <h2 id="h-infusions">Infusion Doses</h2>
-      <p>Live ranges per weight + drip rate (mL/hr) when a concentration is set.</p>
-    </div>
-  </div>
-  <div class="search">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-    <input id="drugSearch" type="search" placeholder="Search drug…" autocomplete="off" />
-  </div>
-  <div class="chips" id="catChips"></div>
-  <div class="cards" id="drugCards" aria-live="polite"></div>
-</section>
-
-<!-- ============== HEMODYNAMICS ============== -->
-<section class="module" id="m-hemo">
-  <div class="module-head"><div><h2>Hemodynamics</h2><p>Live MAP, shock index, CPP, and oxygen delivery hints.</p></div></div>
-  <div class="cards">
-    <div class="card">
-      <h3>Blood Pressure</h3>
-      <div class="sub">Enter cuff or arterial line values.</div>
-      <div class="grid-in three">
-        <div class="field"><label>SBP</label><div class="input"><input id="hd-sbp" type="number" inputmode="numeric" placeholder="mmHg" /><span class="unit">mmHg</span></div></div>
-        <div class="field"><label>DBP</label><div class="input"><input id="hd-dbp" type="number" inputmode="numeric" placeholder="mmHg" /><span class="unit">mmHg</span></div></div>
-        <div class="field"><label>HR</label><div class="input"><input id="hd-hr" type="number" inputmode="numeric" placeholder="bpm" /><span class="unit">bpm</span></div></div>
-      </div>
-      <div class="row"><span class="k">MAP</span><span class="v" id="hd-map">—</span></div>
-      <div class="row"><span class="k">Pulse Pressure</span><span class="v" id="hd-pp">—</span></div>
-      <div class="row"><span class="k">Shock Index (HR/SBP)</span><span class="v" id="hd-si">—</span></div>
-      <div class="row"><span class="k">Modified SI (HR/MAP)</span><span class="v" id="hd-msi">—</span></div>
-      <div class="verdict" id="hd-verdict">Enter SBP/DBP to interpret.</div>
-    </div>
-
-    <div class="card">
-      <h3>Cerebral Perfusion</h3>
-      <div class="sub">CPP = MAP − ICP. Target adults ≥ 60 mmHg.</div>
-      <div class="grid-in">
-        <div class="field"><label>ICP</label><div class="input"><input id="cpp-icp" type="number" inputmode="numeric" placeholder="mmHg" /><span class="unit">mmHg</span></div></div>
-        <div class="field"><label>MAP override</label><div class="input"><input id="cpp-map" type="number" inputmode="numeric" placeholder="auto" /><span class="unit">mmHg</span></div></div>
-      </div>
-      <div class="row"><span class="k">CPP</span><span class="v" id="cpp-out">—</span></div>
-      <div class="verdict" id="cpp-verdict">Enter ICP to compute.</div>
-    </div>
-
-    <div class="card">
-      <h3>Vasoactive Norepinephrine Equivalents</h3>
-      <div class="sub">Rough comparator of vasopressor load (μg/kg/min equivalents).</div>
-      <div class="grid-in">
-        <div class="field"><label>Norepi (μg/kg/min)</label><div class="input"><input id="ne-norepi" type="number" step="0.01" inputmode="decimal" /></div></div>
-        <div class="field"><label>Epi (μg/kg/min)</label><div class="input"><input id="ne-epi" type="number" step="0.01" inputmode="decimal" /></div></div>
-        <div class="field"><label>Phenyleph (μg/kg/min)</label><div class="input"><input id="ne-phenyl" type="number" step="0.01" inputmode="decimal" /></div></div>
-        <div class="field"><label>Dopamine (μg/kg/min)</label><div class="input"><input id="ne-dop" type="number" step="0.1" inputmode="decimal" /></div></div>
-        <div class="field"><label>Vasopressin (U/min)</label><div class="input"><input id="ne-vaso" type="number" step="0.01" inputmode="decimal" /></div></div>
-      </div>
-      <div class="row"><span class="k">NE equivalent</span><span class="v" id="ne-total">—</span></div>
-      <div class="verdict" id="ne-verdict">Sum of norepi-equivalent vasopressor support.</div>
-    </div>
-  </div>
-</section>
-
-<!-- ============== VENTILATOR ============== -->
-<section class="module" id="m-vent">
-  <div class="module-head"><div><h2>Ventilator</h2><p>PBW-based tidal volumes, P/F ratio (Berlin), driving pressure, compliance.</p></div></div>
-  <div class="cards">
-    <div class="card">
-      <h3>Tidal Volume (Predicted BW)</h3>
-      <div class="sub">PBW (Devine) needs height &amp; sex. Targets: 4 / 6 / 8 mL/kg.</div>
-      <div class="row"><span class="k">PBW</span><span class="v" id="v-pbw">—</span></div>
-      <div class="row"><span class="k">TV 4 mL/kg (low)</span><span class="v" id="v-tv4">—</span></div>
-      <div class="row"><span class="k">TV 6 mL/kg (target)</span><span class="v mid" id="v-tv6">—</span></div>
-      <div class="row"><span class="k">TV 8 mL/kg (max ARDS)</span><span class="v" id="v-tv8">—</span></div>
-    </div>
-
-    <div class="card">
-      <h3>Oxygenation (P/F &amp; SF)</h3>
-      <div class="grid-in">
-        <div class="field"><label>PaO₂</label><div class="input"><input id="v-pao2" type="number" inputmode="numeric" /><span class="unit">mmHg</span></div></div>
-        <div class="field"><label>SpO₂</label><div class="input"><input id="v-spo2" type="number" inputmode="numeric" max="100" /><span class="unit">%</span></div></div>
-        <div class="field"><label>FiO₂</label><div class="input"><input id="v-fio2" type="number" inputmode="decimal" step="0.01" placeholder="0.4 or 40" /></div></div>
-      </div>
-      <div class="row"><span class="k">P/F ratio</span><span class="v" id="v-pf">—</span></div>
-      <div class="row"><span class="k">SpO₂/FiO₂</span><span class="v" id="v-sf">—</span></div>
-      <div class="verdict" id="v-pfverdict">Enter PaO₂ and FiO₂ for Berlin ARDS classification.</div>
-    </div>
-
-    <div class="card">
-      <h3>Driving Pressure &amp; Compliance</h3>
-      <div class="grid-in three">
-        <div class="field"><label>Pplat</label><div class="input"><input id="v-pplat" type="number" inputmode="numeric" /><span class="unit">cmH₂O</span></div></div>
-        <div class="field"><label>PEEP</label><div class="input"><input id="v-peep" type="number" inputmode="numeric" /><span class="unit">cmH₂O</span></div></div>
-        <div class="field"><label>TV</label><div class="input"><input id="v-tv" type="number" inputmode="numeric" /><span class="unit">mL</span></div></div>
-      </div>
-      <div class="row"><span class="k">Driving pressure</span><span class="v" id="v-dp">—</span></div>
-      <div class="row"><span class="k">Static compliance</span><span class="v" id="v-cstat">—</span></div>
-      <div class="verdict" id="v-dpverdict">Target driving pressure &lt; 15 cmH₂O.</div>
-    </div>
-  </div>
-</section>
-
-<!-- ============== ABG ============== -->
-<section class="module" id="m-abg">
-  <div class="module-head"><div><h2>Acid–Base / ABG</h2><p>Primary disorder, expected compensation, anion gap, delta–delta, A–a.</p></div></div>
-  <div class="cards">
-    <div class="card">
-      <h3>Inputs</h3>
-      <div class="grid-in three">
-        <div class="field"><label>pH</label><div class="input"><input id="ab-ph" type="number" step="0.01" inputmode="decimal" /></div></div>
-        <div class="field"><label>PaCO₂</label><div class="input"><input id="ab-co2" type="number" inputmode="numeric" /><span class="unit">mmHg</span></div></div>
-        <div class="field"><label>HCO₃</label><div class="input"><input id="ab-hco3" type="number" inputmode="decimal" /><span class="unit">mEq/L</span></div></div>
-        <div class="field"><label>Na</label><div class="input"><input id="ab-na" type="number" inputmode="numeric" /><span class="unit">mEq/L</span></div></div>
-        <div class="field"><label>Cl</label><div class="input"><input id="ab-cl" type="number" inputmode="numeric" /><span class="unit">mEq/L</span></div></div>
-        <div class="field"><label>Albumin</label><div class="input"><input id="ab-alb" type="number" step="0.1" inputmode="decimal" placeholder="g/dL" /><span class="unit">g/dL</span></div></div>
-        <div class="field"><label>PaO₂</label><div class="input"><input id="ab-pao2" type="number" inputmode="numeric" /></div></div>
-        <div class="field"><label>FiO₂</label><div class="input"><input id="ab-fio2" type="number" step="0.01" inputmode="decimal" /></div></div>
+    <div class="onboarding-hero">
+      <img class="onboarding-logo" src="icons/icon-192.png" alt="Najm ICUCalc" />
+      <div class="onboarding-brand">
+        <h1>NAJM</h1>
+        <div class="sub">ICU CALCULATOR</div>
       </div>
     </div>
 
-    <div class="card">
-      <h3>Interpretation</h3>
-      <div class="row"><span class="k">Primary disorder</span><span class="v" id="ab-primary">—</span></div>
-      <div class="row"><span class="k">Expected compensation</span><span class="v" id="ab-comp">—</span></div>
-      <div class="row"><span class="k">Anion gap</span><span class="v" id="ab-ag">—</span></div>
-      <div class="row"><span class="k">Corrected AG (albumin)</span><span class="v" id="ab-cag">—</span></div>
-      <div class="row"><span class="k">Δ-Δ ratio</span><span class="v" id="ab-dd">—</span></div>
-      <div class="row"><span class="k">A–a gradient</span><span class="v" id="ab-aa">—</span></div>
-      <div class="verdict" id="ab-verdict">Enter pH, PaCO₂, HCO₃ to start.</div>
-    </div>
-  </div>
-</section>
+    <h2 class="welcome-title">Welcome to <span>Najm</span></h2>
+    <p class="welcome-sub">Your essential ICU companion.<br/>Precise. Fast. Reliable.</p>
 
-<!-- ============== ELECTROLYTES ============== -->
-<section class="module" id="m-lytes">
-  <div class="module-head"><div><h2>Electrolytes</h2><p>Corrections, osmolality, free water deficit, replacement guides.</p></div></div>
-  <div class="cards">
-    <div class="card">
-      <h3>Corrected Calcium</h3>
-      <div class="sub">Ca<sub>corr</sub> = Ca + 0.8 × (4 − albumin)</div>
-      <div class="grid-in">
-        <div class="field"><label>Ca measured</label><div class="input"><input id="ca-ca" type="number" step="0.1" inputmode="decimal" /><span class="unit">mg/dL</span></div></div>
-        <div class="field"><label>Albumin</label><div class="input"><input id="ca-alb" type="number" step="0.1" inputmode="decimal" /><span class="unit">g/dL</span></div></div>
+    <div class="feature-list">
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 7h8M8 11h3M13 11h3M8 15h3M13 15h3M8 19h3M13 19h3"/></svg>
+        </div>
+        <div class="feature-body">
+          <h3>Comprehensive Calculators</h3>
+          <p>Essential formulas and scores for daily ICU practice.</p>
+        </div>
       </div>
-      <div class="row"><span class="k">Corrected Ca</span><span class="v" id="ca-corr">—</span></div>
-      <div class="verdict" id="ca-verdict">Reference 8.5 – 10.5 mg/dL.</div>
-    </div>
-
-    <div class="card">
-      <h3>Corrected Sodium (hyperglycemia)</h3>
-      <div class="sub">Na<sub>corr</sub> = Na + 1.6 × (glucose − 100) / 100</div>
-      <div class="grid-in">
-        <div class="field"><label>Na measured</label><div class="input"><input id="na-na" type="number" inputmode="numeric" /><span class="unit">mEq/L</span></div></div>
-        <div class="field"><label>Glucose</label><div class="input"><input id="na-glu" type="number" inputmode="numeric" /><span class="unit">mg/dL</span></div></div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg>
+        </div>
+        <div class="feature-body">
+          <h3>Fast &amp; Efficient</h3>
+          <p>Accurate results in seconds when it matters most.</p>
+        </div>
       </div>
-      <div class="row"><span class="k">Corrected Na</span><span class="v" id="na-corr">—</span></div>
-    </div>
-
-    <div class="card">
-      <h3>Serum Osmolality</h3>
-      <div class="sub">2·Na + Glucose/18 + BUN/2.8 (+ EtOH/3.7)</div>
-      <div class="grid-in three">
-        <div class="field"><label>Na</label><div class="input"><input id="os-na" type="number" inputmode="numeric" /></div></div>
-        <div class="field"><label>Glucose</label><div class="input"><input id="os-glu" type="number" inputmode="numeric" /></div></div>
-        <div class="field"><label>BUN</label><div class="input"><input id="os-bun" type="number" inputmode="numeric" /></div></div>
-        <div class="field"><label>EtOH</label><div class="input"><input id="os-etoh" type="number" inputmode="numeric" /></div></div>
-        <div class="field"><label>Measured</label><div class="input"><input id="os-meas" type="number" inputmode="numeric" /></div></div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-12V5l-8-3-8 3v5c0 8 8 12 8 12Z"/><path d="m9 12 2 2 4-4"/></svg>
+        </div>
+        <div class="feature-body">
+          <h3>Evidence Based</h3>
+          <p>Based on the latest guidelines and clinical research.</p>
+        </div>
       </div>
-      <div class="row"><span class="k">Calculated osm</span><span class="v" id="os-calc">—</span></div>
-      <div class="row"><span class="k">Osmolar gap</span><span class="v" id="os-gap">—</span></div>
-      <div class="verdict" id="os-verdict">Normal gap &lt; 10.</div>
-    </div>
-
-    <div class="card">
-      <h3>Free Water Deficit (hypernatremia)</h3>
-      <div class="sub">FWD = TBW × (Na/140 − 1). TBW = 0.6·W (M) / 0.5·W (F).</div>
-      <div class="grid-in">
-        <div class="field"><label>Current Na</label><div class="input"><input id="fwd-na" type="number" inputmode="numeric" /><span class="unit">mEq/L</span></div></div>
-        <div class="field"><label>Target Na</label><div class="input"><input id="fwd-tgt" type="number" inputmode="numeric" placeholder="140" /><span class="unit">mEq/L</span></div></div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <div class="feature-body">
+          <h3>Made for ICU Professionals</h3>
+          <p>Designed by clinicians, for clinicians. By Dr. Mohamed Najm.</p>
+        </div>
       </div>
-      <div class="row"><span class="k">Free water deficit</span><span class="v" id="fwd-out">—</span></div>
-      <div class="verdict">Correct ≤ 10 mEq/L per 24 hr to avoid cerebral edema.</div>
     </div>
 
-    <div class="card">
-      <h3>Potassium Replacement</h3>
-      <div class="sub">Empiric IV KCl guide for low serum K⁺.</div>
-      <div class="grid-in">
-        <div class="field"><label>Serum K⁺</label><div class="input"><input id="k-k" type="number" step="0.1" inputmode="decimal" /><span class="unit">mEq/L</span></div></div>
+    <div class="onboarding-cta">
+      <button class="btn-primary" type="button" id="onbStart">
+        Get Started
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </button>
+    </div>
+
+    <div class="onboarding-dots">
+      <span class="active"></span><span></span><span></span>
+    </div>
+  </div>
+</div>
+
+<!-- ============== APP ============== -->
+<div class="app hide" id="app">
+
+  <!-- Top bar with brand + patient + tabs -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <div class="brand-text">
+          <span class="name">NAJM</span>
+          <small>ICU / CCU</small>
+        </div>
       </div>
-      <div class="row"><span class="k">Suggested replacement</span><span class="v" id="k-out">—</span></div>
-      <div class="verdict">Max peripheral 10 mEq/hr; central 20 mEq/hr with monitoring.</div>
-    </div>
-  </div>
-</section>
-
-<!-- ============== RENAL ============== -->
-<section class="module" id="m-renal">
-  <div class="module-head"><div><h2>Renal &amp; Fluids</h2><p>Creatinine clearance, AKI stage, urine output, sepsis fluid bolus.</p></div></div>
-  <div class="cards">
-    <div class="card">
-      <h3>Creatinine Clearance (Cockcroft–Gault)</h3>
-      <div class="sub">CrCl = (140 − age) × W / (72 × Cr); × 0.85 (F).</div>
-      <div class="row"><span class="k">CrCl</span><span class="v" id="rn-crcl">—</span></div>
-      <div class="verdict" id="rn-crclv">Set age, weight, sex, creatinine in the patient bar.</div>
+      <span class="save-dot" id="saveDot">Auto-saved</span>
     </div>
 
-    <div class="card">
-      <h3>Urine Output</h3>
-      <div class="sub">Per kg/hr — oliguria &lt; 0.5 mL/kg/hr.</div>
-      <div class="grid-in">
-        <div class="field"><label>Total UO</label><div class="input"><input id="uo-vol" type="number" inputmode="numeric" /><span class="unit">mL</span></div></div>
-        <div class="field"><label>Over</label><div class="input"><input id="uo-hr" type="number" inputmode="decimal" step="0.5" /><span class="unit">hr</span></div></div>
+    <div class="patient">
+      <div class="patient-inner">
+        <div class="field">
+          <label for="p-weight">Weight</label>
+          <div class="input"><input id="p-weight" type="number" inputmode="decimal" min="0" max="300" step="0.5" /><span class="unit">kg</span></div>
+        </div>
+        <div class="field">
+          <label for="p-height">Height</label>
+          <div class="input"><input id="p-height" type="number" inputmode="decimal" min="0" max="250" step="1" /><span class="unit">cm</span></div>
+        </div>
+        <div class="field">
+          <label for="p-age">Age</label>
+          <div class="input"><input id="p-age" type="number" inputmode="numeric" min="0" max="120" step="1" /><span class="unit">yr</span></div>
+        </div>
+        <div class="field">
+          <label for="p-sex">Sex</label>
+          <div class="input">
+            <select id="p-sex">
+              <option value="">—</option>
+              <option value="M">M</option>
+              <option value="F">F</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="p-cr">Cr</label>
+          <div class="input"><input id="p-cr" type="number" inputmode="decimal" min="0" max="30" step="0.1" /><span class="unit">mg/dL</span></div>
+        </div>
       </div>
-      <div class="row"><span class="k">Rate</span><span class="v" id="uo-rate">—</span></div>
-      <div class="verdict" id="uo-verdict">Enter volume + hours.</div>
+
+      <div class="patient-derived">
+        <div class="field derived"><label>IBW</label><div class="input"><span class="val" id="d-ibw">—</span><span class="unit">kg</span></div></div>
+        <div class="field derived"><label>BSA</label><div class="input"><span class="val" id="d-bsa">—</span><span class="unit">m²</span></div></div>
+        <div class="field derived"><label>CrCl</label><div class="input"><span class="val" id="d-crcl">—</span><span class="unit">mL/min</span></div></div>
+        <button class="reset-btn" type="button" id="resetPt">Clear</button>
+      </div>
     </div>
 
-    <div class="card">
-      <h3>Sepsis Fluid Bolus</h3>
-      <div class="sub">Surviving Sepsis: 30 mL/kg crystalloid within 3 hr.</div>
-      <div class="row"><span class="k">Target volume</span><span class="v" id="sep-vol">—</span></div>
-      <div class="row"><span class="k">¼ bolus (250 mL increments)</span><span class="v" id="sep-quarter">—</span></div>
-      <div class="verdict">Reassess after each bolus — avoid over-resuscitation.</div>
-    </div>
-
-    <div class="card">
-      <h3>Maintenance Fluids (4-2-1)</h3>
-      <div class="sub">First 10 kg ×4, next 10 kg ×2, remainder ×1 mL/kg/hr.</div>
-      <div class="row"><span class="k">Maintenance rate</span><span class="v" id="mn-rate">—</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============== SCORES ============== -->
-<section class="module" id="m-scores">
-  <div class="module-head"><div><h2>Clinical Scores</h2><p>Compute as you select. All scores are local — nothing leaves your device.</p></div></div>
-  <div class="cards">
-    <div class="card"><h3>GCS</h3><div class="sub">Glasgow Coma Scale (3–15)</div><div class="score-grid" id="score-gcs"></div></div>
-    <div class="card"><h3>qSOFA</h3><div class="sub">≥ 2 → higher sepsis mortality risk.</div><div class="score-grid" id="score-qsofa"></div></div>
-    <div class="card"><h3>SOFA</h3><div class="sub">Organ dysfunction (0–24).</div><div class="score-grid" id="score-sofa"></div></div>
-    <div class="card"><h3>CHA₂DS₂-VASc</h3><div class="sub">Stroke risk in AF.</div><div class="score-grid" id="score-chads"></div></div>
-    <div class="card"><h3>HAS-BLED</h3><div class="sub">Bleeding risk on anticoagulation.</div><div class="score-grid" id="score-hasbled"></div></div>
-    <div class="card"><h3>Wells (PE)</h3><div class="sub">Pretest probability of pulmonary embolism.</div><div class="score-grid" id="score-wells"></div></div>
-    <div class="card"><h3>RASS</h3><div class="sub">Richmond Agitation–Sedation Scale.</div><div class="score-grid" id="score-rass"></div></div>
-  </div>
-</section>
-
-<!-- ============== NOTES ============== -->
-<section class="module" id="m-notes">
-  <div class="module-head"><div><h2>Shift Notes</h2><p>Plain-text scratchpad — saved locally on this device only.</p></div></div>
-  <div class="card notes">
-    <textarea id="notes" placeholder="Patient summary, plan, pending tasks, handover…"></textarea>
-    <div class="note-actions">
-      <button class="btn primary" type="button" id="copyNotes">Copy</button>
-      <button class="btn" type="button" id="exportNotes">Download .txt</button>
-      <button class="btn danger" type="button" id="clearNotes">Clear</button>
-    </div>
-  </div>
-</section>
-
-<!-- ============== ANTIBIOTICS ============== -->
-<section class="module" id="m-antibiotics">
-  <div class="module-head">
-    <div>
-      <h2>Common ICU Antibiotics</h2>
-      <p>Empiric doses with renal adjustment based on the patient's CrCl.</p>
-    </div>
-    <span class="pill info" id="abx-crcl-badge">CrCl —</span>
-  </div>
-  <div class="search">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-    <input id="abxSearch" type="search" placeholder="Search antibiotic (e.g. mero, vanco)…" autocomplete="off" />
-  </div>
-  <div class="chips" id="abxClassChips"></div>
-  <div class="cards" id="abxCards" aria-live="polite"></div>
-</section>
-
-<!-- ============== ABOUT ============== -->
-<section class="module" id="m-about">
-  <div class="module-head"><div><h2>About</h2><p>Najm ICUCalc — bedside clinical assistant.</p></div></div>
-
-  <div class="card">
-    <h3>Designed by</h3>
-    <div class="sub">Author &amp; clinical lead</div>
-    <div class="row" style="border-top:0;padding-top:4px">
-      <span class="k">Name</span><span class="v">Dr. Mohamed Najm</span>
-    </div>
-    <div class="row">
-      <span class="k">Role</span><span class="v">Intensivist · ICU / CCU</span>
-    </div>
-    <div class="row">
-      <span class="k">Version</span><span class="v" id="app-version">1.0.0</span>
-    </div>
-    <div class="row">
-      <span class="k">Build date</span><span class="v" id="app-build">—</span>
-    </div>
+    <nav class="tabs" aria-label="Modules">
+      <div class="tabs-inner" id="tabs">
+        <button class="tab active" type="button" data-tab="infusions">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v6"/><path d="M12 8c-3 3-6 6-6 10a6 6 0 0 0 12 0c0-4-3-7-6-10Z"/></svg>
+          Infusions
+        </button>
+        <button class="tab" type="button" data-tab="antibiotics">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12a7.5 7.5 0 0 1 7.5-7.5V12H4.5Z"/><path d="M12 4.5a7.5 7.5 0 0 1 7.5 7.5H12V4.5Z"/><path d="M19.5 12a7.5 7.5 0 0 1-7.5 7.5V12h7.5Z"/><path d="M12 19.5A7.5 7.5 0 0 1 4.5 12H12v7.5Z"/></svg>
+          Antibiotics
+        </button>
+        <button class="tab" type="button" data-tab="hemo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-5 4 12 3-7 2 3h3"/></svg>
+          Hemodynamics
+        </button>
+        <button class="tab" type="button" data-tab="vent">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M6 8c-2 0-3 2-3 4s1 4 3 4c1 0 2-1 2-3v-2c0-2-1-3-2-3Z"/><path d="M18 8c2 0 3 2 3 4s-1 4-3 4c-1 0-2-1-2-3v-2c0-2 1-3 2-3Z"/></svg>
+          Ventilator
+        </button>
+        <button class="tab" type="button" data-tab="abg">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v6l4 8a3 3 0 0 1-3 4H8a3 3 0 0 1-3-4l4-8V3Z"/><path d="M9 3h6"/></svg>
+          ABG
+        </button>
+        <button class="tab" type="button" data-tab="lytes">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m13 2-8 12h6l-2 8 8-12h-6l2-8Z"/></svg>
+          Electrolytes
+        </button>
+        <button class="tab" type="button" data-tab="renal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-4-2-5l-5-8-5 8c-1 1-2 3-2 5a7 7 0 0 0 7 7Z"/></svg>
+          Renal
+        </button>
+        <button class="tab" type="button" data-tab="scores">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15V9"/><path d="M12 15V6"/><path d="M17 15v-4"/></svg>
+          Scores
+        </button>
+        <button class="tab" type="button" data-tab="notes">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-9"/><path d="m19 3-6 6h4V3Z"/></svg>
+          Notes
+        </button>
+        <button class="tab" type="button" data-tab="about">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 12h1v5h1"/></svg>
+          About
+        </button>
+      </div>
+    </nav>
   </div>
 
-  <div class="card">
-    <h3>Clinical References</h3>
-    <div class="sub">Sources consulted for dose ranges, formulas, and score interpretations.</div>
-    <div id="ref-list"></div>
-  </div>
+  <main>
 
-  <div class="card">
-    <h3>Disclaimer</h3>
-    <div class="sub">Reference aid — not a medical device.</div>
-    <div class="verdict warn">
-      All doses, calculations, and score interpretations presented in Najm ICUCalc are for
-      clinical reference only. Every value must be independently verified by a qualified
-      clinician against institutional protocols, drug labels, and the patient's clinical
-      context. The author assumes no liability for clinical decisions made with this tool.
-    </div>
-    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
-      <a class="btn" href="privacy-policy.html">Privacy policy</a>
-      <a class="btn" href="https://github.com/mahham20022-art/Najm-icucalc" target="_blank" rel="noopener">Source on GitHub</a>
-      <button class="btn primary" type="button" id="wipeAllBtn">Wipe all local data</button>
-    </div>
-  </div>
-</section>
+    <!-- INFUSIONS -->
+    <section class="module active" id="m-infusions">
+      <div class="module-head">
+        <div>
+          <h2>Infusion Doses</h2>
+          <p>Live ranges by weight + drip rate at standard concentrations.</p>
+        </div>
+      </div>
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="drugSearch" type="search" placeholder="Search drug…" autocomplete="off" />
+      </div>
+      <div class="chips" id="catChips"></div>
+      <div class="cards" id="drugCards" aria-live="polite"></div>
+    </section>
 
-</main>
+    <!-- ANTIBIOTICS -->
+    <section class="module" id="m-antibiotics">
+      <div class="module-head">
+        <div>
+          <h2>Common ICU Antibiotics</h2>
+          <p>Empiric doses with renal adjustment by CrCl.</p>
+        </div>
+        <span class="pill info" id="abx-crcl-badge">CrCl —</span>
+      </div>
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="abxSearch" type="search" placeholder="Search antibiotic…" autocomplete="off" />
+      </div>
+      <div class="chips" id="abxClassChips"></div>
+      <div class="cards" id="abxCards" aria-live="polite"></div>
+    </section>
 
-<footer>
-  <strong>Reference aid only — not a medical device.</strong> Always verify against institutional
-  protocols, drug labels, and the patient's clinical context. Data is stored locally in this
-  browser and never transmitted.
-  <br />
-  <a href="privacy-policy.html" style="color:#38bdf8">Privacy policy</a>
-  &nbsp;·&nbsp;
-  <a href="https://github.com/mahham20022-art/Najm-icucalc" style="color:#38bdf8">Source</a>
-</footer>
+    <!-- HEMODYNAMICS -->
+    <section class="module" id="m-hemo">
+      <div class="module-head"><div><h2>Hemodynamics</h2><p>MAP, shock index, CPP, and pressor load.</p></div></div>
+      <div class="cards">
+        <div class="card">
+          <h3>Blood Pressure</h3>
+          <div class="sub">Enter cuff or arterial line values.</div>
+          <div class="grid-in three">
+            <div class="field"><label>SBP</label><div class="input"><input id="hd-sbp" type="number" inputmode="numeric" /><span class="unit">mmHg</span></div></div>
+            <div class="field"><label>DBP</label><div class="input"><input id="hd-dbp" type="number" inputmode="numeric" /><span class="unit">mmHg</span></div></div>
+            <div class="field"><label>HR</label><div class="input"><input id="hd-hr" type="number" inputmode="numeric" /><span class="unit">bpm</span></div></div>
+          </div>
+          <div class="row"><span class="k">MAP</span><span class="v" id="hd-map">—</span></div>
+          <div class="row"><span class="k">Pulse Pressure</span><span class="v" id="hd-pp">—</span></div>
+          <div class="row"><span class="k">Shock Index</span><span class="v" id="hd-si">—</span></div>
+          <div class="row"><span class="k">Modified SI</span><span class="v" id="hd-msi">—</span></div>
+          <div class="verdict" id="hd-verdict">Enter SBP/DBP to interpret.</div>
+        </div>
+
+        <div class="card">
+          <h3>Cerebral Perfusion</h3>
+          <div class="sub">CPP = MAP − ICP. Adults target ≥ 60 mmHg.</div>
+          <div class="grid-in">
+            <div class="field"><label>ICP</label><div class="input"><input id="cpp-icp" type="number" inputmode="numeric" /><span class="unit">mmHg</span></div></div>
+            <div class="field"><label>MAP override</label><div class="input"><input id="cpp-map" type="number" inputmode="numeric" /><span class="unit">auto</span></div></div>
+          </div>
+          <div class="row"><span class="k">CPP</span><span class="v" id="cpp-out">—</span></div>
+          <div class="verdict" id="cpp-verdict">Enter ICP to compute.</div>
+        </div>
+
+        <div class="card">
+          <h3>Norepi Equivalents</h3>
+          <div class="sub">Comparator of vasopressor load (μg/kg/min equivalents).</div>
+          <div class="grid-in">
+            <div class="field"><label>Norepi</label><div class="input"><input id="ne-norepi" type="number" step="0.01" inputmode="decimal" /><span class="unit">μg/kg/min</span></div></div>
+            <div class="field"><label>Epi</label><div class="input"><input id="ne-epi" type="number" step="0.01" inputmode="decimal" /><span class="unit">μg/kg/min</span></div></div>
+            <div class="field"><label>Phenyleph</label><div class="input"><input id="ne-phenyl" type="number" step="0.01" inputmode="decimal" /><span class="unit">μg/kg/min</span></div></div>
+            <div class="field"><label>Dopamine</label><div class="input"><input id="ne-dop" type="number" step="0.1" inputmode="decimal" /><span class="unit">μg/kg/min</span></div></div>
+            <div class="field"><label>Vasopressin</label><div class="input"><input id="ne-vaso" type="number" step="0.01" inputmode="decimal" /><span class="unit">U/min</span></div></div>
+          </div>
+          <div class="row"><span class="k">NE equivalent</span><span class="v" id="ne-total">—</span></div>
+          <div class="verdict" id="ne-verdict">Sum of norepi-equivalent support.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VENTILATOR -->
+    <section class="module" id="m-vent">
+      <div class="module-head"><div><h2>Ventilator</h2><p>PBW-based TV, Berlin ARDS, driving pressure.</p></div></div>
+      <div class="cards">
+        <div class="card">
+          <h3>Tidal Volume (Predicted BW)</h3>
+          <div class="sub">PBW needs height + sex. Targets: 4 / 6 / 8 mL/kg.</div>
+          <div class="row"><span class="k">PBW</span><span class="v" id="v-pbw">—</span></div>
+          <div class="row"><span class="k">TV 4 mL/kg (low)</span><span class="v" id="v-tv4">—</span></div>
+          <div class="row"><span class="k">TV 6 mL/kg (target)</span><span class="v mid" id="v-tv6">—</span></div>
+          <div class="row"><span class="k">TV 8 mL/kg (max ARDS)</span><span class="v" id="v-tv8">—</span></div>
+        </div>
+
+        <div class="card">
+          <h3>Oxygenation (P/F &amp; SF)</h3>
+          <div class="grid-in three">
+            <div class="field"><label>PaO₂</label><div class="input"><input id="v-pao2" type="number" inputmode="numeric" /><span class="unit">mmHg</span></div></div>
+            <div class="field"><label>SpO₂</label><div class="input"><input id="v-spo2" type="number" inputmode="numeric" max="100" /><span class="unit">%</span></div></div>
+            <div class="field"><label>FiO₂</label><div class="input"><input id="v-fio2" type="number" inputmode="decimal" step="0.01" /><span class="unit">%</span></div></div>
+          </div>
+          <div class="row"><span class="k">P/F ratio</span><span class="v" id="v-pf">—</span></div>
+          <div class="row"><span class="k">SpO₂/FiO₂</span><span class="v" id="v-sf">—</span></div>
+          <div class="verdict" id="v-pfverdict">Enter PaO₂ and FiO₂ for Berlin classification.</div>
+        </div>
+
+        <div class="card">
+          <h3>Driving Pressure &amp; Compliance</h3>
+          <div class="grid-in three">
+            <div class="field"><label>Pplat</label><div class="input"><input id="v-pplat" type="number" inputmode="numeric" /><span class="unit">cmH₂O</span></div></div>
+            <div class="field"><label>PEEP</label><div class="input"><input id="v-peep" type="number" inputmode="numeric" /><span class="unit">cmH₂O</span></div></div>
+            <div class="field"><label>TV</label><div class="input"><input id="v-tv" type="number" inputmode="numeric" /><span class="unit">mL</span></div></div>
+          </div>
+          <div class="row"><span class="k">Driving pressure</span><span class="v" id="v-dp">—</span></div>
+          <div class="row"><span class="k">Static compliance</span><span class="v" id="v-cstat">—</span></div>
+          <div class="verdict" id="v-dpverdict">Target driving pressure &lt; 15 cmH₂O.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABG -->
+    <section class="module" id="m-abg">
+      <div class="module-head"><div><h2>Acid–Base / ABG</h2><p>Primary disorder, compensation, anion gap, Δ-Δ, A–a.</p></div></div>
+      <div class="cards">
+        <div class="card">
+          <h3>Inputs</h3>
+          <div class="grid-in">
+            <div class="field"><label>pH</label><div class="input"><input id="ab-ph" type="number" step="0.01" inputmode="decimal" /></div></div>
+            <div class="field"><label>PaCO₂</label><div class="input"><input id="ab-co2" type="number" inputmode="numeric" /><span class="unit">mmHg</span></div></div>
+            <div class="field"><label>HCO₃</label><div class="input"><input id="ab-hco3" type="number" inputmode="decimal" /><span class="unit">mEq/L</span></div></div>
+            <div class="field"><label>Na</label><div class="input"><input id="ab-na" type="number" inputmode="numeric" /><span class="unit">mEq/L</span></div></div>
+            <div class="field"><label>Cl</label><div class="input"><input id="ab-cl" type="number" inputmode="numeric" /><span class="unit">mEq/L</span></div></div>
+            <div class="field"><label>Albumin</label><div class="input"><input id="ab-alb" type="number" step="0.1" inputmode="decimal" /><span class="unit">g/dL</span></div></div>
+            <div class="field"><label>PaO₂</label><div class="input"><input id="ab-pao2" type="number" inputmode="numeric" /><span class="unit">mmHg</span></div></div>
+            <div class="field"><label>FiO₂</label><div class="input"><input id="ab-fio2" type="number" step="0.01" inputmode="decimal" /><span class="unit">%</span></div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Interpretation</h3>
+          <div class="row"><span class="k">Primary disorder</span><span class="v" id="ab-primary">—</span></div>
+          <div class="row"><span class="k">Expected compensation</span><span class="v" id="ab-comp">—</span></div>
+          <div class="row"><span class="k">Anion gap</span><span class="v" id="ab-ag">—</span></div>
+          <div class="row"><span class="k">Corrected AG</span><span class="v" id="ab-cag">—</span></div>
+          <div class="row"><span class="k">Δ-Δ ratio</span><span class="v" id="ab-dd">—</span></div>
+          <div class="row"><span class="k">A–a gradient</span><span class="v" id="ab-aa">—</span></div>
+          <div class="verdict" id="ab-verdict">Enter pH, PaCO₂, HCO₃ to start.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ELECTROLYTES -->
+    <section class="module" id="m-lytes">
+      <div class="module-head"><div><h2>Electrolytes</h2><p>Corrections, osmolality, FWD, K⁺ replacement.</p></div></div>
+      <div class="cards">
+        <div class="card">
+          <h3>Corrected Calcium</h3>
+          <div class="sub">Ca<sub>corr</sub> = Ca + 0.8 × (4 − albumin)</div>
+          <div class="grid-in">
+            <div class="field"><label>Ca measured</label><div class="input"><input id="ca-ca" type="number" step="0.1" inputmode="decimal" /><span class="unit">mg/dL</span></div></div>
+            <div class="field"><label>Albumin</label><div class="input"><input id="ca-alb" type="number" step="0.1" inputmode="decimal" /><span class="unit">g/dL</span></div></div>
+          </div>
+          <div class="row"><span class="k">Corrected Ca</span><span class="v" id="ca-corr">—</span></div>
+          <div class="verdict" id="ca-verdict">Reference 8.5 – 10.5 mg/dL.</div>
+        </div>
+
+        <div class="card">
+          <h3>Corrected Na (hyperglycemia)</h3>
+          <div class="sub">Na<sub>corr</sub> = Na + 1.6 × (glucose − 100) / 100</div>
+          <div class="grid-in">
+            <div class="field"><label>Na measured</label><div class="input"><input id="na-na" type="number" inputmode="numeric" /><span class="unit">mEq/L</span></div></div>
+            <div class="field"><label>Glucose</label><div class="input"><input id="na-glu" type="number" inputmode="numeric" /><span class="unit">mg/dL</span></div></div>
+          </div>
+          <div class="row"><span class="k">Corrected Na</span><span class="v" id="na-corr">—</span></div>
+        </div>
+
+        <div class="card">
+          <h3>Serum Osmolality</h3>
+          <div class="sub">2·Na + Glucose/18 + BUN/2.8 (+ EtOH/3.7)</div>
+          <div class="grid-in three">
+            <div class="field"><label>Na</label><div class="input"><input id="os-na" type="number" inputmode="numeric" /></div></div>
+            <div class="field"><label>Glucose</label><div class="input"><input id="os-glu" type="number" inputmode="numeric" /></div></div>
+            <div class="field"><label>BUN</label><div class="input"><input id="os-bun" type="number" inputmode="numeric" /></div></div>
+            <div class="field"><label>EtOH</label><div class="input"><input id="os-etoh" type="number" inputmode="numeric" /></div></div>
+            <div class="field"><label>Measured</label><div class="input"><input id="os-meas" type="number" inputmode="numeric" /></div></div>
+          </div>
+          <div class="row"><span class="k">Calculated osm</span><span class="v" id="os-calc">—</span></div>
+          <div class="row"><span class="k">Osmolar gap</span><span class="v" id="os-gap">—</span></div>
+          <div class="verdict" id="os-verdict">Normal gap &lt; 10.</div>
+        </div>
+
+        <div class="card">
+          <h3>Free Water Deficit</h3>
+          <div class="sub">FWD = TBW × (Na/target − 1). TBW = 0.6·W (M) / 0.5·W (F).</div>
+          <div class="grid-in">
+            <div class="field"><label>Current Na</label><div class="input"><input id="fwd-na" type="number" inputmode="numeric" /><span class="unit">mEq/L</span></div></div>
+            <div class="field"><label>Target Na</label><div class="input"><input id="fwd-tgt" type="number" inputmode="numeric" /><span class="unit">mEq/L</span></div></div>
+          </div>
+          <div class="row"><span class="k">Free water deficit</span><span class="v" id="fwd-out">—</span></div>
+          <div class="verdict">Correct ≤ 10 mEq/L per 24 hr to avoid cerebral edema.</div>
+        </div>
+
+        <div class="card">
+          <h3>Potassium Replacement</h3>
+          <div class="sub">Empiric IV KCl guide.</div>
+          <div class="grid-in full">
+            <div class="field"><label>Serum K⁺</label><div class="input"><input id="k-k" type="number" step="0.1" inputmode="decimal" /><span class="unit">mEq/L</span></div></div>
+          </div>
+          <div class="row"><span class="k">Suggested replacement</span><span class="v" id="k-out">—</span></div>
+          <div class="verdict">Max peripheral 10 mEq/hr; central 20 mEq/hr with monitoring.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RENAL -->
+    <section class="module" id="m-renal">
+      <div class="module-head"><div><h2>Renal &amp; Fluids</h2><p>CrCl, UO, sepsis bolus, maintenance.</p></div></div>
+      <div class="cards">
+        <div class="card">
+          <h3>Creatinine Clearance</h3>
+          <div class="sub">Cockcroft–Gault: (140 − age) × W / (72 × Cr); × 0.85 (F).</div>
+          <div class="row"><span class="k">CrCl</span><span class="v" id="rn-crcl">—</span></div>
+          <div class="verdict" id="rn-crclv">Set age, weight, sex, creatinine in the patient bar.</div>
+        </div>
+
+        <div class="card">
+          <h3>Urine Output</h3>
+          <div class="sub">Per kg/hr — oliguria &lt; 0.5 mL/kg/hr.</div>
+          <div class="grid-in">
+            <div class="field"><label>Total UO</label><div class="input"><input id="uo-vol" type="number" inputmode="numeric" /><span class="unit">mL</span></div></div>
+            <div class="field"><label>Over</label><div class="input"><input id="uo-hr" type="number" inputmode="decimal" step="0.5" /><span class="unit">hr</span></div></div>
+          </div>
+          <div class="row"><span class="k">Rate</span><span class="v" id="uo-rate">—</span></div>
+          <div class="verdict" id="uo-verdict">Enter volume + hours.</div>
+        </div>
+
+        <div class="card">
+          <h3>Sepsis Fluid Bolus</h3>
+          <div class="sub">Surviving Sepsis: 30 mL/kg crystalloid within 3 hr.</div>
+          <div class="row"><span class="k">Target volume</span><span class="v" id="sep-vol">—</span></div>
+          <div class="row"><span class="k">¼ bolus (250 mL)</span><span class="v" id="sep-quarter">—</span></div>
+          <div class="verdict">Reassess after each bolus — avoid over-resuscitation.</div>
+        </div>
+
+        <div class="card">
+          <h3>Maintenance Fluids (4-2-1)</h3>
+          <div class="sub">First 10 kg ×4, next 10 kg ×2, remainder ×1 mL/kg/hr.</div>
+          <div class="row"><span class="k">Maintenance rate</span><span class="v" id="mn-rate">—</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCORES -->
+    <section class="module" id="m-scores">
+      <div class="module-head"><div><h2>Clinical Scores</h2><p>Live scoring with interpretation.</p></div></div>
+      <div class="cards">
+        <div class="card"><h3>GCS</h3><div class="sub">Glasgow Coma Scale (3–15)</div><div id="score-gcs"></div></div>
+        <div class="card"><h3>qSOFA</h3><div class="sub">≥ 2 → higher sepsis mortality risk.</div><div id="score-qsofa"></div></div>
+        <div class="card"><h3>SOFA</h3><div class="sub">Organ dysfunction (0–24).</div><div id="score-sofa"></div></div>
+        <div class="card"><h3>CHA₂DS₂-VASc</h3><div class="sub">Stroke risk in AF.</div><div id="score-chads"></div></div>
+        <div class="card"><h3>HAS-BLED</h3><div class="sub">Bleeding risk on anticoagulation.</div><div id="score-hasbled"></div></div>
+        <div class="card"><h3>Wells (PE)</h3><div class="sub">Pretest probability of PE.</div><div id="score-wells"></div></div>
+        <div class="card"><h3>RASS</h3><div class="sub">Richmond Agitation–Sedation Scale.</div><div id="score-rass"></div></div>
+      </div>
+    </section>
+
+    <!-- NOTES -->
+    <section class="module" id="m-notes">
+      <div class="module-head"><div><h2>Shift Notes</h2><p>Scratchpad — stored locally on this device.</p></div></div>
+      <div class="card notes">
+        <textarea id="notes" placeholder="Patient summary, plan, pending tasks, handover…"></textarea>
+        <div class="note-actions">
+          <button class="btn primary" type="button" id="copyNotes">Copy</button>
+          <button class="btn" type="button" id="exportNotes">Download .txt</button>
+          <button class="btn danger" type="button" id="clearNotes">Clear</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="module" id="m-about">
+      <div class="module-head"><div><h2>About</h2><p>Najm ICUCalc — bedside clinical assistant.</p></div></div>
+      <div class="card">
+        <h3>Designed by</h3>
+        <div class="sub">Author &amp; clinical lead</div>
+        <div class="row"><span class="k">Name</span><span class="v">Dr. Mohamed Najm</span></div>
+        <div class="row"><span class="k">Role</span><span class="v">Intensivist · ICU / CCU</span></div>
+        <div class="row"><span class="k">Version</span><span class="v">1.1.0</span></div>
+        <div class="row"><span class="k">Build</span><span class="v" id="app-build">—</span></div>
+      </div>
+
+      <div class="card">
+        <h3>Clinical References</h3>
+        <div class="sub">Sources for dose ranges, formulas, and score interpretations.</div>
+        <div id="ref-list"></div>
+      </div>
+
+      <div class="card">
+        <h3>Disclaimer</h3>
+        <div class="sub">Reference aid — not a medical device.</div>
+        <div class="verdict warn">
+          All doses, calculations, and interpretations are for clinical reference only.
+          Every value must be independently verified by a qualified clinician against
+          institutional protocols, drug labels, and the patient's clinical context.
+          The author assumes no liability for clinical decisions made with this tool.
+        </div>
+        <div class="note-actions">
+          <a class="btn" href="privacy-policy.html">Privacy policy</a>
+          <a class="btn" href="https://github.com/mahham20022-art/Najm-icucalc" target="_blank" rel="noopener">Source</a>
+          <button class="btn" type="button" id="showOnbBtn">Show welcome again</button>
+          <button class="btn danger" type="button" id="wipeAllBtn">Wipe all data</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="fine"><strong>Reference aid — not a medical device.</strong> Always verify against institutional protocols and drug labels.</div>
+    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc · Designed by Dr. Mohamed Najm</div>
+  </footer>
+</div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -749,23 +1238,24 @@ const state = {
   abxCls: "all",
   abxQuery: "",
   tab: "infusions",
-  inputs: {},   // arbitrary persisted inputs by id
-  scores: {},   // score selections by score key
+  inputs: {},
+  scores: {},
   notes: "",
+  onboarded: false,
 };
 
 function loadState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) Object.assign(state, JSON.parse(raw));
-  } catch (e) { /* ignore */ }
+  } catch (e) {}
 }
 let saveTimer = null;
 function saveState() {
   clearTimeout(saveTimer);
   saveTimer = setTimeout(() => {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
-    catch (e) { /* quota */ }
+    catch (e) {}
     flashSave();
   }, 200);
 }
@@ -779,10 +1269,7 @@ function flashSave() {
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
-const num = v => {
-  const n = parseFloat(v);
-  return isNaN(n) ? null : n;
-};
+const num = v => { const n = parseFloat(v); return isNaN(n) ? null : n; };
 const fmt = (n, d = 1) => {
   if (n === null || n === undefined || isNaN(n)) return "—";
   const abs = Math.abs(n);
@@ -791,24 +1278,23 @@ const fmt = (n, d = 1) => {
   return n.toFixed(Math.max(d, 2));
 };
 function showToast(msg) {
-  const t = $("#toast"); t.textContent = msg; t.classList.add("show");
+  const t = $("#toast");
+  t.textContent = msg; t.classList.add("show");
   clearTimeout(showToast._t);
   showToast._t = setTimeout(() => t.classList.remove("show"), 1600);
 }
 
 /* ============================================================
-   PERSISTED INPUT BINDING
+   INPUT BINDING
    ============================================================ */
-function bindInput(id, key, container = state.inputs, cb) {
+function bindInput(id, key) {
   const el = $("#" + id);
   if (!el) return;
-  if (container[key] !== undefined && container[key] !== null && container[key] !== "") {
-    el.value = container[key];
-  }
+  const v = state.inputs[key];
+  if (v !== undefined && v !== null && v !== "") el.value = v;
   el.addEventListener("input", () => {
-    container[key] = el.value;
+    state.inputs[key] = el.value;
     saveState();
-    if (cb) cb();
     runAll();
   });
 }
@@ -817,11 +1303,8 @@ function bindInput(id, key, container = state.inputs, cb) {
    PATIENT
    ============================================================ */
 const PATIENT_FIELDS = [
-  ["p-weight", "weight"],
-  ["p-height", "height"],
-  ["p-age",    "age"],
-  ["p-sex",    "sex"],
-  ["p-cr",     "cr"],
+  ["p-weight", "weight"], ["p-height", "height"], ["p-age", "age"],
+  ["p-sex", "sex"], ["p-cr", "cr"],
 ];
 function bindPatient() {
   for (const [id, key] of PATIENT_FIELDS) {
@@ -843,20 +1326,16 @@ function bindPatient() {
 }
 
 function pbw() {
-  const h = num(state.patient.height);
-  const sex = state.patient.sex;
+  const h = num(state.patient.height), sex = state.patient.sex;
   if (!h || !sex) return null;
-  const inches = h / 2.54;
-  const over60 = inches - 60;
-  const base = sex === "M" ? 50 : 45.5;
-  return base + 2.3 * over60;
+  return (sex === "M" ? 50 : 45.5) + 2.3 * (h / 2.54 - 60);
 }
 function bsa() {
   const h = num(state.patient.height), w = num(state.patient.weight);
   if (!h || !w) return null;
   return Math.sqrt((h * w) / 3600);
 }
-function crCl() {
+function computedCrCl() {
   const age = num(state.patient.age), w = num(state.patient.weight), cr = num(state.patient.cr);
   const sex = state.patient.sex;
   if (!age || !w || !cr || !sex) return null;
@@ -867,7 +1346,7 @@ function crCl() {
 function renderDerived() {
   $("#d-ibw").textContent  = pbw() !== null ? fmt(pbw(), 1)  : "—";
   $("#d-bsa").textContent  = bsa() !== null ? fmt(bsa(), 2)  : "—";
-  $("#d-crcl").textContent = crCl() !== null ? fmt(crCl(), 0) : "—";
+  $("#d-crcl").textContent = computedCrCl() !== null ? fmt(computedCrCl(), 0) : "—";
 }
 
 /* ============================================================
@@ -875,117 +1354,82 @@ function renderDerived() {
    ============================================================ */
 function bindTabs() {
   const container = $("#tabs");
-  const tabButtons = () => $$("#tabs .tab");
-
   function activate(name) {
     if (!$("#m-" + name)) name = "infusions";
     state.tab = name;
     saveState();
-    tabButtons().forEach(t => t.classList.toggle("active", t.dataset.tab === name));
+    $$("#tabs .tab").forEach(t => t.classList.toggle("active", t.dataset.tab === name));
     $$(".module").forEach(m => m.classList.toggle("active", m.id === "m-" + name));
     if (location.hash !== "#" + name) history.replaceState(null, "", "#" + name);
     window.scrollTo({ top: 0, behavior: "auto" });
-    // If activating the About tab, make sure references are rendered
     if (name === "about") renderAbout();
     if (name === "antibiotics") renderAntibiotics();
-  }
 
-  // Event delegation on the container so re-renders don't lose the handler.
+    // Scroll active tab into view within the tab bar
+    const activeBtn = container.querySelector(`.tab[data-tab="${name}"]`);
+    if (activeBtn) activeBtn.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  }
   container.addEventListener("click", e => {
     const btn = e.target.closest(".tab");
-    if (btn && container.contains(btn)) {
-      activate(btn.dataset.tab);
-    }
+    if (btn && container.contains(btn)) activate(btn.dataset.tab);
   });
-
   window.addEventListener("hashchange", () => {
     const h = location.hash.replace("#", "");
     if (h && $("#m-" + h)) activate(h);
   });
-
   const initial = (location.hash || "").replace("#", "") || state.tab || "infusions";
   activate(initial);
 }
 
 /* ============================================================
-   INFUSIONS
+   INFUSION DRUGS
    ============================================================ */
 const DRUGS = [
-  // Sedation / analgesia
   { id: "fentanyl",  name: "Fentanyl",        cat: "Sedation",        min: 0.5,  max: 3,    unit: "mcg/kg/hr",  conc: "10 mcg/mL",   concVal: 10,    concUnit: "mcg/mL" },
   { id: "propofol",  name: "Propofol",        cat: "Sedation",        min: 5,    max: 50,   unit: "mcg/kg/min", conc: "10 mg/mL",    concVal: 10000, concUnit: "mcg/mL" },
   { id: "midaz",     name: "Midazolam",       cat: "Sedation",        min: 0.02, max: 0.1,  unit: "mg/kg/hr",   conc: "1 mg/mL",     concVal: 1,     concUnit: "mg/mL" },
   { id: "dex",       name: "Dexmedetomidine", cat: "Sedation",        min: 0.2,  max: 1.4,  unit: "mcg/kg/hr",  conc: "4 mcg/mL",    concVal: 4,     concUnit: "mcg/mL" },
   { id: "ketamine",  name: "Ketamine",        cat: "Sedation",        min: 0.1,  max: 2,    unit: "mg/kg/hr",   conc: "1 mg/mL",     concVal: 1,     concUnit: "mg/mL" },
   { id: "morphine",  name: "Morphine",        cat: "Sedation",        min: 0.01, max: 0.05, unit: "mg/kg/hr",   conc: "1 mg/mL",     concVal: 1,     concUnit: "mg/mL" },
-  // Vasopressors
   { id: "norepi",    name: "Norepinephrine",  cat: "Vasopressor",     min: 0.01, max: 1,    unit: "mcg/kg/min", conc: "16 mcg/mL",   concVal: 16,    concUnit: "mcg/mL" },
   { id: "epi",       name: "Epinephrine",     cat: "Vasopressor",     min: 0.01, max: 1,    unit: "mcg/kg/min", conc: "16 mcg/mL",   concVal: 16,    concUnit: "mcg/mL" },
   { id: "phenyl",    name: "Phenylephrine",   cat: "Vasopressor",     min: 0.1,  max: 5,    unit: "mcg/kg/min", conc: "100 mcg/mL",  concVal: 100,   concUnit: "mcg/mL" },
   { id: "vaso",      name: "Vasopressin",     cat: "Vasopressor",     min: 0.01, max: 0.04, unit: "U/min",      conc: "0.4 U/mL",    concVal: 0.4,   concUnit: "U/mL",   weightless: true },
-  // Inotropes
   { id: "dop",       name: "Dopamine",        cat: "Inotrope",        min: 2,    max: 20,   unit: "mcg/kg/min", conc: "1600 mcg/mL", concVal: 1600,  concUnit: "mcg/mL" },
   { id: "dob",       name: "Dobutamine",      cat: "Inotrope",        min: 2,    max: 20,   unit: "mcg/kg/min", conc: "1000 mcg/mL", concVal: 1000,  concUnit: "mcg/mL" },
   { id: "milri",     name: "Milrinone",       cat: "Inotrope",        min: 0.25, max: 0.75, unit: "mcg/kg/min", conc: "200 mcg/mL",  concVal: 200,   concUnit: "mcg/mL" },
-  // Antihypertensives
   { id: "esmo",      name: "Esmolol",         cat: "Antihypertensive",min: 50,   max: 300,  unit: "mcg/kg/min", conc: "10 mg/mL",    concVal: 10000, concUnit: "mcg/mL" },
   { id: "nicar",     name: "Nicardipine",     cat: "Antihypertensive",min: 5,    max: 15,   unit: "mg/hr",      conc: "0.1 mg/mL",   concVal: 0.1,   concUnit: "mg/mL",  weightless: true },
   { id: "labet",     name: "Labetalol",       cat: "Antihypertensive",min: 2,    max: 8,    unit: "mg/min",     conc: "1 mg/mL",     concVal: 1,     concUnit: "mg/mL",  weightless: true },
   { id: "ntg",       name: "Nitroglycerin",   cat: "Antihypertensive",min: 5,    max: 200,  unit: "mcg/min",    conc: "100 mcg/mL",  concVal: 100,   concUnit: "mcg/mL", weightless: true },
   { id: "snp",       name: "Nitroprusside",   cat: "Antihypertensive",min: 0.25, max: 10,   unit: "mcg/kg/min", conc: "200 mcg/mL",  concVal: 200,   concUnit: "mcg/mL" },
-  // Antiarrhythmics
   { id: "amio",      name: "Amiodarone",      cat: "Antiarrhythmic",  min: 0.5,  max: 1,    unit: "mg/min",     conc: "1.8 mg/mL",   concVal: 1.8,   concUnit: "mg/mL",  weightless: true },
   { id: "lido",      name: "Lidocaine",       cat: "Antiarrhythmic",  min: 1,    max: 4,    unit: "mg/min",     conc: "8 mg/mL",     concVal: 8,     concUnit: "mg/mL",  weightless: true },
   { id: "diltiazem", name: "Diltiazem",       cat: "Antiarrhythmic",  min: 5,    max: 15,   unit: "mg/hr",      conc: "1 mg/mL",     concVal: 1,     concUnit: "mg/mL",  weightless: true },
-  // Insulin & misc
   { id: "insulin",   name: "Insulin (regular)",cat: "Endocrine",      min: 0.05, max: 0.1,  unit: "U/kg/hr",    conc: "1 U/mL",      concVal: 1,     concUnit: "U/mL" },
   { id: "heparin",   name: "Heparin",         cat: "Anticoagulant",   min: 12,   max: 25,   unit: "U/kg/hr",    conc: "100 U/mL",    concVal: 100,   concUnit: "U/mL" },
 ];
-
 const CATS = ["all", ...Array.from(new Set(DRUGS.map(d => d.cat)))];
 
-function rangeClass(d) {
-  const r = d.max / d.min;
-  if (r > 8) return "high";
-  if (r < 3) return "low";
-  return "mid";
-}
-
-/* convert a per-kg or fixed dose to mL/hr from concentration (per mL) */
-function infusionRate(d, dosePerKg, w) {
+function rangeClass(d) { const r = d.max / d.min; return r > 8 ? "high" : r < 3 ? "low" : "mid"; }
+function infusionRate(d, dose, w) {
   if (!d.concVal) return null;
-  let dosePerMin;
-  // normalize unit to mcg/min or mg/min or U/min depending on concentration unit
-  // Convert input dose to: dose per minute matching concentration unit base.
-  // Simplest approach: compute total drug per hour (mass/hr) then divide by conc/mL → mL/hr.
-
-  const w_eff = d.weightless ? 1 : (w || null);
-  if (!w_eff && !d.weightless) return null;
-
-  let perHour;            // amount of drug per hour, in the same UNIT as concUnit (per mL)
-  const concBase = d.concUnit.split("/")[0]; // "mcg" | "mg" | "U"
-
-  // dose units: "mcg/kg/min", "mg/kg/hr", "mcg/min", "mg/hr", "U/min", "U/kg/hr"
+  const wEff = d.weightless ? 1 : (w || null);
+  if (!wEff && !d.weightless) return null;
   const u = d.unit.toLowerCase();
-  // amount per kg per hour (in mass/U as given) — first compute that:
-  let perKgPerHour;
-  if (u.includes("/min")) perKgPerHour = dosePerKg * 60;
-  else                    perKgPerHour = dosePerKg;
-  let amount = perKgPerHour * w_eff;
-  // amount is in input mass unit per hour — convert to concentration base:
+  const concBase = d.concUnit.split("/")[0];
+  const perKgPerHour = u.includes("/min") ? dose * 60 : dose;
+  let amount = perKgPerHour * wEff;
   const inBase = u.startsWith("mcg") ? "mcg" : u.startsWith("mg") ? "mg" : "U";
   if (inBase === "mcg" && concBase === "mg") amount /= 1000;
   if (inBase === "mg"  && concBase === "mcg") amount *= 1000;
-  // (U <-> U only)
-  perHour = amount;
-  return perHour / d.concVal;
+  return amount / d.concVal;
 }
 
 function renderInfusions() {
-  // Chips
   const chipBox = $("#catChips");
   chipBox.innerHTML = CATS.map(c =>
-    `<button class="chip ${state.drugCat === c ? "active" : ""}" data-cat="${c}">${c === "all" ? "All" : c}</button>`
+    `<button class="chip ${state.drugCat === c ? "active" : ""}" type="button" data-cat="${c}">${c === "all" ? "All" : c}</button>`
   ).join("");
   chipBox.querySelectorAll(".chip").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -997,49 +1441,35 @@ function renderInfusions() {
 
   const w = num(state.patient.weight);
   const q = (state.drugQuery || "").trim().toLowerCase();
-  const cat = state.drugCat;
   const filtered = DRUGS.filter(d => {
-    if (cat !== "all" && d.cat !== cat) return false;
+    if (state.drugCat !== "all" && d.cat !== state.drugCat) return false;
     if (q && !(d.name + " " + d.cat).toLowerCase().includes(q)) return false;
     return true;
   });
 
   const grid = $("#drugCards");
   if (filtered.length === 0) {
-    grid.innerHTML = `<div class="card"><h3>No drugs match</h3><div class="sub">Clear the search or change the category.</div></div>`;
+    grid.innerHTML = `<div class="card"><h3>No drugs match</h3><div class="sub">Clear the search or category.</div></div>`;
     return;
   }
-
   grid.innerHTML = filtered.map(d => {
     const cls = rangeClass(d);
-    const perKgLine = `<div class="row"><span class="k">Standard range</span><span class="v ${cls}">${fmt(d.min, 2)} – ${fmt(d.max, 2)} ${d.unit}</span></div>`;
-    let absLine = "";
-    let rateLine = "";
+    const perLine = `<div class="row"><span class="k">Range</span><span class="v ${cls}">${fmt(d.min, 2)} – ${fmt(d.max, 2)} ${d.unit}</span></div>`;
+    let absLine = "", rateLine = "";
     if (w && !d.weightless) {
       const lo = d.min * w, hi = d.max * w;
-      const absUnit = d.unit.replace("/kg", "");
-      absLine = `<div class="row"><span class="k">For ${w} kg</span><span class="v ${cls}">${fmt(lo, 2)} – ${fmt(hi, 2)} ${absUnit}</span></div>`;
-      const rLo = infusionRate(d, d.min, w);
-      const rHi = infusionRate(d, d.max, w);
-      if (rLo !== null && rHi !== null) {
-        rateLine = `<div class="row"><span class="k">Drip @ ${d.conc}</span><span class="v">${fmt(rLo, 2)} – ${fmt(rHi, 1)} mL/hr</span></div>`;
-      }
-    } else if (d.weightless) {
-      const rLo = infusionRate(d, d.min, null);
-      const rHi = infusionRate(d, d.max, null);
-      if (rLo !== null && rHi !== null) {
-        rateLine = `<div class="row"><span class="k">Drip @ ${d.conc}</span><span class="v">${fmt(rLo, 2)} – ${fmt(rHi, 1)} mL/hr</span></div>`;
-      }
+      absLine = `<div class="row"><span class="k">For ${w} kg</span><span class="v ${cls}">${fmt(lo, 2)} – ${fmt(hi, 2)} ${d.unit.replace("/kg", "")}</span></div>`;
+    }
+    const rLo = infusionRate(d, d.min, w), rHi = infusionRate(d, d.max, w);
+    if (rLo !== null && rHi !== null) {
+      rateLine = `<div class="row"><span class="k">Drip @ ${d.conc}</span><span class="v">${fmt(rLo, 2)} – ${fmt(rHi, 1)} mL/hr</span></div>`;
     }
     return `
       <div class="card">
-        <h3>${d.name} <span class="pill info" style="margin-left:6px">${d.cat}</span></h3>
-        <div class="sub">${d.weightless ? "Fixed-rate infusion" : "Weight-based infusion"} · standard concentration: ${d.conc}</div>
-        ${perKgLine}
-        ${absLine}
-        ${rateLine}
-      </div>
-    `;
+        <h3>${d.name} <span class="pill info">${d.cat}</span></h3>
+        <div class="sub">${d.weightless ? "Fixed-rate" : "Weight-based"} · ${d.conc}</div>
+        ${perLine}${absLine}${rateLine}
+      </div>`;
   }).join("");
 }
 
@@ -1054,221 +1484,334 @@ function bindInfusionControls() {
 }
 
 /* ============================================================
+   ANTIBIOTICS
+   ============================================================ */
+const ABX = [
+  { id: "pipTazo", name: "Piperacillin-tazobactam", cls: "β-lactam",
+    std: "4.5 g IV q6h (extended 4 h infusion)",
+    crcl: [[40, 1e9, "4.5 g q6h"], [20, 40, "3.375 g q6h"], [0, 20, "2.25 g q6h"]],
+    ind: "HAP/VAP, complicated intra-abdominal, febrile neutropenia" },
+  { id: "meropenem", name: "Meropenem", cls: "Carbapenem",
+    std: "1 g IV q8h (2 g q8h for CNS)",
+    crcl: [[51, 1e9, "1 g q8h"], [26, 51, "1 g q12h"], [10, 26, "500 mg q12h"], [0, 10, "500 mg q24h"]],
+    ind: "Severe sepsis, ESBL, nosocomial pneumonia" },
+  { id: "imipenem", name: "Imipenem-cilastatin", cls: "Carbapenem",
+    std: "500 mg IV q6h",
+    crcl: [[71, 1e9, "500 mg q6h"], [41, 71, "500 mg q8h"], [21, 41, "500 mg q12h"], [0, 21, "500 mg q24h"]],
+    ind: "Similar to meropenem — avoid in seizure risk" },
+  { id: "cefepime", name: "Cefepime", cls: "Cephalosporin",
+    std: "2 g IV q8h",
+    crcl: [[60, 1e9, "2 g q8h"], [30, 60, "2 g q12h"], [11, 30, "2 g q24h"], [0, 11, "1 g q24h"]],
+    ind: "HAP, pyelonephritis, febrile neutropenia, MDR gram-negatives" },
+  { id: "ceftriaxone", name: "Ceftriaxone", cls: "Cephalosporin",
+    std: "2 g IV q24h (q12h for meningitis)",
+    crcl: [[0, 1e9, "No renal adjustment"]],
+    ind: "CAP, meningitis, pyelonephritis" },
+  { id: "ceftazAvi", name: "Ceftazidime-avibactam", cls: "Cephalosporin",
+    std: "2.5 g IV q8h",
+    crcl: [[51, 1e9, "2.5 g q8h"], [31, 51, "1.25 g q8h"], [16, 31, "0.94 g q12h"], [6, 16, "0.94 g q24h"], [0, 6, "0.94 g q48h"]],
+    ind: "CRE (KPC), Pseudomonas" },
+  { id: "ampSulbactam", name: "Ampicillin-sulbactam", cls: "β-lactam",
+    std: "3 g IV q6h",
+    crcl: [[30, 1e9, "3 g q6h"], [15, 30, "3 g q12h"], [0, 15, "3 g q24h"]],
+    ind: "Aspiration pneumonia, intra-abdominal, SSTI" },
+  { id: "aztreonam", name: "Aztreonam", cls: "Monobactam",
+    std: "2 g IV q8h",
+    crcl: [[30, 1e9, "2 g q8h"], [10, 30, "1 g q8h"], [0, 10, "500 mg q8h"]],
+    ind: "Gram-negative coverage in β-lactam allergy" },
+  { id: "vanco", name: "Vancomycin", cls: "Anti-MRSA glycopeptide",
+    std: "15–20 mg/kg IV q8–12h (load 25–30 mg/kg critical)",
+    crcl: [[80, 1e9, "15–20 mg/kg q8–12h (AUC 400–600)"], [50, 80, "15–20 mg/kg q12h"], [20, 50, "15 mg/kg q24h"], [0, 20, "By levels only"]],
+    ind: "MRSA, empiric coverage in septic shock",
+    notes: "Follow trough 15–20 or AUC24 400–600." },
+  { id: "linezolid", name: "Linezolid", cls: "Oxazolidinone",
+    std: "600 mg IV / PO q12h",
+    crcl: [[0, 1e9, "No renal adjustment"]],
+    ind: "MRSA pneumonia, VRE",
+    notes: "Thrombocytopenia, serotonin syndrome." },
+  { id: "daptomycin", name: "Daptomycin", cls: "Lipopeptide",
+    std: "6–10 mg/kg IV q24h",
+    crcl: [[30, 1e9, "6–10 mg/kg q24h"], [0, 30, "6–10 mg/kg q48h"]],
+    ind: "MRSA bacteremia, right-sided endocarditis",
+    notes: "Never for pneumonia. Monitor CPK." },
+  { id: "levo", name: "Levofloxacin", cls: "Fluoroquinolone",
+    std: "750 mg IV q24h",
+    crcl: [[50, 1e9, "750 mg q24h"], [20, 50, "750 mg then q48h"], [0, 20, "500 mg q48h"]],
+    ind: "CAP, complicated UTI, atypicals" },
+  { id: "cipro", name: "Ciprofloxacin", cls: "Fluoroquinolone",
+    std: "400 mg IV q8–12h",
+    crcl: [[50, 1e9, "400 mg q8–12h"], [30, 50, "400 mg q12h"], [0, 30, "400 mg q24h"]],
+    ind: "Pseudomonas, complicated intra-abdominal (with metro)" },
+  { id: "metro", name: "Metronidazole", cls: "Nitroimidazole",
+    std: "500 mg IV q8h",
+    crcl: [[0, 1e9, "No renal adjustment"]],
+    ind: "Anaerobes, C. difficile (oral)" },
+  { id: "azithro", name: "Azithromycin", cls: "Macrolide",
+    std: "500 mg IV q24h",
+    crcl: [[0, 1e9, "No renal adjustment"]],
+    ind: "Atypical CAP coverage, Legionella" },
+  { id: "amikacin", name: "Amikacin", cls: "Aminoglycoside",
+    std: "15–20 mg/kg IV q24h (extended interval)",
+    crcl: [[60, 1e9, "15–20 mg/kg q24h"], [40, 60, "15 mg/kg q36h"], [20, 40, "15 mg/kg q48h"], [0, 20, "By levels only"]],
+    ind: "MDR gram-negative synergy",
+    notes: "Trough < 4, peak 56–64." },
+  { id: "gent", name: "Gentamicin", cls: "Aminoglycoside",
+    std: "5–7 mg/kg IV q24h",
+    crcl: [[60, 1e9, "5–7 mg/kg q24h"], [40, 60, "5 mg/kg q36h"], [20, 40, "5 mg/kg q48h"], [0, 20, "By levels only"]],
+    ind: "Enterococcal synergy, gram-negative augmentation" },
+  { id: "colistin", name: "Colistin (CBA)", cls: "Polymyxin",
+    std: "Load 9 MIU then 4.5 MIU q12h",
+    crcl: [[80, 1e9, "4.5 MIU q12h"], [50, 80, "3.5 MIU q12h"], [30, 50, "2.5 MIU q12h"], [0, 30, "1.5–2 MIU q12h"]],
+    ind: "MDR/XDR Acinetobacter, Pseudomonas",
+    notes: "Nephrotoxic — monitor creatinine daily." },
+  { id: "fluconazole", name: "Fluconazole", cls: "Antifungal (azole)",
+    std: "Load 800 mg, then 400 mg IV q24h",
+    crcl: [[50, 1e9, "400–800 mg q24h"], [0, 50, "50% of dose q24h"]],
+    ind: "Candidiasis (non-krusei/non-glabrata)" },
+  { id: "vorico", name: "Voriconazole", cls: "Antifungal (azole)",
+    std: "Load 6 mg/kg q12h × 2, then 4 mg/kg q12h",
+    crcl: [[50, 1e9, "4 mg/kg q12h"], [0, 50, "PO if possible"]],
+    ind: "Aspergillosis",
+    notes: "Drug interactions; trough 1–5.5 mg/L." },
+  { id: "caspo", name: "Caspofungin", cls: "Antifungal (echinocandin)",
+    std: "Load 70 mg, then 50 mg IV q24h",
+    crcl: [[0, 1e9, "No renal adjustment"]],
+    ind: "Invasive candidiasis, empiric for FN" },
+  { id: "mica", name: "Micafungin", cls: "Antifungal (echinocandin)",
+    std: "100 mg IV q24h (150 mg esophageal)",
+    crcl: [[0, 1e9, "No renal adjustment"]],
+    ind: "Candidemia, invasive candidiasis" },
+  { id: "acyclovir", name: "Acyclovir", cls: "Antiviral",
+    std: "10 mg/kg IV q8h",
+    crcl: [[50, 1e9, "10 mg/kg q8h"], [25, 50, "10 mg/kg q12h"], [10, 25, "10 mg/kg q24h"], [0, 10, "5 mg/kg q24h"]],
+    ind: "HSV encephalitis, VZV pneumonitis" },
+  { id: "oseltamivir", name: "Oseltamivir", cls: "Antiviral",
+    std: "75 mg PO q12h",
+    crcl: [[60, 1e9, "75 mg q12h"], [30, 60, "30 mg q12h"], [10, 30, "30 mg q24h"], [0, 10, "30 mg once"]],
+    ind: "Influenza A/B" },
+];
+const ABX_CLASSES = ["all", ...Array.from(new Set(ABX.map(a => a.cls)))];
+
+function abxDose(a, crcl) {
+  if (crcl == null) return { label: a.std, active: false };
+  for (const [lo, hi, dose] of a.crcl) if (crcl >= lo && crcl < hi) return { label: dose, active: true };
+  return { label: a.std, active: false };
+}
+function renderAntibiotics() {
+  const chipBox = $("#abxClassChips");
+  if (!chipBox) return;
+  chipBox.innerHTML = ABX_CLASSES.map(c =>
+    `<button class="chip ${state.abxCls === c ? "active" : ""}" type="button" data-c="${c}">${c === "all" ? "All" : c}</button>`
+  ).join("");
+  chipBox.querySelectorAll(".chip").forEach(btn => {
+    btn.addEventListener("click", () => { state.abxCls = btn.dataset.c; saveState(); renderAntibiotics(); });
+  });
+
+  const c = computedCrCl();
+  const badge = $("#abx-crcl-badge");
+  if (badge) {
+    if (c == null) { badge.textContent = "CrCl —"; badge.className = "pill info"; }
+    else { badge.textContent = `CrCl ${fmt(c, 0)} mL/min`;
+      badge.className = "pill " + (c < 30 ? "bad" : c < 60 ? "warn" : "ok"); }
+  }
+
+  const q = (state.abxQuery || "").trim().toLowerCase();
+  const list = ABX.filter(a => {
+    if (state.abxCls !== "all" && a.cls !== state.abxCls) return false;
+    if (q && !(a.name + " " + a.cls + " " + (a.ind || "")).toLowerCase().includes(q)) return false;
+    return true;
+  });
+  const grid = $("#abxCards");
+  if (list.length === 0) {
+    grid.innerHTML = `<div class="card"><h3>No matches</h3><div class="sub">Clear search or change class.</div></div>`;
+    return;
+  }
+  grid.innerHTML = list.map(a => {
+    const d = abxDose(a, c);
+    return `
+      <div class="card">
+        <h3>${a.name} <span class="pill info">${a.cls}</span></h3>
+        <div class="sub">${a.ind || ""}</div>
+        <div class="row"><span class="k">Standard dose</span><span class="v">${a.std}</span></div>
+        <div class="row"><span class="k">${d.active ? `For CrCl ${fmt(c, 0)}` : "Adjusted"}</span><span class="v ${d.active ? "mid" : ""}">${d.label}</span></div>
+        ${a.notes ? `<div class="verdict warn">${a.notes}</div>` : ""}
+      </div>`;
+  }).join("");
+}
+function bindAntibioticControls() {
+  const s = $("#abxSearch");
+  if (!s) return;
+  s.value = state.abxQuery || "";
+  s.addEventListener("input", e => { state.abxQuery = e.target.value; saveState(); renderAntibiotics(); });
+}
+
+/* ============================================================
    HEMODYNAMICS
    ============================================================ */
 function runHemo() {
   const sbp = num(state.inputs.hd_sbp), dbp = num(state.inputs.hd_dbp), hr = num(state.inputs.hd_hr);
   const map = (sbp != null && dbp != null) ? (sbp + 2 * dbp) / 3 : null;
   const pp = (sbp != null && dbp != null) ? sbp - dbp : null;
-  const si = (hr != null && sbp != null && sbp > 0) ? hr / sbp : null;
-  const msi = (hr != null && map != null && map > 0) ? hr / map : null;
-
+  const si = (hr != null && sbp) ? hr / sbp : null;
+  const msi = (hr != null && map) ? hr / map : null;
   $("#hd-map").textContent = map != null ? fmt(map, 0) + " mmHg" : "—";
-  $("#hd-pp").textContent  = pp  != null ? fmt(pp, 0) + " mmHg"  : "—";
-  $("#hd-si").textContent  = si  != null ? fmt(si, 2)            : "—";
-  $("#hd-msi").textContent = msi != null ? fmt(msi, 2)           : "—";
+  $("#hd-pp").textContent  = pp  != null ? fmt(pp, 0)  + " mmHg" : "—";
+  $("#hd-si").textContent  = si  != null ? fmt(si, 2) : "—";
+  $("#hd-msi").textContent = msi != null ? fmt(msi, 2) : "—";
+  const v = $("#hd-verdict"); v.classList.remove("ok","warn","bad");
+  if (map == null) { v.textContent = "Enter SBP/DBP to interpret."; }
+  else {
+    let msgs = [];
+    if (map < 65) { msgs.push("MAP < 65 → inadequate perfusion."); v.classList.add("bad"); }
+    else if (map > 110) { msgs.push("MAP > 110 → check sedation/pain."); v.classList.add("warn"); }
+    else { msgs.push("MAP in target range."); v.classList.add("ok"); }
+    if (si != null && si >= 1) msgs.push("Shock index ≥ 1 → consider occult shock.");
+    else if (si != null && si >= 0.7) msgs.push("Shock index borderline (0.7–1).");
+    v.innerHTML = msgs.map(m => `<div>• ${m}</div>`).join("");
+  }
 
-  const v = $("#hd-verdict");
-  v.classList.remove("ok","warn","bad");
-  if (map == null) { v.textContent = "Enter SBP/DBP to interpret."; return; }
-  let msgs = [];
-  if (map < 65) { msgs.push("MAP < 65 → inadequate perfusion."); v.classList.add("bad"); }
-  else if (map > 110) { msgs.push("MAP > 110 → check sedation, pain, fluid overload."); v.classList.add("warn"); }
-  else { msgs.push("MAP in target range."); v.classList.add("ok"); }
-  if (si != null && si >= 1) msgs.push("Shock index ≥ 1 → consider occult shock.");
-  if (si != null && si >= 0.7 && si < 1) msgs.push("Shock index borderline (0.7–1).");
-  v.innerHTML = msgs.map(m => `<div>• ${m}</div>`).join("");
-
-  // CPP
   const icp = num(state.inputs.cpp_icp);
   const mapOv = num(state.inputs.cpp_map);
   const effMap = mapOv != null ? mapOv : map;
-  const cv = $("#cpp-verdict");
-  cv.classList.remove("ok","warn","bad");
+  const cv = $("#cpp-verdict"); cv.classList.remove("ok","warn","bad");
   if (effMap != null && icp != null) {
     const cpp = effMap - icp;
     $("#cpp-out").textContent = fmt(cpp, 0) + " mmHg";
-    if (cpp < 50)      { cv.textContent = "CPP < 50 → critical ischemia risk."; cv.classList.add("bad"); }
-    else if (cpp < 60) { cv.textContent = "CPP 50–60 → borderline.";              cv.classList.add("warn"); }
-    else               { cv.textContent = "CPP ≥ 60 → adequate cerebral perfusion."; cv.classList.add("ok"); }
-  } else {
-    $("#cpp-out").textContent = "—";
-    cv.textContent = "Enter ICP (MAP auto-fills from hemo card).";
-  }
+    if (cpp < 50)      { cv.textContent = "CPP < 50 → ischemia risk."; cv.classList.add("bad"); }
+    else if (cpp < 60) { cv.textContent = "CPP 50–60 → borderline.";   cv.classList.add("warn"); }
+    else               { cv.textContent = "CPP ≥ 60 → adequate.";       cv.classList.add("ok"); }
+  } else { $("#cpp-out").textContent = "—"; cv.textContent = "Enter ICP to compute."; }
 
-  // NE equivalents (Khanna/Goradia hybrid simplified)
-  // NE 1 = NE 1, Epi 1 = NE 1, Phenyl 10 = NE 1 (so /10), Dopa 100 = NE 1 (so /100),
-  // Vasopressin 0.04 U/min ≈ NE 0.1 mcg/kg/min (factor 2.5 of U/min)
-  const ne   = num(state.inputs.ne_norepi)  || 0;
-  const epi  = num(state.inputs.ne_epi)     || 0;
-  const phn  = num(state.inputs.ne_phenyl)  || 0;
-  const dpa  = num(state.inputs.ne_dop)     || 0;
-  const vas  = num(state.inputs.ne_vaso)    || 0;
-  const total = ne + epi + (phn / 10) + (dpa / 100) + (vas * 2.5);
-  const nv = $("#ne-verdict");
-  nv.classList.remove("ok","warn","bad");
+  const ne  = num(state.inputs.ne_norepi) || 0;
+  const epi = num(state.inputs.ne_epi)    || 0;
+  const phn = num(state.inputs.ne_phenyl) || 0;
+  const dpa = num(state.inputs.ne_dop)    || 0;
+  const vas = num(state.inputs.ne_vaso)   || 0;
+  const total = ne + epi + phn/10 + dpa/100 + vas*2.5;
+  const nv = $("#ne-verdict"); nv.classList.remove("ok","warn","bad");
   if (ne+epi+phn+dpa+vas === 0) {
-    $("#ne-total").textContent = "—";
-    nv.textContent = "Sum of norepi-equivalent vasopressor support.";
+    $("#ne-total").textContent = "—"; nv.textContent = "Sum of NE-equivalent support.";
   } else {
     $("#ne-total").textContent = fmt(total, 2) + " mcg/kg/min";
-    if (total >= 0.5)      { nv.textContent = "Very high pressor load (≥ 0.5).";   nv.classList.add("bad"); }
-    else if (total >= 0.25){ nv.textContent = "High pressor load (≥ 0.25).";       nv.classList.add("warn"); }
-    else                   { nv.textContent = "Moderate / low pressor support.";   nv.classList.add("ok"); }
+    if (total >= 0.5) { nv.textContent = "Very high pressor load (≥ 0.5)."; nv.classList.add("bad"); }
+    else if (total >= 0.25) { nv.textContent = "High pressor load (≥ 0.25)."; nv.classList.add("warn"); }
+    else { nv.textContent = "Moderate / low pressor support."; nv.classList.add("ok"); }
   }
 }
 
 /* ============================================================
    VENTILATOR
    ============================================================ */
-function fioFraction(x) {
-  // accept 0.4 or 40
-  if (x == null) return null;
-  return x > 1 ? x / 100 : x;
-}
+function fioFraction(x) { if (x == null) return null; return x > 1 ? x / 100 : x; }
 function runVent() {
   const p = pbw();
   $("#v-pbw").textContent = p != null ? fmt(p, 1) + " kg" : "—";
-  $("#v-tv4").textContent = p != null ? fmt(p * 4, 0) + " mL" : "—";
-  $("#v-tv6").textContent = p != null ? fmt(p * 6, 0) + " mL" : "—";
-  $("#v-tv8").textContent = p != null ? fmt(p * 8, 0) + " mL" : "—";
+  $("#v-tv4").textContent = p != null ? fmt(p*4, 0) + " mL" : "—";
+  $("#v-tv6").textContent = p != null ? fmt(p*6, 0) + " mL" : "—";
+  $("#v-tv8").textContent = p != null ? fmt(p*8, 0) + " mL" : "—";
 
   const pao2 = num(state.inputs.v_pao2);
   const spo2 = num(state.inputs.v_spo2);
   const fio2 = fioFraction(num(state.inputs.v_fio2));
-  const pf = (pao2 != null && fio2) ? pao2 / fio2 : null;
-  const sf = (spo2 != null && fio2) ? spo2 / fio2 : null;
-
+  const pf = (pao2 != null && fio2) ? pao2/fio2 : null;
+  const sf = (spo2 != null && fio2) ? spo2/fio2 : null;
   $("#v-pf").textContent = pf != null ? fmt(pf, 0) : "—";
   $("#v-sf").textContent = sf != null ? fmt(sf, 0) : "—";
-
-  const vv = $("#v-pfverdict");
-  vv.classList.remove("ok","warn","bad");
-  if (pf == null) vv.textContent = "Enter PaO₂ and FiO₂ for Berlin ARDS classification.";
+  const vv = $("#v-pfverdict"); vv.classList.remove("ok","warn","bad");
+  if (pf == null) vv.textContent = "Enter PaO₂ and FiO₂ for Berlin classification.";
   else if (pf < 100) { vv.textContent = "P/F < 100 → severe ARDS."; vv.classList.add("bad"); }
   else if (pf < 200) { vv.textContent = "P/F 100–200 → moderate ARDS."; vv.classList.add("bad"); }
   else if (pf < 300) { vv.textContent = "P/F 200–300 → mild ARDS."; vv.classList.add("warn"); }
-  else               { vv.textContent = "P/F ≥ 300 → no ARDS by Berlin."; vv.classList.add("ok"); }
+  else               { vv.textContent = "P/F ≥ 300 → no ARDS.";       vv.classList.add("ok"); }
 
   const pplat = num(state.inputs.v_pplat);
   const peep  = num(state.inputs.v_peep);
   const tv    = num(state.inputs.v_tv);
   const dp = (pplat != null && peep != null) ? pplat - peep : null;
   const cs = (tv != null && dp != null && dp > 0) ? tv / dp : null;
-
   $("#v-dp").textContent    = dp != null ? fmt(dp, 0) + " cmH₂O" : "—";
   $("#v-cstat").textContent = cs != null ? fmt(cs, 1) + " mL/cmH₂O" : "—";
-
-  const dv = $("#v-dpverdict");
-  dv.classList.remove("ok","warn","bad");
+  const dv = $("#v-dpverdict"); dv.classList.remove("ok","warn","bad");
   if (dp == null) dv.textContent = "Target driving pressure < 15 cmH₂O.";
-  else if (dp >= 15) { dv.textContent = "Driving pressure ≥ 15 → reduce TV or recruit."; dv.classList.add("bad"); }
-  else if (dp >= 13) { dv.textContent = "Driving pressure 13–14 → caution.";              dv.classList.add("warn"); }
-  else               { dv.textContent = "Driving pressure within safe range.";            dv.classList.add("ok"); }
+  else if (dp >= 15) { dv.textContent = "≥ 15 → reduce TV / recruit."; dv.classList.add("bad"); }
+  else if (dp >= 13) { dv.textContent = "13–14 → caution.";            dv.classList.add("warn"); }
+  else               { dv.textContent = "Within safe range.";           dv.classList.add("ok"); }
 }
 
 /* ============================================================
    ABG
    ============================================================ */
 function runABG() {
-  const pH  = num(state.inputs.ab_ph);
-  const co2 = num(state.inputs.ab_co2);
-  const hco3= num(state.inputs.ab_hco3);
-  const na  = num(state.inputs.ab_na);
-  const cl  = num(state.inputs.ab_cl);
-  const alb = num(state.inputs.ab_alb);
-  const pao2= num(state.inputs.ab_pao2);
-  const fio2= fioFraction(num(state.inputs.ab_fio2));
-
-  // Primary disorder
-  let primary = "—";
-  let comp = "—";
-  let summary = [];
-
+  const pH  = num(state.inputs.ab_ph), co2 = num(state.inputs.ab_co2), hco3 = num(state.inputs.ab_hco3);
+  const na  = num(state.inputs.ab_na), cl  = num(state.inputs.ab_cl), alb = num(state.inputs.ab_alb);
+  const pao2= num(state.inputs.ab_pao2), fio2 = fioFraction(num(state.inputs.ab_fio2));
+  let primary = "—", comp = "—", summary = [];
   if (pH != null && co2 != null && hco3 != null) {
     if (pH < 7.35) {
-      if (co2 > 45 && hco3 >= 22) { primary = "Respiratory acidosis"; }
-      else if (hco3 < 22 && co2 <= 45) { primary = "Metabolic acidosis"; }
-      else if (co2 > 45 && hco3 < 22) { primary = "Mixed metabolic + respiratory acidosis"; }
-      else { primary = "Acidemia"; }
+      if (co2 > 45 && hco3 >= 22) primary = "Respiratory acidosis";
+      else if (hco3 < 22 && co2 <= 45) primary = "Metabolic acidosis";
+      else if (co2 > 45 && hco3 < 22) primary = "Mixed metabolic + respiratory acidosis";
+      else primary = "Acidemia";
     } else if (pH > 7.45) {
-      if (co2 < 35 && hco3 <= 26) { primary = "Respiratory alkalosis"; }
-      else if (hco3 > 26 && co2 >= 35) { primary = "Metabolic alkalosis"; }
-      else if (co2 < 35 && hco3 > 26) { primary = "Mixed metabolic + respiratory alkalosis"; }
-      else { primary = "Alkalemia"; }
+      if (co2 < 35 && hco3 <= 26) primary = "Respiratory alkalosis";
+      else if (hco3 > 26 && co2 >= 35) primary = "Metabolic alkalosis";
+      else if (co2 < 35 && hco3 > 26) primary = "Mixed metabolic + respiratory alkalosis";
+      else primary = "Alkalemia";
     } else {
-      if (co2 > 45 && hco3 > 26) primary = "Compensated / mixed (high CO₂ + HCO₃)";
-      else if (co2 < 35 && hco3 < 22) primary = "Compensated / mixed (low CO₂ + HCO₃)";
-      else primary = "Normal pH";
+      primary = co2 > 45 && hco3 > 26 ? "Compensated / mixed (high CO₂+HCO₃)"
+        : co2 < 35 && hco3 < 22 ? "Compensated / mixed (low CO₂+HCO₃)"
+        : "Normal pH";
     }
-
-    // Expected compensation
     if (primary.startsWith("Metabolic acidosis")) {
       const exp = 1.5 * hco3 + 8;
-      comp = `Winters: PaCO₂ ${fmt(exp - 2, 0)}–${fmt(exp + 2, 0)}`;
-      if (co2 > exp + 2) summary.push("Inadequate respiratory compensation → concurrent respiratory acidosis.");
+      comp = `Winters: PaCO₂ ${fmt(exp-2, 0)}–${fmt(exp+2, 0)}`;
+      if (co2 > exp + 2) summary.push("Inadequate compensation → concurrent respiratory acidosis.");
       else if (co2 < exp - 2) summary.push("Over-compensation → concurrent respiratory alkalosis.");
     } else if (primary.startsWith("Metabolic alkalosis")) {
-      const exp = 0.7 * (hco3 - 24) + 40;
-      comp = `Expected PaCO₂ ≈ ${fmt(exp, 0)}`;
+      comp = `Expected PaCO₂ ≈ ${fmt(0.7*(hco3-24)+40, 0)}`;
     } else if (primary.startsWith("Respiratory acidosis")) {
-      const dCO2 = co2 - 40;
-      const acuteHCO3 = 24 + 0.1 * dCO2;
-      const chronicHCO3 = 24 + 0.35 * dCO2;
-      comp = `Acute ΔHCO₃ ≈ ${fmt(acuteHCO3, 0)} · Chronic ≈ ${fmt(chronicHCO3, 0)}`;
+      const d = co2 - 40;
+      comp = `Acute ΔHCO₃ ≈ ${fmt(24+0.1*d,0)} · Chronic ≈ ${fmt(24+0.35*d,0)}`;
     } else if (primary.startsWith("Respiratory alkalosis")) {
-      const dCO2 = 40 - co2;
-      const acuteHCO3 = 24 - 0.2 * dCO2;
-      const chronicHCO3 = 24 - 0.5 * dCO2;
-      comp = `Acute ΔHCO₃ ≈ ${fmt(acuteHCO3, 0)} · Chronic ≈ ${fmt(chronicHCO3, 0)}`;
+      const d = 40 - co2;
+      comp = `Acute ΔHCO₃ ≈ ${fmt(24-0.2*d,0)} · Chronic ≈ ${fmt(24-0.5*d,0)}`;
     }
   }
-
   $("#ab-primary").textContent = primary;
   $("#ab-comp").textContent = comp;
 
-  // Anion gap
-  let ag = null, cag = null, dd = null;
+  let ag=null, cag=null, dd=null;
   if (na != null && cl != null && hco3 != null) {
     ag = na - cl - hco3;
     cag = alb != null ? ag + 2.5 * (4 - alb) : ag;
     $("#ab-ag").textContent = fmt(ag, 1);
-    $("#ab-cag").textContent = alb != null ? fmt(cag, 1) : fmt(ag, 1) + " (no albumin)";
-
-    // delta-delta
+    $("#ab-cag").textContent = alb != null ? fmt(cag, 1) : `${fmt(ag,1)} (no alb)`;
     const dAG = (alb != null ? cag : ag) - 12;
     const dHCO3 = 24 - hco3;
     if (dHCO3 !== 0) {
       dd = dAG / dHCO3;
-      let interp = "";
-      if (dd < 0.4) interp = "pure non-AG metabolic acidosis";
-      else if (dd < 1) interp = "mixed AG + non-AG acidosis";
-      else if (dd <= 2) interp = "pure AG metabolic acidosis";
-      else interp = "AG acidosis + concurrent metabolic alkalosis (or compensated resp acidosis)";
+      const interp = dd < 0.4 ? "pure non-AG met acidosis"
+        : dd < 1 ? "mixed AG + non-AG acidosis"
+        : dd <= 2 ? "pure AG met acidosis"
+        : "AG acidosis + met alkalosis";
       $("#ab-dd").textContent = `${fmt(dd, 2)} — ${interp}`;
     } else $("#ab-dd").textContent = "—";
   } else {
-    $("#ab-ag").textContent = "—";
-    $("#ab-cag").textContent = "—";
-    $("#ab-dd").textContent = "—";
+    $("#ab-ag").textContent = "—"; $("#ab-cag").textContent = "—"; $("#ab-dd").textContent = "—";
   }
-
-  // A-a gradient
   if (pao2 != null && fio2 != null && co2 != null) {
     const PAO2 = fio2 * (760 - 47) - co2 / 0.8;
     const aa = PAO2 - pao2;
-    const ageNum = num(state.patient.age);
-    const expected = ageNum != null ? (ageNum / 4 + 4) : null;
-    $("#ab-aa").textContent = `${fmt(aa, 0)} mmHg` + (expected ? ` (expected ≤ ${fmt(expected, 0)})` : "");
+    const ageN = num(state.patient.age);
+    $("#ab-aa").textContent = `${fmt(aa, 0)} mmHg` + (ageN ? ` (exp ≤ ${fmt(ageN/4+4, 0)})` : "");
   } else $("#ab-aa").textContent = "—";
 
-  const v = $("#ab-verdict");
-  v.classList.remove("ok","warn","bad");
+  const v = $("#ab-verdict"); v.classList.remove("ok","warn","bad");
   if (primary === "—") { v.textContent = "Enter pH, PaCO₂, HCO₃ to start."; return; }
   v.classList.add(primary.includes("Mixed") || primary.includes("Met") || primary.includes("Resp") ? "warn" : "ok");
   const lines = [`<b>${primary}.</b>`];
   if (comp !== "—") lines.push(comp + ".");
-  if (ag != null) lines.push("Anion gap " + fmt(ag, 1) + (alb != null ? `, corrected ${fmt(cag, 1)}.` : "."));
+  if (ag != null) lines.push("AG " + fmt(ag,1) + (alb != null ? `, corrected ${fmt(cag,1)}.` : "."));
   summary.forEach(s => lines.push(s));
   v.innerHTML = lines.join(" ");
 }
@@ -1279,19 +1822,17 @@ function runABG() {
 function runLytes() {
   const ca = num(state.inputs.ca_ca), calb = num(state.inputs.ca_alb);
   if (ca != null && calb != null) {
-    const corr = ca + 0.8 * (4 - calb);
-    $("#ca-corr").textContent = fmt(corr, 2) + " mg/dL";
+    const c = ca + 0.8 * (4 - calb);
+    $("#ca-corr").textContent = fmt(c, 2) + " mg/dL";
     const v = $("#ca-verdict"); v.classList.remove("ok","warn","bad");
-    if (corr < 8.5) { v.textContent = "Hypocalcemia (corrected)."; v.classList.add("warn"); }
-    else if (corr > 10.5) { v.textContent = "Hypercalcemia (corrected)."; v.classList.add("warn"); }
+    if (c < 8.5) { v.textContent = "Hypocalcemia (corrected)."; v.classList.add("warn"); }
+    else if (c > 10.5) { v.textContent = "Hypercalcemia (corrected)."; v.classList.add("warn"); }
     else { v.textContent = "Normal corrected Ca."; v.classList.add("ok"); }
   } else $("#ca-corr").textContent = "—";
 
-  const nNa = num(state.inputs.na_na), nGlu = num(state.inputs.na_glu);
-  if (nNa != null && nGlu != null) {
-    const corr = nNa + 1.6 * (nGlu - 100) / 100;
-    $("#na-corr").textContent = fmt(corr, 1) + " mEq/L";
-  } else $("#na-corr").textContent = "—";
+  const na = num(state.inputs.na_na), glu = num(state.inputs.na_glu);
+  $("#na-corr").textContent = (na != null && glu != null)
+    ? fmt(na + 1.6 * (glu - 100) / 100, 1) + " mEq/L" : "—";
 
   const oNa = num(state.inputs.os_na), oG = num(state.inputs.os_glu), oB = num(state.inputs.os_bun);
   const oE = num(state.inputs.os_etoh), oM = num(state.inputs.os_meas);
@@ -1303,75 +1844,65 @@ function runLytes() {
     if (oM != null) {
       const gap = oM - calc;
       $("#os-gap").textContent = fmt(gap, 1);
-      if (gap > 10) { v.textContent = "Osmolar gap > 10 → consider toxic alcohols."; v.classList.add("bad"); }
+      if (gap > 10) { v.textContent = "Gap > 10 → consider toxic alcohols."; v.classList.add("bad"); }
       else { v.textContent = "Normal osmolar gap."; v.classList.add("ok"); }
     } else { $("#os-gap").textContent = "—"; v.textContent = "Add measured osm for gap."; }
-  } else {
-    $("#os-calc").textContent = "—";
-    $("#os-gap").textContent = "—";
-  }
+  } else { $("#os-calc").textContent = "—"; $("#os-gap").textContent = "—"; }
 
-  // Free water deficit
   const fNa = num(state.inputs.fwd_na), fTgt = num(state.inputs.fwd_tgt) || 140;
-  const w = num(state.patient.weight);
-  const sex = state.patient.sex;
+  const w = num(state.patient.weight), sex = state.patient.sex;
   if (fNa != null && w && sex) {
-    const tbwFactor = sex === "M" ? 0.6 : 0.5;
-    const tbw = tbwFactor * w;
+    const tbw = (sex === "M" ? 0.6 : 0.5) * w;
     const fwd = tbw * (fNa / fTgt - 1);
     $("#fwd-out").textContent = fwd > 0 ? fmt(fwd, 2) + " L" : "—";
   } else $("#fwd-out").textContent = "—";
 
-  // K replacement
   const k = num(state.inputs.k_k);
   if (k != null) {
     let msg;
     if (k >= 4.0) msg = "No replacement needed";
     else if (k >= 3.5) msg = "10 mEq KCl PO/IV";
-    else if (k >= 3.0) msg = "20–40 mEq KCl IV (split doses)";
+    else if (k >= 3.0) msg = "20–40 mEq KCl IV (split)";
     else if (k >= 2.5) msg = "40–60 mEq KCl IV + check Mg";
-    else msg = "60–80 mEq + central line + telemetry";
+    else msg = "60–80 mEq + central + telemetry";
     $("#k-out").textContent = msg;
   } else $("#k-out").textContent = "—";
 }
 
 /* ============================================================
-   RENAL / FLUIDS
+   RENAL
    ============================================================ */
 function runRenal() {
-  const c = crCl();
+  const c = computedCrCl();
   $("#rn-crcl").textContent = c != null ? fmt(c, 0) + " mL/min" : "—";
   const v = $("#rn-crclv"); v.classList.remove("ok","warn","bad");
-  if (c == null) v.textContent = "Set age, weight, sex, creatinine in the patient bar.";
-  else if (c < 15) { v.textContent = "Kidney failure (CrCl < 15) — renal-dose all meds."; v.classList.add("bad"); }
-  else if (c < 30) { v.textContent = "Severe ↓ (15–29) — major dose adjustment needed."; v.classList.add("bad"); }
-  else if (c < 60) { v.textContent = "Moderate ↓ (30–59) — dose-adjust many drugs."; v.classList.add("warn"); }
-  else { v.textContent = "Adequate clearance (≥ 60)."; v.classList.add("ok"); }
+  if (c == null) v.textContent = "Set age, weight, sex, creatinine.";
+  else if (c < 15) { v.textContent = "Failure — renal-dose all meds."; v.classList.add("bad"); }
+  else if (c < 30) { v.textContent = "Severe ↓ — major adjustment."; v.classList.add("bad"); }
+  else if (c < 60) { v.textContent = "Moderate ↓ — dose-adjust many."; v.classList.add("warn"); }
+  else { v.textContent = "Adequate clearance."; v.classList.add("ok"); }
 
-  const vol = num(state.inputs.uo_vol), hr = num(state.inputs.uo_hr);
-  const w = num(state.patient.weight);
+  const vol = num(state.inputs.uo_vol), hr = num(state.inputs.uo_hr), w = num(state.patient.weight);
   const uv = $("#uo-verdict"); uv.classList.remove("ok","warn","bad");
   if (vol != null && hr && w) {
     const rate = vol / hr / w;
     $("#uo-rate").textContent = fmt(rate, 2) + " mL/kg/hr";
-    if (rate < 0.3) { uv.textContent = "Anuria/severe oliguria — escalate."; uv.classList.add("bad"); }
-    else if (rate < 0.5) { uv.textContent = "Oliguria — assess perfusion, obstruction."; uv.classList.add("warn"); }
-    else { uv.textContent = "Adequate urine output."; uv.classList.add("ok"); }
+    if (rate < 0.3) { uv.textContent = "Severe oliguria — escalate."; uv.classList.add("bad"); }
+    else if (rate < 0.5) { uv.textContent = "Oliguria."; uv.classList.add("warn"); }
+    else { uv.textContent = "Adequate."; uv.classList.add("ok"); }
   } else { $("#uo-rate").textContent = "—"; uv.textContent = "Enter volume + hours."; }
 
-  // Sepsis bolus
   if (w) {
-    const target = w * 30;
-    $("#sep-vol").textContent = fmt(target, 0) + " mL";
-    $("#sep-quarter").textContent = `${Math.ceil(target / 250)} × 250 mL boluses`;
+    const t = w * 30;
+    $("#sep-vol").textContent = fmt(t, 0) + " mL";
+    $("#sep-quarter").textContent = `${Math.ceil(t/250)} × 250 mL`;
   } else { $("#sep-vol").textContent = "—"; $("#sep-quarter").textContent = "—"; }
 
-  // 4-2-1 maintenance
   if (w) {
     let r;
     if (w <= 10) r = w * 4;
-    else if (w <= 20) r = 40 + (w - 10) * 2;
-    else r = 60 + (w - 20);
+    else if (w <= 20) r = 40 + (w-10) * 2;
+    else r = 60 + (w-20);
     $("#mn-rate").textContent = fmt(r, 0) + " mL/hr";
   } else $("#mn-rate").textContent = "—";
 }
@@ -1380,84 +1911,62 @@ function runRenal() {
    SCORES
    ============================================================ */
 const SCORES = {
-  gcs: {
-    items: [
-      { k: "Eye",   opts: [["Spontaneous (4)",4],["To speech (3)",3],["To pain (2)",2],["None (1)",1]] },
-      { k: "Verbal",opts: [["Oriented (5)",5],["Confused (4)",4],["Inappropriate (3)",3],["Incomprehensible (2)",2],["None (1)",1]] },
-      { k: "Motor", opts: [["Obeys (6)",6],["Localizes (5)",5],["Withdraws (4)",4],["Abnormal flexion (3)",3],["Extension (2)",2],["None (1)",1]] },
-    ],
-    interpret: t => t <= 8 ? ["Severe — consider intubation.", "bad"] : t <= 12 ? ["Moderate.", "warn"] : ["Mild / normal.", "ok"],
-  },
-  qsofa: {
-    items: [
-      { k: "RR ≥ 22",        opts: [["No",0],["Yes",1]] },
-      { k: "Altered mental status", opts: [["No",0],["Yes",1]] },
-      { k: "SBP ≤ 100",      opts: [["No",0],["Yes",1]] },
-    ],
-    interpret: t => t >= 2 ? ["High sepsis mortality risk.", "bad"] : ["Low risk by qSOFA.", "ok"],
-  },
-  sofa: {
-    items: [
-      { k: "PaO₂/FiO₂",  opts: [["≥ 400 (0)",0],["< 400 (1)",1],["< 300 (2)",2],["< 200 vent (3)",3],["< 100 vent (4)",4]] },
-      { k: "Platelets",  opts: [["≥ 150 (0)",0],["< 150 (1)",1],["< 100 (2)",2],["< 50 (3)",3],["< 20 (4)",4]] },
-      { k: "Bilirubin",  opts: [["< 1.2 (0)",0],["1.2–1.9 (1)",1],["2–5.9 (2)",2],["6–11.9 (3)",3],["≥ 12 (4)",4]] },
-      { k: "Cardiovascular", opts: [["MAP ≥ 70 (0)",0],["MAP < 70 (1)",1],["Dopa ≤ 5 / dobut (2)",2],["Dopa > 5 / NE ≤ 0.1 (3)",3],["Dopa > 15 / NE > 0.1 (4)",4]] },
-      { k: "GCS",        opts: [["15 (0)",0],["13–14 (1)",1],["10–12 (2)",2],["6–9 (3)",3],["< 6 (4)",4]] },
-      { k: "Creatinine / UO", opts: [["< 1.2 (0)",0],["1.2–1.9 (1)",1],["2–3.4 (2)",2],["3.5–4.9 or < 500 mL (3)",3],["≥ 5 or < 200 mL (4)",4]] },
-    ],
-    interpret: t => t >= 11 ? ["Very high mortality.", "bad"] : t >= 7 ? ["High mortality.", "bad"] : t >= 4 ? ["Moderate.", "warn"] : ["Low organ dysfunction.", "ok"],
-  },
-  chads: {
-    items: [
-      { k: "CHF",                      opts: [["No",0],["Yes",1]] },
-      { k: "Hypertension",             opts: [["No",0],["Yes",1]] },
-      { k: "Age ≥ 75",                 opts: [["No",0],["Yes",2]] },
-      { k: "Diabetes",                 opts: [["No",0],["Yes",1]] },
-      { k: "Stroke / TIA / thrombo",   opts: [["No",0],["Yes",2]] },
-      { k: "Vascular disease",         opts: [["No",0],["Yes",1]] },
-      { k: "Age 65–74",                opts: [["No",0],["Yes",1]] },
-      { k: "Female",                   opts: [["No",0],["Yes",1]] },
-    ],
-    interpret: t => t >= 2 ? ["Anticoagulation recommended.", "bad"] : t === 1 ? ["Consider anticoagulation.", "warn"] : ["No anticoagulation needed.", "ok"],
-  },
-  hasbled: {
-    items: [
-      { k: "Hypertension (uncontrolled)", opts: [["No",0],["Yes",1]] },
-      { k: "Abnormal renal function",     opts: [["No",0],["Yes",1]] },
-      { k: "Abnormal liver function",     opts: [["No",0],["Yes",1]] },
-      { k: "Stroke history",              opts: [["No",0],["Yes",1]] },
-      { k: "Bleeding history",            opts: [["No",0],["Yes",1]] },
-      { k: "Labile INR",                  opts: [["No",0],["Yes",1]] },
-      { k: "Elderly > 65",                opts: [["No",0],["Yes",1]] },
-      { k: "Drugs (antiplatelet/NSAID)",  opts: [["No",0],["Yes",1]] },
-      { k: "Alcohol ≥ 8/wk",              opts: [["No",0],["Yes",1]] },
-    ],
-    interpret: t => t >= 3 ? ["High bleeding risk — caution / closer follow-up.", "bad"] : ["Moderate/low bleeding risk.", "ok"],
-  },
-  wells: {
-    items: [
-      { k: "Signs of DVT",                       opts: [["No",0],["Yes",3]] },
-      { k: "PE more likely than alt dx",         opts: [["No",0],["Yes",3]] },
-      { k: "HR > 100",                           opts: [["No",0],["Yes",1.5]] },
-      { k: "Immobilization / surgery ≤ 4 wk",    opts: [["No",0],["Yes",1.5]] },
-      { k: "Prior DVT/PE",                       opts: [["No",0],["Yes",1.5]] },
-      { k: "Hemoptysis",                         opts: [["No",0],["Yes",1]] },
-      { k: "Active malignancy",                  opts: [["No",0],["Yes",1]] },
-    ],
-    interpret: t => t > 6 ? ["High probability — image directly.", "bad"] : t >= 2 ? ["Moderate — D-dimer or CT.", "warn"] : ["Low — D-dimer to exclude.", "ok"],
-  },
-  rass: {
-    items: [
-      { k: "Level", opts: [
-        ["+4 Combative", 4],["+3 Very agitated", 3],["+2 Agitated", 2],["+1 Restless", 1],
-        [" 0 Alert & calm", 0],["−1 Drowsy", -1],["−2 Light sedation", -2],
-        ["−3 Moderate sedation", -3],["−4 Deep sedation", -4],["−5 Unarousable", -5],
-      ] },
-    ],
-    interpret: t => t >= 2 ? ["Agitated — assess pain/delirium.", "warn"] : t <= -3 ? ["Deep sedation — daily SAT if possible.", "warn"] : ["Acceptable depth.", "ok"],
-  },
+  gcs: { items: [
+    { k:"Eye", opts:[["Spontaneous (4)",4],["To speech (3)",3],["To pain (2)",2],["None (1)",1]] },
+    { k:"Verbal", opts:[["Oriented (5)",5],["Confused (4)",4],["Inappropriate (3)",3],["Incomprehensible (2)",2],["None (1)",1]] },
+    { k:"Motor", opts:[["Obeys (6)",6],["Localizes (5)",5],["Withdraws (4)",4],["Abnormal flexion (3)",3],["Extension (2)",2],["None (1)",1]] },
+  ], i: t => t <= 8 ? ["Severe — consider intubation.","bad"] : t <= 12 ? ["Moderate.","warn"] : ["Mild / normal.","ok"] },
+  qsofa: { items: [
+    { k:"RR ≥ 22", opts:[["No",0],["Yes",1]] },
+    { k:"Altered mental status", opts:[["No",0],["Yes",1]] },
+    { k:"SBP ≤ 100", opts:[["No",0],["Yes",1]] },
+  ], i: t => t >= 2 ? ["High sepsis mortality risk.","bad"] : ["Low risk.","ok"] },
+  sofa: { items: [
+    { k:"PaO₂/FiO₂", opts:[["≥400 (0)",0],["<400 (1)",1],["<300 (2)",2],["<200 vent (3)",3],["<100 vent (4)",4]] },
+    { k:"Platelets", opts:[["≥150 (0)",0],["<150 (1)",1],["<100 (2)",2],["<50 (3)",3],["<20 (4)",4]] },
+    { k:"Bilirubin", opts:[["<1.2 (0)",0],["1.2–1.9 (1)",1],["2–5.9 (2)",2],["6–11.9 (3)",3],["≥12 (4)",4]] },
+    { k:"Cardiovascular", opts:[["MAP≥70 (0)",0],["MAP<70 (1)",1],["Dopa≤5/dob (2)",2],["Dopa>5/NE≤0.1 (3)",3],["Dopa>15/NE>0.1 (4)",4]] },
+    { k:"GCS", opts:[["15 (0)",0],["13–14 (1)",1],["10–12 (2)",2],["6–9 (3)",3],["<6 (4)",4]] },
+    { k:"Cr / UO", opts:[["<1.2 (0)",0],["1.2–1.9 (1)",1],["2–3.4 (2)",2],["3.5–4.9 / <500 mL (3)",3],["≥5 / <200 mL (4)",4]] },
+  ], i: t => t >= 11 ? ["Very high mortality.","bad"] : t >= 7 ? ["High mortality.","bad"] : t >= 4 ? ["Moderate.","warn"] : ["Low.","ok"] },
+  chads: { items: [
+    { k:"CHF", opts:[["No",0],["Yes",1]] },
+    { k:"Hypertension", opts:[["No",0],["Yes",1]] },
+    { k:"Age ≥ 75", opts:[["No",0],["Yes",2]] },
+    { k:"Diabetes", opts:[["No",0],["Yes",1]] },
+    { k:"Stroke / TIA", opts:[["No",0],["Yes",2]] },
+    { k:"Vascular", opts:[["No",0],["Yes",1]] },
+    { k:"Age 65–74", opts:[["No",0],["Yes",1]] },
+    { k:"Female", opts:[["No",0],["Yes",1]] },
+  ], i: t => t >= 2 ? ["Anticoagulation recommended.","bad"] : t === 1 ? ["Consider anticoagulation.","warn"] : ["No anticoagulation.","ok"] },
+  hasbled: { items: [
+    { k:"Hypertension (uncontrolled)", opts:[["No",0],["Yes",1]] },
+    { k:"Abnormal renal", opts:[["No",0],["Yes",1]] },
+    { k:"Abnormal liver", opts:[["No",0],["Yes",1]] },
+    { k:"Stroke history", opts:[["No",0],["Yes",1]] },
+    { k:"Bleeding history", opts:[["No",0],["Yes",1]] },
+    { k:"Labile INR", opts:[["No",0],["Yes",1]] },
+    { k:"Elderly > 65", opts:[["No",0],["Yes",1]] },
+    { k:"Drugs (antipl/NSAID)", opts:[["No",0],["Yes",1]] },
+    { k:"Alcohol ≥ 8/wk", opts:[["No",0],["Yes",1]] },
+  ], i: t => t >= 3 ? ["High bleeding risk.","bad"] : ["Moderate/low risk.","ok"] },
+  wells: { items: [
+    { k:"Signs of DVT", opts:[["No",0],["Yes",3]] },
+    { k:"PE > alt dx", opts:[["No",0],["Yes",3]] },
+    { k:"HR > 100", opts:[["No",0],["Yes",1.5]] },
+    { k:"Immob / surgery ≤ 4w", opts:[["No",0],["Yes",1.5]] },
+    { k:"Prior DVT/PE", opts:[["No",0],["Yes",1.5]] },
+    { k:"Hemoptysis", opts:[["No",0],["Yes",1]] },
+    { k:"Active malignancy", opts:[["No",0],["Yes",1]] },
+  ], i: t => t > 6 ? ["High — image directly.","bad"] : t >= 2 ? ["Moderate — D-dimer or CT.","warn"] : ["Low — D-dimer to exclude.","ok"] },
+  rass: { items: [
+    { k:"Level", opts:[
+      ["+4 Combative",4],["+3 Very agitated",3],["+2 Agitated",2],["+1 Restless",1],
+      [" 0 Alert & calm",0],["−1 Drowsy",-1],["−2 Light sedation",-2],
+      ["−3 Moderate sedation",-3],["−4 Deep sedation",-4],["−5 Unarousable",-5],
+    ] },
+  ], i: t => t >= 2 ? ["Agitated — assess pain/delirium.","warn"] : t <= -3 ? ["Deep sedation.","warn"] : ["Acceptable.","ok"] },
 };
-
 function renderScore(key) {
   const sc = SCORES[key];
   const root = $("#score-" + key);
@@ -1472,7 +1981,6 @@ function renderScore(key) {
       </select>
     </div>`;
   }).join("") + `<div class="score-total"><span>Total</span><span class="total" id="t-${key}">—</span></div>`;
-
   root.querySelectorAll("select").forEach(sel => {
     sel.addEventListener("change", () => {
       const i = +sel.dataset.i;
@@ -1484,27 +1992,29 @@ function renderScore(key) {
   tallyScore(key);
 }
 function tallyScore(key) {
-  const sc = SCORES[key];
-  const vals = state.scores[key] || {};
+  const sc = SCORES[key], vals = state.scores[key] || {};
   let total = 0, any = false;
   for (let i = 0; i < sc.items.length; i++) {
     const v = vals[i];
     if (v !== "" && v !== undefined && v !== null) { total += Number(v); any = true; }
   }
-  const el = $("#t-" + key);
-  if (!any) { el.textContent = "—"; el.parentElement.style.background = "rgba(14,165,233,.1)"; el.parentElement.style.borderColor = "rgba(14,165,233,.25)"; return; }
-  const [msg, level] = sc.interpret(total);
-  const box = el.parentElement;
-  el.textContent = total + " · " + msg;
+  const el = $("#t-" + key), box = el.parentElement;
   const colors = {
-    ok: ["rgba(52,211,153,.12)","rgba(52,211,153,.3)","var(--ok)"],
-    warn: ["rgba(251,191,36,.12)","rgba(251,191,36,.3)","var(--warn)"],
-    bad: ["rgba(239,68,68,.12)","rgba(239,68,68,.3)","var(--danger)"],
+    ok:   ["rgba(52,211,153,.10)","rgba(52,211,153,.25)","var(--ok)"],
+    warn: ["rgba(251,191,36,.10)","rgba(251,191,36,.25)","var(--warn)"],
+    bad:  ["rgba(248,113,113,.10)","rgba(248,113,113,.25)","var(--danger)"],
+    info: ["rgba(56,189,248,.08)","rgba(56,189,248,.2)","var(--brand)"],
   };
-  const c = colors[level] || colors.ok;
-  box.style.background = c[0];
-  box.style.borderColor = c[1];
-  el.style.color = c[2];
+  if (!any) {
+    el.textContent = "—";
+    const c = colors.info;
+    box.style.background = c[0]; box.style.borderColor = c[1]; el.style.color = c[2];
+    return;
+  }
+  const [msg, level] = sc.i(total);
+  const c = colors[level] || colors.info;
+  el.textContent = total + " · " + msg;
+  box.style.background = c[0]; box.style.borderColor = c[1]; el.style.color = c[2];
 }
 function renderAllScores() { Object.keys(SCORES).forEach(renderScore); }
 
@@ -1524,7 +2034,7 @@ function bindNotes() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "icucalc-notes-" + new Date().toISOString().slice(0, 16).replace(/[:T]/g, "-") + ".txt";
+    a.download = "icucalc-notes-" + new Date().toISOString().slice(0,16).replace(/[:T]/g,"-") + ".txt";
     a.click();
     URL.revokeObjectURL(url);
   });
@@ -1534,237 +2044,32 @@ function bindNotes() {
 }
 
 /* ============================================================
-   ANTIBIOTICS
-   ============================================================ */
-const ABX = [
-  // β-lactams
-  { id: "pipTazo", name: "Piperacillin-tazobactam", cls: "β-lactam",
-    standard: "4.5 g IV q6h (extended infusion 4 h)",
-    crcl: [[40, Infinity, "4.5 g q6h"], [20, 40, "3.375 g q6h"], [0, 20, "2.25 g q6h"]],
-    ind: "HAP/VAP, complicated intra-abdominal, febrile neutropenia" },
-  { id: "meropenem", name: "Meropenem", cls: "Carbapenem",
-    standard: "1 g IV q8h (2 g q8h for CNS)",
-    crcl: [[51, Infinity, "1 g q8h"], [26, 50, "1 g q12h"], [10, 25, "500 mg q12h"], [0, 10, "500 mg q24h"]],
-    ind: "Severe sepsis, ESBL, mixed nosocomial pneumonia" },
-  { id: "imipenem", name: "Imipenem-cilastatin", cls: "Carbapenem",
-    standard: "500 mg IV q6h",
-    crcl: [[71, Infinity, "500 mg q6h"], [41, 70, "500 mg q8h"], [21, 40, "500 mg q12h"], [0, 20, "500 mg q24h"]],
-    ind: "Similar to meropenem — avoid in seizure risk" },
-  { id: "cefepime", name: "Cefepime", cls: "Cephalosporin",
-    standard: "2 g IV q8h",
-    crcl: [[60, Infinity, "2 g q8h"], [30, 59, "2 g q12h"], [11, 29, "2 g q24h"], [0, 10, "1 g q24h"]],
-    ind: "HAP, pyelonephritis, febrile neutropenia, MDR gram-negatives" },
-  { id: "ceftriaxone", name: "Ceftriaxone", cls: "Cephalosporin",
-    standard: "2 g IV q24h (q12h for meningitis)",
-    crcl: [[0, Infinity, "No renal adjustment"]],
-    ind: "CAP, meningitis, pyelonephritis, gonorrhea" },
-  { id: "ceftazAvi", name: "Ceftazidime-avibactam", cls: "Cephalosporin",
-    standard: "2.5 g IV q8h",
-    crcl: [[51, Infinity, "2.5 g q8h"], [31, 50, "1.25 g q8h"], [16, 30, "0.94 g q12h"], [6, 15, "0.94 g q24h"], [0, 5, "0.94 g q48h"]],
-    ind: "Carbapenem-resistant Enterobacterales (KPC), Pseudomonas" },
-  { id: "ampSulbactam", name: "Ampicillin-sulbactam", cls: "β-lactam",
-    standard: "3 g IV q6h",
-    crcl: [[30, Infinity, "3 g q6h"], [15, 29, "3 g q12h"], [0, 15, "3 g q24h"]],
-    ind: "Aspiration pneumonia, intra-abdominal, skin/soft tissue" },
-  { id: "aztreonam", name: "Aztreonam", cls: "Monobactam",
-    standard: "2 g IV q8h",
-    crcl: [[30, Infinity, "2 g q8h"], [10, 29, "1 g q8h"], [0, 10, "500 mg q8h"]],
-    ind: "Gram-negative coverage in β-lactam allergy" },
-
-  // Anti-MRSA
-  { id: "vanco", name: "Vancomycin", cls: "Anti-MRSA glycopeptide",
-    standard: "15–20 mg/kg IV q8–12h (load 25–30 mg/kg for critical)",
-    crcl: [[80, Infinity, "15–20 mg/kg q8–12h (target AUC 400–600)"], [50, 80, "15–20 mg/kg q12h"], [20, 49, "15 mg/kg q24h"], [0, 20, "By levels only"]],
-    ind: "MRSA, empiric coverage in septic shock",
-    notes: "Follow trough (15–20) or AUC24 (400–600)." },
-  { id: "linezolid", name: "Linezolid", cls: "Oxazolidinone",
-    standard: "600 mg IV / PO q12h",
-    crcl: [[0, Infinity, "No renal adjustment"]],
-    ind: "MRSA pneumonia, VRE",
-    notes: "Watch thrombocytopenia, serotonin syndrome." },
-  { id: "daptomycin", name: "Daptomycin", cls: "Lipopeptide",
-    standard: "6–10 mg/kg IV q24h",
-    crcl: [[30, Infinity, "6–10 mg/kg q24h"], [0, 30, "6–10 mg/kg q48h"]],
-    ind: "MRSA bacteremia, right-sided endocarditis",
-    notes: "Inactivated by surfactant — never use for pneumonia. Monitor CPK." },
-
-  // Fluoroquinolones
-  { id: "levo", name: "Levofloxacin", cls: "Fluoroquinolone",
-    standard: "750 mg IV q24h",
-    crcl: [[50, Infinity, "750 mg q24h"], [20, 49, "750 mg then 750 mg q48h"], [0, 19, "750 mg then 500 mg q48h"]],
-    ind: "CAP, complicated UTI, atypicals" },
-  { id: "cipro", name: "Ciprofloxacin", cls: "Fluoroquinolone",
-    standard: "400 mg IV q8–12h",
-    crcl: [[50, Infinity, "400 mg q8–12h"], [30, 49, "400 mg q12h"], [0, 29, "400 mg q24h"]],
-    ind: "Pseudomonas, complicated intra-abdominal (with metro)" },
-
-  // Others
-  { id: "metro", name: "Metronidazole", cls: "Nitroimidazole",
-    standard: "500 mg IV q8h",
-    crcl: [[0, Infinity, "No renal adjustment (reduce if severe hepatic dysfunction)"]],
-    ind: "Anaerobes, C. difficile (oral)" },
-  { id: "azithro", name: "Azithromycin", cls: "Macrolide",
-    standard: "500 mg IV q24h",
-    crcl: [[0, Infinity, "No renal adjustment"]],
-    ind: "Atypical CAP coverage, Legionella" },
-
-  // Aminoglycosides
-  { id: "amikacin", name: "Amikacin", cls: "Aminoglycoside",
-    standard: "15–20 mg/kg IV q24h (extended interval)",
-    crcl: [[60, Infinity, "15–20 mg/kg q24h"], [40, 59, "15 mg/kg q36h"], [20, 39, "15 mg/kg q48h"], [0, 19, "By levels only"]],
-    ind: "MDR gram-negative synergy",
-    notes: "Monitor trough (< 4 mg/L) + peak (56–64 mg/L)." },
-  { id: "gent", name: "Gentamicin", cls: "Aminoglycoside",
-    standard: "5–7 mg/kg IV q24h",
-    crcl: [[60, Infinity, "5–7 mg/kg q24h"], [40, 59, "5 mg/kg q36h"], [20, 39, "5 mg/kg q48h"], [0, 19, "By levels only"]],
-    ind: "Enterococcal synergy, gram-negative augmentation" },
-  { id: "colistin", name: "Colistin (CBA)", cls: "Polymyxin",
-    standard: "Load 9 MIU then 4.5 MIU q12h (~2.5 mg/kg CBA q12h)",
-    crcl: [[80, Infinity, "4.5 MIU q12h"], [50, 79, "3.5 MIU q12h"], [30, 49, "2.5 MIU q12h"], [0, 29, "1.5–2 MIU q12h"]],
-    ind: "MDR/XDR Acinetobacter, Pseudomonas",
-    notes: "Nephrotoxic — monitor creatinine daily." },
-
-  // Antifungals
-  { id: "fluconazole", name: "Fluconazole", cls: "Antifungal (azole)",
-    standard: "Load 800 mg, then 400 mg IV q24h",
-    crcl: [[50, Infinity, "400–800 mg q24h"], [0, 50, "50% of dose q24h"]],
-    ind: "Candidiasis (non-krusei/non-glabrata)" },
-  { id: "vorico", name: "Voriconazole", cls: "Antifungal (azole)",
-    standard: "Load 6 mg/kg IV q12h × 2, then 4 mg/kg IV q12h",
-    crcl: [[50, Infinity, "4 mg/kg q12h"], [0, 50, "PO if possible (IV vehicle accumulates)"]],
-    ind: "Aspergillosis",
-    notes: "Multiple drug interactions; trough 1–5.5 mg/L." },
-  { id: "caspo", name: "Caspofungin", cls: "Antifungal (echinocandin)",
-    standard: "Load 70 mg, then 50 mg IV q24h",
-    crcl: [[0, Infinity, "No renal adjustment"]],
-    ind: "Invasive candidiasis, empiric for febrile neutropenia" },
-  { id: "mica", name: "Micafungin", cls: "Antifungal (echinocandin)",
-    standard: "100 mg IV q24h (150 mg for esophageal)",
-    crcl: [[0, Infinity, "No renal adjustment"]],
-    ind: "Candidemia, invasive candidiasis" },
-
-  // Antiviral
-  { id: "acyclovir", name: "Acyclovir", cls: "Antiviral",
-    standard: "10 mg/kg IV q8h",
-    crcl: [[50, Infinity, "10 mg/kg q8h"], [25, 49, "10 mg/kg q12h"], [10, 24, "10 mg/kg q24h"], [0, 9, "5 mg/kg q24h"]],
-    ind: "HSV encephalitis, VZV pneumonitis" },
-  { id: "oseltamivir", name: "Oseltamivir", cls: "Antiviral",
-    standard: "75 mg PO q12h",
-    crcl: [[60, Infinity, "75 mg q12h"], [30, 59, "30 mg q12h"], [10, 29, "30 mg q24h"], [0, 9, "30 mg once (or per HD schedule)"]],
-    ind: "Influenza A/B" },
-];
-
-const ABX_CLASSES = ["all", ...Array.from(new Set(ABX.map(a => a.cls)))];
-
-function abxAdjustedDose(abx, crcl) {
-  if (crcl == null) return { label: abx.standard, active: false };
-  for (const [lo, hi, dose] of abx.crcl) {
-    if (crcl >= lo && crcl < hi) return { label: dose, active: true };
-  }
-  return { label: abx.standard, active: false };
-}
-
-function renderAntibiotics() {
-  // Class chips
-  const chipBox = $("#abxClassChips");
-  if (!chipBox) return;
-  const activeClass = state.abxCls || "all";
-  chipBox.innerHTML = ABX_CLASSES.map(c =>
-    `<button class="chip ${activeClass === c ? "active" : ""}" type="button" data-c="${c}">${c === "all" ? "All" : c}</button>`
-  ).join("");
-  chipBox.querySelectorAll(".chip").forEach(btn => {
-    btn.addEventListener("click", () => {
-      state.abxCls = btn.dataset.c;
-      saveState();
-      renderAntibiotics();
-    });
-  });
-
-  // CrCl badge
-  const c = computedCrCl();
-  const badge = $("#abx-crcl-badge");
-  if (badge) {
-    if (c == null) { badge.textContent = "CrCl —"; badge.className = "pill info"; }
-    else { badge.textContent = `CrCl ${fmt(c, 0)} mL/min`;
-      badge.className = "pill " + (c < 30 ? "bad" : c < 60 ? "warn" : "ok"); }
-  }
-
-  const q = (state.abxQuery || "").trim().toLowerCase();
-  const list = ABX.filter(a => {
-    if (activeClass !== "all" && a.cls !== activeClass) return false;
-    if (!q) return true;
-    return (a.name + " " + a.cls + " " + (a.ind || "")).toLowerCase().includes(q);
-  });
-
-  const grid = $("#abxCards");
-  if (!grid) return;
-  if (list.length === 0) {
-    grid.innerHTML = `<div class="card"><h3>No antibiotic matches</h3><div class="sub">Clear the search or change the class.</div></div>`;
-    return;
-  }
-
-  grid.innerHTML = list.map(a => {
-    const dose = abxAdjustedDose(a, c);
-    return `
-      <div class="card">
-        <h3>${a.name} <span class="pill info" style="margin-left:6px">${a.cls}</span></h3>
-        <div class="sub">${a.ind || ""}</div>
-        <div class="row"><span class="k">Standard dose</span><span class="v">${a.standard}</span></div>
-        <div class="row"><span class="k">${dose.active ? `For CrCl ${fmt(c, 0)}` : "Adjusted dose"}</span><span class="v ${dose.active ? "mid" : ""}">${dose.label}</span></div>
-        ${a.notes ? `<div class="verdict warn" style="margin-top:8px">${a.notes}</div>` : ""}
-      </div>
-    `;
-  }).join("");
-}
-
-function computedCrCl() {
-  const p = state.patient;
-  const age = num(p.age), w = num(p.weight), cr = num(p.cr);
-  if (!age || !w || !cr || !p.sex) return null;
-  let v = ((140 - age) * w) / (72 * cr);
-  if (p.sex === "F") v *= 0.85;
-  return v;
-}
-
-function bindAntibioticControls() {
-  const s = $("#abxSearch");
-  if (!s) return;
-  s.value = state.abxQuery || "";
-  s.addEventListener("input", e => {
-    state.abxQuery = e.target.value;
-    saveState();
-    renderAntibiotics();
-  });
-}
-
-/* ============================================================
-   ABOUT / REFERENCES
+   ABOUT
    ============================================================ */
 const REFERENCES = [
-  { s: "Marino PL. The ICU Book, 5th ed. Wolters Kluwer, 2023." },
-  { s: "Evans L et al. Surviving Sepsis Campaign: International Guidelines for Management of Sepsis and Septic Shock 2021. Crit Care Med 2021;49(11):e1063–e1143." },
-  { s: "ARDS Definition Task Force. Acute respiratory distress syndrome: the Berlin definition. JAMA 2012;307(23):2526–33." },
-  { s: "ARDSnet. Ventilation with lower tidal volumes as compared with traditional tidal volumes for ALI/ARDS. NEJM 2000;342(18):1301–08." },
-  { s: "Amato MBP et al. Driving pressure and survival in the acute respiratory distress syndrome. NEJM 2015;372(8):747–55." },
-  { s: "Panchal AR et al. Part 3: adult basic and advanced life support: 2020 AHA Guidelines for CPR and ECC. Circulation 2020;142(16_suppl_2):S366–S468." },
-  { s: "Gilbert DN et al. The Sanford Guide to Antimicrobial Therapy 2024." },
-  { s: "Kalil AC et al. Management of adults with HAP/VAP: 2016 IDSA/ATS guidelines. Clin Infect Dis 2016;63(5):e61–e111." },
-  { s: "KDIGO. Clinical practice guideline for acute kidney injury. Kidney Int Suppl 2012;2(1):1–138." },
-  { s: "Hindricks G et al. 2020 ESC Guidelines for AF (CHA₂DS₂-VASc, HAS-BLED). Eur Heart J 2021;42(5):373–498." },
-  { s: "Konstantinides SV et al. 2019 ESC Guidelines for the diagnosis and management of acute pulmonary embolism (Wells). Eur Heart J 2020;41(4):543–603." },
-  { s: "Sessler CN et al. The Richmond Agitation-Sedation Scale (RASS). Am J Respir Crit Care Med 2002;166(10):1338–44." },
-  { s: "Vincent JL et al. The SOFA score to describe organ dysfunction/failure. Intensive Care Med 1996;22(7):707–10." },
-  { s: "Cockcroft DW, Gault MH. Prediction of creatinine clearance from serum creatinine. Nephron 1976;16(1):31–41." },
-  { s: "Winters RW. Terminology of acid-base disorders. Ann NY Acad Sci 1966;133(1):211–24." },
-  { s: "Adrogué HJ, Madias NE. Hypernatremia. NEJM 2000;342(20):1493–99 (free water deficit)." },
-  { s: "Khanna A et al. Angiotensin II for the treatment of vasodilatory shock (norepinephrine equivalents). NEJM 2017;377(5):419–30." },
+  "Marino PL. The ICU Book, 5th ed. Wolters Kluwer, 2023.",
+  "Evans L et al. Surviving Sepsis Campaign 2021. Crit Care Med 2021;49(11):e1063–e1143.",
+  "ARDS Definition Task Force. Berlin definition. JAMA 2012;307(23):2526–33.",
+  "ARDSnet. Low tidal volumes for ARDS. NEJM 2000;342(18):1301–08.",
+  "Amato MBP et al. Driving pressure and survival in ARDS. NEJM 2015;372(8):747–55.",
+  "Panchal AR et al. 2020 AHA CPR & ECC Guidelines. Circulation 2020;142(16_suppl_2).",
+  "Gilbert DN et al. The Sanford Guide to Antimicrobial Therapy 2024.",
+  "Kalil AC et al. IDSA/ATS HAP/VAP 2016. Clin Infect Dis 2016;63(5):e61–e111.",
+  "KDIGO. AKI clinical practice guideline. Kidney Int Suppl 2012;2(1):1–138.",
+  "Hindricks G et al. 2020 ESC AF Guidelines. Eur Heart J 2021;42(5):373–498.",
+  "Konstantinides SV et al. 2019 ESC PE Guidelines. Eur Heart J 2020;41(4):543–603.",
+  "Sessler CN et al. RASS. Am J Respir Crit Care Med 2002;166(10):1338–44.",
+  "Vincent JL et al. SOFA. Intensive Care Med 1996;22(7):707–10.",
+  "Cockcroft DW, Gault MH. Nephron 1976;16(1):31–41 (CrCl).",
+  "Winters RW. Ann NY Acad Sci 1966;133(1):211–24 (compensation).",
+  "Adrogué HJ, Madias NE. Hypernatremia. NEJM 2000;342(20):1493–99 (FWD).",
+  "Khanna A et al. NEJM 2017;377(5):419–30 (NE equivalents).",
 ];
-
 function renderAbout() {
   const list = $("#ref-list");
   if (list && !list.dataset.rendered) {
     list.innerHTML = REFERENCES.map((r, i) =>
-      `<div class="row"><span class="k">${i + 1}.</span><span class="v" style="text-align:right;font-weight:600;line-height:1.5">${r.s}</span></div>`
+      `<div class="row"><span class="k">${i+1}.</span><span class="v" style="text-align:right;font-weight:600;line-height:1.55;font-family:inherit;font-size:12.5px">${r}</span></div>`
     ).join("");
     list.dataset.rendered = "1";
   }
@@ -1774,47 +2079,23 @@ function renderAbout() {
     bd.dataset.set = "1";
   }
 }
-
 function bindAbout() {
-  const wipeBtn = $("#wipeAllBtn");
-  if (wipeBtn) {
-    wipeBtn.addEventListener("click", () => {
-      if (!confirm("Erase ALL local data (patient, inputs, scores, notes)? This cannot be undone.")) return;
-      try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
-      location.reload();
-    });
-  }
+  $("#wipeAllBtn").addEventListener("click", () => {
+    if (!confirm("Erase ALL local data? This cannot be undone.")) return;
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    location.reload();
+  });
+  $("#showOnbBtn").addEventListener("click", () => {
+    state.onboarded = false; saveState();
+    $("#onboarding").classList.remove("hide");
+    $("#app").classList.add("hide");
+  });
 }
 
 /* ============================================================
-   WIRE EVERYTHING
+   RUN + INIT
    ============================================================ */
-function bindAllInputs() {
-  // Hemo
-  bindInput("hd-sbp", "hd_sbp"); bindInput("hd-dbp", "hd_dbp"); bindInput("hd-hr", "hd_hr");
-  bindInput("cpp-icp", "cpp_icp"); bindInput("cpp-map", "cpp_map");
-  bindInput("ne-norepi","ne_norepi"); bindInput("ne-epi","ne_epi"); bindInput("ne-phenyl","ne_phenyl");
-  bindInput("ne-dop","ne_dop"); bindInput("ne-vaso","ne_vaso");
-  // Vent
-  bindInput("v-pao2","v_pao2"); bindInput("v-spo2","v_spo2"); bindInput("v-fio2","v_fio2");
-  bindInput("v-pplat","v_pplat"); bindInput("v-peep","v_peep"); bindInput("v-tv","v_tv");
-  // ABG
-  ["ab-ph","ab-co2","ab-hco3","ab-na","ab-cl","ab-alb","ab-pao2","ab-fio2"].forEach(id =>
-    bindInput(id, id.replace("-", "_"))
-  );
-  // Lytes
-  ["ca-ca","ca-alb","na-na","na-glu","os-na","os-glu","os-bun","os-etoh","os-meas","fwd-na","fwd-tgt","k-k"].forEach(id =>
-    bindInput(id, id.replace("-", "_"))
-  );
-  // Renal
-  bindInput("uo-vol","uo_vol"); bindInput("uo-hr","uo_hr");
-}
-
-function safeRun(fn, name) {
-  try { fn(); }
-  catch (e) { console.error(`[najm] ${name} failed:`, e); }
-}
-
+function safeRun(fn, name) { try { fn(); } catch (e) { console.error(`[najm] ${name} failed:`, e); } }
 function runAll() {
   safeRun(renderDerived,    "renderDerived");
   safeRun(renderInfusions,  "renderInfusions");
@@ -1826,9 +2107,38 @@ function runAll() {
   safeRun(renderAntibiotics,"renderAntibiotics");
 }
 
+function bindAllInputs() {
+  ["hd-sbp","hd-dbp","hd-hr","cpp-icp","cpp-map",
+   "ne-norepi","ne-epi","ne-phenyl","ne-dop","ne-vaso",
+   "v-pao2","v-spo2","v-fio2","v-pplat","v-peep","v-tv",
+   "ab-ph","ab-co2","ab-hco3","ab-na","ab-cl","ab-alb","ab-pao2","ab-fio2",
+   "ca-ca","ca-alb","na-na","na-glu",
+   "os-na","os-glu","os-bun","os-etoh","os-meas",
+   "fwd-na","fwd-tgt","k-k",
+   "uo-vol","uo-hr"].forEach(id => bindInput(id, id.replace("-", "_")));
+}
+
+function showApp() {
+  $("#onboarding").classList.add("hide");
+  $("#app").classList.remove("hide");
+  state.onboarded = true;
+  saveState();
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   try {
     loadState();
+    // Splash → onboarding (first run) or app (returning)
+    setTimeout(() => {
+      $("#splash").classList.add("hide");
+      if (state.onboarded) {
+        $("#app").classList.remove("hide");
+      } else {
+        $("#onboarding").classList.remove("hide");
+      }
+    }, 1500);
+
+    // Init app
     bindPatient();
     bindTabs();
     bindInfusionControls();
@@ -1838,15 +2148,21 @@ document.addEventListener("DOMContentLoaded", () => {
     bindNotes();
     bindAbout();
     runAll();
+
+    // Onboarding CTAs
+    $("#onbStart").addEventListener("click", showApp);
+    $("#onbSkip").addEventListener("click", showApp);
+
+    // Year
+    $("#year").textContent = new Date().getFullYear();
   } catch (e) {
     console.error("[najm] init failed:", e);
-    // Fall back — force infusions tab to be visible so app remains usable.
-    const inf = document.getElementById("m-infusions");
-    if (inf) inf.classList.add("active");
+    $("#splash").classList.add("hide");
+    $("#app").classList.remove("hide");
   }
 });
 
-/* Register service worker for full offline support (production only). */
+/* Register service worker (production only). */
 if ("serviceWorker" in navigator && location.protocol !== "file:") {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("sw.js").catch(() => {});
