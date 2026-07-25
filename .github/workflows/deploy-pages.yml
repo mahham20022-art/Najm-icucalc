@@ -1,0 +1,62 @@
+name: Deploy Najm ICUCalc to Pages
+
+on:
+  push:
+    branches:
+      - claude/fix-app-links-Sp24p
+      - main
+    paths:
+      - 'index.html'
+      - 'manifest.webmanifest'
+      - 'sw.js'
+      - 'privacy-policy.html'
+      - 'icons/**'
+  workflow_dispatch:
+
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source branch
+        uses: actions/checkout@v4
+        with:
+          path: source
+
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: pages
+          fetch-depth: 1
+
+      - name: Sync Najm files to gh-pages root (preserve /ash, /cinemind, /design)
+        run: |
+          cp source/index.html               pages/index.html
+          cp source/manifest.webmanifest     pages/manifest.webmanifest
+          cp source/sw.js                    pages/sw.js
+          cp source/privacy-policy.html      pages/privacy-policy.html
+          mkdir -p pages/icons
+          cp -r source/icons/*.png           pages/icons/
+
+      - name: Commit and push if changed
+        working-directory: pages
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [[ -z "$(git status --porcelain)" ]]; then
+            echo "No changes to deploy."
+            exit 0
+          fi
+          git add -A
+          git commit -m "deploy: sync Najm ICUCalc from ${GITHUB_SHA::7}
+
+          Source: ${GITHUB_REF#refs/heads/}@${GITHUB_SHA}
+          Triggered by: ${GITHUB_ACTOR}"
+          git push origin gh-pages
