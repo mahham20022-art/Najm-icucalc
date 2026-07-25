@@ -1,0 +1,1751 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
+<meta name="theme-color" content="#05060A" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="ASH" />
+<meta name="format-detection" content="telephone=no" />
+<title>ASH · Acute Support Hub</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><defs><linearGradient id='g' x1='0' x2='1' y1='0' y2='1'><stop offset='0' stop-color='%235DF4FF'/><stop offset='.5' stop-color='%237A8BFF'/><stop offset='1' stop-color='%23C8A2FF'/></linearGradient></defs><rect width='180' height='180' rx='40' fill='%23050610'/><rect x='14' y='14' width='152' height='152' rx='32' fill='none' stroke='url(%23g)' stroke-width='3'/><text x='90' y='118' text-anchor='middle' font-family='ui-serif,Georgia' font-style='italic' font-size='90' font-weight='600' fill='url(%23g)'>A</text></svg>" />
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23050610'/><text x='32' y='44' text-anchor='middle' font-family='ui-serif,Georgia' font-style='italic' font-size='38' font-weight='600' fill='%235DF4FF'>A</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+
+<style>
+:root{
+  --obsidian:#05060A;--abyss:#0A0D17;--carbon:#10141F;--graphite:#171C2B;--steel:#222A3E;
+  --fog:rgba(244,247,255,.08);
+  --ink:#F4F7FF;--ink-2:#C7CEDF;--ink-3:#8892A8;--ink-4:#525B70;
+  --plasma:#5DF4FF;--plasma-2:#7A8BFF;--mihrab:#00C2A8;--solar:#FFB020;
+  --vital:#FF3355;--pulse:#3FFFB0;--bismuth:#C8A2FF;--sand:#E9D9B0;
+  --f-ui:"Inter Tight",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-data:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --f-ar:"IBM Plex Sans Arabic","Inter Tight",sans-serif;
+  --f-serif:"Instrument Serif","Times New Roman",serif;
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bot:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:#000;color:var(--ink);font-family:var(--f-ui);overscroll-behavior:none;-webkit-font-smoothing:antialiased;height:100%}
+body{
+  background:
+    radial-gradient(1200px 700px at 70% -10%, rgba(93,244,255,.10), transparent 60%),
+    radial-gradient(900px 500px at -10% 30%, rgba(122,139,255,.08), transparent 60%),
+    var(--obsidian);
+  min-height:100dvh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+::selection{background:rgba(93,244,255,.25);color:#fff}
+button,a{cursor:pointer;font-family:inherit;color:inherit}
+input,textarea{font-family:inherit}
+
+/* ── Phone shell (desktop bezel, fullscreen mobile) ───── */
+.app{
+  width:100%;
+  max-width:430px;
+  height:100dvh;
+  max-height:932px;
+  background:var(--obsidian);
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+@media(min-width:640px){
+  .app{
+    border-radius:48px;
+    border:8px solid #1A2030;
+    box-shadow:
+      0 80px 120px -40px rgba(0,0,0,.85),
+      0 0 0 1px rgba(255,255,255,.06),
+      inset 0 0 0 1px rgba(255,255,255,.04);
+    height:calc(100dvh - 40px);
+  }
+  .app::before{
+    content:"";position:absolute;top:14px;left:50%;transform:translateX(-50%);
+    width:120px;height:32px;border-radius:16px;background:#000;z-index:1000;
+  }
+}
+
+/* ── Status bar ───────────────────────────────────────── */
+.statusbar{
+  flex-shrink:0;
+  padding:calc(var(--safe-top) + 14px) 28px 8px;
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--f-data);font-size:13px;color:var(--ink);font-weight:600;
+  background:transparent;
+  position:relative;z-index:5;
+}
+.statusbar .right{display:flex;gap:5px;align-items:center}
+.statusbar svg{display:block}
+@media(min-width:640px){.statusbar{padding-top:36px}}
+
+/* ── Header (per-screen) ──────────────────────────────── */
+.header{
+  flex-shrink:0;
+  display:flex;align-items:center;gap:10px;
+  padding:6px 18px 12px;
+  position:relative;z-index:3;
+}
+.header .back{
+  width:36px;height:36px;border-radius:50%;
+  background:rgba(255,255,255,.06);border:1px solid var(--fog);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--ink);transition:transform .15s ease,background .15s;
+}
+.header .back:active{transform:scale(.9);background:rgba(93,244,255,.12)}
+.header .title{flex:1;min-width:0}
+.header .title .t{font-size:17px;font-weight:600;line-height:1.1;letter-spacing:-.01em}
+.header .title .s{font-size:11px;color:var(--ink-3);font-family:var(--f-data);letter-spacing:.08em;margin-top:2px}
+.header .action{padding:8px 12px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid var(--fog);font-size:12px;display:flex;align-items:center;gap:6px}
+.header .action.primary{background:linear-gradient(180deg,#5DF4FF,#22B6C7);color:#001016;border:none;font-weight:600}
+
+/* ── Screens ──────────────────────────────────────────── */
+.screens{flex:1;min-height:0;position:relative;overflow:hidden}
+.screen{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  overflow:hidden;
+  background:var(--obsidian);
+  transform:translateX(100%);
+  transition:transform .32s cubic-bezier(.32,.72,0,1);
+  z-index:1;
+}
+.screen.active{transform:translateX(0);z-index:2}
+.screen.peek{transform:translateX(-25%);opacity:.6;z-index:0}
+.screen .body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding-bottom:120px}
+.screen .body::-webkit-scrollbar{width:0}
+.screen.has-tabbar .body{padding-bottom:110px}
+
+/* ── Tab bar (only on root screens) ──────────────────── */
+.tabbar{
+  position:absolute;left:12px;right:12px;
+  bottom:calc(var(--safe-bot) + 14px);
+  display:flex;align-items:center;justify-content:space-around;
+  padding:8px;border-radius:24px;
+  background:rgba(10,13,23,.92);backdrop-filter:blur(20px) saturate(140%);
+  -webkit-backdrop-filter:blur(20px) saturate(140%);
+  border:1px solid var(--fog);
+  z-index:50;
+  box-shadow:0 16px 40px -12px rgba(0,0,0,.6);
+}
+.tabbar.hidden{display:none}
+.tab{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:6px 0;font-size:9px;color:var(--ink-3);letter-spacing:.08em;text-transform:uppercase;
+  border:none;background:transparent;transition:color .15s,transform .15s;
+}
+.tab:active{transform:scale(.92)}
+.tab.active{color:var(--plasma)}
+.tab.active svg{filter:drop-shadow(0 0 6px rgba(93,244,255,.5))}
+.tab-ask{
+  flex:0 0 auto;width:56px;height:56px;border-radius:50%;
+  background:conic-gradient(from 0deg,#5DF4FF,#7A8BFF,#C8A2FF,#5DF4FF);
+  display:flex;align-items:center;justify-content:center;margin-top:-22px;
+  box-shadow:0 14px 30px -8px rgba(93,244,255,.5),0 0 0 1px rgba(255,255,255,.08) inset;
+  border:none;
+  transition:transform .15s;
+}
+.tab-ask:active{transform:scale(.92)}
+.tab-ask .core{width:46px;height:46px;border-radius:50%;background:var(--obsidian);display:flex;align-items:center;justify-content:center;color:var(--plasma);font-family:var(--f-data);font-size:11px;letter-spacing:.16em;font-weight:600}
+
+/* ── Cards / surfaces ────────────────────────────────── */
+.card{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01));border:1px solid var(--fog);border-radius:18px;padding:14px;margin:8px 16px}
+.card.flat{background:rgba(255,255,255,.025)}
+.card.click{cursor:pointer;transition:transform .15s,background .15s,border-color .15s}
+.card.click:active{transform:scale(.985);background:rgba(255,255,255,.06)}
+.row{display:flex;gap:10px;align-items:center}
+.spacer{flex:1}
+
+/* ── Pills / chips ───────────────────────────────────── */
+.pill{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border-radius:999px;font-family:var(--f-data);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--fog);background:rgba(255,255,255,.04);color:var(--ink-2);font-weight:500}
+.pill.vital{color:var(--vital);border-color:rgba(255,51,85,.4);background:rgba(255,51,85,.08)}
+.pill.solar{color:var(--solar);border-color:rgba(255,176,32,.4);background:rgba(255,176,32,.08)}
+.pill.plasma{color:var(--plasma);border-color:rgba(93,244,255,.4);background:rgba(93,244,255,.08)}
+.pill.mihrab{color:var(--mihrab);border-color:rgba(0,194,168,.4);background:rgba(0,194,168,.08)}
+.pill.bismuth{color:var(--bismuth);border-color:rgba(200,162,255,.4);background:rgba(200,162,255,.08)}
+.pill.pulse{color:var(--pulse);border-color:rgba(63,255,176,.4);background:rgba(63,255,176,.08)}
+.pill.lg{font-size:11px;padding:6px 11px}
+.dot{width:6px;height:6px;border-radius:50%;background:currentColor;box-shadow:0 0 8px currentColor;animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(.7)}}
+@keyframes ring{0%{box-shadow:0 0 0 0 rgba(255,51,85,.55)}70%{box-shadow:0 0 0 20px rgba(255,51,85,0)}100%{box-shadow:0 0 0 0 rgba(255,51,85,0)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes scan{0%{transform:translateY(-110%)}100%{transform:translateY(110%)}}
+@keyframes wave{0%,100%{height:6px}50%{height:24px}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+/* ── Buttons ─────────────────────────────────────────── */
+.btn{padding:14px 18px;border-radius:14px;font-size:14px;font-weight:600;border:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .12s,box-shadow .12s;width:100%}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:linear-gradient(180deg,#5DF4FF,#22B6C7);color:#001016;box-shadow:0 10px 24px -8px rgba(93,244,255,.5)}
+.btn.vital{background:linear-gradient(135deg,#FF3355,#B81E3A);color:#fff;box-shadow:0 10px 24px -8px rgba(255,51,85,.5)}
+.btn.ghost{background:rgba(255,255,255,.06);color:var(--ink);border:1px solid var(--fog)}
+.btn.success{background:linear-gradient(180deg,#3FFFB0,#00C2A8);color:#001D17}
+
+/* ────────────────── HOME ────────────────── */
+.greet{padding:6px 22px 4px;font-family:var(--f-serif);font-style:italic;font-weight:400;font-size:28px;letter-spacing:-.02em;line-height:1.1}
+.greet .name{color:var(--plasma)}
+.greet-sub{padding:0 22px 12px;font-size:12px;color:var(--ink-3);font-family:var(--f-data);letter-spacing:.04em}
+
+.ai-brief{
+  margin:8px 16px;padding:18px;border-radius:22px;
+  background:radial-gradient(140% 100% at 30% 0%,rgba(122,139,255,.25),rgba(93,244,255,.08) 40%,transparent 70%),linear-gradient(180deg,#0E1424,#080B14);
+  border:1px solid rgba(122,139,255,.3);position:relative;overflow:hidden;
+}
+.ai-brief::after{content:"";position:absolute;inset:-50% -10%;background:radial-gradient(40% 60% at 50% 50%,rgba(122,139,255,.22),transparent 70%);animation:float 6s ease-in-out infinite;pointer-events:none}
+.ai-brief .top{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:2}
+.ai-brief .label{font-family:var(--f-data);font-size:10px;letter-spacing:.16em;color:var(--bismuth);font-weight:600}
+.ai-brief .text{margin-top:10px;font-size:14px;line-height:1.5;position:relative;z-index:2}
+.ai-brief .ask-cta{margin-top:14px;display:flex;align-items:center;gap:8px;padding:12px 14px;border-radius:14px;background:rgba(0,0,0,.4);border:1px solid rgba(93,244,255,.35);position:relative;z-index:2}
+.ai-brief .ask-cta .placeholder{flex:1;font-family:var(--f-data);font-size:11px;color:var(--ink-3);letter-spacing:.04em}
+.ai-brief .ask-cta .mic{width:30px;height:30px;border-radius:50%;background:var(--plasma);color:#001016;display:flex;align-items:center;justify-content:center}
+
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px;margin-top:10px}
+.stat{padding:14px;border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0));border:1px solid var(--fog);transition:transform .15s,background .15s}
+.stat:active{transform:scale(.98);background:rgba(255,255,255,.08)}
+.stat .ico{width:22px;height:22px;color:var(--plasma);margin-bottom:6px}
+.stat .t{font-size:11px;color:var(--ink-3);font-family:var(--f-data);letter-spacing:.06em;text-transform:uppercase}
+.stat .v{font-family:var(--f-data);font-size:22px;letter-spacing:-.02em;margin-top:4px;font-weight:500}
+.stat .sub{font-size:10px;color:var(--ink-3);margin-top:2px}
+.stat.crit{border-color:rgba(255,51,85,.4);background:linear-gradient(180deg,rgba(255,51,85,.10),rgba(255,51,85,.02))}
+.stat.crit .ico,.stat.crit .v{color:var(--vital)}
+.stat.heat{border-color:rgba(255,176,32,.4);background:linear-gradient(180deg,rgba(255,176,32,.10),rgba(255,176,32,.02))}
+.stat.heat .ico,.stat.heat .v{color:var(--solar)}
+
+.emergency{
+  margin:12px 16px;padding:14px;border-radius:18px;
+  background:linear-gradient(135deg,rgba(255,51,85,.20),rgba(255,51,85,.05));
+  border:1px solid rgba(255,51,85,.4);position:relative;overflow:hidden;
+}
+.emergency::before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,51,85,.18) 50%,transparent 70%);background-size:200% 100%;animation:shimmer 3s linear infinite}
+.emergency .row{position:relative;z-index:2}
+.emergency .ico{width:38px;height:38px;border-radius:12px;background:var(--vital);color:#fff;display:flex;align-items:center;justify-content:center;animation:ring 1.6s infinite;flex-shrink:0}
+.emergency .t{font-size:14px;font-weight:600}
+.emergency .d{font-size:11px;color:var(--ink-2);margin-top:2px}
+.emergency .arrow{margin-left:auto;color:var(--vital)}
+
+.sec-h{padding:18px 22px 8px;display:flex;align-items:center;justify-content:space-between}
+.sec-h .t{font-family:var(--f-data);font-size:11px;color:var(--ink-3);letter-spacing:.16em;text-transform:uppercase}
+.sec-h .a{font-size:12px;color:var(--plasma)}
+
+.bed{
+  display:flex;align-items:center;gap:12px;padding:14px;border-radius:14px;
+  background:rgba(255,255,255,.025);border:1px solid var(--fog);
+  margin:6px 16px;
+  transition:transform .15s,background .15s;
+}
+.bed:active{transform:scale(.985);background:rgba(255,255,255,.06)}
+.bed .num{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#1A2342,#0A0E1A);display:flex;align-items:center;justify-content:center;font-family:var(--f-data);font-size:14px;color:var(--plasma);border:1px solid var(--fog);flex-shrink:0}
+.bed.crit .num{background:linear-gradient(135deg,#FF3355,#B81E3A);color:#fff;border-color:rgba(255,51,85,.5)}
+.bed.warn .num{background:linear-gradient(135deg,#FFB020,#8A4A05);color:#fff;border-color:rgba(255,176,32,.5)}
+.bed .info{flex:1;min-width:0}
+.bed .name{font-size:13.5px;font-weight:600}
+.bed .meta{font-size:11px;color:var(--ink-3);margin-top:2px}
+.bed .vitals-mini{display:flex;gap:8px;margin-top:6px}
+.bed .vitals-mini span{font-family:var(--f-data);font-size:10px;color:var(--ink-2)}
+.bed .vitals-mini b{color:var(--ink)}
+.bed .vitals-mini b.bad{color:var(--vital)}
+.bed .vitals-mini b.warn{color:var(--solar)}
+.bed .arrow{color:var(--ink-3)}
+
+/* ────────────────── PATIENT DETAIL ────────────────── */
+.passport{margin:6px 16px;padding:16px;border-radius:18px;background:linear-gradient(135deg,rgba(232,217,176,.10),rgba(232,217,176,.02));border:1px solid rgba(232,217,176,.25);position:relative;overflow:hidden}
+.passport::before{content:"";position:absolute;top:-30px;right:-30px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(232,217,176,.18),transparent 70%);pointer-events:none}
+.passport .row1{display:flex;align-items:flex-start;gap:12px;position:relative;z-index:2}
+.passport .avatar{width:54px;height:54px;border-radius:14px;background:linear-gradient(135deg,#2A3149,#10141F);display:flex;align-items:center;justify-content:center;color:var(--sand);font-family:var(--f-serif);font-size:24px;border:1px solid var(--fog);flex-shrink:0}
+.passport .info{flex:1;min-width:0}
+.passport .name-en{font-size:16px;font-weight:600;letter-spacing:-.01em}
+.passport .name-ar{font-family:var(--f-ar);font-size:14px;color:var(--ink-2);direction:rtl;text-align:right;margin-top:2px}
+.passport .meta{font-family:var(--f-data);font-size:10px;color:var(--ink-3);margin-top:4px;letter-spacing:.06em}
+.passport .qr{width:54px;height:54px;border-radius:10px;background:repeating-conic-gradient(#fff 0 25%,#000 0 50%) 50%/12px 12px,#fff;border:1px solid var(--fog);flex-shrink:0}
+.passport .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;position:relative;z-index:2}
+
+.vitals-grid{margin:10px 16px;padding:14px 14px 8px;border-radius:16px;background:rgba(255,255,255,.025);border:1px solid var(--fog)}
+.vitals-grid .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.vital-cell{padding:6px 4px}
+.vital-cell .l{font-family:var(--f-data);font-size:9px;letter-spacing:.12em;color:var(--ink-3);text-transform:uppercase}
+.vital-cell .v{font-family:var(--f-data);font-size:18px;letter-spacing:-.02em;margin-top:3px;font-weight:500}
+.vital-cell .v.good{color:var(--pulse)}
+.vital-cell .v.warn{color:var(--solar)}
+.vital-cell .v.bad{color:var(--vital);animation:pulse 1.8s infinite}
+.vital-cell .u{font-family:var(--f-data);font-size:9px;color:var(--ink-4);font-weight:400}
+.vitals-trace{margin-top:10px;height:42px;border-radius:10px;background:#000;border:1px solid var(--fog);position:relative;overflow:hidden}
+.vitals-trace svg{position:absolute;inset:0;width:100%;height:100%}
+
+.actions-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px;margin-top:6px}
+.act{padding:14px 12px;border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0));border:1px solid var(--fog);display:flex;flex-direction:column;align-items:flex-start;gap:6px;transition:transform .15s,background .15s}
+.act:active{transform:scale(.98);background:rgba(255,255,255,.08)}
+.act svg{color:var(--plasma)}
+.act .t{font-size:13px;font-weight:600}
+.act .s{font-size:10.5px;color:var(--ink-3)}
+.act.crit{border-color:rgba(255,51,85,.4);background:linear-gradient(180deg,rgba(255,51,85,.10),rgba(255,51,85,.02))}
+.act.crit svg{color:var(--vital)}
+
+/* ────────────────── ECG ────────────────── */
+.ecg-box{margin:8px 16px;border-radius:18px;background:#000;border:1px solid var(--fog);position:relative;overflow:hidden;height:220px}
+.ecg-box::before{content:"";position:absolute;inset:0;background:
+  linear-gradient(rgba(255,51,85,.12),transparent 40%),
+  repeating-linear-gradient(0deg,rgba(255,51,85,.1) 0 1px,transparent 1px 14px),
+  repeating-linear-gradient(90deg,rgba(255,51,85,.1) 0 1px,transparent 1px 14px);
+}
+.ecg-box .label{position:absolute;left:12px;top:10px;font-family:var(--f-data);font-size:10px;color:var(--vital);letter-spacing:.1em;z-index:2}
+.ecg-box .lead{position:absolute;right:12px;top:10px;font-family:var(--f-data);font-size:10px;color:var(--ink-3)}
+.ecg-box .scan{position:absolute;left:0;right:0;height:60%;background:linear-gradient(180deg,transparent,rgba(93,244,255,.18),transparent);animation:scan 2.4s ease-in-out infinite}
+.ecg-box .stop-scan .scan{display:none}
+.ecg-box svg{position:absolute;inset:0;width:100%;height:100%}
+.ecg-finding{margin:8px 16px;padding:14px;border-radius:16px;border:1px solid rgba(255,51,85,.4);background:linear-gradient(180deg,rgba(255,51,85,.10),rgba(255,51,85,.02))}
+.ecg-finding .head{display:flex;align-items:center;gap:8px;font-family:var(--f-data);font-size:10px;color:var(--vital);letter-spacing:.14em}
+.ecg-finding h4{font-size:20px;letter-spacing:-.02em;margin:8px 0 2px;font-weight:600}
+.ecg-finding .sub{font-size:11px;color:var(--ink-3)}
+.ecg-finding .findings{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px}
+.ecg-finding .f{font-family:var(--f-data);font-size:10px;color:var(--ink-2);padding:7px 9px;border-radius:8px;background:rgba(0,0,0,.3);border:1px solid var(--fog);display:flex;justify-content:space-between}
+.ecg-finding .f span{color:var(--vital)}
+
+.activate-btn{
+  margin:12px 16px;padding:16px;border-radius:18px;
+  background:linear-gradient(135deg,#FF3355,#B81E3A);color:#fff;
+  display:flex;align-items:center;gap:12px;
+  box-shadow:0 18px 36px -10px rgba(255,51,85,.55);
+  border:none;width:calc(100% - 32px);
+  position:relative;overflow:hidden;
+  transition:transform .12s;
+}
+.activate-btn:active{transform:scale(.985)}
+.activate-btn::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.22) 50%,transparent 70%);background-size:200% 100%;animation:shimmer 2.4s linear infinite}
+.activate-btn .ico{width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.activate-btn .meta{flex:1;text-align:left;position:relative;z-index:2}
+.activate-btn .t{font-size:15px;font-weight:700}
+.activate-btn .s{font-size:11px;opacity:.9}
+
+/* ────────────────── PROTOCOL ────────────────── */
+.timer-bar{
+  margin:6px 16px 4px;padding:14px;border-radius:16px;
+  background:linear-gradient(135deg,rgba(255,51,85,.18),rgba(255,51,85,.04));
+  border:1px solid rgba(255,51,85,.4);
+}
+.timer-bar .lbl{font-family:var(--f-data);font-size:10px;color:var(--vital);letter-spacing:.14em}
+.timer-bar .v{font-family:var(--f-data);font-size:34px;color:var(--vital);font-weight:600;letter-spacing:-.02em;margin-top:4px;text-shadow:0 0 20px rgba(255,51,85,.4)}
+.timer-bar .target{font-family:var(--f-data);font-size:10px;color:var(--ink-3);margin-top:4px}
+
+.proto-step{
+  margin:8px 16px;display:flex;gap:10px;align-items:flex-start;
+}
+.proto-step .check{
+  flex:0 0 32px;height:32px;border-radius:50%;
+  background:rgba(255,255,255,.05);border:1.5px solid var(--fog);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--f-data);font-size:12px;color:var(--ink-3);
+  margin-top:4px;cursor:pointer;
+  transition:all .2s;
+}
+.proto-step.done .check{background:var(--mihrab);border-color:var(--mihrab);color:#001b18}
+.proto-step.now .check{background:var(--vital);border-color:var(--vital);color:#fff;animation:ring 1.8s infinite}
+.proto-step .body{flex:1;min-width:0;padding:14px;border-radius:14px;border:1px solid var(--fog);background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,0));cursor:pointer;transition:all .15s}
+.proto-step.now .body{border-color:rgba(255,51,85,.4);background:linear-gradient(180deg,rgba(255,51,85,.10),rgba(255,51,85,.01))}
+.proto-step.done .body{opacity:.65}
+.proto-step.done .t{text-decoration:line-through;text-decoration-color:rgba(255,255,255,.3)}
+.proto-step .t{font-size:13.5px;font-weight:600;line-height:1.3}
+.proto-step .d{font-size:11.5px;color:var(--ink-3);margin-top:4px;line-height:1.5}
+.proto-step .when{font-family:var(--f-data);font-size:10px;color:var(--mihrab);margin-top:6px}
+
+/* ────────────────── ASK ASH (CHAT) ────────────────── */
+.chat-body{padding:8px 14px 12px;display:flex;flex-direction:column;gap:10px}
+.msg{padding:12px 14px;border-radius:18px;font-size:13.5px;line-height:1.5;max-width:88%;animation:msgIn .35s cubic-bezier(.32,.72,0,1)}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.msg.user{align-self:flex-end;background:linear-gradient(180deg,#1A2342,#0F1530);border:1px solid rgba(122,139,255,.4);color:var(--ink)}
+.msg.ai{align-self:flex-start;background:linear-gradient(180deg,rgba(0,194,168,.07),rgba(0,194,168,.02));border:1px solid rgba(0,194,168,.3);position:relative;overflow:hidden}
+.msg.ai .head{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-family:var(--f-data);font-size:10px;letter-spacing:.14em;color:var(--mihrab)}
+.msg.ai .head .src{margin-left:auto;color:var(--ink-3);text-transform:none;letter-spacing:0;font-size:9.5px}
+.msg.ai b{color:var(--ink);font-weight:600}
+.msg.ai ul{margin:6px 0 0;padding-left:18px}
+.msg.ai li{margin:4px 0;color:var(--ink-2);font-size:12.5px}
+.msg.ai .conf{display:flex;align-items:center;gap:8px;margin-top:12px;padding-top:10px;border-top:1px dashed rgba(0,194,168,.25)}
+.msg.ai .conf .bar{flex:1;height:4px;border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden}
+.msg.ai .conf .bar i{display:block;height:100%;background:linear-gradient(90deg,#3FFFB0,#00C2A8);border-radius:99px;width:0;transition:width 1.2s ease}
+.msg.ai .conf .n{font-family:var(--f-data);font-size:10px;color:var(--mihrab)}
+.msg.ai .srcs{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.msg.ai .srcs .pill{font-size:9px;padding:3px 7px}
+.typing{display:inline-flex;gap:3px;padding:14px 18px}
+.typing i{width:7px;height:7px;border-radius:50%;background:var(--mihrab);animation:typing 1.2s infinite}
+.typing i:nth-child(2){animation-delay:.15s}
+.typing i:nth-child(3){animation-delay:.3s}
+@keyframes typing{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
+
+.suggestions{padding:0 14px 8px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.suggestions::-webkit-scrollbar{display:none}
+.suggestions .chip{flex-shrink:0;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid var(--fog);font-size:11px;color:var(--ink-2);white-space:nowrap;cursor:pointer;transition:all .15s}
+.suggestions .chip:active{background:rgba(93,244,255,.12);border-color:var(--plasma);color:var(--plasma)}
+
+.composer{
+  position:absolute;left:14px;right:14px;
+  bottom:calc(var(--safe-bot) + 14px);
+  display:flex;align-items:center;gap:8px;
+  padding:8px 8px 8px 16px;border-radius:24px;
+  background:rgba(10,13,23,.95);backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--fog);z-index:30;
+}
+.composer input{flex:1;background:transparent;border:none;outline:none;color:var(--ink);font-size:14px;padding:8px 0}
+.composer input::placeholder{color:var(--ink-4)}
+.composer .send{width:38px;height:38px;border-radius:50%;background:var(--plasma);color:#001016;display:flex;align-items:center;justify-content:center;border:none;transition:transform .12s,opacity .15s;opacity:.5}
+.composer .send.ready{opacity:1}
+.composer .send:active{transform:scale(.9)}
+
+/* ────────────────── DRUGS ────────────────── */
+.search-bar{margin:8px 16px 8px;padding:11px 14px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--fog);display:flex;align-items:center;gap:10px}
+.search-bar input{flex:1;background:transparent;border:none;outline:none;color:var(--ink);font-size:14px}
+.search-bar input::placeholder{color:var(--ink-4)}
+
+.drug-cat{padding:14px 22px 4px;font-family:var(--f-data);font-size:10px;letter-spacing:.16em;color:var(--ink-3);text-transform:uppercase}
+.drug-row{
+  display:flex;align-items:center;gap:12px;padding:14px 16px;
+  margin:0 16px 6px;border-radius:14px;
+  background:rgba(255,255,255,.025);border:1px solid var(--fog);
+  cursor:pointer;transition:all .15s;
+}
+.drug-row:active{transform:scale(.985);background:rgba(255,255,255,.06)}
+.drug-row .name{flex:1;min-width:0}
+.drug-row .name .t{font-size:14px;font-weight:600}
+.drug-row .name .s{font-size:11px;color:var(--ink-3);margin-top:2px;font-family:var(--f-data)}
+.drug-row .dose{font-family:var(--f-data);font-size:11px;color:var(--plasma);text-align:right}
+.drug-row .dose .u{color:var(--ink-3);display:block;font-size:9px;margin-top:2px}
+
+/* ────────────────── DRUG DETAIL ────────────────── */
+.drug-hero{
+  margin:6px 16px;padding:18px;border-radius:20px;
+  border:1px solid rgba(122,139,255,.3);
+  background:linear-gradient(135deg,rgba(122,139,255,.12),rgba(93,244,255,.04));
+  position:relative;overflow:hidden;
+}
+.drug-hero .class{font-family:var(--f-data);font-size:10px;letter-spacing:.16em;color:var(--plasma-2);text-transform:uppercase}
+.drug-hero h2{font-size:28px;letter-spacing:-.02em;margin:6px 0 4px;font-weight:600}
+.drug-hero .conc{font-size:11px;color:var(--ink-3);font-family:var(--f-data)}
+
+.dose-card{margin:0 16px;padding:18px;border-radius:18px;background:rgba(0,0,0,.4);border:1px solid var(--fog);margin-top:12px}
+.dose-card .row{display:flex;justify-content:space-between;align-items:center;font-family:var(--f-data);font-size:10px;color:var(--ink-3);letter-spacing:.12em;text-transform:uppercase}
+.dose-card .val{font-family:var(--f-data);font-size:32px;color:var(--plasma);font-weight:600;letter-spacing:-.02em;margin-top:8px;text-shadow:0 0 20px rgba(93,244,255,.3)}
+.dose-card .unit{font-size:14px;color:var(--ink-3);margin-left:6px;font-weight:400}
+.dose-card .computed{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding-top:12px;border-top:1px solid var(--fog)}
+.dose-card .computed .cc{font-family:var(--f-data);font-size:11px}
+.dose-card .computed .cc .l{color:var(--ink-3);letter-spacing:.06em;font-size:9px;text-transform:uppercase}
+.dose-card .computed .cc .v{color:var(--ink);font-size:18px;margin-top:3px;font-weight:500}
+
+.slider-wrap{padding:14px 0 4px}
+.slider-track{position:relative;height:36px}
+.slider-track input[type=range]{width:100%;-webkit-appearance:none;appearance:none;background:transparent;outline:none;position:absolute;inset:0;height:36px;margin:0;cursor:pointer}
+.slider-track .bg{position:absolute;left:0;right:0;top:50%;height:6px;border-radius:999px;background:rgba(255,255,255,.08);transform:translateY(-50%)}
+.slider-track .fill{position:absolute;left:0;top:50%;height:6px;border-radius:999px;background:linear-gradient(90deg,#5DF4FF,#7A8BFF);transform:translateY(-50%);pointer-events:none;width:0}
+.slider-track input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px rgba(93,244,255,.25),0 6px 14px -4px rgba(93,244,255,.7);border:none;cursor:grab}
+.slider-track input[type=range]::-webkit-slider-thumb:active{cursor:grabbing;transform:scale(1.1)}
+.slider-track input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px rgba(93,244,255,.25),0 6px 14px -4px rgba(93,244,255,.7);border:none;cursor:grab}
+.slider-labels{display:flex;justify-content:space-between;font-family:var(--f-data);font-size:9px;color:var(--ink-3);margin-top:6px;letter-spacing:.06em}
+
+.flags{margin:12px 16px 0;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.flag{padding:10px;border-radius:12px;border:1px solid var(--fog);background:rgba(255,255,255,.03)}
+.flag .l{font-family:var(--f-data);font-size:9px;letter-spacing:.12em;color:var(--ink-3);text-transform:uppercase}
+.flag .v{font-size:12.5px;color:var(--ink);margin-top:4px;font-weight:500}
+.flag.warn{border-color:rgba(255,176,32,.4);background:rgba(255,176,32,.08)}
+.flag.warn .v{color:var(--solar)}
+.flag.ok{border-color:rgba(0,194,168,.4);background:rgba(0,194,168,.07)}
+.flag.ok .v{color:var(--mihrab)}
+.flag.crit{border-color:rgba(255,51,85,.4);background:rgba(255,51,85,.08)}
+.flag.crit .v{color:var(--vital)}
+
+.safety-alert{margin:10px 16px 0;padding:12px 14px;border-radius:14px;border:1px solid rgba(122,139,255,.35);background:rgba(122,139,255,.07);display:flex;gap:10px}
+.safety-alert .ico{width:28px;height:28px;border-radius:8px;background:rgba(122,139,255,.18);color:var(--plasma-2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.safety-alert .t{font-size:12.5px;font-weight:600}
+.safety-alert .d{font-size:11px;color:var(--ink-3);margin-top:3px;line-height:1.4}
+
+/* ────────────────── HEAT & CROWD ────────────────── */
+.wbgt{
+  margin:6px 16px;padding:20px;border-radius:20px;
+  background:radial-gradient(70% 100% at 50% 0%,rgba(255,176,32,.25),transparent 70%),linear-gradient(180deg,#1A1408,#0A0C12);
+  border:1px solid rgba(255,176,32,.4);text-align:center;position:relative;overflow:hidden;
+}
+.wbgt .arc{width:200px;height:108px;margin:6px auto 0;position:relative}
+.wbgt .arc svg{width:100%;height:100%}
+.wbgt .v{font-family:var(--f-data);font-size:48px;color:var(--solar);font-weight:600;letter-spacing:-.03em;line-height:1;margin-top:-22px;position:relative;z-index:2}
+.wbgt .u{font-size:13px;color:var(--ink-3);font-weight:400}
+.wbgt .lbl{font-family:var(--f-data);font-size:11px;letter-spacing:.16em;color:var(--solar);text-transform:uppercase;margin-top:10px;font-weight:600}
+.wbgt .desc{font-size:12px;color:var(--ink-2);margin-top:6px;line-height:1.5}
+
+.zones{padding:0 16px;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.zone{padding:14px;border-radius:14px;border:1px solid var(--fog);background:rgba(255,255,255,.03)}
+.zone .nm{font-size:12.5px;font-weight:600}
+.zone .num{font-family:var(--f-data);font-size:20px;letter-spacing:-.02em;margin-top:4px;font-weight:500}
+.zone .bar{height:5px;border-radius:99px;background:rgba(255,255,255,.07);margin-top:8px;overflow:hidden}
+.zone .bar i{display:block;height:100%;background:linear-gradient(90deg,#FFB020,#FF3355);border-radius:99px}
+.zone .meta{font-size:10.5px;color:var(--ink-3);margin-top:4px}
+
+/* ────────────────── POLYGLOT ────────────────── */
+.poly-active{margin:8px 16px;padding:18px;border-radius:20px;background:linear-gradient(180deg,rgba(93,244,255,.10),rgba(93,244,255,.02));border:1px solid rgba(93,244,255,.35);text-align:center}
+.poly-active .label{font-family:var(--f-data);font-size:10px;color:var(--plasma);letter-spacing:.16em;text-transform:uppercase}
+.poly-active .mic-big{width:84px;height:84px;border-radius:50%;background:conic-gradient(from 0deg,#5DF4FF,#7A8BFF,#C8A2FF,#5DF4FF);display:flex;align-items:center;justify-content:center;margin:14px auto 0;cursor:pointer;border:none;transition:transform .15s}
+.poly-active .mic-big:active{transform:scale(.9)}
+.poly-active .mic-big.recording{animation:ring 1.4s infinite}
+.poly-active .mic-big .core{width:72px;height:72px;border-radius:50%;background:var(--obsidian);display:flex;align-items:center;justify-content:center;color:var(--plasma)}
+.poly-active .hint{font-size:11px;color:var(--ink-3);margin-top:10px;font-family:var(--f-data)}
+.poly-active .wave{display:none;align-items:center;gap:3px;justify-content:center;margin-top:10px;height:24px}
+.poly-active.listening .wave{display:flex}
+.poly-active.listening .hint{color:var(--vital)}
+.poly-active .wave i{display:block;width:3px;background:var(--plasma);border-radius:2px;animation:wave 1s ease-in-out infinite}
+
+.lang-grid{padding:14px 16px 8px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.lang-btn{padding:10px 8px;border-radius:12px;border:1px solid var(--fog);background:rgba(255,255,255,.03);font-size:11px;text-align:center;font-weight:500;cursor:pointer;transition:all .15s}
+.lang-btn.active{background:rgba(93,244,255,.10);border-color:var(--plasma);color:var(--plasma)}
+.lang-btn:active{transform:scale(.95)}
+
+.poly-transcript{margin:0 16px;padding:14px;border-radius:14px;border:1px solid var(--fog);background:rgba(255,255,255,.025);min-height:140px}
+.poly-transcript .heard{font-size:14px;line-height:1.5;color:var(--ink-2)}
+.poly-transcript .heard.ar{font-family:var(--f-ar);direction:rtl;text-align:right}
+.poly-transcript .trans{margin-top:10px;padding-top:10px;border-top:1px dashed var(--fog);font-size:13.5px;color:var(--mihrab);line-height:1.5}
+.poly-transcript .empty{font-size:12px;color:var(--ink-4);text-align:center;padding:30px 10px;font-family:var(--f-data);letter-spacing:.04em}
+
+/* ────────────────── CALCULATOR ────────────────── */
+.calc-q{margin:8px 16px;padding:14px;border-radius:14px;background:rgba(255,255,255,.025);border:1px solid var(--fog);display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .15s}
+.calc-q:active{transform:scale(.985);background:rgba(255,255,255,.05)}
+.calc-q .t{flex:1;font-size:13px;font-weight:500;line-height:1.4}
+.calc-q .pts{font-family:var(--f-data);font-size:11px;color:var(--ink-3);margin-top:2px}
+.calc-q .toggle{width:48px;height:28px;border-radius:14px;background:rgba(255,255,255,.08);position:relative;flex-shrink:0;transition:background .2s}
+.calc-q .toggle::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:transform .2s,background .2s}
+.calc-q.on .toggle{background:var(--plasma)}
+.calc-q.on .toggle::after{transform:translateX(20px);background:#001016}
+
+.calc-result{margin:14px 16px;padding:18px;border-radius:18px;background:linear-gradient(135deg,rgba(0,194,168,.12),rgba(63,255,176,.04));border:1px solid rgba(0,194,168,.35);text-align:center}
+.calc-result .label{font-family:var(--f-data);font-size:10px;color:var(--mihrab);letter-spacing:.16em;text-transform:uppercase;font-weight:600}
+.calc-result .v{font-family:var(--f-data);font-size:54px;color:var(--mihrab);font-weight:600;line-height:1;margin-top:8px;letter-spacing:-.03em}
+.calc-result .cat{font-size:13px;color:var(--ink);margin-top:6px;font-weight:600}
+.calc-result .desc{font-size:11.5px;color:var(--ink-3);margin-top:6px;line-height:1.5}
+.calc-result.med{background:linear-gradient(135deg,rgba(255,176,32,.12),rgba(255,176,32,.03));border-color:rgba(255,176,32,.35)}
+.calc-result.med .label,.calc-result.med .v{color:var(--solar)}
+.calc-result.high{background:linear-gradient(135deg,rgba(255,51,85,.12),rgba(255,51,85,.03));border-color:rgba(255,51,85,.35)}
+.calc-result.high .label,.calc-result.high .v{color:var(--vital)}
+
+/* ────────────────── TASLEEM ────────────────── */
+.tas-card{margin:6px 16px;padding:14px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0));border:1px solid var(--fog)}
+.tas-card .head{display:flex;align-items:center;gap:8px;font-family:var(--f-data);font-size:10px;letter-spacing:.14em;color:var(--bismuth);text-transform:uppercase;font-weight:600}
+.tas-card h3{margin:8px 0 2px;font-size:17px;font-weight:600}
+.tas-body{margin-top:10px;font-size:12.5px;line-height:1.65;color:var(--ink-2)}
+.tas-body b{color:var(--ink);font-weight:600}
+.tas-body .hl{color:var(--plasma)}
+.tas-bed{display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;border:1px solid var(--fog);background:rgba(255,255,255,.02);margin-top:8px}
+.tas-bed .b{font-family:var(--f-data);font-size:10px;color:var(--ink-3);letter-spacing:.12em}
+.tas-bed .b b{color:var(--plasma)}
+.tas-bed .t{flex:1;font-size:12px;color:var(--ink-2);line-height:1.4}
+
+/* ────────────────── MODAL ────────────────── */
+.modal-bg{
+  position:absolute;inset:0;background:rgba(0,0,0,.7);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  z-index:100;display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .25s;
+}
+.modal-bg.open{opacity:1;pointer-events:auto}
+.modal{
+  width:100%;background:var(--carbon);border-radius:24px 24px 0 0;
+  padding:24px 20px calc(var(--safe-bot) + 24px);
+  transform:translateY(100%);transition:transform .35s cubic-bezier(.32,.72,0,1);
+  border-top:1px solid var(--fog);
+}
+.modal-bg.open .modal{transform:translateY(0)}
+.modal .grab{width:36px;height:4px;border-radius:2px;background:var(--fog);margin:0 auto 16px}
+.modal h2{font-size:20px;letter-spacing:-.02em;margin:0 0 8px;font-weight:600}
+.modal p{font-size:13.5px;color:var(--ink-2);line-height:1.5;margin:0 0 18px}
+.modal .btns{display:flex;gap:10px}
+
+/* ── Toast ──────────────────────────────────────────── */
+.toast{
+  position:absolute;top:calc(var(--safe-top) + 70px);left:50%;
+  transform:translateX(-50%) translateY(-20px);
+  padding:12px 18px;border-radius:14px;
+  background:rgba(0,194,168,.95);color:#001b18;font-weight:600;font-size:13px;
+  z-index:200;opacity:0;pointer-events:none;
+  transition:all .3s cubic-bezier(.32,.72,0,1);
+  display:flex;align-items:center;gap:8px;
+  box-shadow:0 14px 30px -8px rgba(0,0,0,.5);
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.vital{background:rgba(255,51,85,.95);color:#fff}
+.toast.warn{background:rgba(255,176,32,.95);color:#1a1004}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- Status bar -->
+  <div class="statusbar">
+    <span id="clock">09:42</span>
+    <span class="right">
+      <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><rect x="0" y="7" width="2.5" height="4"/><rect x="3.5" y="5" width="2.5" height="6"/><rect x="7" y="3" width="2.5" height="8"/><rect x="10.5" y="0" width="2.5" height="11"/></svg>
+      <svg width="14" height="11" viewBox="0 0 14 11"><path d="M7 9 L2 4 A7 7 0 0 1 12 4 Z" fill="currentColor"/></svg>
+      <svg width="25" height="11" viewBox="0 0 25 11"><rect x=".5" y=".5" width="21" height="10" rx="2.5" fill="none" stroke="currentColor"/><rect x="22.5" y="3.5" width="2" height="4" rx="1" fill="currentColor"/><rect x="2" y="2" width="17" height="7" rx="1.5" fill="currentColor"/></svg>
+    </span>
+  </div>
+
+  <!-- Screen container -->
+  <div class="screens" id="screens">
+
+    <!-- ═══════════════════ HOME ═══════════════════ -->
+    <section class="screen active has-tabbar" data-screen="home">
+      <div class="header">
+        <div class="title">
+          <div class="t">Mission Control</div>
+          <div class="s">MINA · SECTOR 3 · SHIFT 04h 18m</div>
+        </div>
+        <button class="action" onclick="nav.push('passport')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="3" height="3"/><rect x="18" y="14" width="3" height="3"/><rect x="14" y="18" width="3" height="3"/><rect x="18" y="18" width="3" height="3"/></svg>
+          Scan
+        </button>
+      </div>
+
+      <div class="body">
+        <div class="greet"><span>السلام عليكم,</span> <span class="name">Dr. Hatem</span></div>
+        <div class="greet-sub">Mina · Jamarat S3 · 09:42 · Shift 04h 18m</div>
+
+        <div class="ai-brief" onclick="nav.push('ask')">
+          <div class="top">
+            <span class="label">ASH · DAILY BRIEFING</span>
+            <span class="pill bismuth">AI · 2m ago</span>
+          </div>
+          <div class="text">
+            <b style="color:var(--bismuth)">3 high-acuity</b> pilgrims expected before Dhuhr.
+            <b style="color:var(--solar)">Heat-stroke surge by 11:30</b>. KAMC cath-lab:
+            <b style="color:var(--pulse)">2 slots open</b>.
+          </div>
+          <div class="ask-cta">
+            <span class="placeholder">Ask ASH anything — "manage AF + CKD"</span>
+            <span class="mic">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+            </span>
+          </div>
+        </div>
+
+        <div class="stat-grid">
+          <button class="stat crit" onclick="nav.push('patient')">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg>
+            <div class="t">Active codes</div>
+            <div class="v">2</div>
+            <div class="sub">STEMI · Sepsis</div>
+          </button>
+          <button class="stat heat" onclick="nav.push('heat')">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v6M5 9l3 3M19 9l-3 3M12 14a4 4 0 1 1 0 8 4 4 0 0 1 0-8z"/></svg>
+            <div class="t">WBGT</div>
+            <div class="v">34.2°</div>
+            <div class="sub">Black flag</div>
+          </button>
+          <button class="stat" onclick="nav.push('tasleem')">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
+            <div class="t">Census</div>
+            <div class="v">18/22</div>
+            <div class="sub">S3 beds</div>
+          </button>
+          <button class="stat" onclick="nav.push('calc')">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h2M12 10h2M16 10h2M8 14h2M12 14h2M16 14h2M8 18h2M12 18h6"/></svg>
+            <div class="t">Calculators</div>
+            <div class="v">7</div>
+            <div class="sub">GRACE · CHA²DS²</div>
+          </button>
+        </div>
+
+        <div class="emergency" onclick="nav.push('patient')">
+          <div class="row">
+            <div class="ico">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg>
+            </div>
+            <div style="flex:1">
+              <div class="t">Bed 7 · STEMI suspected</div>
+              <div class="d">62 M · Anterior ST↑ V1-V4 · 32 min</div>
+            </div>
+            <svg class="arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg>
+          </div>
+        </div>
+
+        <div class="sec-h"><div class="t">Pilgrims in care</div><div class="a">18 →</div></div>
+
+        <button class="bed crit" onclick="nav.push('patient')">
+          <div class="num">07</div>
+          <div class="info">
+            <div class="name">Mohammad Idris Khan</div>
+            <div class="meta">62 M · PK · STEMI active</div>
+            <div class="vitals-mini">
+              <span>HR <b class="bad">112</b></span>
+              <span>BP <b class="warn">94/58</b></span>
+              <span>SpO₂ <b>96%</b></span>
+            </div>
+          </div>
+          <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+
+        <button class="bed warn" onclick="toast('Demo: tap bed 7 for live STEMI flow','warn')">
+          <div class="num">12</div>
+          <div class="info">
+            <div class="name">Abdullah Yusuf</div>
+            <div class="meta">54 M · ID · Heat exhaustion</div>
+            <div class="vitals-mini">
+              <span>HR <b>104</b></span>
+              <span>Temp <b class="warn">39.1°</b></span>
+              <span>Lac <b>2.4</b></span>
+            </div>
+          </div>
+          <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+
+        <button class="bed" onclick="toast('Demo: tap bed 7 for live STEMI flow')">
+          <div class="num">15</div>
+          <div class="info">
+            <div class="name">Fatima Rahman</div>
+            <div class="meta">68 F · BD · CAP, day 2</div>
+            <div class="vitals-mini">
+              <span>HR <b>88</b></span>
+              <span>SpO₂ <b>94%</b></span>
+              <span>Temp <b>38.0°</b></span>
+            </div>
+          </div>
+          <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+
+        <button class="bed" onclick="toast('Demo: tap bed 7 for live STEMI flow')">
+          <div class="num">19</div>
+          <div class="info">
+            <div class="name">Ibrahim Mansour</div>
+            <div class="meta">71 M · TR · post-fall, observation</div>
+            <div class="vitals-mini">
+              <span>HR <b>76</b></span>
+              <span>BP <b>132/82</b></span>
+              <span>GCS <b>15</b></span>
+            </div>
+          </div>
+          <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- ═══════════════════ PATIENT DETAIL ═══════════════════ -->
+    <section class="screen" data-screen="patient">
+      <div class="header">
+        <button class="back" onclick="nav.pop()" aria-label="Back">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 6l-6 6 6 6"/></svg>
+        </button>
+        <div class="title">
+          <div class="t">Bed 7 · Patient</div>
+          <div class="s">STEMI · ACTIVE · 09:42</div>
+        </div>
+        <button class="action" onclick="nav.push('polyglot')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+          UR
+        </button>
+      </div>
+
+      <div class="body">
+        <div class="passport">
+          <div class="row1">
+            <div class="avatar">م</div>
+            <div class="info">
+              <div class="name-en">Mohammad Idris Khan</div>
+              <div class="name-ar">محمد إدريس خان</div>
+              <div class="meta">PK · 62 y · M · 78 kg · ID PK-A82-7194</div>
+            </div>
+            <div class="qr"></div>
+          </div>
+          <div class="tags">
+            <span class="pill solar">HTN</span>
+            <span class="pill solar">DM-2</span>
+            <span class="pill vital">CAD · 2017 PCI</span>
+            <span class="pill mihrab">Metformin</span>
+            <span class="pill mihrab">Atorvastatin</span>
+            <span class="pill plasma">Allergy: PCN</span>
+          </div>
+        </div>
+
+        <div class="vitals-grid">
+          <div class="grid">
+            <div class="vital-cell"><div class="l">HR</div><div class="v bad">112<span class="u"> bpm</span></div></div>
+            <div class="vital-cell"><div class="l">BP</div><div class="v warn">94/58</div></div>
+            <div class="vital-cell"><div class="l">SpO₂</div><div class="v good">96<span class="u">%</span></div></div>
+            <div class="vital-cell"><div class="l">Temp</div><div class="v warn">38.4°</div></div>
+          </div>
+          <div class="vitals-trace">
+            <svg viewBox="0 0 400 60" preserveAspectRatio="none">
+              <path d="M0 30 L40 30 L46 22 L50 42 L54 14 L58 30 L100 30 L140 30 L146 22 L150 42 L154 14 L158 30 L200 30 L240 30 L246 22 L250 42 L254 14 L258 30 L300 30 L340 30 L346 22 L350 42 L354 14 L358 30 L400 30"
+                fill="none" stroke="#3FFFB0" stroke-width="1.5" style="filter:drop-shadow(0 0 4px rgba(63,255,176,.5))"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="sec-h"><div class="t">Quick actions</div></div>
+        <div class="actions-grid">
+          <button class="act crit" onclick="nav.push('ecg')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg>
+            <div class="t">ECG Lens</div>
+            <div class="s">AI · STEMI 0.92</div>
+          </button>
+          <button class="act crit" onclick="nav.push('protocol')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L20 6M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+            <div class="t">ACS Protocol</div>
+            <div class="s">Step 4 / 9</div>
+          </button>
+          <button class="act" onclick="nav.push('drugs')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2h6l1 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3z"/></svg>
+            <div class="t">Drugs · Najm</div>
+            <div class="s">5 active drips</div>
+          </button>
+          <button class="act" onclick="nav.push('calc')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h2M12 10h2M16 10h2M8 14h2M12 14h2M16 14h2M8 18h2M12 18h6"/></svg>
+            <div class="t">GRACE Score</div>
+            <div class="s">Calculate risk</div>
+          </button>
+        </div>
+
+        <div class="safety-alert" style="margin:14px 16px 0">
+          <div class="ico" style="background:rgba(255,51,85,.18);color:var(--vital)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 2 2 22h20z"/></svg>
+          </div>
+          <div>
+            <div class="t" style="color:var(--vital)">⛔ DO NOT give nitrates</div>
+            <div class="d">RV infarction suspected (ST↑ III &gt; II). Preload-dependent. ESC STEMI 2023 · Class III</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════ ECG ═══════════════════ -->
+    <section class="screen" data-screen="ecg">
+      <div class="header">
+        <button class="back" onclick="nav.pop()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <div class="title">
+          <div class="t">ECG Lens</div>
+          <div class="s" id="ecg-status">AI ANALYZING…</div>
+        </div>
+        <span class="pill vital lg" id="ecg-pill" style="display:none">STEMI · 95%</span>
+      </div>
+
+      <div class="body">
+        <div class="ecg-box" id="ecg-box">
+          <div class="label">LEAD V2 · 25mm/s</div>
+          <div class="lead">10mm/mV</div>
+          <div class="scan"></div>
+          <svg viewBox="0 0 600 220" preserveAspectRatio="none">
+            <path d="M0 120 L40 120 L48 108 L52 142 L56 60 L60 120 L80 120 L120 120 L128 108 L132 145 L136 55 L140 120 L160 120 L200 120 L208 108 L212 145 L216 55 L220 120 L240 120 L280 120 L288 108 L292 145 L296 55 L300 120 L320 120 L360 120 L368 108 L372 145 L376 55 L380 120 L400 120 L440 120 L448 108 L452 145 L456 55 L460 120 L480 120 L520 120 L528 108 L532 145 L536 55 L540 120 L600 120"
+              fill="none" stroke="#3FFFB0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 6px rgba(63,255,176,.6))"/>
+          </svg>
+        </div>
+
+        <div class="ecg-finding" id="ecg-finding" style="display:none">
+          <div class="head">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 2 22h20z"/></svg>
+            AI FINDING · CONFIRMED 0.92
+          </div>
+          <h4>Anterior STEMI</h4>
+          <div class="sub">V1–V4 ST-elevation, hyperacute T-waves, reciprocal II/III/aVF depression</div>
+          <div class="findings">
+            <div class="f">ST V2 <span>↑ 2.5 mm</span></div>
+            <div class="f">ST V3 <span>↑ 3.0 mm</span></div>
+            <div class="f">QTc <span>438 ms</span></div>
+            <div class="f">Axis <span>+30°</span></div>
+          </div>
+        </div>
+
+        <button class="activate-btn" id="ecg-activate" style="display:none" onclick="openModal('activate')">
+          <div class="ico">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg>
+          </div>
+          <div class="meta">
+            <div class="t">Activate Code STEMI</div>
+            <div class="s">KAMC cath lab · 2 slots · ETA 18 min</div>
+          </div>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- ═══════════════════ PROTOCOL ═══════════════════ -->
+    <section class="screen" data-screen="protocol">
+      <div class="header">
+        <button class="back" onclick="nav.pop()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <div class="title">
+          <div class="t">ACS · Anterior STEMI</div>
+          <div class="s"><span id="proto-progress">3 / 9</span> · BED 07</div>
+        </div>
+        <span class="pill plasma lg">LIVE</span>
+      </div>
+
+      <div class="body">
+        <div class="timer-bar">
+          <div class="lbl">DOOR-TO-NEEDLE</div>
+          <div class="v" id="proto-timer">04:38</div>
+          <div class="target">TARGET ≤ 30:00 · KAMC notified</div>
+        </div>
+
+        <div id="proto-list">
+          <!-- steps rendered by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════ ASK ASH ═══════════════════ -->
+    <section class="screen" data-screen="ask">
+      <div class="header">
+        <button class="back" onclick="nav.pop()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <div class="title">
+          <div class="t">Ask ASH</div>
+          <div class="s">CITED · EVIDENCE MODE</div>
+        </div>
+        <span class="pill mihrab lg">AHA·ESC</span>
+      </div>
+
+      <div class="body" id="chat-body" style="padding-bottom:140px">
+        <div class="suggestions" id="chat-suggestions">
+          <button class="chip" onclick="ask('manage AF with RVR in CKD-4')">AF + RVR in CKD-4</button>
+          <button class="chip" onclick="ask('heat stroke initial management')">Heat stroke init</button>
+          <button class="chip" onclick="ask('septic shock first hour')">Sepsis 1st-hour</button>
+          <button class="chip" onclick="ask('STEMI in pregnancy')">STEMI in pregnancy</button>
+        </div>
+        <div class="chat-body" id="chat-msgs"></div>
+      </div>
+
+      <div class="composer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--ink-3)"><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/><path d="M12 8v8M8 12h8"/></svg>
+        <input id="chat-input" type="text" placeholder="Ask anything — voice or type…" />
+        <button class="send" id="chat-send" onclick="ask()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- ═══════════════════ DRUGS ═══════════════════ -->
+    <section class="screen has-tabbar" data-screen="drugs">
+      <div class="header">
+        <div class="title">
+          <div class="t">Critical Drugs</div>
+          <div class="s">NAJM · WEIGHT 78 KG · CrCl 22</div>
+        </div>
+        <button class="action" onclick="nav.push('calc')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/></svg>
+          Calc
+        </button>
+      </div>
+
+      <div class="body">
+        <div class="search-bar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--ink-3)"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+          <input id="drug-search" type="text" placeholder="Search drug, class, or indication…" oninput="filterDrugs()" />
+        </div>
+        <div id="drug-list"></div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════ DRUG DETAIL ═══════════════════ -->
+    <section class="screen" data-screen="drug-detail">
+      <div class="header">
+        <button class="back" onclick="nav.pop()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <div class="title">
+          <div class="t" id="dd-title">Noradrenaline</div>
+          <div class="s">NAJM BRIDGE · LIVE CALC</div>
+        </div>
+        <span class="pill plasma lg">SAFE</span>
+      </div>
+
+      <div class="body">
+        <div class="drug-hero">
+          <div class="class" id="dd-class">VASOPRESSOR · α₁ AGONIST</div>
+          <h2 id="dd-name">Noradrenaline</h2>
+          <div class="conc" id="dd-conc">4 mg / 250 mL D5W = 16 µg/mL · Central line</div>
+        </div>
+
+        <div class="dose-card">
+          <div class="row">
+            <span>CURRENT DOSE</span>
+            <span style="color:var(--mihrab)" id="dd-status">✓ WITHIN RANGE</span>
+          </div>
+          <div class="val"><span id="dd-dose">0.18</span><span class="unit" id="dd-unit"> µg / kg / min</span></div>
+
+          <div class="slider-wrap">
+            <div class="slider-track">
+              <div class="bg"></div>
+              <div class="fill" id="dd-fill"></div>
+              <input id="dd-slider" type="range" min="0" max="100" value="35" oninput="updateDose()" />
+            </div>
+            <div class="slider-labels">
+              <span id="dd-min">0.01</span>
+              <span>0.5</span>
+              <span id="dd-max">2.0 µg/kg/min</span>
+            </div>
+          </div>
+
+          <div class="computed">
+            <div class="cc"><div class="l">RATE</div><div class="v"><span id="dd-rate">52.7</span> mL/h</div></div>
+            <div class="cc"><div class="l">µg / min</div><div class="v"><span id="dd-mcgmin">14.0</span></div></div>
+          </div>
+        </div>
+
+        <div class="flags">
+          <div class="flag ok"><div class="l">Patient</div><div class="v">78 kg</div></div>
+          <div class="flag ok"><div class="l">Line</div><div class="v">Central · IJ R</div></div>
+          <div class="flag warn"><div class="l">CKD adjust</div><div class="v">Monitor lactate q1h</div></div>
+          <div class="flag"><div class="l">Compatible</div><div class="v">Y-site clear</div></div>
+        </div>
+
+        <div class="safety-alert">
+          <div class="ico">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+          </div>
+          <div>
+            <div class="t">Add vasopressin at 0.03 U/min?</div>
+            <div class="d">SCCM SSC 2024 · consider 2nd agent before NE &gt; 0.25 µg/kg/min to limit α-tox.</div>
+          </div>
+        </div>
+
+        <div style="padding:14px 16px">
+          <button class="btn primary" onclick="toast('Order placed — Najm synced')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            Place order
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════ HEAT ═══════════════════ -->
+    <section class="screen" data-screen="heat">
+      <div class="header">
+        <button class="back" onclick="nav.pop()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <div class="title">
+          <div class="t">Heat & Crowd</div>
+          <div class="s">MOH STATIONS · 60s REFRESH</div>
+        </div>
+        <span class="pill solar lg">BLACK</span>
+      </div>
+
+      <div class="body">
+        <div class="wbgt">
+          <div class="arc">
+            <svg viewBox="0 0 200 100">
+              <defs>
+                <linearGradient id="garc2" x1="0" x2="1">
+                  <stop offset="0" stop-color="#3FFFB0"/>
+                  <stop offset=".4" stop-color="#FFB020"/>
+                  <stop offset="1" stop-color="#FF3355"/>
+                </linearGradient>
+              </defs>
+              <path d="M 14 92 A 86 86 0 0 1 186 92" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="14" stroke-linecap="round"/>
+              <path d="M 14 92 A 86 86 0 0 1 186 92" fill="none" stroke="url(#garc2)" stroke-width="14" stroke-linecap="round" stroke-dasharray="210 400" stroke-dashoffset="-12"/>
+              <circle cx="170" cy="38" r="7" fill="#FFB020" stroke="#fff" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="v">34.2°<span class="u"> WBGT</span></div>
+          <div class="lbl">CATEGORY IV · BLACK FLAG</div>
+          <div class="desc">Exertion ≥ 20 min carries high heat-stroke risk for non-acclimatised pilgrims.</div>
+        </div>
+
+        <div class="sec-h"><div class="t">Sector density</div><div class="a">LIVE →</div></div>
+        <div class="zones">
+          <div class="zone"><div class="nm">Jamarat E</div><div class="num" style="color:var(--vital)">6.4 ppl/m²</div><div class="bar"><i style="width:88%"></i></div><div class="meta">↑ surge 11:30</div></div>
+          <div class="zone"><div class="nm">Arafat plain</div><div class="num" style="color:var(--solar)">4.8 ppl/m²</div><div class="bar"><i style="width:64%"></i></div><div class="meta">→ stable</div></div>
+          <div class="zone"><div class="nm">Muzdalifah</div><div class="num" style="color:var(--pulse)">2.1 ppl/m²</div><div class="bar"><i style="width:30%;background:linear-gradient(90deg,#3FFFB0,#00C2A8)"></i></div><div class="meta">↓ dispersing</div></div>
+          <div class="zone"><div class="nm">Mash'ar</div><div class="num" style="color:var(--solar)">5.2 ppl/m²</div><div class="bar"><i style="width:74%"></i></div><div class="meta">→ prayer wave</div></div>
+        </div>
+
+        <div class="emergency" style="margin-top:14px">
+          <div class="row">
+            <div class="ico" style="background:var(--solar);animation:none">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 2v6M12 14a4 4 0 1 1 0 8 4 4 0 0 1 0-8z"/></svg>
+            </div>
+            <div style="flex:1">
+              <div class="t">Predicted surge · 11:30</div>
+              <div class="d">~ 14–18 heat cases · Sector 3 + 4</div>
+            </div>
+            <svg class="arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--solar)"><path d="M9 6l6 6-6 6"/></svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════ POLYGLOT ═══════════════════ -->
+    <section class="screen" data-screen="polyglot">
+      <div class="header">
+        <button class="back" onclick="nav.pop()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <div class="title">
+          <div class="t">Polyglot Triage</div>
+          <div class="s">VOICE → CLINICAL EN</div>
+        </div>
+      </div>
+
+      <div class="body">
+        <div class="poly-active" id="poly-active">
+          <div class="label">PILGRIM SPEAKS · YOU READ EN</div>
+          <button class="mic-big" id="mic-big" onclick="toggleMic()">
+            <div class="core">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+            </div>
+          </button>
+          <div class="hint" id="mic-hint">Tap to start listening</div>
+          <div class="wave">
+            <i style="animation-delay:0s"></i><i style="animation-delay:.1s"></i><i style="animation-delay:.2s"></i><i style="animation-delay:.3s"></i><i style="animation-delay:.4s"></i><i style="animation-delay:.5s"></i><i style="animation-delay:.6s"></i><i style="animation-delay:.7s"></i><i style="animation-delay:.8s"></i><i style="animation-delay:.9s"></i><i style="animation-delay:1s"></i><i style="animation-delay:1.1s"></i>
+          </div>
+        </div>
+
+        <div class="sec-h"><div class="t">Pilgrim language</div></div>
+        <div class="lang-grid">
+          <button class="lang-btn active" data-lang="ur" onclick="setLang(this,'ur')">🇵🇰 Urdu</button>
+          <button class="lang-btn" data-lang="id" onclick="setLang(this,'id')">🇮🇩 Indonesian</button>
+          <button class="lang-btn" data-lang="tr" onclick="setLang(this,'tr')">🇹🇷 Turkish</button>
+          <button class="lang-btn" data-lang="fa" onclick="setLang(this,'fa')">🇮🇷 Farsi</button>
+          <button class="lang-btn" data-lang="fr" onclick="setLang(this,'fr')">🇫🇷 French</button>
+          <button class="lang-btn" data-lang="ar" onclick="setLang(this,'ar')">🇸🇦 Arabic</button>
+        </div>
+
+        <div class="sec-h"><div class="t">Transcript</div></div>
+        <div class="poly-transcript" id="poly-transcript">
+          <div class="empty">Tap mic & speak — translation appears here.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════ CALCULATOR ═══════════════════ -->
+    <section class="screen" data-screen="calc">
+      <div class="header">
+        <button class="back" onclick="nav.pop()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <div class="title">
+          <div class="t">CHA₂DS₂-VASc</div>
+          <div class="s">STROKE RISK · AF</div>
+        </div>
+        <span class="pill mihrab lg">LIVE</span>
+      </div>
+
+      <div class="body">
+        <div id="calc-result-wrap"></div>
+
+        <div class="sec-h"><div class="t">Risk factors</div></div>
+        <div id="calc-q-list"></div>
+
+        <div style="padding:14px 16px;margin-top:6px">
+          <button class="btn ghost" onclick="resetCalc()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg>
+            Reset
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════ PASSPORT (scan) ═══════════════════ -->
+    <section class="screen" data-screen="passport">
+      <div class="header">
+        <button class="back" onclick="nav.pop()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <div class="title">
+          <div class="t">Pilgrim Passport</div>
+          <div class="s">TAWAKKALNA · NUSUK</div>
+        </div>
+      </div>
+
+      <div class="body">
+        <div style="margin:8px 16px;padding:24px;border-radius:20px;background:rgba(0,0,0,.6);border:1px solid var(--fog);text-align:center;position:relative;overflow:hidden;height:340px;display:flex;align-items:center;justify-content:center">
+          <!-- viewfinder corners -->
+          <svg width="200" height="200" viewBox="0 0 200 200" fill="none" stroke="var(--plasma)" stroke-width="3" style="filter:drop-shadow(0 0 12px rgba(93,244,255,.5))">
+            <path d="M10 40 V10 H40"/>
+            <path d="M160 10 H190 V40"/>
+            <path d="M190 160 V190 H160"/>
+            <path d="M40 190 H10 V160"/>
+          </svg>
+          <div style="position:absolute;left:0;right:0;top:50%;height:2px;background:linear-gradient(90deg,transparent,var(--plasma),transparent);animation:scan 2s ease-in-out infinite;box-shadow:0 0 12px var(--plasma)"></div>
+          <div style="position:absolute;left:0;right:0;bottom:24px;font-family:var(--f-data);font-size:11px;color:var(--ink-3);letter-spacing:.16em;text-transform:uppercase">Position QR within frame</div>
+        </div>
+
+        <div style="padding:0 16px;margin-top:12px">
+          <button class="btn primary" onclick="nav.push('patient')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 11l3 3L20 6M21 12a9 9 0 1 1-18 0"/></svg>
+            Demo: open last scanned pilgrim
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════ TASLEEM ═══════════════════ -->
+    <section class="screen" data-screen="tasleem">
+      <div class="header">
+        <button class="back" onclick="nav.pop()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <div class="title">
+          <div class="t">Shift Tasleem</div>
+          <div class="s">AI · AUTO-DRAFTED</div>
+        </div>
+        <span class="pill bismuth lg">DRAFT</span>
+      </div>
+
+      <div class="body">
+        <div class="tas-card">
+          <div class="head">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg>
+            HANDOVER · SECTOR 3 · 18:00
+          </div>
+          <h3>To: Dr. Aisha Al-Otaibi</h3>
+          <div class="tas-body">
+            <b>Sector:</b> 18 of 22 beds. WBGT now <span class="hl">31.4°</span> (down from 34.2°). No active codes. KAMC cath-lab: 1 slot.<br/><br/>
+            <b>Pilgrims of concern:</b>
+          </div>
+          <div class="tas-bed"><div class="b">BED <b>07</b></div><div class="t">M Idris Khan · post-PCI LAD · stable, trop ↓. NEXT: 22:00 ECG.</div></div>
+          <div class="tas-bed"><div class="b">BED <b>12</b></div><div class="t">A Yusuf · Heat exhaustion, NS 2L given. WATCH: rhabdo CK pending.</div></div>
+          <div class="tas-bed"><div class="b">BED <b>15</b></div><div class="t">F Rahman · CAP, ceftriaxone q24h, KAMC bed ETA 21:00.</div></div>
+        </div>
+
+        <div style="padding:14px 16px;display:flex;gap:8px">
+          <button class="btn ghost" style="flex:1" onclick="toast('Draft saved to clipboard','warn')">Edit</button>
+          <button class="btn primary" style="flex:1" onclick="toast('Tasleem signed & sent')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 11l3 3L20 6M21 12a9 9 0 1 1-18 0"/></svg>
+            Sign & send
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Tab bar -->
+  <nav class="tabbar" id="tabbar">
+    <button class="tab active" data-tab="home" onclick="nav.switch('home')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12 12 4l9 8v8a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>
+      Home
+    </button>
+    <button class="tab" data-tab="heat" onclick="nav.switch('heat')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v6M5 9l3 3M19 9l-3 3M12 14a4 4 0 1 1 0 8 4 4 0 0 1 0-8z"/></svg>
+      Heat
+    </button>
+    <button class="tab-ask" onclick="nav.switch('ask')"><div class="core">ASK</div></button>
+    <button class="tab" data-tab="drugs" onclick="nav.switch('drugs')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2h6l1 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3z"/></svg>
+      Drugs
+    </button>
+    <button class="tab" data-tab="tasleem" onclick="nav.switch('tasleem')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      Shift
+    </button>
+  </nav>
+
+  <!-- Modal -->
+  <div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
+    <div class="modal" id="modal">
+      <div class="grab"></div>
+      <h2 id="modal-title">Confirm</h2>
+      <p id="modal-text">Are you sure?</p>
+      <div class="btns">
+        <button class="btn ghost" onclick="closeModal()">Cancel</button>
+        <button class="btn vital" id="modal-ok">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 11l3 3L20 6"/></svg>
+    <span id="toast-text">Done</span>
+  </div>
+
+</div>
+
+<script>
+/* ─────────────────────────────────────────────────────────
+   ASH · Acute Support Hub — Interactive prototype
+   Plain ES2017. Zero dependencies. ~600 lines.
+   ───────────────────────────────────────────────────────── */
+
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => Array.from(el.querySelectorAll(s));
+
+/* ── Live clock ───────────────────────────────────────── */
+function tick(){
+  const t = new Date();
+  const hh = String(t.getHours()).padStart(2,"0");
+  const mm = String(t.getMinutes()).padStart(2,"0");
+  $('#clock').textContent = `${hh}:${mm}`;
+}
+tick(); setInterval(tick, 30000);
+
+/* ── Haptic-ish feedback ──────────────────────────────── */
+function haptic(){ if(navigator.vibrate) navigator.vibrate(8); }
+document.addEventListener('click', e => {
+  if(e.target.closest('button,a,.bed,.stat,.act,.card.click,.emergency,.calc-q,.drug-row,.proto-step,.tab,.chip')) haptic();
+});
+
+/* ── Navigation ───────────────────────────────────────── */
+const nav = {
+  stack: ['home'],
+  push(s){ if(this.stack[this.stack.length-1]===s) return; this.stack.push(s); this._render(); },
+  pop(){ if(this.stack.length>1){ this.stack.pop(); this._render(); } },
+  switch(s){ this.stack = [s]; this._render(); },
+  _render(){
+    const cur = this.stack[this.stack.length-1];
+    $$('.screen').forEach(el => el.classList.toggle('active', el.dataset.screen === cur));
+    $$('.screen').forEach(el => el.querySelector('.body') && (el.querySelector('.body').scrollTop = 0));
+    // Tab bar visibility
+    const hasTab = $(`.screen[data-screen="${cur}"]`)?.classList.contains('has-tabbar');
+    $('#tabbar').classList.toggle('hidden', !hasTab);
+    // Active tab
+    $$('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === cur));
+    // Screen-specific lifecycle
+    if(cur === 'ecg') runEcgAnalysis();
+    if(cur === 'protocol') startProtoTimer();
+    if(cur === 'drugs') renderDrugs();
+    if(cur === 'calc') renderCalc();
+  }
+};
+window.nav = nav;
+
+/* ── Toast ────────────────────────────────────────────── */
+let toastTimer;
+function toast(text, kind=""){
+  const el = $('#toast');
+  $('#toast-text').textContent = text;
+  el.className = 'toast show ' + kind;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+}
+window.toast = toast;
+
+/* ── Modal ────────────────────────────────────────────── */
+function openModal(kind){
+  const bg = $('#modal-bg');
+  if(kind === 'activate'){
+    $('#modal-title').textContent = 'Activate Code STEMI?';
+    $('#modal-text').textContent = 'This will page the KAMC cath lab, start the D2B timer, and attach this ECG to the referral packet.';
+    $('#modal-ok').textContent = 'Activate';
+    $('#modal-ok').onclick = () => { closeModal(); toast('Code STEMI activated · KAMC paged','vital'); nav.push('protocol'); };
+  }
+  bg.classList.add('open');
+}
+function closeModal(){ $('#modal-bg').classList.remove('open'); }
+window.openModal = openModal; window.closeModal = closeModal;
+
+/* ═══════════════════ ECG ═══════════════════ */
+let ecgRan = false;
+function runEcgAnalysis(){
+  if(ecgRan){
+    $('#ecg-status').textContent = 'CONFIRMED · ANTERIOR STEMI';
+    $('#ecg-pill').style.display = '';
+    $('#ecg-finding').style.display = '';
+    $('#ecg-activate').style.display = '';
+    return;
+  }
+  $('#ecg-status').textContent = 'AI ANALYZING…';
+  $('#ecg-pill').style.display = 'none';
+  $('#ecg-finding').style.display = 'none';
+  $('#ecg-activate').style.display = 'none';
+  setTimeout(() => {
+    if(nav.stack[nav.stack.length-1] !== 'ecg') return;
+    ecgRan = true;
+    $('#ecg-status').textContent = 'CONFIRMED · ANTERIOR STEMI';
+    $('#ecg-pill').style.display = '';
+    $('#ecg-finding').style.display = '';
+    $('#ecg-activate').style.display = '';
+    haptic(); haptic();
+    toast('STEMI confirmed · 0.92 confidence','vital');
+  }, 1900);
+}
+
+/* ═══════════════════ PROTOCOL ═══════════════════ */
+const PROTO_STEPS = [
+  {t:'12-lead ECG within 10 min', d:'Confirmed 09:42 · Anterior STEMI · 0.92', done:true},
+  {t:'ASA 325 mg chewable + IV access ×2', d:'18G right AC, 20G left dorsum', done:true},
+  {t:'Ticagrelor 180 mg PO loading', d:'Allergy screen clear', done:true},
+  {t:'Heparin 60 U/kg IV bolus', d:'Weight 78 kg → 4 680 U capped to 4 000 U. Then 12 U/kg/h infusion.', now:true},
+  {t:'Activate cath lab · KAMC', d:'Auto-prepared. Tap when team confirms.'},
+  {t:'Beta-blocker · if no contraindication', d:'Avoid: SBP < 100, HR < 60, signs of CHF.'},
+  {t:'High-intensity statin', d:'Atorvastatin 80 mg PO.'},
+  {t:'GP IIb/IIIa per cath team', d:'Defer to interventional decision.'},
+  {t:'Transfer · door-to-balloon ≤ 90 min', d:'KAMC accepts. Helicopter ETA 18 min.'},
+];
+let protoState = PROTO_STEPS.map(s => ({done: !!s.done, now: !!s.now}));
+let protoTimerId, protoStart;
+
+function renderProtoList(){
+  const wrap = $('#proto-list');
+  if(!wrap) return;
+  wrap.innerHTML = '';
+  PROTO_STEPS.forEach((s,i) => {
+    const st = protoState[i];
+    const div = document.createElement('div');
+    div.className = 'proto-step' + (st.done ? ' done' : '') + (st.now ? ' now' : '');
+    div.innerHTML = `
+      <div class="check" data-i="${i}">${st.done ? '✓' : (i+1)}</div>
+      <div class="body" data-i="${i}">
+        <div class="t">${s.t}</div>
+        <div class="d">${s.d}</div>
+        ${st.now ? '<div class="when">⚡ DO NOW</div>' : ''}
+      </div>`;
+    wrap.appendChild(div);
+  });
+  // Bind toggle
+  $$('.proto-step .check, .proto-step .body').forEach(el => {
+    el.onclick = () => toggleStep(parseInt(el.dataset.i,10));
+  });
+  // Progress
+  const done = protoState.filter(s => s.done).length;
+  $('#proto-progress').textContent = `${done} / ${PROTO_STEPS.length}`;
+}
+function toggleStep(i){
+  protoState[i].done = !protoState[i].done;
+  if(protoState[i].done){
+    protoState[i].now = false;
+    // advance "now" to next undone
+    const nextI = protoState.findIndex(s => !s.done && !s.now);
+    if(nextI >= 0) protoState[nextI].now = true;
+    toast('Step ✓ logged');
+  }
+  renderProtoList();
+}
+function startProtoTimer(){
+  renderProtoList();
+  if(!protoStart) protoStart = Date.now() - 278000; // start at ~4:38
+  clearInterval(protoTimerId);
+  protoTimerId = setInterval(() => {
+    const s = Math.floor((Date.now() - protoStart) / 1000);
+    const mm = String(Math.floor(s/60)).padStart(2,"0");
+    const ss = String(s%60).padStart(2,"0");
+    const el = $('#proto-timer');
+    if(el) el.textContent = `${mm}:${ss}`;
+  }, 1000);
+}
+
+/* ═══════════════════ ASK ASH (CHAT) ═══════════════════ */
+const ASK_DB = [
+  {
+    q: ['af','rvr','ckd','afib','atrial'],
+    title: 'Unstable AF + RVR in CKD-4',
+    bullets: [
+      'If unstable (SBP < 90, ischemia, CHF): synchronised DC cardioversion <b>120–200 J</b> biphasic.',
+      'Sedate: midazolam 1–2 mg <i>or</i> propofol 0.5 mg/kg if BP allows.',
+      'Stable enough for rate control: <b>amiodarone</b> 150 mg IV over 10 min (avoid β-blocker if BP < 90).',
+      'Anticoagulation: CHA<sub>2</sub>DS<sub>2</sub>-VASc ≥ 2 → start, but <b>avoid DOACs</b> (CrCl < 15). LMWH dose-reduced.',
+      'Hold metformin × 48 h post-contrast / lactic-acidosis risk.'
+    ],
+    confidence: 92, sources: ['ESC AF 2024 · Class I','KDIGO 2024','AHA ACLS 2023']
+  },
+  {
+    q: ['heat','stroke','hyperthermia','wbgt'],
+    title: 'Exertional Heat Stroke · initial management',
+    bullets: [
+      '<b>Cool first, transport second.</b> Target T ≤ 38.9°C ASAP.',
+      'Cold-water immersion is gold standard. If unavailable: ice-sheets + rotation, fan + mist, cold IV NS.',
+      'Aggressive cooling for the first 30 min — even before full workup.',
+      'Do NOT give antipyretics — pathway is thermoregulatory, not cytokine.',
+      'Watch for rhabdo (CK, K⁺), DIC, AKI. NS bolus 1–2 L then reassess.'
+    ],
+    confidence: 95, sources: ['ACSM 2023','MOH-KSA HAJJ 1446','Wilderness Med 2023']
+  },
+  {
+    q: ['sepsis','septic','shock','ssc'],
+    title: 'Septic shock — first hour',
+    bullets: [
+      '<b>30 mL/kg balanced crystalloid</b> in the first 3 h (target the first hour).',
+      'Blood + site cultures <i>before</i> antibiotics — within 45 min.',
+      'Broad-spectrum antibiotic within 1 h. Source control as soon as feasible.',
+      'Vasopressors if MAP < 65 after fluids → NE first. Target MAP ≥ 65.',
+      'Lactate q2h until clearing. Hydrocortisone 200 mg/day if refractory.'
+    ],
+    confidence: 93, sources: ['SCCM SSC 2024','IDSA 2024']
+  },
+  {
+    q: ['stemi','pregnancy'],
+    title: 'STEMI in pregnancy',
+    bullets: [
+      'Primary PCI is preferred. Radiation dose to fetus minimal with shielding.',
+      'Thrombolysis: <b>relative</b> contraindication. Consider only if PCI > 120 min away.',
+      'Heparin (UFH/LMWH) safe. <b>Avoid ACE-I / ARB / Statins</b>.',
+      'Aspirin 81 mg safe; clopidogrel preferred over ticagrelor (less data).',
+      'Multidisciplinary: cardiology + OB + anesthesia.'
+    ],
+    confidence: 86, sources: ['ESC CVD-Preg 2018','AHA 2023']
+  }
+];
+
+function ask(prefilled){
+  const input = $('#chat-input');
+  const q = (prefilled || input.value).trim();
+  if(!q) return;
+  input.value = '';
+  $('#chat-send').classList.remove('ready');
+
+  const wrap = $('#chat-msgs');
+  // user msg
+  const u = document.createElement('div');
+  u.className = 'msg user';
+  u.textContent = q;
+  wrap.appendChild(u);
+  // typing
+  const tWrap = document.createElement('div');
+  tWrap.className = 'msg ai';
+  tWrap.innerHTML = `<div class="typing"><i></i><i></i><i></i></div>`;
+  wrap.appendChild(tWrap);
+  scrollChat();
+
+  setTimeout(() => {
+    const matched = ASK_DB.find(e => e.q.some(k => q.toLowerCase().includes(k)))
+                 || { title:'I have no calibrated answer for that yet.',
+                      bullets:['Try a clinical question — e.g. "manage AF in CKD" or "heat stroke initial management."'],
+                      confidence: 0, sources: ['No source — try a clearer prompt'] };
+    tWrap.innerHTML = renderAi(matched);
+    // animate confidence bar
+    requestAnimationFrame(() => {
+      const bar = tWrap.querySelector('.conf .bar i');
+      if(bar) bar.style.width = matched.confidence + '%';
+    });
+    scrollChat();
+  }, 900);
+}
+function renderAi(m){
+  const srcs = m.sources.map(s => `<span class="pill mihrab">${s}</span>`).join('');
+  const items = m.bullets.map(b => `<li>${b}</li>`).join('');
+  return `
+    <div class="head">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg>
+      ASH · Clinical
+      <span class="src">${m.sources[0] || ''}</span>
+    </div>
+    <div><b>${m.title}</b></div>
+    <ul>${items}</ul>
+    <div class="conf">
+      <span class="n">CONFIDENCE</span>
+      <div class="bar"><i></i></div>
+      <span class="n">${m.confidence}%</span>
+    </div>
+    <div class="srcs">${srcs}</div>
+  `;
+}
+function scrollChat(){
+  const b = $('[data-screen="ask"] .body');
+  if(b) b.scrollTop = b.scrollHeight;
+}
+$('#chat-input').addEventListener('input', e => {
+  $('#chat-send').classList.toggle('ready', e.target.value.trim().length > 0);
+});
+$('#chat-input').addEventListener('keydown', e => { if(e.key==='Enter') ask(); });
+window.ask = ask;
+
+/* ═══════════════════ DRUGS ═══════════════════ */
+const DRUGS = [
+  {cat:'Vasopressors / Inotropes', drugs:[
+    {id:'norepi', name:'Noradrenaline', class:'α₁ Agonist · vasopressor', min:0.01, max:2.0, step:0.01, default:0.18, units:'µg/kg/min', conc:'4 mg / 250 mL = 16 µg/mL · Central'},
+    {id:'epi',    name:'Adrenaline',    class:'α + β · inotrope/vasopressor', min:0.01, max:1.0, step:0.01, default:0.05, units:'µg/kg/min', conc:'4 mg / 250 mL = 16 µg/mL · Central'},
+    {id:'dop',    name:'Dopamine',      class:'Dose-dependent', min:2, max:20, step:0.5, default:5, units:'µg/kg/min', conc:'400 mg / 250 mL = 1.6 mg/mL'},
+    {id:'dob',    name:'Dobutamine',    class:'β₁ inotrope', min:2, max:20, step:0.5, default:5, units:'µg/kg/min', conc:'250 mg / 250 mL = 1 mg/mL'},
+    {id:'vaso',   name:'Vasopressin',   class:'V₁ agonist · 2nd-line', min:0.01, max:0.06, step:0.005, default:0.03, units:'U/min', conc:'20 U / 100 mL'},
+  ]},
+  {cat:'Sedation / Analgesia', drugs:[
+    {id:'fent', name:'Fentanyl',      class:'Opioid · short-acting', min:1, max:5, step:0.1, default:2, units:'µg/kg/h', conc:'2500 µg / 50 mL'},
+    {id:'prop', name:'Propofol',      class:'GABA · sedative', min:5, max:50, step:1, default:25, units:'µg/kg/min', conc:'10 mg/mL'},
+    {id:'mid',  name:'Midazolam',     class:'Benzodiazepine', min:0.02, max:0.1, step:0.01, default:0.05, units:'mg/kg/h', conc:'50 mg / 50 mL'},
+    {id:'dex',  name:'Dexmedetomidine',class:'α₂ agonist', min:0.2, max:1.4, step:0.05, default:0.5, units:'µg/kg/h', conc:'200 µg / 50 mL'},
+  ]},
+  {cat:'Anti-arrhythmic', drugs:[
+    {id:'amio',  name:'Amiodarone',  class:'Class III', min:0, max:1200, step:50, default:900, units:'mg/24h', conc:'150 mg over 10 min, then 1 mg/min × 6h, then 0.5 mg/min'},
+    {id:'esmo',  name:'Esmolol',     class:'β₁ short-acting', min:50, max:300, step:10, default:100, units:'µg/kg/min', conc:'2500 mg / 250 mL'},
+  ]},
+  {cat:'Antihypertensive', drugs:[
+    {id:'nicar', name:'Nicardipine', class:'CCB', min:5, max:15, step:0.5, default:7, units:'mg/h', conc:'25 mg / 250 mL'},
+    {id:'labet', name:'Labetalol',   class:'α + β blocker', min:2, max:8, step:0.5, default:3, units:'mg/min', conc:'200 mg / 200 mL'},
+    {id:'ngt',   name:'Nitroglycerin',class:'Nitrate · venodilator', min:5, max:200, step:5, default:20, units:'µg/min', conc:'50 mg / 250 mL'},
+  ]}
+];
+let activeDrug = DRUGS[0].drugs[0];
+
+function renderDrugs(){
+  const root = $('#drug-list');
+  const q = ($('#drug-search')?.value || '').toLowerCase().trim();
+  root.innerHTML = '';
+  DRUGS.forEach(g => {
+    const matches = g.drugs.filter(d =>
+      !q || d.name.toLowerCase().includes(q) || d.class.toLowerCase().includes(q));
+    if(!matches.length) return;
+    const h = document.createElement('div'); h.className='drug-cat'; h.textContent = g.cat;
+    root.appendChild(h);
+    matches.forEach(d => {
+      const r = document.createElement('button'); r.className = 'drug-row';
+      r.innerHTML = `
+        <div class="name"><div class="t">${d.name}</div><div class="s">${d.class}</div></div>
+        <div class="dose">${d.default}<span class="u">${d.units}</span></div>`;
+      r.onclick = () => { activeDrug = d; openDrug(d); };
+      root.appendChild(r);
+    });
+  });
+  if(!root.children.length){
+    root.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--ink-3);font-family:var(--f-data);font-size:11px;letter-spacing:.1em">NO MATCH · try amiodarone, sepsis, β-blocker…</div>';
+  }
+}
+function filterDrugs(){ renderDrugs(); }
+window.filterDrugs = filterDrugs;
+
+function openDrug(d){
+  $('#dd-title').textContent = d.name;
+  $('#dd-name').textContent = d.name;
+  $('#dd-class').textContent = d.class.toUpperCase();
+  $('#dd-conc').textContent = d.conc;
+  $('#dd-unit').textContent = ' ' + d.units;
+  $('#dd-min').textContent = d.min;
+  $('#dd-max').textContent = `${d.max} ${d.units}`;
+  // set slider to default
+  const pct = ((d.default - d.min) / (d.max - d.min)) * 100;
+  $('#dd-slider').value = pct;
+  updateDose();
+  nav.push('drug-detail');
+}
+function updateDose(){
+  const d = activeDrug;
+  const pct = parseFloat($('#dd-slider').value);
+  const dose = +(d.min + ((d.max - d.min) * pct/100)).toFixed(d.step < 0.1 ? 3 : 2);
+  $('#dd-fill').style.width = pct + '%';
+  $('#dd-dose').textContent = dose;
+
+  // Compute rate (mL/h) — naive demo math: use weight 78 kg, parse concentration mg/mL
+  const wt = 78;
+  // try to parse e.g. "16 µg/mL"
+  const concMatch = d.conc.match(/(\d+(?:\.\d+)?)\s*(mg|µg|U)\s*\/\s*mL/);
+  let concPerMl = 0; let unit = d.units;
+  if(concMatch){
+    const val = parseFloat(concMatch[1]);
+    const u = concMatch[2];
+    // normalise to µg/mL when units in µg/kg/min
+    if(u==='mg') concPerMl = val * 1000;
+    else if(u==='µg') concPerMl = val;
+    else concPerMl = val;
+  }
+  let mcgPerMin = 0;
+  if(unit.includes('µg/kg/min')) mcgPerMin = dose * wt;
+  else if(unit.includes('µg/kg/h')) mcgPerMin = dose * wt / 60;
+  else if(unit.includes('mg/kg/h')) mcgPerMin = dose * wt * 1000 / 60;
+  else if(unit.includes('µg/min')) mcgPerMin = dose;
+  else if(unit.includes('mg/h')) mcgPerMin = dose * 1000 / 60;
+  else if(unit.includes('mg/min')) mcgPerMin = dose * 1000;
+  else if(unit==='U/min') mcgPerMin = dose; // treat U as units
+
+  const rate = concPerMl > 0 ? +(mcgPerMin / concPerMl * 60).toFixed(1) : 0;
+  $('#dd-rate').textContent = rate || '—';
+  $('#dd-mcgmin').textContent = +mcgPerMin.toFixed(1);
+
+  // safety: if dose > 80% of max, color warn
+  const safety = $('#dd-status');
+  if(pct > 80){ safety.textContent = '⚠ HIGH RANGE'; safety.style.color = 'var(--solar)'; }
+  else if(pct < 5){ safety.textContent = '⚠ MIN — escalate'; safety.style.color = 'var(--solar)'; }
+  else { safety.textContent = '✓ WITHIN RANGE'; safety.style.color = 'var(--mihrab)'; }
+}
+window.updateDose = updateDose;
+
+/* ═══════════════════ POLYGLOT ═══════════════════ */
+const POLY_DEMO = {
+  ur: { heard:'میرے سینے میں ٢٠ منٹ سے درد ہے، بایاں بازو بھی، پسینہ بہت آرہا ہے۔', dir:'rtl', font:'ar',
+        trans:'20 min chest pain, radiating to left arm, profuse diaphoresis.', flag:'ACS RED FLAG' },
+  id: { heard:'Saya pusing, dada saya berdebar, sangat panas, tidak bisa berdiri lama.', dir:'ltr',
+        trans:'Dizzy, palpitations, very hot, cannot stand for long.', flag:'HEAT + ARRHYTHMIA' },
+  tr: { heard:'Başım ağrıyor, çok terliyorum, midem bulanıyor.', dir:'ltr',
+        trans:'Headache, sweating a lot, nausea.', flag:'HEAT EXHAUSTION?' },
+  fa: { heard:'سینه‌ام درد می‌کنه، نفسم سخت می‌آد، حدود نیم ساعته شروع شده.', dir:'rtl', font:'ar',
+        trans:'Chest pain, dyspnea, started ~30 min ago.', flag:'ACS RED FLAG' },
+  fr: { heard:'J’ai mal au ventre depuis ce matin, j’ai vomi trois fois.', dir:'ltr',
+        trans:'Abdominal pain since this morning, vomited 3 times.', flag:'' },
+  ar: { heard:'عندي ألم شديد في الصدر، ينتشر إلى الذراع، منذ نصف ساعة.', dir:'rtl', font:'ar',
+        trans:'Severe chest pain radiating to arm, since ~30 min.', flag:'ACS RED FLAG' },
+};
+let polyLang = 'ur';
+let polyListening = false;
+function setLang(btn, lang){
+  $$('.lang-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  polyLang = lang;
+}
+window.setLang = setLang;
+function toggleMic(){
+  const ac = $('#poly-active'), hint = $('#mic-hint'), mic = $('#mic-big');
+  polyListening = !polyListening;
+  ac.classList.toggle('listening', polyListening);
+  mic.classList.toggle('recording', polyListening);
+  if(polyListening){
+    hint.textContent = 'Listening… speak now';
+    setTimeout(() => {
+      if(!polyListening) return;
+      const d = POLY_DEMO[polyLang];
+      $('#poly-transcript').innerHTML = `
+        <div class="heard ${d.font || ''}" style="direction:${d.dir}">${d.heard}</div>
+        <div class="trans"><b style="color:var(--ink)">EN:</b> ${d.trans}
+          ${d.flag ? `<span class="pill vital" style="margin-left:6px;font-size:9px">${d.flag}</span>` : ''}
+        </div>`;
+      polyListening = false;
+      ac.classList.remove('listening');
+      mic.classList.remove('recording');
+      hint.textContent = 'Tap mic to re-record';
+      if(d.flag) toast(d.flag,'vital');
+    }, 1800);
+  } else {
+    hint.textContent = 'Tap to start listening';
+  }
+}
+window.toggleMic = toggleMic;
+
+/* ═══════════════════ CALCULATOR (CHA2DS2-VASc) ═══════════════════ */
+const CALC_QS = [
+  {id:'chf', t:'Congestive heart failure / LV dysfunction', pts:1, on:false},
+  {id:'htn', t:'Hypertension', pts:1, on:true},
+  {id:'age75',t:'Age ≥ 75 years', pts:2, on:false},
+  {id:'dm',  t:'Diabetes mellitus', pts:1, on:true},
+  {id:'str', t:'Stroke / TIA / thromboembolism', pts:2, on:false},
+  {id:'vd',  t:'Vascular disease (MI, PAD, plaque)', pts:1, on:true},
+  {id:'age65',t:'Age 65–74 years', pts:1, on:true},
+  {id:'sex', t:'Female sex', pts:1, on:false},
+];
+function renderCalc(){
+  const root = $('#calc-q-list');
+  root.innerHTML = '';
+  CALC_QS.forEach((q,i) => {
+    const div = document.createElement('button'); div.className = 'calc-q' + (q.on?' on':'');
+    div.innerHTML = `
+      <div style="flex:1">
+        <div class="t">${q.t}</div>
+        <div class="pts">+${q.pts} ${q.pts>1?'points':'point'}</div>
+      </div>
+      <div class="toggle"></div>`;
+    div.onclick = () => { CALC_QS[i].on = !CALC_QS[i].on; renderCalc(); };
+    root.appendChild(div);
+  });
+  // result
+  const score = CALC_QS.filter(q => q.on).reduce((a,q) => a+q.pts, 0);
+  let cat, desc, kind;
+  if(score === 0){ cat='Low risk'; desc='Annual stroke risk 0%. No anticoagulation indicated.'; kind=''; }
+  else if(score === 1){ cat='Borderline'; desc='Annual risk ~1.3%. Consider OAC (male) / not indicated (female only).'; kind='med'; }
+  else { cat='High risk'; desc=`Annual stroke risk ${(score*1.4+1).toFixed(1)}%. <b>OAC indicated</b> — DOAC preferred if CrCl > 30.`; kind='high'; }
+  $('#calc-result-wrap').innerHTML = `
+    <div class="calc-result ${kind}">
+      <div class="label">CHA₂DS₂-VASc</div>
+      <div class="v">${score}</div>
+      <div class="cat">${cat}</div>
+      <div class="desc">${desc}</div>
+    </div>`;
+}
+function resetCalc(){
+  CALC_QS.forEach(q => q.on = false);
+  renderCalc();
+  toast('Reset · all factors cleared');
+}
+window.resetCalc = resetCalc;
+
+/* ═══════════════════ Swipe-back gesture ═══════════════════ */
+let touchStartX = 0, touchStartY = 0, touchDx = 0;
+document.addEventListener('touchstart', e => {
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+});
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  if(touchStartX < 24 && dx > 80 && Math.abs(dy) < 60 && nav.stack.length > 1){
+    nav.pop();
+  }
+});
+
+</script>
+
+</body>
+</html>
