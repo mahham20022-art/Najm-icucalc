@@ -2170,5 +2170,16 @@ if ("serviceWorker" in navigator && location.protocol !== "file:") {
   });
 }
 </script>
+
+<!-- GoatCounter — privacy-friendly analytics (no cookies, no PII, respects Do-Not-Track). Loads only when served from the deployed origin. -->
+<script>
+  if (location.hostname.endsWith("github.io") || location.hostname.includes("goatcounter")) {
+    var g = document.createElement("script");
+    g.setAttribute("data-goatcounter", "https://najmsd.goatcounter.com/count");
+    g.async = true;
+    g.src = "//gc.zgo.at/count.js";
+    document.body.appendChild(g);
+  }
+</script>
 </body>
 </html>
