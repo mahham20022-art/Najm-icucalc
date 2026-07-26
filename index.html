@@ -2197,15 +2197,36 @@ if ("serviceWorker" in navigator && location.protocol !== "file:") {
 }
 </script>
 
-<!-- GoatCounter — privacy-friendly analytics (no cookies, no PII, respects Do-Not-Track). Loads only when served from the deployed origin. -->
+<!-- GoatCounter — privacy-friendly analytics (no cookies, no PII, respects Do-Not-Track).
+     Skips only file:// and localhost; everywhere else count.js loads and self-registers. -->
 <script>
-  if (location.hostname.endsWith("github.io") || location.hostname.includes("goatcounter")) {
+  (function () {
+    var h = location.hostname;
+    var localHost = h === "localhost" || h === "127.0.0.1" || h === "" || location.protocol === "file:";
+    if (localHost) return;
+
+    window.goatcounter = { endpoint: "https://najmsd.goatcounter.com/count", no_onload: true };
+
     var g = document.createElement("script");
-    g.setAttribute("data-goatcounter", "https://najmsd.goatcounter.com/count");
     g.async = true;
     g.src = "//gc.zgo.at/count.js";
     document.body.appendChild(g);
-  }
+
+    // Count the initial pageview once count.js is ready.
+    function count() {
+      if (window.goatcounter && typeof window.goatcounter.count === "function") {
+        window.goatcounter.count();
+      }
+    }
+    g.addEventListener("load", count);
+
+    // Re-count when the page is restored from Safari's back-forward cache
+    // (bfcache) — scripts don't re-run on bfcache restore, so bookmark /
+    // home-screen returns would otherwise be invisible.
+    window.addEventListener("pageshow", function (e) {
+      if (e.persisted) count();
+    });
+  })();
 </script>
 </body>
 </html>
