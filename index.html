@@ -2163,10 +2163,36 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-/* Register service worker (production only). */
+/* Register service worker (production only) with aggressive updates so
+   bookmark/home-screen opens always pull the latest HTML (and its
+   analytics script), not the shell from a previous visit. */
 if ("serviceWorker" in navigator && location.protocol !== "file:") {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("sw.js").catch(() => {});
+    navigator.serviceWorker.register("sw.js", { updateViaCache: "none" })
+      .then(reg => {
+        // Force an update check every page load — costs one HEAD request.
+        reg.update().catch(() => {});
+        reg.addEventListener("updatefound", () => {
+          const sw = reg.installing;
+          if (!sw) return;
+          sw.addEventListener("statechange", () => {
+            // A new SW installed while an old one is controlling the page —
+            // hand off immediately so the next fetch uses the new shell.
+            if (sw.state === "installed" && navigator.serviceWorker.controller) {
+              sw.postMessage({ type: "SKIP_WAITING" });
+            }
+          });
+        });
+      })
+      .catch(() => {});
+    // If the controlling SW hands off to a new one, reload once so the
+    // freshly-cached HTML (with analytics) is what the user sees.
+    let reloaded = false;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (reloaded) return;
+      reloaded = true;
+      window.location.reload();
+    });
   });
 }
 </script>

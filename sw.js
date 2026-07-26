@@ -1,6 +1,7 @@
 /* Najm ICUCalc — Service Worker
-   v6: network-first for HTML so users always get the latest UI. */
-const CACHE = "najm-icu-v6";
+   v7: network-first for HTML + skip-waiting handoff so bookmark opens
+   always deliver the latest shell (and its analytics script). */
+const CACHE = "najm-icu-v7";
 const SHELL = [
   "./",
   "./index.html",
@@ -28,6 +29,14 @@ self.addEventListener("activate", event => {
   );
 });
 
+// Page can post {type:"SKIP_WAITING"} to force immediate handoff when a
+// new SW is installed while an old one still controls the tab.
+self.addEventListener("message", event => {
+  if (event.data && event.data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
+});
+
 self.addEventListener("fetch", event => {
   const req = event.request;
   if (req.method !== "GET") return;
@@ -40,8 +49,6 @@ self.addEventListener("fetch", event => {
                  url.pathname.endsWith("/");
 
   if (isHTML) {
-    // Network-first — always try the live copy so About/version/credentials
-    // update the moment we redeploy. Fall back to cache when offline.
     event.respondWith(
       fetch(req)
         .then(res => {
@@ -56,7 +63,6 @@ self.addEventListener("fetch", event => {
     return;
   }
 
-  // Cache-first for icons/manifest/etc.
   event.respondWith(
     caches.match(req).then(cached => {
       if (cached) return cached;
