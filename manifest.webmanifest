@@ -1,27 +1,39 @@
 {
-  "name": "Najm ICUCalc — ICU/CCU Assistant",
+  "name": "Najm ICUCalc",
   "short_name": "ICUCalc",
-  "description": "Bedside ICU/CCU assistant: infusions, hemodynamics, ventilator, ABG, electrolytes, renal, scores, and notes.",
-  "start_url": "./?utm_source=pwa",
-  "scope": "./",
-  "id": "/Najm-icucalc/",
+  "description": "Intelligent ICU calculator and clinical assistant",
+  "start_url": "/",
+  "scope": "/",
+  "id": "/",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui", "browser"],
-  "orientation": "any",
-  "background_color": "#07101f",
-  "theme_color": "#0284c7",
-  "categories": ["medical", "health", "utilities", "productivity"],
+  "orientation": "portrait",
   "lang": "en",
   "dir": "ltr",
+  "theme_color": "#071A2F",
+  "background_color": "#071A2F",
+  "categories": ["medical", "health", "productivity"],
+  "prefer_related_applications": false,
   "icons": [
-    { "src": "icons/icon-192.png",      "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icon-512.png",      "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icon-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    { "src": "icons/icon-48.png",   "sizes": "48x48",   "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-72.png",   "sizes": "72x72",   "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-96.png",   "sizes": "96x96",   "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-144.png",  "sizes": "144x144", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-192.png",  "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-256.png",  "sizes": "256x256", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-384.png",  "sizes": "384x384", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png",  "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "shortcuts": [
-    { "name": "Infusions",    "short_name": "Drips",  "url": "./#infusions", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "ABG",          "short_name": "ABG",    "url": "./#abg",       "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "Scores",       "short_name": "Scores", "url": "./#scores",    "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "Notes",        "short_name": "Notes",  "url": "./#notes",     "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
+    { "name": "Infusions",   "short_name": "Drips",  "url": "/#infusions",   "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "RSI",         "short_name": "RSI",    "url": "/#rsi",         "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "ABG",         "short_name": "ABG",    "url": "/#abg",         "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Antidotes",   "short_name": "Antid.", "url": "/#antidotes",   "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Neuro",       "short_name": "Neuro",  "url": "/#neuro",       "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
+  ],
+  "screenshots": [
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "form_factor": "narrow", "label": "Najm ICUCalc logo" }
   ]
 }

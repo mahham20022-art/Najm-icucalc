@@ -3,23 +3,36 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#03080f" />
-<meta name="description" content="Najm ICUCalc — precise, fast, reliable bedside ICU/CCU assistant. Infusions, antibiotics, hemodynamics, ventilator, ABG, electrolytes, renal, scores, notes." />
-<title>Najm ICUCalc — Precise. Fast. Reliable.</title>
+<meta name="theme-color" content="#071A2F" />
+<meta name="color-scheme" content="dark" />
+<meta name="description" content="Intelligent ICU calculator and clinical assistant — infusions, antibiotics, antidotes, RSI, neuroprotection, ABG, ventilator, electrolytes, renal, scores." />
+<title>Najm ICUCalc — Intelligent ICU Assistant</title>
 <link rel="manifest" href="manifest.webmanifest" />
+<link rel="icon" type="image/x-icon" href="icons/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png" />
+<link rel="mask-icon" href="icons/icon-maskable.png" color="#22d3ee" />
 <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,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" />
 <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
 <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch.png" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="Najm" />
+<meta name="apple-mobile-web-app-title" content="ICUCalc" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="application-name" content="Najm ICUCalc" />
 <meta name="format-detection" content="telephone=no" />
-<meta property="og:title" content="Najm ICUCalc — Precise. Fast. Reliable." />
-<meta property="og:description" content="Bedside ICU/CCU assistant designed by Dr. Mohamed Najm." />
+<meta name="msapplication-TileColor" content="#071A2F" />
+<meta name="msapplication-TileImage" content="icons/icon-192.png" />
+<meta name="msapplication-navbutton-color" content="#071A2F" />
+<meta property="og:title" content="Najm ICUCalc — Intelligent ICU Assistant" />
+<meta property="og:description" content="Intelligent ICU calculator and clinical assistant. By Dr. Mohamed Najm." />
 <meta property="og:image" content="icons/icon-512.png" />
 <meta property="og:type" content="website" />
+<meta property="og:url" content="https://mahham20022-art.github.io/Najm-icucalc/" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Najm ICUCalc" />
+<meta name="twitter:description" content="Intelligent ICU calculator and clinical assistant." />
+<meta name="twitter:image" content="icons/icon-512.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
@@ -882,6 +895,28 @@
   footer .fine { color: var(--muted); }
   footer a { color: var(--brand-3); }
 
+  /* -------- Contact link (About page) -------- */
+  .contact-mail {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 12px 16px; margin-top: 6px;
+    background:
+      linear-gradient(135deg, rgba(34,211,238,.12), rgba(14,165,233,.08));
+    border: 1px solid rgba(56,189,248,.3);
+    border-radius: var(--r-md);
+    color: var(--brand);
+    font-size: 15px; font-weight: 700;
+    text-decoration: none;
+    letter-spacing: -0.01em;
+    transition: transform .12s, background .15s, border-color .15s;
+  }
+  .contact-mail svg { width: 20px; height: 20px; flex-shrink: 0; }
+  .contact-mail:hover {
+    transform: translateY(-1px);
+    background: linear-gradient(135deg, rgba(34,211,238,.20), rgba(14,165,233,.14));
+    border-color: var(--brand);
+  }
+  .contact-mail:active { transform: translateY(0); }
+
   /* -------- Toast -------- */
   .toast {
     position: fixed; left: 50%; bottom: 24px;
@@ -1130,6 +1165,10 @@
         <button class="tab tab-danger" type="button" data-tab="rsi">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="M12 18v4"/><path d="m4.9 4.9 2.8 2.8"/><path d="m16.3 16.3 2.8 2.8"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="m4.9 19.1 2.8-2.8"/><path d="m16.3 7.7 2.8-2.8"/></svg>
           RSI
+        </button>
+        <button class="tab" type="button" data-tab="neuro">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 13a3.5 3.5 0 0 0-3.5 3.5v1a3.5 3.5 0 1 1-7 0"/><path d="M8.5 21a3.5 3.5 0 1 1-7 0v-1a3.5 3.5 0 0 1 3.5-3.5"/><path d="M17.5 16a3.5 3.5 0 1 0 0-7h-1a3.5 3.5 0 1 1 0-7"/><path d="M22.5 8a3.5 3.5 0 0 0-3.5-3.5"/></svg>
+          Neuro
         </button>
         <button class="tab" type="button" data-tab="about">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 12h1v5h1"/></svg>
@@ -1460,6 +1499,17 @@
       <div class="cards" id="rsiCards" aria-live="polite"></div>
     </section>
 
+    <!-- NEUROPROTECTIVE STRATEGY -->
+    <section class="module" id="m-neuro">
+      <div class="module-head">
+        <div>
+          <h2>Neuroprotective Strategy</h2>
+          <p>Evidence-based bundle for TBI, SAH, ischemic stroke, ICH, and post-arrest.</p>
+        </div>
+      </div>
+      <div class="cards" id="neuroCards"></div>
+    </section>
+
     <!-- ABOUT -->
     <section class="module" id="m-about">
       <div class="module-head"><div><h2>About</h2><p>Najm ICUCalc — bedside clinical assistant.</p></div></div>
@@ -1468,8 +1518,17 @@
         <div class="sub">Author &amp; clinical lead</div>
         <div class="row"><span class="k">Name</span><span class="v">Dr. Mohamed Najm</span></div>
         <div class="row"><span class="k">Credentials</span><span class="v">MBBS · PgDip EM · FEBN · MRCEM SECONDARY</span></div>
-        <div class="row"><span class="k">Version</span><span class="v">1.1.0</span></div>
+        <div class="row"><span class="k">Version</span><span class="v">1.2.0</span></div>
         <div class="row"><span class="k">Build</span><span class="v" id="app-build">—</span></div>
+      </div>
+
+      <div class="card">
+        <h3>📧 Contact Us</h3>
+        <div class="sub">Questions, feature requests, or clinical corrections — send a note.</div>
+        <a class="contact-mail" href="mailto:mahham2002@yahoo.com?subject=Najm%20ICUCalc%20feedback">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+          <span>mahham2002@yahoo.com</span>
+        </a>
       </div>
 
       <div class="card">
@@ -1757,6 +1816,7 @@ function bindTabs() {
     if (name === "antibiotics") renderAntibiotics();
     if (name === "antidotes") renderAntidotes();
     if (name === "rsi") renderRSI();
+    if (name === "neuro") renderNeuro();
 
     // Scroll active tab into view within the tab bar
     const activeBtn = container.querySelector(`.tab[data-tab="${name}"]`);
@@ -1801,6 +1861,16 @@ const DRUGS = [
   { id: "diltiazem", name: "Diltiazem",       cat: "Antiarrhythmic",  min: 5,    max: 15,   unit: "mg/hr",      conc: "1 mg/mL",     concVal: 1,     concUnit: "mg/mL",  weightless: true },
   { id: "insulin",   name: "Insulin (regular)",cat: "Endocrine",      min: 0.05, max: 0.1,  unit: "U/kg/hr",    conc: "1 U/mL",      concVal: 1,     concUnit: "U/mL" },
   { id: "heparin",   name: "Heparin",         cat: "Anticoagulant",   min: 12,   max: 25,   unit: "U/kg/hr",    conc: "100 U/mL",    concVal: 100,   concUnit: "U/mL" },
+
+  // Neuromuscular blocker infusions (Esmeron + Cis)
+  { id: "rocInf",    name: "Rocuronium (Esmeron)", cat: "Neuromuscular", min: 8,   max: 12,  unit: "mcg/kg/min", conc: "1 mg/mL",  concVal: 1000, concUnit: "mcg/mL",
+    load: "0.6–1.2 mg/kg IV bolus (intubation) — reversible with sugammadex 16 mg/kg.",
+    prep: "Standard: 50 mg (5 mL) in 45 mL NS = 1 mg/mL, or 100 mg (10 mL) in 90 mL NS. Central line preferred.",
+    safety: "Deep sedation + analgesia MANDATORY. Monitor TOF q4h (target 1–2/4). Daily drug holiday. Prolonged in renal + hepatic failure — use cisatracurium instead." },
+  { id: "cisInf",    name: "Cisatracurium",   cat: "Neuromuscular",     min: 1,   max: 3,   unit: "mcg/kg/min", conc: "2 mg/mL",  concVal: 2000, concUnit: "mcg/mL",
+    load: "0.15–0.2 mg/kg IV bolus.",
+    prep: "200 mg in 100 mL NS = 2 mg/mL. Or use pre-mix 5 mg/mL vials.",
+    safety: "Hofmann elimination — safe in renal/hepatic failure. First-line NMBA infusion in ARDS. Monitor TOF, daily drug holiday. NOT reversed by sugammadex." },
 ];
 const CATS = ["all", ...Array.from(new Set(DRUGS.map(d => d.cat)))];
 
@@ -1848,20 +1918,29 @@ function renderInfusions() {
   grid.innerHTML = filtered.map(d => {
     const cls = rangeClass(d);
     const perLine = `<div class="row"><span class="k">Range</span><span class="v ${cls}">${fmt(d.min, 2)} – ${fmt(d.max, 2)} ${d.unit}</span></div>`;
-    let absLine = "", rateLine = "";
+    let absLine = "", rateLine = "", mgHrLine = "";
     if (w && !d.weightless) {
       const lo = d.min * w, hi = d.max * w;
       absLine = `<div class="row"><span class="k">For ${w} kg</span><span class="v ${cls}">${fmt(lo, 2)} – ${fmt(hi, 2)} ${d.unit.replace("/kg", "")}</span></div>`;
+      // For mcg/kg/min drugs also show mg/hr equivalent
+      if (d.unit === "mcg/kg/min") {
+        const loMgHr = (d.min * w * 60) / 1000, hiMgHr = (d.max * w * 60) / 1000;
+        mgHrLine = `<div class="row"><span class="k">mg/hr equivalent</span><span class="v">${fmt(loMgHr, 2)} – ${fmt(hiMgHr, 1)} mg/hr</span></div>`;
+      }
     }
     const rLo = infusionRate(d, d.min, w), rHi = infusionRate(d, d.max, w);
     if (rLo !== null && rHi !== null) {
       rateLine = `<div class="row"><span class="k">Drip @ ${d.conc}</span><span class="v">${fmt(rLo, 2)} – ${fmt(rHi, 1)} mL/hr</span></div>`;
     }
+    const loadLine   = d.load   ? `<div class="verdict info" style="margin-top:8px"><b>Load:</b> ${d.load}</div>` : "";
+    const prepLine   = d.prep   ? `<div class="verdict info"><b>Prep:</b> ${d.prep}</div>` : "";
+    const safetyLine = d.safety ? `<div class="verdict warn"><b>Safety:</b> ${d.safety}</div>` : "";
     return `
       <div class="card">
         <h3>${d.name} <span class="pill info">${d.cat}</span></h3>
         <div class="sub">${d.weightless ? "Fixed-rate" : "Weight-based"} · ${d.conc}</div>
-        ${perLine}${absLine}${rateLine}
+        ${perLine}${absLine}${mgHrLine}${rateLine}
+        ${loadLine}${prepLine}${safetyLine}
       </div>`;
   }).join("");
 }
@@ -2223,6 +2302,60 @@ const RSI_PROTOCOL = [
 ];
 
 const ANT_CLASSES = ["all", ...Array.from(new Set(ANTIDOTES.map(a => a.cls)))];
+
+/* ============================================================
+   NEUROPROTECTIVE STRATEGY
+   ============================================================ */
+const NEURO_BUNDLE = [
+  { icon: "🛏️", title: "Head positioning",
+    body: "Head of bed 30° · head neutral · loose collar off · avoid neck vein occlusion. Improves cerebral venous drainage, lowers ICP without hurting CPP." },
+  { icon: "🫁", title: "Oxygenation targets",
+    body: "PaO₂ 80–120 mmHg · SpO₂ ≥ 94 %. Avoid both hypoxia (SpO₂ < 90) and hyperoxia (PaO₂ > 300) — free-radical injury." },
+  { icon: "💨", title: "Ventilation strategy",
+    body: "Lung-protective: TV 6 mL/kg PBW, plateau ≤ 30, driving pressure < 15. Avoid PEEP > 15 in ↑ICP unless refractory hypoxia. Sedate to prevent asynchrony/coughing." },
+  { icon: "🌬️", title: "PaCO₂ targets",
+    body: "<b>35–40 mmHg</b> = normocapnia (default). Brief 30–35 for acute herniation only (temporary, bridge to definitive Rx). AVOID PaCO₂ < 30 sustained → vasoconstriction ischemia. Avoid PaCO₂ > 45 → vasodilation, ↑ICP." },
+  { icon: "🩺", title: "Blood pressure targets",
+    body: "<b>TBI:</b> SBP ≥ 100 (age 50–69), SBP ≥ 110 (age &lt;50 or ≥70).<br><b>Ischemic stroke (no tPA):</b> permit up to 220/120.<br><b>Post-tPA:</b> &lt; 180/105 × 24 h.<br><b>ICH:</b> SBP 140 (INTERACT-2), avoid rapid drops.<br><b>SAH:</b> SBP &lt; 160 pre-securing, then permissive HTN + triple-H if vasospasm." },
+  { icon: "🧠", title: "CPP targets",
+    body: "CPP = MAP − ICP. Adult target <b>60–70 mmHg</b> (guided by autoregulation status). Avoid CPP &lt; 50 (ischemia) and &gt; 90 (ARDS/edema risk). Use norepinephrine as first-line pressor." },
+  { icon: "📈", title: "ICP management",
+    body: "Target ICP &lt; 22 mmHg. Escalation ladder:<br><b>Tier 1</b> HOB, sedation, analgesia, normothermia, PaCO₂ 35–40, seizure Rx.<br><b>Tier 2</b> deep sedation ± paralysis, osmotherapy (see below), CSF drain if EVD.<br><b>Tier 3</b> hyperventilation 30–35 short-term, hypothermia 33–36 °C.<br><b>Tier 4</b> barbiturate coma (Pentobarbital load 5–10 mg/kg → 1–5 mg/kg/hr), decompressive craniectomy." },
+  { icon: "🌡️", title: "Temperature",
+    body: "Aggressively treat T > 37.5 °C — every 1 °C ↑ CMRO₂ ~ 6 %. Paracetamol 1 g IV q6h, cooling blankets, endovascular device. Target <b>36 – 37.5 °C</b>. For post-cardiac-arrest: targeted temperature management 32 – 36 °C × 24 h." },
+  { icon: "🍬", title: "Glycemic control",
+    body: "Target <b>140 – 180 mg/dL</b> (7.8 – 10 mmol/L). Insulin infusion if BG > 180 sustained. Avoid hypoglycemia (BG &lt; 70) — worse outcomes than moderate hyperglycemia in acute brain injury." },
+  { icon: "🧂", title: "Sodium & osmolality",
+    body: "Aim serum Na <b>140 – 150</b> mEq/L (higher tolerance in TBI/SAH — up to 155). Osm 285–320 mOsm/kg (spare renal). Avoid hyponatremia (Na &lt; 135) → cerebral edema. For SIADH: fluid restrict or vaptan. For CSW: replace Na + volume with hypertonic saline." },
+  { icon: "💧", title: "Fluids",
+    body: "<b>Isotonic only</b> — 0.9 % NS or Plasmalyte. AVOID 5 % dextrose or hypotonic fluids (free water → cerebral edema). Target euvolemia (CVP 8–12, MAP goal met, no pulmonary edema). Use hypertonic saline (3 %) as maintenance in ↑ICP if Na headroom." },
+  { icon: "😴", title: "Sedation",
+    body: "Depth guided by neuro exam needs. Propofol first-line (short t½ for exam windows) 20–70 mcg/kg/min. Watch PRIS if > 4 mg/kg/hr &gt; 48 h. Dexmedetomidine if daily awakening possible. Avoid benzodiazepines (delirium)." },
+  { icon: "💊", title: "Analgesia",
+    body: "Fentanyl 25–200 mcg/hr (short half-life, exam-friendly). Ketamine acceptable in TBI (updated evidence — no ICP rise). Avoid morphine in AKI (accumulation). Treat pain BEFORE agitation — pain worsens ICP." },
+  { icon: "⚡", title: "Seizure prevention",
+    body: "<b>TBI (severe):</b> Levetiracetam 1 g IV BD × 7 d (BTF Level IIA).<br><b>SAH:</b> Levetiracetam 1 g IV BD until aneurysm secured.<br><b>ICH:</b> Only if clinical seizure — no routine prophylaxis.<br><b>Post-craniotomy:</b> Case-by-case, usually 7 d." },
+  { icon: "🧪", title: "Hyperosmolar therapy",
+    body: "<b>Mannitol</b> 0.25–1 g/kg IV over 15 min. Monitor: serum osm target &lt; 320, osmolar gap &lt; 20, urine output, Na. Renal caution.<br><b>Hypertonic saline 3 %</b> 250 mL IV bolus, or continuous 30–150 mL/hr for Na 145–155.<br><b>23.4 % NaCl</b> 30 mL over 5–10 min via central line — fastest ICP drop." },
+  { icon: "🍽️", title: "Nutrition",
+    body: "Start enteral nutrition within <b>24–48 h</b> (ASPEN/ESICM). Target 25–30 kcal/kg/day + 1.2–2 g protein/kg/day. Post-pyloric tube if gastric intolerance. Semi-recumbent 30–45° to prevent VAP." },
+  { icon: "🩸", title: "DVT prophylaxis",
+    body: "IPCs from admission. Chemical prophylaxis:<br>• Non-hemorrhagic: LMWH 40 mg SC daily from day 1<br>• TBI: LMWH 24–48 h after stable CT<br>• ICH: LMWH 24–72 h if bleed stable on imaging<br>• SAH: LMWH after aneurysm secured (~ 24 h post)" },
+  { icon: "🛡️", title: "Stress ulcer prophylaxis",
+    body: "PPI (Pantoprazole 40 mg IV/PO daily) OR H₂ blocker (Famotidine 20 mg IV BD). Indications: mechanical ventilation ≥ 48 h, coagulopathy (Plt &lt; 50 or INR &gt; 1.5), TBI/SAH, burns, transplant. De-escalate when enteral feeds tolerated + risk resolved." },
+];
+
+function renderNeuro() {
+  const el = $("#neuroCards");
+  if (!el || el.dataset.rendered) return;
+  el.innerHTML = NEURO_BUNDLE.map(n => `
+    <div class="card">
+      <h3>${n.icon} ${n.title}</h3>
+      <div class="verdict info" style="margin-top:6px;line-height:1.7">${n.body}</div>
+    </div>
+  `).join("");
+  el.dataset.rendered = "1";
+}
 
 function renderRSIProtocol() {
   const el = $("#rsiProtocol");
