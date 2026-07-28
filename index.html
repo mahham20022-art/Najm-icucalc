@@ -422,6 +422,20 @@
     color: var(--faint); font-size: 10px; font-weight: 700;
     flex-shrink: 0; padding-left: 4px;
   }
+  /* Tappable unit — cycles through valid units for that field on click */
+  button.unit-cycle {
+    appearance: none;
+    background: transparent; border: 0; padding: 4px 6px;
+    color: var(--brand-3); font-size: 10px; font-weight: 700;
+    letter-spacing: 0.01em; cursor: pointer;
+    border-bottom: 1px dashed rgba(56,189,248,.4);
+    line-height: 1; border-radius: 0;
+    flex-shrink: 0;
+    transition: color .12s, border-color .12s;
+  }
+  button.unit-cycle:hover { color: var(--brand); border-bottom-color: var(--brand); }
+  button.unit-cycle:active { transform: scale(0.95); }
+  .grid-in button.unit-cycle { font-size: 10.5px; }
   .field.derived .input {
     background: linear-gradient(180deg, rgba(34,211,238,.06), rgba(14,165,233,.03));
     border-color: rgba(56,189,248,.2);
@@ -840,7 +854,7 @@
       <div class="patient-inner">
         <div class="field">
           <label for="p-weight">Weight</label>
-          <div class="input"><input id="p-weight" type="number" inputmode="decimal" min="0" max="300" step="0.5" /><span class="unit">kg</span></div>
+          <div class="input"><input id="p-weight" type="number" inputmode="decimal" min="0" max="300" step="0.5" /><button type="button" class="unit unit-cycle" data-uf="weight" aria-label="Cycle unit">kg</button></div>
         </div>
         <div class="field">
           <label for="p-height">Height</label>
@@ -862,7 +876,7 @@
         </div>
         <div class="field">
           <label for="p-cr">Cr</label>
-          <div class="input"><input id="p-cr" type="number" inputmode="decimal" min="0" max="30" step="0.1" /><span class="unit">mg/dL</span></div>
+          <div class="input"><input id="p-cr" type="number" inputmode="decimal" min="0" max="30" step="0.1" /><button type="button" class="unit unit-cycle" data-uf="cr" aria-label="Cycle unit">mg/dL</button></div>
         </div>
       </div>
 
@@ -1056,7 +1070,7 @@
             <div class="field"><label>HCO₃</label><div class="input"><input id="ab-hco3" type="number" inputmode="decimal" /><span class="unit">mEq/L</span></div></div>
             <div class="field"><label>Na</label><div class="input"><input id="ab-na" type="number" inputmode="numeric" /><span class="unit">mEq/L</span></div></div>
             <div class="field"><label>Cl</label><div class="input"><input id="ab-cl" type="number" inputmode="numeric" /><span class="unit">mEq/L</span></div></div>
-            <div class="field"><label>Albumin</label><div class="input"><input id="ab-alb" type="number" step="0.1" inputmode="decimal" /><span class="unit">g/dL</span></div></div>
+            <div class="field"><label>Albumin</label><div class="input"><input id="ab-alb" type="number" step="0.1" inputmode="decimal" /><button type="button" class="unit unit-cycle" data-uf="alb" aria-label="Cycle unit">g/dL</button></div></div>
             <div class="field"><label>PaO₂</label><div class="input"><input id="ab-pao2" type="number" inputmode="numeric" /><span class="unit">mmHg</span></div></div>
             <div class="field"><label>FiO₂</label><div class="input"><input id="ab-fio2" type="number" step="0.01" inputmode="decimal" /><span class="unit">%</span></div></div>
           </div>
@@ -1083,8 +1097,8 @@
           <h3>Corrected Calcium</h3>
           <div class="sub">Ca<sub>corr</sub> = Ca + 0.8 × (4 − albumin)</div>
           <div class="grid-in">
-            <div class="field"><label>Ca measured</label><div class="input"><input id="ca-ca" type="number" step="0.1" inputmode="decimal" /><span class="unit">mg/dL</span></div></div>
-            <div class="field"><label>Albumin</label><div class="input"><input id="ca-alb" type="number" step="0.1" inputmode="decimal" /><span class="unit">g/dL</span></div></div>
+            <div class="field"><label>Ca measured</label><div class="input"><input id="ca-ca" type="number" step="0.1" inputmode="decimal" /><button type="button" class="unit unit-cycle" data-uf="ca" aria-label="Cycle unit">mg/dL</button></div></div>
+            <div class="field"><label>Albumin</label><div class="input"><input id="ca-alb" type="number" step="0.1" inputmode="decimal" /><button type="button" class="unit unit-cycle" data-uf="alb" aria-label="Cycle unit">g/dL</button></div></div>
           </div>
           <div class="row"><span class="k">Corrected Ca</span><span class="v" id="ca-corr">—</span></div>
           <div class="verdict" id="ca-verdict">Reference 8.5 – 10.5 mg/dL.</div>
@@ -1095,7 +1109,7 @@
           <div class="sub">Na<sub>corr</sub> = Na + 1.6 × (glucose − 100) / 100</div>
           <div class="grid-in">
             <div class="field"><label>Na measured</label><div class="input"><input id="na-na" type="number" inputmode="numeric" /><span class="unit">mEq/L</span></div></div>
-            <div class="field"><label>Glucose</label><div class="input"><input id="na-glu" type="number" inputmode="numeric" /><span class="unit">mg/dL</span></div></div>
+            <div class="field"><label>Glucose</label><div class="input"><input id="na-glu" type="number" inputmode="numeric" /><button type="button" class="unit unit-cycle" data-uf="glu" aria-label="Cycle unit">mg/dL</button></div></div>
           </div>
           <div class="row"><span class="k">Corrected Na</span><span class="v" id="na-corr">—</span></div>
         </div>
@@ -1105,8 +1119,8 @@
           <div class="sub">2·Na + Glucose/18 + BUN/2.8 (+ EtOH/3.7)</div>
           <div class="grid-in three">
             <div class="field"><label>Na</label><div class="input"><input id="os-na" type="number" inputmode="numeric" /></div></div>
-            <div class="field"><label>Glucose</label><div class="input"><input id="os-glu" type="number" inputmode="numeric" /></div></div>
-            <div class="field"><label>BUN</label><div class="input"><input id="os-bun" type="number" inputmode="numeric" /></div></div>
+            <div class="field"><label>Glucose</label><div class="input"><input id="os-glu" type="number" inputmode="numeric" /><button type="button" class="unit unit-cycle" data-uf="glu" aria-label="Cycle unit">mg/dL</button></div></div>
+            <div class="field"><label>BUN</label><div class="input"><input id="os-bun" type="number" inputmode="numeric" /><button type="button" class="unit unit-cycle" data-uf="bun" aria-label="Cycle unit">mg/dL</button></div></div>
             <div class="field"><label>EtOH</label><div class="input"><input id="os-etoh" type="number" inputmode="numeric" /></div></div>
             <div class="field"><label>Measured</label><div class="input"><input id="os-meas" type="number" inputmode="numeric" /></div></div>
           </div>
@@ -1338,12 +1352,12 @@ function bindInput(id, key) {
   const v = state.inputs[key];
   if (v !== undefined && v !== null && v !== "") el.value = v;
   el.addEventListener("input", () => {
-    // If this field has a unit-conversion mapping and we're in SI mode,
-    // convert the displayed value back to US units for internal storage.
     const uKey = FIELD_UNITS[id];
-    if (uKey && state.units === "SI" && el.value !== "") {
+    if (uKey && el.value !== "") {
+      const idx = unitIdx(uKey);
+      const opt = UNIT_OPTIONS[uKey][idx];
       const n = parseFloat(el.value);
-      state.inputs[key] = isNaN(n) ? el.value : String(n / UNIT_MAP[uKey].factor);
+      state.inputs[key] = isNaN(n) ? el.value : (idx === 0 ? el.value : String(n / opt.f));
     } else {
       state.inputs[key] = el.value;
     }
@@ -1364,10 +1378,12 @@ function bindPatient() {
     const el = $("#" + id);
     if (state.patient[key]) el.value = state.patient[key];
     el.addEventListener("input", () => {
-      // Cr input needs SI → US conversion for internal storage.
-      if (id === "p-cr" && state.units === "SI" && el.value !== "") {
+      const uKey = FIELD_UNITS[id];
+      if (uKey && el.value !== "") {
+        const idx = unitIdx(uKey);
+        const opt = UNIT_OPTIONS[uKey][idx];
         const n = parseFloat(el.value);
-        state.patient[key] = isNaN(n) ? el.value : String(n / UNIT_MAP.cr.factor);
+        state.patient[key] = isNaN(n) ? el.value : (idx === 0 ? el.value : String(n / opt.f));
       } else {
         state.patient[key] = el.value;
       }
@@ -1801,6 +1817,40 @@ const ANTIDOTES = [
     toxin: "Systemic local-anesthetic toxicity (arrest, seizures)",
     dose: "1.5 mL/kg IV bolus over 1 min, then 0.25 mL/kg/min infusion. Repeat bolus q3–5 min PRN (max 3 boluses); infusion max 12 mL/kg total.",
     notes: "Also for lipophilic drug overdose (CCB, TCA — evidence weaker). Notify lab — will interfere with assays." },
+
+  // ── NMB reversal & RSI (bedside ICU emergency doses) ──────────────
+  { id: "sugammadex", name: "Sugammadex", cls: "NMB reversal",
+    toxin: "Rocuronium or vecuronium reversal — routine or immediate rescue",
+    dose: "Routine reversal (TOF 2/4): 2 mg/kg IV. Deep block (post-tetanic count 1–2): 4 mg/kg IV. Immediate reversal after RSI dose: 16 mg/kg IV.",
+    notes: "Onset 2–3 min — much faster than neostigmine. Not for benzylisoquinolinium NMBAs (atracurium/cisatracurium). Rare anaphylaxis. Avoid re-paralysis with rocuronium/vecuronium for 24 h after (use cisatracurium)." },
+  { id: "neostigmine", name: "Neostigmine + Glycopyrrolate", cls: "NMB reversal",
+    toxin: "Non-depolarizing NMB reversal (when sugammadex unavailable)",
+    dose: "Neostigmine 0.04–0.07 mg/kg IV (max 5 mg) + glycopyrrolate 0.2 mg per 1 mg neostigmine.",
+    notes: "Wait until TOF ratio ≥ 2/4 (no reversal from deep block). Cholinergic side effects (bradycardia, bronchospasm) mitigated by glycopyrrolate." },
+  { id: "etomidate", name: "Etomidate", cls: "RSI induction",
+    toxin: "Induction for RSI — hemodynamically neutral",
+    dose: "0.3 mg/kg IV bolus (single dose).",
+    notes: "Preferred in hypotension/CV instability. Single dose suppresses adrenal for ~24 h (avoid repeat in septic shock). Onset 30–60 s, duration 5–10 min." },
+  { id: "ketamineRSI", name: "Ketamine (RSI bolus)", cls: "RSI induction",
+    toxin: "Induction for RSI — bronchodilator, analgesic",
+    dose: "1–2 mg/kg IV over 30 s (or 4 mg/kg IM).",
+    notes: "First-line in status asthmaticus, severe hypotension, trauma. Increases HR/BP (avoid in hypertensive crisis, aortic dissection). Emergence phenomena at higher doses." },
+  { id: "propofolRSI", name: "Propofol (RSI bolus)", cls: "RSI induction",
+    toxin: "Induction for RSI in hemodynamically stable patient",
+    dose: "1.5–2.5 mg/kg IV over 20–30 s.",
+    notes: "Causes hypotension — halve dose in elderly/shock. Anti-emetic. Not preferred in critical shock." },
+  { id: "sux", name: "Succinylcholine", cls: "RSI paralytic (depolarizing)",
+    toxin: "RSI paralysis when short duration required",
+    dose: "1–2 mg/kg IV (adult 100 mg standard). IM 3–4 mg/kg if no IV.",
+    notes: "Fastest onset (30–60 s), 5–10 min duration. AVOID in hyperkalemia, burns > 24 h, denervation, malignant hyperthermia risk, muscular dystrophy. May cause bradycardia (esp children — pre-treat atropine)." },
+  { id: "roc", name: "Rocuronium (RSI)", cls: "RSI paralytic (non-depolarizing)",
+    toxin: "RSI paralysis — reversible with sugammadex",
+    dose: "1.2 mg/kg IV bolus for RSI (0.6 mg/kg for standard intubation).",
+    notes: "Onset 45–60 s at 1.2 mg/kg, duration 40–60 min. Fully reversed at any time with sugammadex 16 mg/kg — an advantage over succinylcholine." },
+  { id: "cis", name: "Cisatracurium", cls: "Neuromuscular blocker (infusion)",
+    toxin: "Sustained neuromuscular blockade in ARDS / severe vent asynchrony",
+    dose: "Intubation bolus 0.15–0.2 mg/kg IV. Infusion 1–3 mcg/kg/min (typically 37.5–150 mcg/min in a 70-kg adult).",
+    notes: "Hofmann elimination — safe in renal/hepatic failure. Ensure deep sedation + analgesia before paralysing. Monitor TOF, drug holidays daily." },
 ];
 const ANT_CLASSES = ["all", ...Array.from(new Set(ANTIDOTES.map(a => a.cls)))];
 
@@ -1841,77 +1891,96 @@ function bindAntidoteControls() {
 }
 
 /* ============================================================
-   UNITS TOGGLE (US ↔ SI) — display-only conversion.
-   Internal storage always in US units so formulas never change.
+   UNITS  — display-only conversion.
+   Internal storage always in the CANONICAL unit (index 0 for each
+   conversion key) so every formula in the app keeps working.
+   Each unit-aware field can be flipped independently by tapping its
+   unit chip; the global US/SI toggle at the top flips all of them at
+   once.
    ============================================================ */
-const UNIT_MAP = {
-  cr:  { US: "mg/dL", SI: "μmol/L", factor: 88.4,   siDecimals: 0 },
-  ca:  { US: "mg/dL", SI: "mmol/L", factor: 0.25,   siDecimals: 2 },
-  alb: { US: "g/dL",  SI: "g/L",    factor: 10,     siDecimals: 0 },
-  glu: { US: "mg/dL", SI: "mmol/L", factor: 0.0555, siDecimals: 1 },
-  bun: { US: "mg/dL", SI: "mmol/L", factor: 0.357,  siDecimals: 1 },
+const UNIT_OPTIONS = {
+  // First entry (index 0) is ALWAYS the canonical / US unit used by formulas.
+  cr:     [{ u: "mg/dL",  f: 1, d: 2 }, { u: "μmol/L", f: 88.4,   d: 0 }],
+  ca:     [{ u: "mg/dL",  f: 1, d: 1 }, { u: "mmol/L", f: 0.25,   d: 2 }],
+  alb:    [{ u: "g/dL",   f: 1, d: 1 }, { u: "g/L",    f: 10,     d: 0 }],
+  glu:    [{ u: "mg/dL",  f: 1, d: 0 }, { u: "mmol/L", f: 0.0555, d: 1 }],
+  bun:    [{ u: "mg/dL",  f: 1, d: 0 }, { u: "mmol/L", f: 0.357,  d: 1 }],
+  weight: [{ u: "kg",     f: 1, d: 1 }, { u: "lb",     f: 2.2046, d: 1 }],
 };
-// which input id maps to which conversion set
+// input id → conversion key
 const FIELD_UNITS = {
-  "p-cr":   "cr",
-  "ca-ca":  "ca",
-  "ca-alb": "alb",
-  "ab-alb": "alb",
-  "na-glu": "glu",
-  "os-glu": "glu",
-  "os-bun": "bun",
+  "p-weight": "weight",
+  "p-cr":     "cr",
+  "ca-ca":    "ca",
+  "ca-alb":   "alb",
+  "ab-alb":   "alb",
+  "na-glu":   "glu",
+  "os-glu":   "glu",
+  "os-bun":   "bun",
 };
+// Which index is each conversion key currently showing?
+// state.fieldUnits[key] = 0 (canonical/US) | 1 (SI/other)
+function unitIdx(key) {
+  const per = (state.fieldUnits || {})[key];
+  if (per === 0 || per === 1) return per;
+  return state.units === "SI" ? 1 : 0;
+}
+function usValueOf(inputId) {
+  if (inputId === "p-weight") return state.patient.weight;
+  if (inputId === "p-cr")     return state.patient.cr;
+  const stateKey = inputId.replace("-", "_");
+  return state.inputs[stateKey];
+}
+function setUSValue(inputId, val) {
+  if (inputId === "p-weight") { state.patient.weight = val; return; }
+  if (inputId === "p-cr")     { state.patient.cr     = val; return; }
+  state.inputs[inputId.replace("-", "_")] = val;
+}
 function applyUnits() {
-  const mode = state.units || "US";
-  $("#unitsLabel").textContent = mode;
-  // Update every visible unit label + convert any current value
+  $("#unitsLabel").textContent = state.units || "US";
   for (const [inputId, key] of Object.entries(FIELD_UNITS)) {
     const el = document.getElementById(inputId);
     if (!el) continue;
-    // Update the sibling <span class="unit"> if present
-    const wrap = el.closest(".field, .input");
-    const unitSpan = wrap ? wrap.querySelector(".unit") : null;
-    if (unitSpan) unitSpan.textContent = UNIT_MAP[key][mode];
-
-    // Convert visible input value (does NOT overwrite state — state stays in US)
-    const stateKey = inputId === "p-cr" ? null : inputId.replace("-", "_");
-    let usValue;
-    if (inputId === "p-cr") {
-      usValue = state.patient.cr;
-    } else {
-      usValue = state.inputs[stateKey];
-    }
+    const wrap = el.closest(".input");
+    const btn = wrap ? wrap.querySelector(".unit-cycle") : null;
+    const idx = unitIdx(key);
+    const opt = UNIT_OPTIONS[key][idx];
+    if (btn) btn.textContent = opt.u;
+    const usValue = usValueOf(inputId);
     if (usValue === undefined || usValue === null || usValue === "") {
       el.value = "";
       continue;
     }
     const n = parseFloat(usValue);
     if (isNaN(n)) { el.value = usValue; continue; }
-    if (mode === "SI") {
-      const conv = n * UNIT_MAP[key].factor;
-      el.value = conv.toFixed(UNIT_MAP[key].siDecimals);
-    } else {
-      el.value = String(usValue);
-    }
+    if (idx === 0) el.value = String(usValue);
+    else            el.value = (n * opt.f).toFixed(opt.d);
   }
 }
-// Intercept changes on unit-aware inputs: convert typed value back to US
-function unitAwareInput(inputId, key) {
-  const el = document.getElementById(inputId);
-  if (!el) return null;
-  return function convertToUS() {
-    const displayed = el.value;
-    if (displayed === "") return "";
-    const n = parseFloat(displayed);
-    if (isNaN(n)) return displayed;
-    if (state.units === "SI") return String(n / UNIT_MAP[key].factor);
-    return String(n);
-  };
+function bindUnitCycles() {
+  document.querySelectorAll(".unit-cycle").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const key = btn.dataset.uf;
+      if (!key || !UNIT_OPTIONS[key]) return;
+      state.fieldUnits = state.fieldUnits || {};
+      const cur = unitIdx(key);
+      const next = (cur + 1) % UNIT_OPTIONS[key].length;
+      state.fieldUnits[key] = next;
+      saveState();
+      applyUnits();
+      const chosen = UNIT_OPTIONS[key][next].u;
+      showToast(chosen);
+    });
+  });
 }
 function bindUnitsToggle() {
   state.units = state.units || "US";
   $("#unitsToggle").addEventListener("click", () => {
     state.units = state.units === "US" ? "SI" : "US";
+    // Global toggle resets every per-field override so all fields flip together.
+    const target = state.units === "SI" ? 1 : 0;
+    state.fieldUnits = {};
+    Object.keys(UNIT_OPTIONS).forEach(k => { state.fieldUnits[k] = target; });
     saveState();
     applyUnits();
     runAll();
@@ -2421,6 +2490,7 @@ document.addEventListener("DOMContentLoaded", () => {
     bindAntibioticControls();
     bindAntidoteControls();
     bindUnitsToggle();
+    bindUnitCycles();
     bindAllInputs();
     renderAllScores();
     bindNotes();
