@@ -1,7 +1,7 @@
 /* Najm ICUCalc — Service Worker
    v7: network-first for HTML + skip-waiting handoff so bookmark opens
    always deliver the latest shell (and its analytics script). */
-const CACHE = "najm-icu-v11";
+const CACHE = "najm-icu-v12";
 const SHELL = [
   "./",
   "./index.html",
