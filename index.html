@@ -354,8 +354,23 @@
     background: rgba(52,211,153,.08); border: 1px solid rgba(52,211,153,.25);
     letter-spacing: 0.02em;
   }
-  .units-toggle {
+  .assistant-btn {
     margin-left: auto;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px 6px 10px;
+    background: linear-gradient(135deg, rgba(34,211,238,.18), rgba(14,165,233,.14));
+    border: 1px solid rgba(56,189,248,.4);
+    border-radius: var(--r-pill);
+    color: var(--brand);
+    font-size: 11px; font-weight: 800; letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: transform .12s, background .15s, border-color .15s, box-shadow .15s;
+    box-shadow: 0 0 20px -8px rgba(34,211,238,.4);
+  }
+  .assistant-btn svg { width: 14px; height: 14px; }
+  .assistant-btn:hover { background: linear-gradient(135deg, rgba(34,211,238,.28), rgba(14,165,233,.22)); border-color: var(--brand); }
+  .assistant-btn:active { transform: scale(0.96); }
+  .units-toggle {
     display: inline-flex; align-items: center; gap: 4px;
     padding: 4px 10px 4px 8px;
     background: rgba(56,189,248,.08);
@@ -365,6 +380,110 @@
     font-size: 10px; font-weight: 800; letter-spacing: 0.12em;
     transition: background .15s, border-color .15s;
     cursor: pointer;
+  }
+  @media (max-width: 480px) {
+    .assistant-btn span { display: none; }
+    .assistant-btn { padding: 8px 9px; }
+  }
+
+  /* ─────────── Modal ─────────── */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(3,8,15,.75);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: grid; place-items: center;
+    padding: 16px;
+    animation: fadeIn .2s ease-out;
+  }
+  .modal-overlay.hide { display: none; }
+  .modal-card {
+    width: 100%; max-width: 560px;
+    max-height: calc(100vh - 40px);
+    background: linear-gradient(180deg, var(--ink-800) 0%, var(--ink-900) 100%);
+    border: 1px solid var(--line-2);
+    border-radius: var(--r-xl);
+    box-shadow: 0 30px 80px -20px rgba(0,0,0,.7);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    animation: modalIn .25s cubic-bezier(.2,.9,.3,1.2);
+  }
+  @keyframes modalIn {
+    from { opacity: 0; transform: translateY(20px) scale(.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .modal-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  .modal-title { display: flex; align-items: center; gap: 10px; color: var(--brand); }
+  .modal-title h3 { margin: 0; font-size: 17px; font-weight: 800; color: var(--text); letter-spacing: -0.01em; }
+  .modal-close {
+    background: transparent; border: 1px solid var(--line);
+    color: var(--muted); border-radius: 8px; padding: 6px;
+    display: grid; place-items: center;
+    transition: color .15s, border-color .15s;
+  }
+  .modal-close svg { width: 16px; height: 16px; }
+  .modal-close:hover { color: var(--text); border-color: var(--line-2); }
+  .modal-sub {
+    padding: 10px 20px; font-size: 12px; color: var(--muted); line-height: 1.55;
+    border-bottom: 1px solid var(--line);
+  }
+  .modal-body {
+    padding: 14px 20px; overflow-y: auto; flex: 1;
+  }
+  .modal-label {
+    display: block; font-size: 10.5px; font-weight: 800;
+    color: var(--muted); letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  #assistantPrompt {
+    width: 100%; min-height: 110px; resize: vertical;
+    background: var(--ink-900);
+    border: 1px solid var(--line);
+    color: var(--text); border-radius: var(--r-md);
+    padding: 12px 14px; outline: 0;
+    font-family: var(--f-sans); font-size: 14px; line-height: 1.55;
+  }
+  #assistantPrompt:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(34,211,238,.15); }
+  .modal-context {
+    margin-top: 12px;
+    background: var(--ink-900);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: 10px 12px;
+  }
+  .modal-context summary {
+    cursor: pointer; font-size: 12px; font-weight: 700; color: var(--brand-3);
+    list-style: none; padding: 2px 0;
+  }
+  .modal-context summary::marker { display: none; }
+  .modal-context summary::-webkit-details-marker { display: none; }
+  .modal-context pre {
+    margin: 10px 0 0; padding: 10px; background: var(--ink-950);
+    border: 1px solid var(--line); border-radius: 8px;
+    font-family: var(--f-mono); font-size: 11.5px; color: var(--text-2);
+    line-height: 1.55; white-space: pre-wrap; word-break: break-word;
+    max-height: 180px; overflow-y: auto;
+  }
+  .modal-quick {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px;
+  }
+  .modal-quick .btn { font-size: 11.5px; padding: 8px 12px; }
+  .modal-foot {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    padding: 12px 20px; border-top: 1px solid var(--line);
+    background: var(--ink-900);
+  }
+  .modal-foot .btn { flex: 1 1 auto; min-width: 120px; text-align: center; }
+  .modal-note {
+    padding: 10px 20px 16px;
+    font-size: 11px; color: var(--warn);
+    background: rgba(251,191,36,.05);
+    border-top: 1px solid rgba(251,191,36,.15);
+    line-height: 1.6;
   }
   .units-toggle::before {
     content: "⇄"; margin-right: 2px; font-size: 12px; font-weight: 700;
@@ -412,15 +531,23 @@
     box-shadow: 0 0 0 3px rgba(34,211,238,.15);
   }
   .field input, .field select {
-    flex: 1; min-width: 0;
+    flex: 1 1 0; min-width: 0; width: 100%;
     background: transparent; border: 0; outline: 0;
-    padding: 8px 2px; font-size: 14px; font-weight: 700;
+    padding: 10px 6px; font-size: 16px; font-weight: 700;
     color: var(--text);
+    letter-spacing: -0.01em;
   }
-  .field input[type="number"] { font-variant-numeric: tabular-nums; }
+  .field input[type="number"] {
+    font-variant-numeric: tabular-nums;
+    -moz-appearance: textfield;
+  }
+  .field input[type=number]::-webkit-outer-spin-button,
+  .field input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none; margin: 0;
+  }
   .field .unit {
-    color: var(--faint); font-size: 10px; font-weight: 700;
-    flex-shrink: 0; padding-left: 4px;
+    color: var(--faint); font-size: 10.5px; font-weight: 700;
+    flex-shrink: 0; padding-left: 4px; white-space: nowrap;
   }
   /* Tappable unit — cycles through valid units for that field on click */
   button.unit-cycle {
@@ -567,12 +694,12 @@
   .pill.info { background: rgba(56,189,248,.10); color: var(--brand-3);border: 1px solid rgba(56,189,248,.25); }
 
   /* -------- Grid inputs inside cards -------- */
-  .grid-in { display: grid; gap: 8px; grid-template-columns: 1fr 1fr; margin-bottom: 8px; }
+  .grid-in { display: grid; gap: 10px; grid-template-columns: 1fr 1fr; margin-bottom: 10px; }
   .grid-in.three { grid-template-columns: repeat(3, 1fr); }
   .grid-in.full  { grid-template-columns: 1fr; }
-  .grid-in .field .input { padding: 0 8px; border-radius: var(--r-sm); }
+  .grid-in .field .input { padding: 0 10px; border-radius: var(--r-md); min-height: 44px; }
   .grid-in .field input,
-  .grid-in .field select { padding: 8px 2px; font-size: 13px; }
+  .grid-in .field select { padding: 11px 4px; font-size: 15.5px; }
 
   /* -------- Verdict -------- */
   .verdict {
@@ -710,17 +837,20 @@
      RESPONSIVE
      ============================================================ */
   @media (max-width: 640px) {
-    .patient-inner { grid-template-columns: repeat(5, minmax(0, 1fr)); padding: 8px 10px; gap: 5px; }
-    .patient-derived { padding: 0 10px 8px; gap: 5px; }
-    .field label { font-size: 8.5px; }
-    .field .input { padding: 0 6px; border-radius: 8px; }
-    .field input, .field select { padding: 7px 2px; font-size: 13px; }
-    .field .unit { font-size: 9.5px; }
-    .field.derived .val { padding: 7px 2px; font-size: 13px; }
-    .reset-btn { padding: 7px 8px; font-size: 10px; }
+    .patient-inner { grid-template-columns: repeat(5, minmax(0, 1fr)); padding: 8px 10px; gap: 6px; }
+    .patient-derived { padding: 0 10px 8px; gap: 6px; }
+    .field label { font-size: 9px; }
+    .field .input { padding: 0 8px; border-radius: 10px; min-height: 42px; }
+    .field input, .field select { padding: 10px 3px; font-size: 15px; }
+    .field .unit { font-size: 10px; }
+    .field.derived .val { padding: 10px 3px; font-size: 15px; }
+    .reset-btn { padding: 8px 10px; font-size: 10.5px; }
 
     .card { padding: 14px; }
+    .grid-in { gap: 8px; }
     .grid-in.three { grid-template-columns: 1fr 1fr; }
+    .grid-in .field .input { min-height: 42px; padding: 0 8px; }
+    .grid-in .field input, .grid-in .field select { padding: 10px 3px; font-size: 15px; }
     .row { font-size: 12.5px; }
     .row .v { font-size: 12px; }
 
@@ -844,6 +974,10 @@
           <small>ICU / CCU</small>
         </div>
       </div>
+      <button class="assistant-btn" type="button" id="assistantBtn" aria-label="Open Smart Assistant" title="Ask an AI about this patient">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 2.3 5.2 5.7.5-4.3 3.8 1.3 5.6L12 14.3l-5 2.8 1.3-5.6L4 7.7l5.7-.5L12 2Z"/></svg>
+        <span>Smart Assistant</span>
+      </button>
       <button class="units-toggle" type="button" id="unitsToggle" aria-label="Toggle units US or SI" title="Switch between US (mg/dL) and SI (mmol/L, μmol/L)">
         <span id="unitsLabel">US</span>
       </button>
@@ -1275,6 +1409,54 @@
     <div class="fine"><strong>Reference aid — not a medical device.</strong> Always verify against institutional protocols and drug labels.</div>
     <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc · Designed by Dr. Mohamed Najm</div>
   </footer>
+</div>
+
+<!-- Smart Assistant modal -->
+<div class="modal-overlay hide" id="assistantModal" role="dialog" aria-modal="true" aria-labelledby="assistantTitle">
+  <div class="modal-card">
+    <div class="modal-head">
+      <div class="modal-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="m12 2 2.3 5.2 5.7.5-4.3 3.8 1.3 5.6L12 14.3l-5 2.8 1.3-5.6L4 7.7l5.7-.5L12 2Z"/></svg>
+        <h3 id="assistantTitle">Smart Assistant</h3>
+      </div>
+      <button class="modal-close" type="button" id="assistantClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m18 6-12 12M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="modal-sub">
+      Ask an AI about this patient. Your prompt is enriched with the patient bar values —
+      never with PHI (name, MRN, DOB) because those aren't stored in the app.
+    </div>
+
+    <div class="modal-body">
+      <label class="modal-label" for="assistantPrompt">Your question</label>
+      <textarea id="assistantPrompt" placeholder="e.g. What's the differential for this ABG? Which vasopressor should I add next? What's the target driving pressure here?"></textarea>
+
+      <details class="modal-context">
+        <summary>Patient context that will be attached</summary>
+        <pre id="assistantContext"></pre>
+      </details>
+
+      <div class="modal-quick">
+        <button class="btn" type="button" data-quick="Interpret this ABG in detail and give me a differential.">🧪 Interpret ABG</button>
+        <button class="btn" type="button" data-quick="Suggest next step for hemodynamic management given the patient bar values.">🫀 Next hemodynamic step</button>
+        <button class="btn" type="button" data-quick="What's the empiric antibiotic regimen for suspected HAP with this CrCl?">💊 Empiric antibiotics</button>
+        <button class="btn" type="button" data-quick="Optimize ventilator settings for ARDS at this patient's PBW.">🫁 Vent settings</button>
+      </div>
+    </div>
+
+    <div class="modal-foot">
+      <a class="btn" type="button" id="assistantCopy">📋 Copy prompt</a>
+      <a class="btn primary" id="assistantClaude" target="_blank" rel="noopener">Open in Claude</a>
+      <a class="btn" id="assistantGPT" target="_blank" rel="noopener">Open in ChatGPT</a>
+    </div>
+
+    <div class="modal-note">
+      ⚠️ Reference aid only — <b>verify every suggestion</b> against your local protocols
+      and the patient's full clinical context. Do not paste any PHI (name, MRN, DOB).
+    </div>
+  </div>
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -2152,11 +2334,120 @@ function runABG() {
   const v = $("#ab-verdict"); v.classList.remove("ok","warn","bad");
   if (primary === "—") { v.textContent = "Enter pH, PaCO₂, HCO₃ to start."; return; }
   v.classList.add(primary.includes("Mixed") || primary.includes("Met") || primary.includes("Resp") ? "warn" : "ok");
-  const lines = [`<b>${primary}.</b>`];
-  if (comp !== "—") lines.push(comp + ".");
-  if (ag != null) lines.push("AG " + fmt(ag,1) + (alb != null ? `, corrected ${fmt(cag,1)}.` : "."));
-  summary.forEach(s => lines.push(s));
-  v.innerHTML = lines.join(" ");
+
+  // Build a rich interpretation: primary, compensation, gap, delta-delta,
+  // then a bulleted differential appropriate to the pattern.
+  const parts = [];
+  parts.push(`<div style="font-size:14px;margin-bottom:8px"><b>${primary}.</b></div>`);
+  if (comp !== "—") parts.push(`<div style="margin-bottom:6px"><span style="color:var(--muted)">Expected compensation:</span> ${comp}</div>`);
+  if (ag != null) {
+    const agLine = "AG " + fmt(ag,1) + (alb != null ? `, corrected ${fmt(cag,1)}` : "");
+    parts.push(`<div style="margin-bottom:6px"><span style="color:var(--muted)">Gap:</span> ${agLine}</div>`);
+  }
+  if (dd != null) {
+    parts.push(`<div style="margin-bottom:6px"><span style="color:var(--muted)">Δ-Δ:</span> ${fmt(dd,2)}</div>`);
+  }
+  summary.forEach(s => parts.push(`<div>• ${s}</div>`));
+
+  // ── Differential diagnoses ──────────────────────────────
+  const ddx = [];
+  const effAG = alb != null ? cag : ag;
+  const highAG = effAG != null && effAG > 12;
+  const lowAG  = effAG != null && effAG < 12;
+
+  if (primary.startsWith("Metabolic acidosis")) {
+    if (highAG) {
+      ddx.push({ h: "High-AG metabolic acidosis — MUDPILES / GOLD MARK",
+        items: [
+          "<b>M</b>ethanol · <b>M</b>etformin",
+          "<b>U</b>remia (advanced CKD/AKI)",
+          "<b>D</b>KA · alcoholic ketoacidosis · starvation",
+          "<b>P</b>ropylene glycol (lorazepam infusion) · <b>P</b>aracetamol",
+          "<b>I</b>ron · <b>I</b>NH · <b>I</b>buprofen",
+          "<b>L</b>-lactate (shock, sepsis, seizure, ischemia) · <b>D</b>-lactate (short bowel)",
+          "<b>E</b>thylene glycol (osmolar gap ↑, Ca oxalate crystals)",
+          "<b>S</b>alicylates (mixed with resp alkalosis → aspirin)",
+        ]});
+    } else {
+      ddx.push({ h: "Normal-AG (hyperchloremic) acidosis — HARDUP / USED CAR",
+        items: [
+          "<b>H</b>yperalimentation (TPN with excess Cl⁻)",
+          "<b>A</b>cetazolamide, other CA-inhibitors",
+          "<b>R</b>enal tubular acidosis (type 1, 2, 4)",
+          "<b>D</b>iarrhea, ileostomy, ureteroenteric conduit",
+          "<b>U</b>reteroenteric fistula · <b>P</b>ancreatic/biliary drainage",
+          "Post-hypocapnia · saline resuscitation",
+        ]});
+    }
+    if (dd != null) {
+      if (dd > 2) ddx.push({ h: "Δ-Δ > 2 hint",
+        items: ["Concurrent metabolic alkalosis (vomiting, diuretics, NG suction) — or pre-existing compensated respiratory acidosis (COPD)"] });
+      else if (dd < 1 && highAG) ddx.push({ h: "Δ-Δ < 1 hint",
+        items: ["Concurrent normal-AG acidosis (mixed HAGMA + NAGMA — e.g. DKA + diarrhea)"] });
+    }
+  }
+
+  if (primary.startsWith("Metabolic alkalosis")) {
+    ddx.push({ h: "Chloride-responsive (urine Cl < 20) — most common",
+      items: [
+        "Vomiting / NG suction (loss of HCl)",
+        "Diuretics (loop, thiazide) — contraction alkalosis",
+        "Post-hypercapnia",
+        "Cystic fibrosis (sweat losses)",
+      ]});
+    ddx.push({ h: "Chloride-resistant (urine Cl > 20)",
+      items: [
+        "Primary hyperaldosteronism (Conn), Cushing",
+        "Bartter / Gitelman syndrome",
+        "Licorice, exogenous mineralocorticoid",
+        "Severe hypokalemia (K < 2)",
+        "Milk-alkali syndrome",
+      ]});
+  }
+
+  if (primary.startsWith("Respiratory acidosis")) {
+    ddx.push({ h: "Respiratory acidosis — hypoventilation",
+      items: [
+        "<b>Airway:</b> asthma exacerbation, COPD, upper-airway obstruction, laryngospasm",
+        "<b>Parenchyma:</b> severe pneumonia, ARDS (late), pulm edema, fibrosis",
+        "<b>Chest wall:</b> flail chest, kyphoscoliosis, obesity hypoventilation",
+        "<b>Neuromuscular:</b> Guillain-Barré, myasthenia gravis, high spinal cord injury, botulism, phrenic nerve palsy",
+        "<b>CNS depression:</b> opioids, benzodiazepines, alcohol, brainstem stroke",
+        "<b>Iatrogenic:</b> inadequate ventilator support, permissive hypercapnia",
+      ]});
+  }
+
+  if (primary.startsWith("Respiratory alkalosis")) {
+    ddx.push({ h: "Respiratory alkalosis — hyperventilation",
+      items: [
+        "<b>Hypoxemia:</b> PE, high altitude, severe anemia, R→L shunt",
+        "<b>Pulmonary:</b> pneumonia, asthma (early), pulm edema, PE",
+        "<b>CNS:</b> stroke, meningitis, encephalitis, tumor, anxiety/pain",
+        "<b>Systemic:</b> sepsis (early), fever, hyperthyroidism",
+        "<b>Drugs:</b> salicylates (mixed picture), progesterone, catecholamines, nicotine, theophylline",
+        "<b>Pregnancy</b> (physiologic — 3rd trimester)",
+        "<b>Iatrogenic:</b> over-ventilation on mechanical ventilator",
+      ]});
+  }
+
+  if (primary.includes("Mixed") || (primary === "Normal pH" && ag != null && highAG)) {
+    ddx.push({ h: "Consider mixed / triple disorder",
+      items: [
+        "Salicylate poisoning: HAGMA + primary respiratory alkalosis",
+        "Sepsis: lactic HAGMA + resp alkalosis + possible metabolic alkalosis (diuretics)",
+        "COPD exacerbation + diuretic use: chronic resp acidosis + metabolic alkalosis",
+        "Compare pH, PaCO₂, HCO₃ trends to unmask the second/third process",
+      ]});
+  }
+
+  ddx.forEach(d => {
+    parts.push(`<div style="margin-top:10px;padding-top:8px;border-top:1px solid rgba(56,189,248,.15)"><b style="color:var(--brand-3)">${d.h}</b></div>`);
+    parts.push(`<ul style="margin:4px 0 0;padding-left:18px;line-height:1.7">`);
+    d.items.forEach(it => parts.push(`<li>${it}</li>`));
+    parts.push(`</ul>`);
+  });
+
+  v.innerHTML = parts.join("");
 }
 
 /* ============================================================
@@ -2436,6 +2727,114 @@ function bindAbout() {
 }
 
 /* ============================================================
+   SMART ASSISTANT — build a context prompt from patient bar + inputs
+   and hand it off to Claude.ai or ChatGPT (or clipboard).
+   ============================================================ */
+function buildAssistantContext() {
+  const p = state.patient;
+  const lines = ["You are an ICU/CCU decision-support assistant. Reference only — the clinician verifies every suggestion."];
+  const patient = [];
+  if (p.age)    patient.push(`age ${p.age}`);
+  if (p.sex)    patient.push(p.sex === "M" ? "male" : "female");
+  if (p.weight) patient.push(`${p.weight} kg`);
+  if (p.height) patient.push(`${p.height} cm`);
+  if (p.cr)     patient.push(`Cr ${p.cr} mg/dL`);
+  if (patient.length) lines.push(`Patient: ${patient.join(", ")}.`);
+
+  const derived = [];
+  if (pbw() != null)          derived.push(`PBW ${fmt(pbw(),1)} kg`);
+  if (bsa() != null)          derived.push(`BSA ${fmt(bsa(),2)} m²`);
+  if (computedCrCl() != null) derived.push(`CrCl ${fmt(computedCrCl(),0)} mL/min`);
+  if (derived.length) lines.push(`Derived: ${derived.join(", ")}.`);
+
+  const i = state.inputs;
+  const hemo = [];
+  if (i.hd_sbp && i.hd_dbp) hemo.push(`BP ${i.hd_sbp}/${i.hd_dbp}`);
+  if (i.hd_hr)              hemo.push(`HR ${i.hd_hr}`);
+  if (i.cpp_icp)            hemo.push(`ICP ${i.cpp_icp}`);
+  if (hemo.length) lines.push(`Hemodynamics: ${hemo.join(", ")}.`);
+
+  const vent = [];
+  if (i.v_pao2) vent.push(`PaO₂ ${i.v_pao2}`);
+  if (i.v_spo2) vent.push(`SpO₂ ${i.v_spo2}%`);
+  if (i.v_fio2) vent.push(`FiO₂ ${i.v_fio2}`);
+  if (i.v_pplat) vent.push(`Pplat ${i.v_pplat}`);
+  if (i.v_peep)  vent.push(`PEEP ${i.v_peep}`);
+  if (i.v_tv)    vent.push(`TV ${i.v_tv} mL`);
+  if (vent.length) lines.push(`Vent: ${vent.join(", ")}.`);
+
+  const abg = [];
+  if (i.ab_ph)   abg.push(`pH ${i.ab_ph}`);
+  if (i.ab_co2)  abg.push(`PaCO₂ ${i.ab_co2}`);
+  if (i.ab_hco3) abg.push(`HCO₃ ${i.ab_hco3}`);
+  if (i.ab_na)   abg.push(`Na ${i.ab_na}`);
+  if (i.ab_cl)   abg.push(`Cl ${i.ab_cl}`);
+  if (i.ab_alb)  abg.push(`Albumin ${i.ab_alb}`);
+  if (abg.length) lines.push(`ABG/labs: ${abg.join(", ")}.`);
+
+  if (state.notes && state.notes.trim()) {
+    lines.push("Shift notes (redacted of PHI): " + state.notes.trim().slice(0, 500));
+  }
+  return lines.join("\n");
+}
+
+function buildAssistantFullPrompt() {
+  const context = buildAssistantContext();
+  const question = ($("#assistantPrompt").value || "").trim() ||
+    "Please review this patient's data and highlight anything I should act on next.";
+  return `${context}\n\nQuestion: ${question}`;
+}
+
+function bindAssistant() {
+  const openBtn  = $("#assistantBtn");
+  const closeBtn = $("#assistantClose");
+  const modal    = $("#assistantModal");
+  const promptEl = $("#assistantPrompt");
+  const ctxEl    = $("#assistantContext");
+  const claudeA  = $("#assistantClaude");
+  const gptA     = $("#assistantGPT");
+  const copyBtn  = $("#assistantCopy");
+
+  function refreshLinks() {
+    ctxEl.textContent = buildAssistantContext();
+    const full = buildAssistantFullPrompt();
+    const enc = encodeURIComponent(full);
+    claudeA.href = "https://claude.ai/new?q=" + enc;
+    gptA.href    = "https://chatgpt.com/?q=" + enc;
+  }
+
+  function open() {
+    refreshLinks();
+    modal.classList.remove("hide");
+    setTimeout(() => promptEl.focus(), 30);
+  }
+  function close() { modal.classList.add("hide"); }
+
+  openBtn.addEventListener("click", open);
+  closeBtn.addEventListener("click", close);
+  modal.addEventListener("click", e => { if (e.target === modal) close(); });
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && !modal.classList.contains("hide")) close();
+  });
+  promptEl.addEventListener("input", refreshLinks);
+
+  document.querySelectorAll(".modal-quick .btn").forEach(b => {
+    b.addEventListener("click", () => {
+      promptEl.value = b.dataset.quick;
+      refreshLinks();
+      promptEl.focus();
+    });
+  });
+
+  copyBtn.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(buildAssistantFullPrompt());
+      showToast("Prompt copied");
+    } catch (e) { showToast("Copy failed"); }
+  });
+}
+
+/* ============================================================
    RUN + INIT
    ============================================================ */
 function safeRun(fn, name) { try { fn(); } catch (e) { console.error(`[najm] ${name} failed:`, e); } }
@@ -2491,6 +2890,7 @@ document.addEventListener("DOMContentLoaded", () => {
     bindAntidoteControls();
     bindUnitsToggle();
     bindUnitCycles();
+    bindAssistant();
     bindAllInputs();
     renderAllScores();
     bindNotes();
