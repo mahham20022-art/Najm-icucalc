@@ -510,7 +510,8 @@
     max-width: 1200px; margin: 0 auto;
     padding: 10px 12px;
     display: grid; gap: 6px;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    /* Cr gets extra room for the mg/dL unit label */
+    grid-template-columns: 1fr 1fr 1fr 0.7fr 1.4fr;
   }
   .field { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
   .field label {
@@ -559,20 +560,26 @@
     color: var(--faint); font-size: 10.5px; font-weight: 700;
     flex-shrink: 0; padding-left: 4px; white-space: nowrap;
   }
-  /* Tappable unit — cycles through valid units for that field on click */
+  /* Tappable unit — cycles through valid units for that field on click.
+     Kept intentionally tiny so it doesn't eat input width on 5-column
+     mobile layouts (Cr field with "mg/dL" was strangling the input). */
   button.unit-cycle {
     appearance: none;
-    background: transparent; border: 0; padding: 4px 6px;
-    color: var(--brand-3); font-size: 10px; font-weight: 700;
-    letter-spacing: 0.01em; cursor: pointer;
+    background: transparent; border: 0; padding: 2px 3px;
+    color: var(--brand-3); font-size: 9.5px; font-weight: 700;
+    letter-spacing: 0; cursor: pointer;
     border-bottom: 1px dashed rgba(56,189,248,.4);
     line-height: 1; border-radius: 0;
-    flex-shrink: 0;
+    flex-shrink: 0; max-width: 42px;
+    white-space: nowrap;
     transition: color .12s, border-color .12s;
   }
   button.unit-cycle:hover { color: var(--brand); border-bottom-color: var(--brand); }
   button.unit-cycle:active { transform: scale(0.95); }
-  .grid-in button.unit-cycle { font-size: 10.5px; }
+  .grid-in button.unit-cycle { font-size: 10.5px; max-width: none; padding: 4px 6px; }
+  /* Guarantee typing space regardless of unit label */
+  .field .input { overflow: hidden; }
+  .field .input input { min-width: 42px !important; }
   .field.derived .input {
     background: linear-gradient(180deg, rgba(34,211,238,.06), rgba(14,165,233,.03));
     border-color: rgba(56,189,248,.2);
@@ -711,33 +718,49 @@
   .grid-in .field input,
   .grid-in .field select { padding: 11px 4px; font-size: 15.5px; }
 
-  /* -------- RSI protocol expandable -------- */
-  .rsi-card { padding: 0; margin-bottom: 14px; overflow: hidden; }
-  .rsi-card summary {
-    padding: 14px 18px;
-    display: flex; align-items: center; justify-content: space-between;
-    cursor: pointer; list-style: none;
-    background: linear-gradient(135deg, rgba(248,113,113,.10), rgba(251,191,36,.08));
-    border-bottom: 1px solid rgba(248,113,113,.15);
-    transition: background .15s;
+  /* -------- RSI TAB + module (red-themed) -------- */
+  .tab.tab-danger {
+    color: var(--danger);
+    background: rgba(248,113,113,.06);
+    border-color: rgba(248,113,113,.25);
   }
-  .rsi-card summary::-webkit-details-marker { display: none; }
-  .rsi-card summary::marker { display: none; }
-  .rsi-card summary:hover { background: linear-gradient(135deg, rgba(248,113,113,.16), rgba(251,191,36,.12)); }
-  .rsi-title { font-size: 14px; font-weight: 800; color: var(--danger); letter-spacing: -0.01em; }
-  .rsi-hint  { font-size: 10.5px; color: var(--muted); font-weight: 600; }
-  .rsi-card[open] .rsi-hint::before { content: "◈ "; }
-  .rsi-body { padding: 14px 18px 16px; }
+  .tab.tab-danger:hover {
+    color: #ffb4b4;
+    background: rgba(248,113,113,.12);
+    border-color: rgba(248,113,113,.4);
+  }
+  .tab.tab-danger.active {
+    color: #ffffff !important;
+    background: linear-gradient(135deg, var(--danger), #dc2626) !important;
+    box-shadow: 0 4px 14px -4px rgba(248,113,113,.6) !important;
+    border-color: transparent !important;
+  }
+  .rsi-head h2 { color: var(--danger); }
+  .rsi-protocol-card {
+    background:
+      linear-gradient(180deg, rgba(220,38,38,.08) 0%, rgba(15,30,53,.9) 100%);
+    border-color: rgba(248,113,113,.35);
+    box-shadow: 0 24px 60px -30px rgba(248,113,113,.4), 0 0 0 1px rgba(248,113,113,.1) inset;
+  }
+  .rsi-protocol-card::before {
+    background: linear-gradient(90deg, transparent, rgba(248,113,113,.6), transparent);
+  }
+  .rsi-protocol-title {
+    color: var(--danger) !important;
+    font-size: 18px !important;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px !important;
+  }
   .rsi-step {
-    padding: 12px 0; border-top: 1px solid var(--line);
+    padding: 14px 0; border-top: 1px solid rgba(248,113,113,.15);
   }
   .rsi-step:first-child { border-top: 0; padding-top: 4px; }
   .rsi-step h4 {
-    margin: 0 0 6px; font-size: 13px; font-weight: 800; color: var(--brand-3);
-    letter-spacing: 0.02em;
+    margin: 0 0 6px; font-size: 14px; font-weight: 800; color: var(--danger);
+    letter-spacing: 0.01em;
   }
   .rsi-step p {
-    margin: 0; font-size: 13px; color: var(--text); line-height: 1.65;
+    margin: 0; font-size: 13.5px; color: var(--text); line-height: 1.7;
   }
   .rsi-step p b { color: var(--warn); }
 
@@ -877,7 +900,7 @@
      RESPONSIVE
      ============================================================ */
   @media (max-width: 640px) {
-    .patient-inner { grid-template-columns: repeat(5, minmax(0, 1fr)); padding: 8px 10px; gap: 6px; }
+    .patient-inner { grid-template-columns: 1fr 1fr 1fr 0.7fr 1.4fr; padding: 8px 10px; gap: 6px; }
     .patient-derived { padding: 0 10px 8px; gap: 6px; }
     .field label { font-size: 9px; }
     .field .input { padding: 0 8px; border-radius: 10px; min-height: 42px; }
@@ -1103,6 +1126,10 @@
         <button class="tab" type="button" data-tab="antidotes">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v6"/><path d="M8 8h8"/><path d="M9 8v10a3 3 0 0 0 6 0V8"/><path d="M9 14h6"/></svg>
           Antidotes
+        </button>
+        <button class="tab tab-danger" type="button" data-tab="rsi">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="M12 18v4"/><path d="m4.9 4.9 2.8 2.8"/><path d="m16.3 16.3 2.8 2.8"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="m4.9 19.1 2.8-2.8"/><path d="m16.3 7.7 2.8-2.8"/></svg>
+          RSI
         </button>
         <button class="tab" type="button" data-tab="about">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 12h1v5h1"/></svg>
@@ -1395,25 +1422,42 @@
     <section class="module" id="m-antidotes">
       <div class="module-head">
         <div>
-          <h2>Antidotes &amp; RSI</h2>
-          <p>Toxicology reversal · RSI protocol · induction · paralytics · reversal.</p>
+          <h2>Antidotes</h2>
+          <p>Toxicology reversal · overdose antidotes · NMB reversal.</p>
         </div>
       </div>
-
-      <details class="card rsi-card">
-        <summary>
-          <span class="rsi-title">🚨 Rapid Sequence Intubation — 7 P's</span>
-          <span class="rsi-hint">tap to open</span>
-        </summary>
-        <div class="rsi-body" id="rsiProtocol"></div>
-      </details>
-
       <div class="search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
         <input id="antSearch" type="search" placeholder="Search antidote or toxin (e.g. sugammadex, opioid)…" autocomplete="off" />
       </div>
       <div class="chips" id="antClassChips"></div>
       <div class="cards" id="antCards" aria-live="polite"></div>
+    </section>
+
+    <!-- RSI -->
+    <section class="module rsi-module" id="m-rsi">
+      <div class="module-head rsi-head">
+        <div>
+          <h2>🚨 Rapid Sequence Intubation</h2>
+          <p>Bedside protocol — the 7 P's, all induction agents, paralytics, pre-treatment, and reversal.</p>
+        </div>
+      </div>
+
+      <!-- 7 P's protocol -->
+      <div class="card rsi-protocol-card">
+        <h3 class="rsi-protocol-title">The 7 P's</h3>
+        <div id="rsiProtocol"></div>
+      </div>
+
+      <!-- Quick drug reference -->
+      <div class="module-head" style="margin-top:20px">
+        <div>
+          <h2 style="font-size:16px">RSI Drug Reference</h2>
+          <p>Doses at a glance — pre-treat → induce → paralyse → reverse.</p>
+        </div>
+      </div>
+      <div class="chips" id="rsiClassChips"></div>
+      <div class="cards" id="rsiCards" aria-live="polite"></div>
     </section>
 
     <!-- ABOUT -->
@@ -1712,6 +1756,7 @@ function bindTabs() {
     if (name === "about") renderAbout();
     if (name === "antibiotics") renderAntibiotics();
     if (name === "antidotes") renderAntidotes();
+    if (name === "rsi") renderRSI();
 
     // Scroll active tab into view within the tab bar
     const activeBtn = container.querySelector(`.tab[data-tab="${name}"]`);
@@ -2188,8 +2233,37 @@ function renderRSIProtocol() {
   el.dataset.rendered = "1";
 }
 
-function renderAntidotes() {
+// The RSI tab reuses the ANTIDOTES entries whose class is one of these:
+const RSI_CLASSES = ["RSI pre-treatment", "RSI induction", "RSI paralytic (depolarizing)", "RSI paralytic (non-depolarizing)", "Neuromuscular blocker", "NMB reversal"];
+function renderRSI() {
   renderRSIProtocol();
+  const chipBox = $("#rsiClassChips");
+  const grid = $("#rsiCards");
+  if (!chipBox || !grid) return;
+
+  const inClass = new Set(RSI_CLASSES);
+  const rsiDrugs = ANTIDOTES.filter(a => inClass.has(a.cls));
+  const chips = ["all", ...Array.from(new Set(rsiDrugs.map(a => a.cls)))];
+  const activeCls = state.rsiCls && chips.includes(state.rsiCls) ? state.rsiCls : "all";
+
+  chipBox.innerHTML = chips.map(c =>
+    `<button class="chip ${activeCls === c ? "active" : ""}" type="button" data-c="${c}">${c === "all" ? "All" : c}</button>`
+  ).join("");
+  chipBox.querySelectorAll(".chip").forEach(btn => {
+    btn.addEventListener("click", () => { state.rsiCls = btn.dataset.c; saveState(); renderRSI(); });
+  });
+
+  const list = activeCls === "all" ? rsiDrugs : rsiDrugs.filter(a => a.cls === activeCls);
+  grid.innerHTML = list.map(a => `
+    <div class="card">
+      <h3>${a.name} <span class="pill bad">${a.cls}</span></h3>
+      <div class="sub">${a.toxin}</div>
+      <div class="row"><span class="k">Dose</span><span class="v">${a.dose}</span></div>
+      ${a.notes ? `<div class="verdict warn">${a.notes}</div>` : ""}
+    </div>`).join("");
+}
+
+function renderAntidotes() {
   const chipBox = $("#antClassChips");
   if (!chipBox) return;
   chipBox.innerHTML = ANT_CLASSES.map(c =>
