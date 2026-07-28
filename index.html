@@ -531,7 +531,7 @@
     box-shadow: 0 0 0 3px rgba(34,211,238,.15);
   }
   .field input, .field select {
-    flex: 1 1 0; min-width: 0; width: 100%;
+    flex: 1 1 auto; min-width: 0;
     background: transparent; border: 0; outline: 0;
     padding: 10px 6px; font-size: 16px; font-weight: 700;
     color: var(--text);
@@ -988,7 +988,7 @@
       <div class="patient-inner">
         <div class="field">
           <label for="p-weight">Weight</label>
-          <div class="input"><input id="p-weight" type="number" inputmode="decimal" min="0" max="300" step="0.5" /><button type="button" class="unit unit-cycle" data-uf="weight" aria-label="Cycle unit">kg</button></div>
+          <div class="input"><input id="p-weight" type="number" inputmode="decimal" min="0" max="300" step="0.5" /><button type="button" class="unit unit-cycle" data-uf="weight" aria-label="Cycle unit" tabindex="-1">kg</button></div>
         </div>
         <div class="field">
           <label for="p-height">Height</label>
@@ -1010,7 +1010,7 @@
         </div>
         <div class="field">
           <label for="p-cr">Cr</label>
-          <div class="input"><input id="p-cr" type="number" inputmode="decimal" min="0" max="30" step="0.1" /><button type="button" class="unit unit-cycle" data-uf="cr" aria-label="Cycle unit">mg/dL</button></div>
+          <div class="input"><input id="p-cr" type="number" inputmode="decimal" min="0" max="30" step="0.1" /><button type="button" class="unit unit-cycle" data-uf="cr" aria-label="Cycle unit" tabindex="-1">mg/dL</button></div>
         </div>
       </div>
 
@@ -1204,7 +1204,7 @@
             <div class="field"><label>HCO₃</label><div class="input"><input id="ab-hco3" type="number" inputmode="decimal" /><span class="unit">mEq/L</span></div></div>
             <div class="field"><label>Na</label><div class="input"><input id="ab-na" type="number" inputmode="numeric" /><span class="unit">mEq/L</span></div></div>
             <div class="field"><label>Cl</label><div class="input"><input id="ab-cl" type="number" inputmode="numeric" /><span class="unit">mEq/L</span></div></div>
-            <div class="field"><label>Albumin</label><div class="input"><input id="ab-alb" type="number" step="0.1" inputmode="decimal" /><button type="button" class="unit unit-cycle" data-uf="alb" aria-label="Cycle unit">g/dL</button></div></div>
+            <div class="field"><label>Albumin</label><div class="input"><input id="ab-alb" type="number" step="0.1" inputmode="decimal" /><button type="button" class="unit unit-cycle" data-uf="alb" aria-label="Cycle unit" tabindex="-1">g/dL</button></div></div>
             <div class="field"><label>PaO₂</label><div class="input"><input id="ab-pao2" type="number" inputmode="numeric" /><span class="unit">mmHg</span></div></div>
             <div class="field"><label>FiO₂</label><div class="input"><input id="ab-fio2" type="number" step="0.01" inputmode="decimal" /><span class="unit">%</span></div></div>
           </div>
@@ -1231,8 +1231,8 @@
           <h3>Corrected Calcium</h3>
           <div class="sub">Ca<sub>corr</sub> = Ca + 0.8 × (4 − albumin)</div>
           <div class="grid-in">
-            <div class="field"><label>Ca measured</label><div class="input"><input id="ca-ca" type="number" step="0.1" inputmode="decimal" /><button type="button" class="unit unit-cycle" data-uf="ca" aria-label="Cycle unit">mg/dL</button></div></div>
-            <div class="field"><label>Albumin</label><div class="input"><input id="ca-alb" type="number" step="0.1" inputmode="decimal" /><button type="button" class="unit unit-cycle" data-uf="alb" aria-label="Cycle unit">g/dL</button></div></div>
+            <div class="field"><label>Ca measured</label><div class="input"><input id="ca-ca" type="number" step="0.1" inputmode="decimal" /><button type="button" class="unit unit-cycle" data-uf="ca" aria-label="Cycle unit" tabindex="-1">mg/dL</button></div></div>
+            <div class="field"><label>Albumin</label><div class="input"><input id="ca-alb" type="number" step="0.1" inputmode="decimal" /><button type="button" class="unit unit-cycle" data-uf="alb" aria-label="Cycle unit" tabindex="-1">g/dL</button></div></div>
           </div>
           <div class="row"><span class="k">Corrected Ca</span><span class="v" id="ca-corr">—</span></div>
           <div class="verdict" id="ca-verdict">Reference 8.5 – 10.5 mg/dL.</div>
@@ -1243,7 +1243,7 @@
           <div class="sub">Na<sub>corr</sub> = Na + 1.6 × (glucose − 100) / 100</div>
           <div class="grid-in">
             <div class="field"><label>Na measured</label><div class="input"><input id="na-na" type="number" inputmode="numeric" /><span class="unit">mEq/L</span></div></div>
-            <div class="field"><label>Glucose</label><div class="input"><input id="na-glu" type="number" inputmode="numeric" /><button type="button" class="unit unit-cycle" data-uf="glu" aria-label="Cycle unit">mg/dL</button></div></div>
+            <div class="field"><label>Glucose</label><div class="input"><input id="na-glu" type="number" inputmode="numeric" /><button type="button" class="unit unit-cycle" data-uf="glu" aria-label="Cycle unit" tabindex="-1">mg/dL</button></div></div>
           </div>
           <div class="row"><span class="k">Corrected Na</span><span class="v" id="na-corr">—</span></div>
         </div>
@@ -1253,8 +1253,8 @@
           <div class="sub">2·Na + Glucose/18 + BUN/2.8 (+ EtOH/3.7)</div>
           <div class="grid-in three">
             <div class="field"><label>Na</label><div class="input"><input id="os-na" type="number" inputmode="numeric" /></div></div>
-            <div class="field"><label>Glucose</label><div class="input"><input id="os-glu" type="number" inputmode="numeric" /><button type="button" class="unit unit-cycle" data-uf="glu" aria-label="Cycle unit">mg/dL</button></div></div>
-            <div class="field"><label>BUN</label><div class="input"><input id="os-bun" type="number" inputmode="numeric" /><button type="button" class="unit unit-cycle" data-uf="bun" aria-label="Cycle unit">mg/dL</button></div></div>
+            <div class="field"><label>Glucose</label><div class="input"><input id="os-glu" type="number" inputmode="numeric" /><button type="button" class="unit unit-cycle" data-uf="glu" aria-label="Cycle unit" tabindex="-1">mg/dL</button></div></div>
+            <div class="field"><label>BUN</label><div class="input"><input id="os-bun" type="number" inputmode="numeric" /><button type="button" class="unit unit-cycle" data-uf="bun" aria-label="Cycle unit" tabindex="-1">mg/dL</button></div></div>
             <div class="field"><label>EtOH</label><div class="input"><input id="os-etoh" type="number" inputmode="numeric" /></div></div>
             <div class="field"><label>Measured</label><div class="input"><input id="os-meas" type="number" inputmode="numeric" /></div></div>
           </div>
@@ -2128,6 +2128,11 @@ function applyUnits() {
     const idx = unitIdx(key);
     const opt = UNIT_OPTIONS[key][idx];
     if (btn) btn.textContent = opt.u;
+
+    // CRITICAL: never overwrite the value of the input the user is actively
+    // typing in — that clobbers their keystrokes and moves the caret.
+    if (document.activeElement === el) continue;
+
     const usValue = usValueOf(inputId);
     if (usValue === undefined || usValue === null || usValue === "") {
       el.value = "";
