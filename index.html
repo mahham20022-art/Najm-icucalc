@@ -347,13 +347,31 @@
     font-weight: 700; color: var(--brand); margin-top: 2px;
   }
   .save-dot {
-    margin-left: auto; flex-shrink: 0;
+    flex-shrink: 0;
     display: inline-flex; align-items: center; gap: 6px;
     font-size: 10.5px; font-weight: 700; color: var(--ok);
     padding: 5px 10px; border-radius: var(--r-pill);
     background: rgba(52,211,153,.08); border: 1px solid rgba(52,211,153,.25);
     letter-spacing: 0.02em;
   }
+  .units-toggle {
+    margin-left: auto;
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 4px 10px 4px 8px;
+    background: rgba(56,189,248,.08);
+    border: 1px solid rgba(56,189,248,.25);
+    border-radius: var(--r-pill);
+    color: var(--brand-3);
+    font-size: 10px; font-weight: 800; letter-spacing: 0.12em;
+    transition: background .15s, border-color .15s;
+    cursor: pointer;
+  }
+  .units-toggle::before {
+    content: "⇄"; margin-right: 2px; font-size: 12px; font-weight: 700;
+    color: var(--brand); line-height: 1;
+  }
+  .units-toggle:hover { background: rgba(56,189,248,.15); border-color: rgba(56,189,248,.4); }
+  .units-toggle:active { transform: scale(0.96); }
   .save-dot::before {
     content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--ok);
     box-shadow: 0 0 0 0 rgba(52,211,153,.6); animation: pulse 1.8s ease-out infinite;
@@ -812,6 +830,9 @@
           <small>ICU / CCU</small>
         </div>
       </div>
+      <button class="units-toggle" type="button" id="unitsToggle" aria-label="Toggle units US or SI" title="Switch between US (mg/dL) and SI (mmol/L, μmol/L)">
+        <span id="unitsLabel">US</span>
+      </button>
       <span class="save-dot" id="saveDot">Auto-saved</span>
     </div>
 
@@ -890,6 +911,10 @@
         <button class="tab" type="button" data-tab="notes">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-9"/><path d="m19 3-6 6h4V3Z"/></svg>
           Notes
+        </button>
+        <button class="tab" type="button" data-tab="antidotes">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v6"/><path d="M8 8h8"/><path d="M9 8v10a3 3 0 0 0 6 0V8"/><path d="M9 14h6"/></svg>
+          Antidotes
         </button>
         <button class="tab" type="button" data-tab="about">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 12h1v5h1"/></svg>
@@ -1178,6 +1203,22 @@
       </div>
     </section>
 
+    <!-- ANTIDOTES -->
+    <section class="module" id="m-antidotes">
+      <div class="module-head">
+        <div>
+          <h2>Antidotes</h2>
+          <p>Critical toxicology reversal agents — dose, route, monitoring.</p>
+        </div>
+      </div>
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="antSearch" type="search" placeholder="Search antidote or toxin (e.g. opioid, naloxone)…" autocomplete="off" />
+      </div>
+      <div class="chips" id="antClassChips"></div>
+      <div class="cards" id="antCards" aria-live="polite"></div>
+    </section>
+
     <!-- ABOUT -->
     <section class="module" id="m-about">
       <div class="module-head"><div><h2>About</h2><p>Najm ICUCalc — bedside clinical assistant.</p></div></div>
@@ -1237,6 +1278,9 @@ const state = {
   drugQuery: "",
   abxCls: "all",
   abxQuery: "",
+  antCls: "all",
+  antQuery: "",
+  units: "US",
   tab: "infusions",
   inputs: {},
   scores: {},
@@ -1294,7 +1338,15 @@ function bindInput(id, key) {
   const v = state.inputs[key];
   if (v !== undefined && v !== null && v !== "") el.value = v;
   el.addEventListener("input", () => {
-    state.inputs[key] = el.value;
+    // If this field has a unit-conversion mapping and we're in SI mode,
+    // convert the displayed value back to US units for internal storage.
+    const uKey = FIELD_UNITS[id];
+    if (uKey && state.units === "SI" && el.value !== "") {
+      const n = parseFloat(el.value);
+      state.inputs[key] = isNaN(n) ? el.value : String(n / UNIT_MAP[uKey].factor);
+    } else {
+      state.inputs[key] = el.value;
+    }
     saveState();
     runAll();
   });
@@ -1312,7 +1364,13 @@ function bindPatient() {
     const el = $("#" + id);
     if (state.patient[key]) el.value = state.patient[key];
     el.addEventListener("input", () => {
-      state.patient[key] = el.value;
+      // Cr input needs SI → US conversion for internal storage.
+      if (id === "p-cr" && state.units === "SI" && el.value !== "") {
+        const n = parseFloat(el.value);
+        state.patient[key] = isNaN(n) ? el.value : String(n / UNIT_MAP.cr.factor);
+      } else {
+        state.patient[key] = el.value;
+      }
       saveState();
       runAll();
     });
@@ -1365,6 +1423,7 @@ function bindTabs() {
     window.scrollTo({ top: 0, behavior: "auto" });
     if (name === "about") renderAbout();
     if (name === "antibiotics") renderAntibiotics();
+    if (name === "antidotes") renderAntidotes();
 
     // Scroll active tab into view within the tab bar
     const activeBtn = container.querySelector(`.tab[data-tab="${name}"]`);
@@ -1644,6 +1703,220 @@ function bindAntibioticControls() {
   if (!s) return;
   s.value = state.abxQuery || "";
   s.addEventListener("input", e => { state.abxQuery = e.target.value; saveState(); renderAntibiotics(); });
+}
+
+/* ============================================================
+   ANTIDOTES
+   ============================================================ */
+const ANTIDOTES = [
+  { id: "naloxone", name: "Naloxone", cls: "Opioid antagonist",
+    toxin: "Opioid overdose (respiratory depression)",
+    dose: "0.04–0.4 mg IV/IM/IN q2–3 min PRN, titrate to RR ≥ 12 (avoid precipitating full withdrawal); infusion 2/3 of reversal dose/hr.",
+    notes: "Short t½ (30–90 min) — repeat/infuse for long-acting opioids (methadone, ER)." },
+  { id: "flumazenil", name: "Flumazenil", cls: "Benzo antagonist",
+    toxin: "Isolated benzodiazepine overdose",
+    dose: "0.2 mg IV over 30 s, then 0.3 mg q1min, then 0.5 mg q1min to max 3 mg total.",
+    notes: "AVOID in chronic BZD users (seizures), TCA co-ingestion, unknown ingestion — precipitates withdrawal + seizures. Rarely indicated in adult ED/ICU." },
+  { id: "nac", name: "N-acetylcysteine (NAC)", cls: "Paracetamol antidote",
+    toxin: "Paracetamol (acetaminophen) overdose",
+    dose: "IV 21-hr: 150 mg/kg over 60 min → 50 mg/kg over 4 h → 100 mg/kg over 16 h. OR PO 72-hr: 140 mg/kg load then 70 mg/kg q4h × 17 doses.",
+    notes: "Start within 8 h of ingestion for max benefit. Continue past 21 h if ALT rising / INR > 2 / detectable paracetamol." },
+  { id: "glucagon", name: "Glucagon", cls: "β-blocker / CCB antidote",
+    toxin: "β-blocker or CCB overdose (bradycardia, hypotension)",
+    dose: "3–10 mg IV bolus (or 50 mcg/kg), then 1–5 mg/hr infusion titrated to HR/BP.",
+    notes: "Common side effect: vomiting (protect airway). Add HDIT + calcium in refractory shock." },
+  { id: "hdit", name: "High-Dose Insulin (HDIT)", cls: "CCB / β-blocker antidote",
+    toxin: "Refractory CCB or β-blocker toxicity",
+    dose: "1 U/kg regular insulin bolus + 25 g dextrose (unless glucose > 300), then insulin 1 U/kg/hr, titrate up to 10 U/kg/hr with dextrose infusion.",
+    notes: "Monitor K⁺ (may drop) + glucose q30min. Effect over 30–60 min. Vasopressors adjunctive." },
+  { id: "cagluconate", name: "Calcium (gluconate / chloride)", cls: "CCB antidote / hyperK+",
+    toxin: "CCB overdose, hyperkalemia (ECG changes), hypocalcemia",
+    dose: "Ca gluconate 10% 30 mL IV over 10 min (peripheral). Ca chloride 10% 10 mL IV over 10 min (central only — vesicant). Repeat q10–20 min.",
+    notes: "Ionized Ca has 3× effect of gluconate. Monitor ionized Ca q30min in CCB overdose." },
+  { id: "digifab", name: "DigiFab (digoxin Fab)", cls: "Cardiac glycoside antidote",
+    toxin: "Digoxin toxicity (arrhythmia, K > 5, level > 10 ng/mL, ingestion > 10 mg)",
+    dose: "Vials = (serum dig ng/mL × weight kg) / 100. Empiric: 10–20 vials acute, 3–6 vials chronic.",
+    notes: "Total digoxin level unreliable after Fab (measures bound + free). Watch for hypoK⁺ after reversal." },
+  { id: "vitk", name: "Vitamin K (phytonadione)", cls: "Warfarin antidote",
+    toxin: "Warfarin over-anticoagulation, VKA reversal",
+    dose: "INR 4.5–10 no bleeding: 1–2.5 mg PO. INR > 10 no bleeding: 2.5–5 mg PO. Major bleeding: 5–10 mg IV over 30 min + 4F-PCC.",
+    notes: "Avoid IM (hematoma). IV over ≥ 20 min — anaphylactoid risk with rapid push." },
+  { id: "pcc", name: "4-Factor PCC (Kcentra)", cls: "Warfarin / VKA reversal",
+    toxin: "Major bleeding on warfarin; urgent surgery",
+    dose: "INR 2–4: 25 U/kg (max 2500). INR 4–6: 35 U/kg (max 3500). INR > 6: 50 U/kg (max 5000).",
+    notes: "Give with vitamin K 5–10 mg IV. Onset < 30 min. Contraindicated in DIC / recent HIT." },
+  { id: "protamine", name: "Protamine sulfate", cls: "Heparin antidote",
+    toxin: "Unfractionated heparin over-anticoagulation, LMWH bleeding",
+    dose: "UFH: 1 mg per 100 units of heparin given in last 2–3 h (max 50 mg per dose). Enoxaparin < 8 h: 1 mg per 1 mg. Give slowly IV over ≥ 10 min.",
+    notes: "Rapid infusion → hypotension, anaphylaxis (esp fish allergy, NPH insulin). Only partially reverses LMWH." },
+  { id: "idarucizumab", name: "Idarucizumab (Praxbind)", cls: "Dabigatran antidote",
+    toxin: "Life-threatening bleeding / emergency surgery on dabigatran",
+    dose: "5 g IV (two 2.5 g vials given consecutively as bolus / short infusion).",
+    notes: "Onset within minutes. Redose 5 g if dabigatran level rebounds or bleeding recurs. Not for Xa inhibitors." },
+  { id: "andexanet", name: "Andexanet alfa (Andexxa)", cls: "Xa inhibitor antidote",
+    toxin: "Life-threatening bleeding on apixaban / rivaroxaban",
+    dose: "Low dose (last dose < 8 h or ≤ 5 mg apix / ≤ 10 mg riva): 400 mg IV bolus (30 mg/min) + 480 mg over 2 h. High dose otherwise: 800 mg + 960 mg over 2 h.",
+    notes: "Thrombosis risk 10 %. Very expensive — 4F-PCC 50 U/kg is a reasonable alternative if not available." },
+  { id: "fomepizole", name: "Fomepizole", cls: "Toxic alcohol antidote",
+    toxin: "Methanol / ethylene glycol poisoning",
+    dose: "15 mg/kg IV load over 30 min → 10 mg/kg q12h × 4 doses → 15 mg/kg q12h until levels < 20 mg/dL and pH normal.",
+    notes: "Double doses during HD (or infuse continuously 1–1.5 mg/kg/hr). Start empirically if osmolar gap > 10." },
+  { id: "hydroxocobalamin", name: "Hydroxocobalamin (Cyanokit)", cls: "Cyanide antidote",
+    toxin: "Cyanide poisoning (smoke inhalation, sodium nitroprusside)",
+    dose: "5 g IV over 15 min. Repeat 5 g PRN (max 10 g).",
+    notes: "Turns skin/urine red — interferes with co-oximetry (falsely high SpO₂). Preferred over cyanide-kit in smoke inhalation." },
+  { id: "atropine", name: "Atropine", cls: "Organophosphate / bradycardia",
+    toxin: "Organophosphate / carbamate poisoning; symptomatic bradycardia",
+    dose: "OP poisoning: 1–3 mg IV, DOUBLE every 3–5 min until secretions dry (may need > 100 mg). Bradycardia: 1 mg IV q3–5 min (max 3 mg).",
+    notes: "Endpoint = drying of pulmonary secretions, not pupils or HR. Also give pralidoxime for OP." },
+  { id: "pralidoxime", name: "Pralidoxime (2-PAM)", cls: "Organophosphate antidote",
+    toxin: "Organophosphate poisoning (only)",
+    dose: "30 mg/kg IV over 30 min, then 8 mg/kg/hr infusion × 24 h (or until atropine no longer needed).",
+    notes: "Not effective for carbamates. Give with atropine (never alone)." },
+  { id: "bicarb", name: "Sodium bicarbonate", cls: "Sodium-channel blocker antidote",
+    toxin: "TCA overdose, sodium-channel toxicity (QRS > 100 ms), salicylate poisoning",
+    dose: "TCA: 1–2 mEq/kg IV bolus, repeat until QRS narrows / pH 7.45–7.55. Salicylate: alkalinize urine — 1–2 mEq/kg bolus then 150 mEq in 1 L D5W at 1.5–2 mL/kg/hr, target urine pH 7.5–8.",
+    notes: "Follow serum K⁺ — alkalinization drives K⁺ intracellularly." },
+  { id: "dantrolene", name: "Dantrolene", cls: "Muscle relaxant (RyR)",
+    toxin: "Malignant hyperthermia; NMS refractory to supportive care",
+    dose: "2.5 mg/kg IV bolus, repeat q5–10 min until MH signs resolve (max 10 mg/kg). Then 1 mg/kg q4–6h × 24–48 h.",
+    notes: "Reconstitute rapidly — call for extra hands. Also stop trigger, cool, treat hyperK⁺, invert vent." },
+  { id: "deferoxamine", name: "Deferoxamine", cls: "Iron chelator",
+    toxin: "Acute iron poisoning (level > 500 mcg/dL, shock, metabolic acidosis)",
+    dose: "15 mg/kg/hr IV infusion (max 6 g/day). Continue until asymptomatic + normal AG + urine not red-brown (\"vin rosé\").",
+    notes: "Hypotension with rapid infusion. Do not use > 24 h (ARDS risk)." },
+  { id: "methyleneblue", name: "Methylene blue", cls: "Methemoglobinemia antidote",
+    toxin: "Symptomatic methemoglobinemia (MetHb > 20 %, or > 10 % with symptoms)",
+    dose: "1–2 mg/kg IV over 5 min. May repeat once at 1 h (max 7 mg/kg cumulative).",
+    notes: "Contraindicated in G6PD deficiency (hemolysis). Interferes with pulse oximetry (falsely low SpO₂)." },
+  { id: "physo", name: "Physostigmine", cls: "Anticholinergic antidote",
+    toxin: "Severe anticholinergic toxicity (agitation, seizures)",
+    dose: "0.5–2 mg IV slowly over 5 min. May repeat q10–30 min.",
+    notes: "AVOID in TCA overdose (asystole risk). Have atropine ready for cholinergic crisis." },
+  { id: "octreotide", name: "Octreotide", cls: "Sulfonylurea antidote",
+    toxin: "Sulfonylurea-induced hypoglycemia (esp glyburide, glipizide)",
+    dose: "50–100 mcg SC q6h × 24 h (adult). Also give dextrose bolus + infusion.",
+    notes: "Suppresses insulin release — prevents rebound hypoglycemia after glucose. Monitor 24 h for recurrence." },
+  { id: "intralipid", name: "Intralipid 20 %", cls: "Local anesthetic toxicity",
+    toxin: "Systemic local-anesthetic toxicity (arrest, seizures)",
+    dose: "1.5 mL/kg IV bolus over 1 min, then 0.25 mL/kg/min infusion. Repeat bolus q3–5 min PRN (max 3 boluses); infusion max 12 mL/kg total.",
+    notes: "Also for lipophilic drug overdose (CCB, TCA — evidence weaker). Notify lab — will interfere with assays." },
+];
+const ANT_CLASSES = ["all", ...Array.from(new Set(ANTIDOTES.map(a => a.cls)))];
+
+function renderAntidotes() {
+  const chipBox = $("#antClassChips");
+  if (!chipBox) return;
+  chipBox.innerHTML = ANT_CLASSES.map(c =>
+    `<button class="chip ${state.antCls === c ? "active" : ""}" type="button" data-c="${c}">${c === "all" ? "All" : c}</button>`
+  ).join("");
+  chipBox.querySelectorAll(".chip").forEach(btn => {
+    btn.addEventListener("click", () => { state.antCls = btn.dataset.c; saveState(); renderAntidotes(); });
+  });
+
+  const q = (state.antQuery || "").trim().toLowerCase();
+  const list = ANTIDOTES.filter(a => {
+    if (state.antCls !== "all" && a.cls !== state.antCls) return false;
+    if (q && !(a.name + " " + a.cls + " " + a.toxin).toLowerCase().includes(q)) return false;
+    return true;
+  });
+  const grid = $("#antCards");
+  if (list.length === 0) {
+    grid.innerHTML = `<div class="card"><h3>No matches</h3><div class="sub">Clear search or change class.</div></div>`;
+    return;
+  }
+  grid.innerHTML = list.map(a => `
+    <div class="card">
+      <h3>${a.name} <span class="pill info">${a.cls}</span></h3>
+      <div class="sub">${a.toxin}</div>
+      <div class="row"><span class="k">Dose</span><span class="v">${a.dose}</span></div>
+      ${a.notes ? `<div class="verdict warn">${a.notes}</div>` : ""}
+    </div>`).join("");
+}
+function bindAntidoteControls() {
+  const s = $("#antSearch");
+  if (!s) return;
+  s.value = state.antQuery || "";
+  s.addEventListener("input", e => { state.antQuery = e.target.value; saveState(); renderAntidotes(); });
+}
+
+/* ============================================================
+   UNITS TOGGLE (US ↔ SI) — display-only conversion.
+   Internal storage always in US units so formulas never change.
+   ============================================================ */
+const UNIT_MAP = {
+  cr:  { US: "mg/dL", SI: "μmol/L", factor: 88.4,   siDecimals: 0 },
+  ca:  { US: "mg/dL", SI: "mmol/L", factor: 0.25,   siDecimals: 2 },
+  alb: { US: "g/dL",  SI: "g/L",    factor: 10,     siDecimals: 0 },
+  glu: { US: "mg/dL", SI: "mmol/L", factor: 0.0555, siDecimals: 1 },
+  bun: { US: "mg/dL", SI: "mmol/L", factor: 0.357,  siDecimals: 1 },
+};
+// which input id maps to which conversion set
+const FIELD_UNITS = {
+  "p-cr":   "cr",
+  "ca-ca":  "ca",
+  "ca-alb": "alb",
+  "ab-alb": "alb",
+  "na-glu": "glu",
+  "os-glu": "glu",
+  "os-bun": "bun",
+};
+function applyUnits() {
+  const mode = state.units || "US";
+  $("#unitsLabel").textContent = mode;
+  // Update every visible unit label + convert any current value
+  for (const [inputId, key] of Object.entries(FIELD_UNITS)) {
+    const el = document.getElementById(inputId);
+    if (!el) continue;
+    // Update the sibling <span class="unit"> if present
+    const wrap = el.closest(".field, .input");
+    const unitSpan = wrap ? wrap.querySelector(".unit") : null;
+    if (unitSpan) unitSpan.textContent = UNIT_MAP[key][mode];
+
+    // Convert visible input value (does NOT overwrite state — state stays in US)
+    const stateKey = inputId === "p-cr" ? null : inputId.replace("-", "_");
+    let usValue;
+    if (inputId === "p-cr") {
+      usValue = state.patient.cr;
+    } else {
+      usValue = state.inputs[stateKey];
+    }
+    if (usValue === undefined || usValue === null || usValue === "") {
+      el.value = "";
+      continue;
+    }
+    const n = parseFloat(usValue);
+    if (isNaN(n)) { el.value = usValue; continue; }
+    if (mode === "SI") {
+      const conv = n * UNIT_MAP[key].factor;
+      el.value = conv.toFixed(UNIT_MAP[key].siDecimals);
+    } else {
+      el.value = String(usValue);
+    }
+  }
+}
+// Intercept changes on unit-aware inputs: convert typed value back to US
+function unitAwareInput(inputId, key) {
+  const el = document.getElementById(inputId);
+  if (!el) return null;
+  return function convertToUS() {
+    const displayed = el.value;
+    if (displayed === "") return "";
+    const n = parseFloat(displayed);
+    if (isNaN(n)) return displayed;
+    if (state.units === "SI") return String(n / UNIT_MAP[key].factor);
+    return String(n);
+  };
+}
+function bindUnitsToggle() {
+  state.units = state.units || "US";
+  $("#unitsToggle").addEventListener("click", () => {
+    state.units = state.units === "US" ? "SI" : "US";
+    saveState();
+    applyUnits();
+    runAll();
+    showToast(`Units: ${state.units}`);
+  });
 }
 
 /* ============================================================
@@ -2106,6 +2379,8 @@ function runAll() {
   safeRun(runLytes,         "runLytes");
   safeRun(runRenal,         "runRenal");
   safeRun(renderAntibiotics,"renderAntibiotics");
+  safeRun(renderAntidotes,  "renderAntidotes");
+  safeRun(applyUnits,       "applyUnits");
 }
 
 function bindAllInputs() {
@@ -2144,6 +2419,8 @@ document.addEventListener("DOMContentLoaded", () => {
     bindTabs();
     bindInfusionControls();
     bindAntibioticControls();
+    bindAntidoteControls();
+    bindUnitsToggle();
     bindAllInputs();
     renderAllScores();
     bindNotes();
