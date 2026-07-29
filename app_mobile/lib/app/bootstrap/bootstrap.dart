@@ -75,12 +75,19 @@ Future<void> _initializeFirebase() async {
   // Crash reporting, per `MED100_ARCHITECTURE.md` §7.5: a production app
   // with no crash visibility is not something to knowingly ship, so this
   // is wired at foundation stage rather than left as an inert dependency.
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-  PlatformDispatcher.instance.onError = (error, stack) {
-    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-    return true;
-  };
-  await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(!kDebugMode);
+  // Skipped on web: `firebase_crashlytics`'s plugin manifest declares only
+  // android/ios support, so `FirebaseCrashlytics.instance` throws on web —
+  // uncaught here, that exception would propagate out of `bootstrap()`
+  // and abort `main()` before `runApp()` is ever reached, i.e. a
+  // permanently blank page on every web load.
+  if (!kIsWeb) {
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+    PlatformDispatcher.instance.onError = (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      return true;
+    };
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(!kDebugMode);
+  }
 
   // App Check, per `MED100_ARCHITECTURE.md` §7.5/§12: described there as
   // "mandatory on every Function/Firestore path" — a dependency that's
