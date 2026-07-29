@@ -2,9 +2,9 @@
   "name": "Najm ICUCalc",
   "short_name": "ICUCalc",
   "description": "Intelligent ICU calculator and clinical assistant",
-  "start_url": "/",
-  "scope": "/",
-  "id": "/",
+  "start_url": "./",
+  "scope": "./",
+  "id": "./",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui", "browser"],
   "orientation": "portrait",
@@ -27,11 +27,11 @@
     { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "shortcuts": [
-    { "name": "Infusions",   "short_name": "Drips",  "url": "/#infusions",   "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "RSI",         "short_name": "RSI",    "url": "/#rsi",         "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "ABG",         "short_name": "ABG",    "url": "/#abg",         "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "Antidotes",   "short_name": "Antid.", "url": "/#antidotes",   "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "Neuro",       "short_name": "Neuro",  "url": "/#neuro",       "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
+    { "name": "Infusions",   "short_name": "Drips",  "url": "./#infusions",   "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "RSI",         "short_name": "RSI",    "url": "./#rsi",         "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "ABG",         "short_name": "ABG",    "url": "./#abg",         "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Antidotes",   "short_name": "Antid.", "url": "./#antidotes",   "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Neuro",       "short_name": "Neuro",  "url": "./#neuro",       "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
   ],
   "screenshots": [
     { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "form_factor": "narrow", "label": "Najm ICUCalc logo" }
