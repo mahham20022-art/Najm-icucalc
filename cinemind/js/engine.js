@@ -14,6 +14,9 @@ const State = {
   watchlist: [],      // [movie object] — full objects so TMDB titles persist
   cache: {},          // movieId -> movie object (session lookups for modal/surprise)
   route: "hero",
+  mood: null,               // active Home mood chip
+  onboardPool: [],          // onboarding candidate posters
+  onboardPicked: [],        // onboarding selected ids
   watchlistView: "grid",
   watchlistSort: "all",
   watchlistMood: "all"
@@ -179,10 +182,41 @@ function runAnalysis() {
   return State.profile;
 }
 
-// Match % for any movie — bundled or TMDB — without throwing on missing fields.
+// Match % for any movie — bundled or TMDB — blended with the learned taste
+// profile so scores sharpen as the user Saves/Skips/rates.
 function matchFor(movie) {
-  if (State.scores[movie.id]) return State.scores[movie.id];
-  return movie.tmdb ? tmdbMatch(movie, State.answers) : scoreMovie(movie, State.answers);
+  let base = movie.tmdb ? tmdbMatch(movie, State.answers)
+    : (State.scores[movie.id] || scoreMovie(movie, State.answers));
+  if (typeof Taste !== "undefined" && Taste.d) {
+    base += Math.max(-8, Math.min(13, Taste.affinity(movie) * 1.1));
+  }
+  return Math.max(62, Math.min(99, Math.round(base)));
+}
+
+// Derives the AI-personality profile from the learned taste (top genres),
+// reusing the archetype copy. Called after onboarding / when taste changes.
+function buildProfileFromTaste() {
+  const genres = Taste.topGenres(3);
+  const g2story = {
+    "Sci-Fi": "Mind-bending", "Mystery": "Mind-bending",
+    "Drama": "Emotional", "Romance": "Emotional",
+    "Comedy": "Inspirational", "Family": "Inspirational",
+    "Adventure": "Action-packed", "Action": "Action-packed", "Fantasy": "Action-packed",
+    "Crime": "Dark", "Thriller": "Dark", "Horror": "Dark",
+    "Documentary": "Real-life stories", "History": "Real-life stories"
+  };
+  const story = g2story[genres[0]] || "Mind-bending";
+  const arch = deriveArchetype({ story });
+  const base = ARCHETYPES[arch];
+  const tags = base.tags.slice(0, 3).concat(genres.slice(0, 2));
+  State.profile = {
+    archetype: arch,
+    summary: base.summary,
+    tags: Array.from(new Set(tags)).slice(0, 5),
+    score: Taste.tasteScore()
+  };
+  saveState();
+  return State.profile;
 }
 
 // Full catalogue, scored against the current answers, ranked best-first.

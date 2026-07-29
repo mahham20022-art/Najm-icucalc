@@ -111,6 +111,33 @@ const TMDB = {
     return (data.results || []).map((m) => this.normalize(m));
   },
 
+  // Search the whole library by title (natural-language "like X").
+  async search(query, page = 1) {
+    const data = await this.req("/search/movie", { query, page, include_adult: "false", language: "en-US" });
+    return (data.results || []).map((m) => this.normalize(m));
+  },
+
+  // "More like this" — TMDB recommendations for a given film.
+  async recommendations(tmdbId) {
+    const data = await this.req("/movie/" + tmdbId + "/recommendations", { language: "en-US", page: 1 });
+    return (data.results || []).map((m) => this.normalize(m));
+  },
+
+  // Popular titles (onboarding poster-pick + fallback decks).
+  async popular(page = 1) {
+    const data = await this.req("/movie/popular", { language: "en-US", page });
+    return (data.results || []).map((m) => this.normalize(m));
+  },
+
+  // Discover from a parsed natural-language intent.
+  async discoverByIntent(intent, page = 1) {
+    const params = { sort_by: intent.sort || "popularity.desc", page, "vote_count.gte": intent.minVotes || 300 };
+    if (intent.include && intent.include.length) params.with_genres = intent.include.join("|");
+    if (intent.exclude && intent.exclude.length) params.without_genres = intent.exclude.join(",");
+    if (intent.maxRuntime) params["with_runtime.lte"] = intent.maxRuntime;
+    return this.discover(params);
+  },
+
   // Full details for the modal (runtime, cast, director, providers, trailer).
   async details(tmdbId) {
     const m = await this.req("/movie/" + tmdbId, {

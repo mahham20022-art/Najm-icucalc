@@ -43,7 +43,7 @@ function toast(msg, icon = "✨") {
 }
 
 // ---- Router ----------------------------------------------------------
-const ROUTES_WITH_TABBAR = ["results", "watchlist", "features", "badges"];
+const ROUTES_WITH_TABBAR = ["home", "search", "watchlist", "profile"];
 
 function navigate(route, opts = {}) {
   State.route = route;
@@ -54,14 +54,13 @@ function navigate(route, opts = {}) {
 function render() {
   let html = "";
   switch (State.route) {
-    case "hero":      html = HeroScreen(); break;
-    case "wizard":    html = WizardScreen(wizardStep); break;
-    case "analysis":  html = AnalysisScreen(); break;
-    case "results":   html = ResultsScreen(); break;
-    case "watchlist": html = WatchlistScreen(); break;
-    case "features":  html = FeaturesScreen(); break;
-    case "badges":    html = BadgesScreen(); break;
-    default:          html = HeroScreen();
+    case "hero":       html = HeroScreen(); break;
+    case "onboarding": html = OnboardingScreen(State.onboardPool, State.onboardPicked); break;
+    case "home":       html = HomeScreen(); break;
+    case "search":     html = SearchScreen(); break;
+    case "watchlist":  html = WatchlistScreen(); break;
+    case "profile":    html = ProfileScreen(); break;
+    default:           html = HeroScreen();
   }
   appEl.innerHTML = html;
 
@@ -76,29 +75,164 @@ function render() {
   }
 
   // Screen-specific kickoff.
-  if (State.route === "analysis") startAnalysis();
-  if (State.route === "results" && TMDB.enabled()) populateResults();
+  if (State.route === "home") fillDeck();
+  if (State.route === "search") restoreSearch();
 }
 
-// ---- Live results population (TMDB) ----------------------------------
-let _resultsToken = 0;
-async function populateResults() {
-  const token = ++_resultsToken;
-  const host = document.getElementById("rowsHost");
+// ---- Discovery deck (Home) -------------------------------------------
+// A queue of scored, unseen movies for the Save/Skip card. Refills from the
+// active mood (or overall taste) via TMDB, falling back to the local library.
+let _deck = [];
+let _deckToken = 0;
+let _deckLoading = false;
+
+function renderDeck() {
+  const host = document.getElementById("deckHost");
   if (!host) return;
+  host.innerHTML = _deck.length ? deckCard(_deck[0]) : deckCard(null);
+  const label = document.getElementById("deckLabel");
+  if (label) label.textContent = State.mood || "Tonight's pick for you";
+}
+
+async function fillDeck(force) {
+  const host = document.getElementById("deckHost");
+  if (!host) return;
+  if (!force && _deck.length) { renderDeck(); return; }
+  if (force) { _deck = []; host.innerHTML = deckSkeleton(); }
+
+  const token = ++_deckToken;
+  let pool = [];
   try {
-    const rows = await tmdbBuildRows(State.answers, State.profile);
-    if (token !== _resultsToken) return;          // a newer render superseded us
-    if (State.route !== "results") return;
-    const liveHost = document.getElementById("rowsHost");
-    if (liveHost) liveHost.innerHTML = renderRows(rows);
-  } catch (err) {
-    if (token !== _resultsToken) return;
-    const liveHost = document.getElementById("rowsHost");
-    if (liveHost) liveHost.innerHTML = renderRows(buildRecommendationRows());
-    const msg = /key/i.test(err.message) ? "Couldn't reach TMDB — check your API key" : "Live library unavailable — showing demo picks";
-    toast(msg, "⚠️");
+    if (TMDB.enabled()) {
+      const chip = MOOD_CHIPS.find((c) => c.label === State.mood);
+      if (chip) {
+        const params = { sort_by: chip.sort || "popularity.desc", "vote_count.gte": chip.minVotes || 300 };
+        if (chip.g && chip.g.length) params.with_genres = chip.g.join("|");
+        if (chip.not) params.without_genres = chip.not.join(",");
+        if (chip.random) params.page = 1 + Math.floor(Math.random() * 8);
+        pool = await TMDB.discover(params);
+      } else {
+        // Personalized default: discover from the user's top genres.
+        const gids = Taste.topGenres(3).map((g) => TMDB.GENRE_ID[g]).filter(Boolean);
+        pool = await TMDB.discover({
+          with_genres: gids.length ? gids.join("|") : "18|878|53",
+          sort_by: "vote_average.desc", "vote_count.gte": 800,
+          page: 1 + Math.floor(Math.random() * 3)
+        });
+      }
+    } else {
+      pool = MOVIES.slice();
+    }
+  } catch (e) {
+    pool = MOVIES.slice();
   }
+  if (token !== _deckToken) return;
+
+  const seen = new Set(Taste.d.seen);
+  _deck = pool
+    .filter((m) => m.poster || !m.tmdb)
+    .filter((m) => !seen.has(m.id))
+    .map((m) => { cacheMovie(m); m.why = m.why || tmdbWhy(m, State.answers); return { movie: m, match: matchFor(m) }; })
+    .sort((a, b) => b.match - a.match);
+
+  renderDeck();
+}
+
+function advanceDeck() {
+  _deck.shift();
+  renderDeck();
+  if (_deck.length <= 1) fillDeck(true); // prefetch the next batch
+}
+
+function deckSave() {
+  if (!_deck.length) return;
+  const m = _deck[0].movie;
+  Taste.like(m);
+  if (!inWatchlist(m.id)) toggleWatchlist(m.id);
+  buildProfileFromTaste();
+  toast(`Saved “${m.title}” — taste updated`, "❤️");
+  advanceDeck();
+}
+
+function deckSkip() {
+  if (!_deck.length) return;
+  Taste.skip(_deck[0].movie);
+  advanceDeck();
+}
+
+// ---- Smart natural-language search -----------------------------------
+let _lastSearch = null;
+function restoreSearch() {
+  if (_lastSearch) {
+    const host = document.getElementById("searchHost");
+    const input = document.getElementById("aiSearch");
+    if (input) input.value = _lastSearch.query;
+    if (host) host.innerHTML = _lastSearch.html;
+  }
+}
+
+async function runSearch(query) {
+  query = (query || "").trim();
+  if (!query) return;
+  if (State.route !== "search") { navigate("search"); }
+  const input = document.getElementById("aiSearch");
+  if (input) input.value = query;
+  const host = document.getElementById("searchHost");
+  if (host) host.innerHTML = `<div class="row"><div class="carousel">${skeletonRows(1)}</div></div>`;
+
+  const intent = parseQuery(query);
+  const token = ++_deckToken;
+  let results = [];
+  try {
+    if (TMDB.enabled()) {
+      if (intent.likeTitle) {
+        const found = await TMDB.search(intent.likeTitle);
+        if (found[0]) {
+          results = await TMDB.recommendations(found[0].tmdbId);
+          // apply exclusions/runtime from the modifiers
+          if (intent.exclude.length) {
+            const exNames = intent.exclude.map((id) => TMDB.ID_GENRE[id]);
+            results = results.filter((m) => !m.genres.some((g) => exNames.includes(g)));
+          }
+        }
+      }
+      if (!results.length) results = await TMDB.discoverByIntent(intent);
+    } else {
+      results = localSearch(query, intent);
+    }
+  } catch (e) {
+    results = localSearch(query, intent);
+  }
+  if (token !== _deckToken) return;
+
+  results = results.filter((m) => m.poster || !m.tmdb).slice(0, 18)
+    .map((m) => { cacheMovie(m); m.why = m.why || tmdbWhy(m, State.answers); return { movie: m, match: matchFor(m) }; })
+    .sort((a, b) => b.match - a.match);
+
+  const note = intent.note.length ? `<div class="search-note">Understood: ${esc(intent.note.join(" · "))}</div>` : "";
+  const rowsHtml = results.length
+    ? note + `<div class="row"><div class="row__head"><h3 class="row__title">Results<em>${results.length} matches</em></h3></div><div class="carousel">${results.map((e) => posterCard(e)).join("")}</div></div>`
+    : `<div class="empty" style="margin-top:24px"><div class="empty__art">🔍</div><h3>No matches</h3><p>Try describing it differently.</p></div>`;
+
+  const liveHost = document.getElementById("searchHost");
+  if (liveHost) liveHost.innerHTML = rowsHtml;
+  _lastSearch = { query, html: rowsHtml };
+}
+
+// Local (no-key) natural-language search over the bundled catalogue.
+function localSearch(query, intent) {
+  const q = query.toLowerCase();
+  const incNames = intent.include.map((id) => TMDB.ID_GENRE[id]).filter(Boolean);
+  const exNames = intent.exclude.map((id) => TMDB.ID_GENRE[id]).filter(Boolean);
+  return MOVIES.filter((m) => {
+    if (exNames.some((g) => m.genres.includes(g))) return false;
+    if (intent.maxRuntime && m.runtime > intent.maxRuntime) return false;
+    if (incNames.length && !incNames.some((g) => m.genres.includes(g))) {
+      // also allow title/keyword text match
+      if (!(m.title.toLowerCase().includes(q) || (m.tone || []).some((t) => q.includes(t.toLowerCase())))) return false;
+    }
+    return true;
+  });
 }
 
 // ---- Wizard logic ----------------------------------------------------
@@ -214,9 +348,10 @@ function closeModal() {
 
 // ---- Surprise Me -----------------------------------------------------
 function surpriseMe() {
-  if (!State.profile) { startFlow(); return; }
+  if (!Taste.d.onboarded) { startFlow(); return; }
   const pick = topPickRandomized();
   if (!pick) return;
+  Taste.markSeen(pick.movie.id); Taste.save();
   const m = pick.movie;
   const art = m.poster
     ? `<img src="${esc(m.poster)}" alt="${esc(m.title)}" onerror="this.remove()" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;position:absolute;inset:0"/>`
@@ -259,7 +394,9 @@ let _lastSurprise = [];
 function topPickRandomized() {
   const pool = recommendationPool();
   const scored = pool.map((m) => ({ movie: m, match: matchFor(m) })).sort((a, b) => b.match - a.match);
-  const fresh = scored.slice(0, 12).filter((e) => !_lastSurprise.includes(e.movie.id));
+  // Never repeat: skip anything already seen (Save/Skip/Surprise) this profile.
+  const unseen = scored.filter((e) => !Taste.hasSeen(e.movie.id) && !_lastSurprise.includes(e.movie.id));
+  const fresh = (unseen.length ? unseen : scored.filter((e) => !_lastSurprise.includes(e.movie.id)));
   const list = fresh.length ? fresh : scored;
   const pick = list[Math.floor(Math.random() * Math.min(list.length, 6))];
   _lastSurprise.push(pick.movie.id);
@@ -316,18 +453,47 @@ function showFamilyPicks() {
   openMovie(pick.id);
 }
 
-// ---- Flow helpers ----------------------------------------------------
-function startFlow() {
-  if (State.profile) { navigate("results"); return; }
-  wizardStep = 0;
-  navigate("wizard");
+// ---- Onboarding ------------------------------------------------------
+let _onboardPage = 1;
+async function startFlow() {
+  State.onboardPicked = [];
+  State.onboardPool = [];
+  _onboardPage = 1;
+  navigate("onboarding");
+  await loadOnboardingPool(true);
 }
 
-function retake() {
-  resetState();
-  wizardStep = 0;
-  navigate("wizard");
+async function loadOnboardingPool(reset) {
+  const grid = document.getElementById("obGrid");
+  try {
+    let batch;
+    if (TMDB.enabled()) batch = await TMDB.popular(_onboardPage);
+    else batch = MOVIES.slice();
+    batch = batch.filter((m) => m.poster || !m.tmdb);
+    batch.forEach(cacheMovie);
+    const existing = new Set(State.onboardPool.map((m) => m.id));
+    State.onboardPool = reset ? batch : State.onboardPool.concat(batch.filter((m) => !existing.has(m.id)));
+  } catch (e) {
+    if (!State.onboardPool.length) State.onboardPool = MOVIES.slice();
+  }
+  if (State.route === "onboarding") render();
 }
+
+function toggleOnboardPick(id) {
+  const i = State.onboardPicked.indexOf(id);
+  if (i === -1) State.onboardPicked.push(id); else State.onboardPicked.splice(i, 1);
+  render();
+}
+
+function finishOnboarding() {
+  State.onboardPicked.forEach((id) => { const m = movieById(id); if (m) Taste.like(m); });
+  Taste.d.onboarded = true; Taste.save();
+  buildProfileFromTaste();
+  navigate("home");
+  toast("Taste profile created — welcome to CineMind", "✨");
+}
+
+function retake() { startFlow(); }
 
 // ---- Global event delegation -----------------------------------------
 document.addEventListener("click", (e) => {
@@ -366,9 +532,41 @@ document.addEventListener("click", (e) => {
   const viewBtn = t.closest("[data-view]");
   if (viewBtn) { State.watchlistView = viewBtn.dataset.view; render(); return; }
 
-  // Mood chip
+  // Watchlist mood filter chip
   const moodBtn = t.closest("[data-mood]");
   if (moodBtn) { State.watchlistMood = moodBtn.dataset.mood; render(); return; }
+
+  // Home mood chip -> set mood + refill deck
+  const moodChip = t.closest("[data-moodchip]");
+  if (moodChip) {
+    const label = moodChip.dataset.moodchip;
+    State.mood = (State.mood === label) ? null : label;
+    Taste.addMood(State.mood || label);
+    document.querySelectorAll("[data-moodchip]").forEach((el) =>
+      el.classList.toggle("active", el.dataset.moodchip === State.mood));
+    fillDeck(true);
+    return;
+  }
+
+  // Onboarding poster pick
+  const obBtn = t.closest("[data-onboard]");
+  if (obBtn) { toggleOnboardPick(obBtn.dataset.onboard); return; }
+
+  // Search suggestion chip
+  const sug = t.closest("[data-suggest]");
+  if (sug) { runSearch(sug.dataset.suggest); return; }
+
+  // Star rating
+  const star = t.closest("[data-rate]");
+  if (star) {
+    const m = movieById(star.dataset.movie);
+    if (m) { Taste.rate(m, parseInt(star.dataset.rate, 10)); buildProfileFromTaste();
+      const wrap = star.closest(".stars");
+      if (wrap) wrap.querySelectorAll(".star").forEach((s, i) => s.classList.toggle("on", i < parseInt(star.dataset.rate, 10)));
+      toast("Thanks — tuning your recommendations", "⭐");
+    }
+    return;
+  }
 
   // Therapist quick feelings
   const feel = t.closest("[data-feeling]");
@@ -387,9 +585,15 @@ document.addEventListener("click", (e) => {
 
   switch (action) {
     case "start": startFlow(); break;
+    case "go-home": navigate("home"); break;
     case "retake": retake(); break;
-    case "wizard-next": wizardNext(); break;
-    case "wizard-back": wizardBack(); break;
+    case "onboard-more": _onboardPage += 1; loadOnboardingPool(false); break;
+    case "onboard-done": finishOnboarding(); break;
+    case "deck-save": deckSave(); break;
+    case "deck-skip": deckSkip(); break;
+    case "reset-taste":
+      Taste.reset(); State.profile = null; State.cache = {}; _deck = [];
+      toast("Taste profile reset", "♻️"); navigate("hero"); break;
     case "surprise": surpriseMe(); break;
     case "toggle-watchlist": {
       const id = actionEl.dataset.movie;
@@ -433,10 +637,10 @@ async function saveKey() {
   if (status) status.innerHTML = '<span class="muted">Verifying key…</span>';
   try {
     await TMDB.validate(key);
-    State.cache = {};               // drop any stale demo/previous-session cache
+    State.cache = {}; _deck = [];   // drop any stale demo/previous-session cache
     if (status) status.innerHTML = '<span class="ok">✓ Connected! Loading the full library…</span>';
     toast("Connected to the full movie library", "🎬");
-    setTimeout(() => { closeModal(); navigate("results"); }, 700);
+    setTimeout(() => { closeModal(); navigate(Taste.d.onboarded ? "home" : "hero"); }, 700);
   } catch (err) {
     if (status) status.innerHTML = `<span class="err">${esc(err.message || "Could not verify key")}. Double-check it and try again.</span>`;
   }
@@ -444,16 +648,25 @@ async function saveKey() {
 
 function disconnectKey() {
   TMDB.clearKey();
-  State.cache = {};
+  State.cache = {}; _deck = [];
   toast("Switched back to the demo library", "📦");
   closeModal();
-  if (State.profile) navigate("results"); else navigate("hero");
+  navigate(Taste.d.onboarded ? "home" : "hero");
 }
 
 // Select dropdown change (sort)
 document.addEventListener("change", (e) => {
   const sel = e.target.closest('[data-action="sort"]');
   if (sel) { State.watchlistSort = sel.value; render(); }
+});
+
+// AI search form submit (Home + Search)
+document.addEventListener("submit", (e) => {
+  if (e.target.closest('[data-action="ai-search-form"]')) {
+    e.preventDefault();
+    const input = document.getElementById("aiSearch");
+    if (input && input.value.trim()) runSearch(input.value);
+  }
 });
 
 // Enter key in therapist input / settings key field
@@ -469,12 +682,14 @@ document.addEventListener("keydown", (e) => {
 
 // ---- Boot ------------------------------------------------------------
 function boot() {
+  Taste.load();
   loadState();
   initBadgeBaseline();
   updateWatchlistBadge();
   spawnParticles();
-  // Always land on the hero; returning users get a "continue" CTA.
-  navigate("hero");
+  // Returning (onboarded) users go straight to Home; newcomers see the hero.
+  if (Taste.d.onboarded) { if (!State.profile) buildProfileFromTaste(); navigate("home"); }
+  else navigate("hero");
 }
 
 window.addEventListener("resize", () => {

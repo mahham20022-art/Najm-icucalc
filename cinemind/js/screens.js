@@ -60,26 +60,277 @@ function HeroScreen() {
     `<div class="hero__poster" style="background:${gradFor(m.grad)};animation-delay:${(i % 6) * -1.2}s"></div>`
   ).join("");
 
-  const returning = !!State.profile;
+  const returning = Taste.d && Taste.d.onboarded;
   return `<section class="page hero">
     <div class="hero__collage">${tiles}</div>
     <div class="hero__inner">
-      <span class="hero__badge"><span class="dot"></span> AI-powered personality matching</span>
-      <h1>Discover the Movies <span class="accent">Made for You</span></h1>
-      <p class="hero__sub">Answer a few questions and let AI uncover movies and series perfectly matched to your personality.</p>
+      <span class="hero__badge"><span class="dot"></span> Your personal AI movie companion</span>
+      <h1>Stop scrolling.<br><span class="accent">Start watching.</span></h1>
+      <p class="hero__sub">CineMind learns your taste and finds the perfect movie in 30 seconds — not another endless database.</p>
       <div class="hero__cta">
-        <button class="btn btn--primary btn--lg" data-action="start">
-          ${returning ? "Continue to My Picks" : "Start My Analysis"}
+        <button class="btn btn--primary btn--lg" data-action="${returning ? "go-home" : "start"}">
+          ${returning ? "Continue" : "Build My Taste Profile"}
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
       </div>
-      ${returning ? `<div class="hero__cta" style="margin-top:14px"><button class="btn btn--ghost" data-action="retake">Retake the quiz</button></div>` : ""}
       <div class="hero__trust">
-        <span><b>${MOVIES.length}+</b> curated titles</span>
-        <span><b>6</b> personality dimensions</span>
-        <span><b>98%</b> avg. match accuracy</span>
+        <span><b>30s</b> to your first pick</span>
+        <span><b>∞</b> movie library</span>
+        <span><b>Learns</b> every tap</span>
       </div>
     </div>
+  </section>`;
+}
+
+// ---- Onboarding: choose movies you love -----------------------------
+function OnboardingScreen(pool, picked) {
+  const min = 4;
+  const grid = pool.map((m) => {
+    const on = picked.includes(m.id);
+    const art = m.poster
+      ? `<img src="${esc(m.poster)}" alt="${esc(m.title)}" loading="lazy" onerror="this.remove()"/>`
+      : `<span class="ob-title">${esc(m.title)}</span>`;
+    return `<button class="ob-poster ${on ? "on" : ""}" data-onboard="${esc(m.id)}" style="background:${gradFor(m.grad)}">
+      ${art}
+      <span class="ob-check">✓</span>
+      <span class="ob-name">${esc(m.title)}</span>
+    </button>`;
+  }).join("");
+
+  const enough = picked.length >= min;
+  return `<section class="page container ob">
+    <div class="ob__head">
+      <div class="page-eyebrow">Step 1 · Build your taste</div>
+      <h1>Pick movies you love</h1>
+      <p>Tap everything you'd happily rewatch. The more you choose, the smarter CineMind gets.</p>
+    </div>
+    <div class="ob-grid" id="obGrid">${grid}</div>
+    <div class="ob__foot">
+      <button class="btn btn--ghost" data-action="onboard-more">Show more</button>
+      <button class="btn btn--primary btn--lg" data-action="onboard-done" ${enough ? "" : "disabled"}>
+        ${enough ? `Continue with ${picked.length}` : `Pick ${min - picked.length} more`}
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </section>`;
+}
+
+// ---- Home: mood-first discovery -------------------------------------
+function greeting() {
+  const h = new Date().getHours();
+  if (h < 5) return "Still up?";
+  if (h < 12) return "Good morning";
+  if (h < 18) return "Good afternoon";
+  return "Good evening";
+}
+
+function HomeScreen() {
+  const chips = MOOD_CHIPS.map((c) =>
+    `<button class="mood-tile ${State.mood === c.label ? "active" : ""}" data-moodchip="${esc(c.label)}">
+      <span class="mt-emoji">${c.emoji}</span><span>${esc(c.label)}</span>
+    </button>`).join("");
+
+  return `<section class="page container home page-pad">
+    <div class="home__top">
+      <div>
+        <div class="home__hello">${greeting()} 👋</div>
+        <h1 class="home__q">What are you in the mood for tonight?</h1>
+      </div>
+      <button class="icon-btn" data-action="open-settings" aria-label="Settings" title="Settings">
+        <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" stroke="currentColor" stroke-width="1.6"/><path d="M19.4 13a7.8 7.8 0 0 0 0-2l2-1.5-2-3.5-2.4 1a7.6 7.6 0 0 0-1.7-1l-.4-2.5h-4l-.4 2.5a7.6 7.6 0 0 0-1.7 1l-2.4-1-2 3.5L4.6 11a7.8 7.8 0 0 0 0 2l-2 1.5 2 3.5 2.4-1a7.6 7.6 0 0 0 1.7 1l.4 2.5h4l.4-2.5a7.6 7.6 0 0 0 1.7-1l2.4 1 2-3.5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+
+    <div class="mood-scroll">${chips}</div>
+
+    <form class="ai-search" data-action="ai-search-form">
+      <span class="ai-search__spark">${SPARK_SVG}</span>
+      <input id="aiSearch" type="text" autocomplete="off"
+        placeholder="Try: a movie like Interstellar but happier" aria-label="Describe what you want to watch" />
+      <button class="ai-search__go" type="submit" aria-label="Search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </form>
+
+    <div class="deck-wrap">
+      <div class="deck__label" id="deckLabel">${State.mood ? esc(State.mood) : "Tonight's pick for you"}</div>
+      <div id="deckHost">${deckSkeleton()}</div>
+    </div>
+  </section>`;
+}
+
+function deckSkeleton() {
+  return `<div class="deck-card skeleton-card">
+    <div class="deck-card__art skeleton"></div>
+    <div class="deck-card__body">
+      <div class="skeleton" style="height:22px;width:60%;border-radius:8px;margin-bottom:12px"></div>
+      <div class="skeleton" style="height:12px;width:90%;border-radius:6px;margin-bottom:8px"></div>
+      <div class="skeleton" style="height:12px;width:70%;border-radius:6px"></div>
+    </div>
+  </div>`;
+}
+
+// The swipeable Save/Skip discovery card.
+function deckCard(entry) {
+  if (!entry) {
+    return `<div class="deck-empty">
+      <div class="empty__art">🎉</div>
+      <h3>That's a wrap for now</h3>
+      <p>Pick another mood above, or hit Surprise Me.</p>
+    </div>`;
+  }
+  const m = entry.movie;
+  const dna = movieDNA(m);
+  const because = tasteBecause(m);
+  const art = m.poster
+    ? `<img src="${esc(m.poster)}" alt="${esc(m.title)}" onerror="this.remove()"/>`
+    : `<div class="poster__logo">${esc(m.title)}</div>`;
+
+  return `<article class="deck-card" data-deck-card>
+    <div class="deck-card__art" style="background:${gradFor(m.grad)}">
+      ${art}
+      <span class="deck-card__score"><b>${entry.match}%</b> match</span>
+      <div class="deck-card__pacing">${dnaBadges(dna)}</div>
+    </div>
+    <div class="deck-card__body">
+      <h2 class="deck-card__title">${esc(m.title)} <span>${esc(m.year)}</span></h2>
+      <div class="deck-card__meta">
+        ${m.rating ? `<span class="imdb">★ ${m.rating.toFixed(1)}</span>` : ""}
+        ${m.runtime ? `<span>${formatRuntime(m.runtime)}</span>` : ""}
+        <span>${esc((m.genres || []).slice(0, 3).join(" · "))}</span>
+      </div>
+      ${because ? `<p class="deck-card__because">${because}</p>` : ""}
+      <p class="deck-card__why">${esc(m.why || tmdbWhy(m, State.answers))}</p>
+      <div class="deck-actions">
+        <button class="deck-btn deck-btn--skip" data-action="deck-skip" aria-label="Skip">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </button>
+        <button class="deck-btn deck-btn--info" data-movie="${esc(m.id)}" aria-label="Details">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 8h.01M11 12h1v4h1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/></svg>
+        </button>
+        <button class="deck-btn deck-btn--save" data-action="deck-save" aria-label="Save">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5 6 5c2 0 3.2 1.1 4 2 .8-.9 2-2 4-2 3.5 0 5 4 3.5 7C19 16.5 12 21 12 21z" fill="currentColor"/></svg>
+        </button>
+      </div>
+    </div>
+  </article>`;
+}
+
+// Small "because you liked…" line from the taste profile.
+function tasteBecause(m) {
+  const g = Taste.topGenres(2).filter((x) => (m.genres || []).includes(x));
+  if (g.length) return `Because you like <b>${esc(g.join(" & "))}</b>`;
+  const dir = Taste.topDirectors(2).find((d) => d === m.director);
+  if (dir) return `Because you like <b>${esc(dir)}</b>`;
+  return "";
+}
+
+function dnaBadges(dna) {
+  const top = Object.entries(dna.dims).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k]) => k);
+  return top.map((t) => `<span class="pace-badge">${esc(t)}</span>`).join("") +
+    `<span class="pace-badge">${esc(dna.pacing)} pace</span>`;
+}
+
+// Movie DNA visualisation (bars) for the detail modal.
+function dnaBlock(movie) {
+  const dna = movieDNA(movie);
+  const bars = Object.entries(dna.dims).map(([k, v]) =>
+    `<div class="dna-row">
+      <span class="dna-label">${esc(k)}</span>
+      <span class="dna-track"><span class="dna-fill" style="width:${v}%"></span></span>
+      <span class="dna-val">${v}%</span>
+    </div>`).join("");
+  return `<div class="dna">
+    <div class="dna__head">🧬 Movie DNA <span>Pacing · ${esc(dna.pacing)}</span></div>
+    ${bars}
+  </div>`;
+}
+
+// "Did we get it right?" star rating.
+function ratingBlock(movie) {
+  const current = Taste.d.ratings[movie.id] || 0;
+  const stars = [1, 2, 3, 4, 5].map((n) =>
+    `<button class="star ${n <= current ? "on" : ""}" data-rate="${n}" data-movie="${esc(movie.id)}" aria-label="${n} stars">★</button>`).join("");
+  return `<div class="rate-block">
+    <div class="rate-block__q">Watched it? Did we get it right?</div>
+    <div class="stars">${stars}</div>
+  </div>`;
+}
+
+// ---- Profile ---------------------------------------------------------
+function ProfileScreen() {
+  const p = State.profile || buildProfileFromTaste();
+  const topG = Taste.topGenres(5);
+  const topD = Taste.topDirectors(3);
+  const acc = Taste.accuracy();
+  const genreBars = (topG.length ? topG : ["—"]).map((g, i) => {
+    const w = 100 - i * 15;
+    return `<div class="dna-row"><span class="dna-label">${esc(g)}</span><span class="dna-track"><span class="dna-fill" style="width:${w}%"></span></span></div>`;
+  }).join("");
+
+  const badgeCards = BADGES.map((b) => {
+    const pr = badgeProgress(b);
+    return `<div class="mini-badge ${pr.unlocked ? "on" : ""}" title="${esc(b.desc)}">
+      <span class="mb-emoji">${b.emoji}</span><span class="mb-name">${esc(b.name)}</span>
+      <span class="mb-prog">${pr.unlocked ? "Unlocked" : pr.count + "/" + pr.goal}</span>
+    </div>`;
+  }).join("");
+
+  return `<section class="page container page-pad">
+    <div class="section-head"><h1>Your Taste</h1>
+      <button class="btn btn--ghost" data-action="reset-taste" style="padding:10px 18px;font-size:13px">Reset</button>
+    </div>
+
+    <div class="profile-card reveal">
+      <div class="score-ring" style="--val:${p.score}">
+        <div><b>${p.score}</b><small>Taste Score</small></div>
+      </div>
+      <div>
+        <div class="profile-card__title">AI Personality · ${esc(p.archetype)}</div>
+        <h2>You are ${archetypeArticle(p.archetype)} ${esc(p.archetype.replace("The ", ""))}</h2>
+        <p>${esc(p.summary)}</p>
+        <div class="tags">${p.tags.map((t) => `<span class="tag">${esc(t)}</span>`).join("")}</div>
+      </div>
+    </div>
+
+    <div class="stat-strip" style="margin-top:22px">
+      <div class="stat"><b>${Taste.d.watched}</b><small>Movies loved</small></div>
+      <div class="stat"><b>${Taste.d.total}</b><small>Rated</small></div>
+      <div class="stat"><b>${Taste.streak()}🔥</b><small>Day streak</small></div>
+      <div class="stat"><b>${acc == null ? "—" : acc + "%"}</b><small>Accuracy</small></div>
+    </div>
+
+    <div class="row"><div class="row__head"><h3 class="row__title">Favourite Genres</h3></div>
+      <div class="dna" style="margin-top:0">${genreBars}</div>
+    </div>
+
+    ${topD.length ? `<div class="row"><div class="row__head"><h3 class="row__title">Favourite Directors</h3></div>
+      <div class="chips-wrap">${topD.map((d) => `<span class="chip">${esc(d)}</span>`).join("")}</div></div>` : ""}
+
+    <div class="row"><div class="row__head"><h3 class="row__title">Achievements</h3></div>
+      <div class="mini-badges">${badgeCards}</div>
+    </div>
+  </section>`;
+}
+
+// ---- Search ----------------------------------------------------------
+function SearchScreen() {
+  return `<section class="page container page-pad">
+    <div class="page-eyebrow">Smart Search</div>
+    <div class="section-head"><h1>Ask for anything</h1></div>
+    <form class="ai-search ai-search--lg" data-action="ai-search-form">
+      <span class="ai-search__spark">${SPARK_SVG}</span>
+      <input id="aiSearch" type="text" autocomplete="off"
+        placeholder="A masterpiece under two hours…" aria-label="Describe what you want to watch" />
+      <button class="ai-search__go" type="submit" aria-label="Search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </form>
+    <div class="search-suggestions">
+      ${["A movie that will change my life", "Something like Se7en without horror", "A beautiful film to watch with my wife", "Mind-blowing sci-fi under 2 hours"]
+        .map((s) => `<button class="mood-chip" data-suggest="${esc(s)}">${esc(s)}</button>`).join("")}
+    </div>
+    <div id="searchHost"></div>
   </section>`;
 }
 
@@ -229,7 +480,7 @@ function SPARK_SVG_LOGO() {
 
 // ---- 6. Movie details modal -----------------------------------------
 function MovieModal(movie, opts = {}) {
-  const match = State.scores[movie.id] || (movie.tmdb ? tmdbMatch(movie, State.answers) : scoreMovie(movie, State.answers));
+  const match = matchFor(movie);
   const inList = inWatchlist(movie.id);
   const chips = (movie.genres || []).map((g) => `<span class="chip">${esc(g)}</span>`).join("");
 
@@ -284,6 +535,10 @@ function MovieModal(movie, opts = {}) {
           <div class="ai-block__head">${SPARK_SVG} Why CineMind picked this for you</div>
           <p>${esc(movie.why || tmdbWhy(movie, State.answers))}</p>
         </div>
+
+        ${dnaBlock(movie)}
+
+        ${ratingBlock(movie)}
 
         <div class="facts">${facts.join("")}</div>
 
