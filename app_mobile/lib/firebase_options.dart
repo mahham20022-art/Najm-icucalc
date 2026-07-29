@@ -28,12 +28,13 @@ class DefaultFirebaseOptions {
   }
 
   static const web = FirebaseOptions(
-    apiKey: 'REPLACE_WITH_FLUTTERFIRE_CONFIGURE',
-    appId: 'REPLACE_WITH_FLUTTERFIRE_CONFIGURE',
-    messagingSenderId: 'REPLACE_WITH_FLUTTERFIRE_CONFIGURE',
-    projectId: 'med100-placeholder',
-    authDomain: 'med100-placeholder.firebaseapp.com',
-    storageBucket: 'med100-placeholder.appspot.com',
+    apiKey: 'AIzaSyCAUIrheK1hRTrgpbhCHZlkNuKFr118N60',
+    appId: '1:136449767934:web:91ea2965e1288074d428af',
+    messagingSenderId: '136449767934',
+    projectId: 'med100-production',
+    authDomain: 'med100-production.firebaseapp.com',
+    storageBucket: 'med100-production.firebasestorage.app',
+    measurementId: 'G-CBME9BL5E8',
   );
 
   static const android = FirebaseOptions(
