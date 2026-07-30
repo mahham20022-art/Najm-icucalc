@@ -84,7 +84,7 @@ function render() {
 // active mood (or overall taste) via TMDB, falling back to the local library.
 let _deck = [];
 let _deckToken = 0;
-let _deckLoading = false;
+let _deckPage = 1;
 
 function renderDeck() {
   const host = document.getElementById("deckHost");
@@ -94,54 +94,59 @@ function renderDeck() {
   if (label) label.textContent = State.mood || "Tonight's pick for you";
 }
 
-async function fillDeck(force) {
+// Fetches one page of candidates for the active mood (or taste default).
+async function fetchDeckPage() {
+  try {
+    if (!TMDB.enabled()) return MOVIES.slice();
+    const chip = MOOD_CHIPS.find((c) => c.label === State.mood);
+    const params = { page: chip && chip.random ? 1 + Math.floor(Math.random() * 40) : _deckPage };
+    if (chip) {
+      params.sort_by = chip.sort || "popularity.desc";
+      params["vote_count.gte"] = chip.minVotes || 300;
+      if (chip.g && chip.g.length) params.with_genres = chip.g.join("|");
+      if (chip.not) params.without_genres = chip.not.join(",");
+    } else {
+      const gids = Taste.topGenres(3).map((g) => TMDB.GENRE_ID[g]).filter(Boolean);
+      params.with_genres = gids.length ? gids.join("|") : "18|878|53|12|35|10749";
+      params.sort_by = "vote_average.desc";
+      params["vote_count.gte"] = 500;
+    }
+    return await TMDB.discover(params);
+  } catch (e) { return MOVIES.slice(); }
+}
+
+// Endless deck: keeps paging TMDB until it has a healthy buffer of unseen
+// cards, so you never run out (the old version refetched page 1 and dried up).
+async function fillDeck(reset) {
   const host = document.getElementById("deckHost");
   if (!host) return;
-  if (!force && _deck.length) { renderDeck(); return; }
-  if (force) { _deck = []; host.innerHTML = deckSkeleton(); }
+  if (reset) { _deck = []; _deckPage = 1; host.innerHTML = deckSkeleton(); }
+  else if (_deck.length > 2) { renderDeck(); return; }
 
   const token = ++_deckToken;
-  let pool = [];
-  try {
-    if (TMDB.enabled()) {
-      const chip = MOOD_CHIPS.find((c) => c.label === State.mood);
-      if (chip) {
-        const params = { sort_by: chip.sort || "popularity.desc", "vote_count.gte": chip.minVotes || 300 };
-        if (chip.g && chip.g.length) params.with_genres = chip.g.join("|");
-        if (chip.not) params.without_genres = chip.not.join(",");
-        if (chip.random) params.page = 1 + Math.floor(Math.random() * 8);
-        pool = await TMDB.discover(params);
-      } else {
-        // Personalized default: discover from the user's top genres.
-        const gids = Taste.topGenres(3).map((g) => TMDB.GENRE_ID[g]).filter(Boolean);
-        pool = await TMDB.discover({
-          with_genres: gids.length ? gids.join("|") : "18|878|53",
-          sort_by: "vote_average.desc", "vote_count.gte": 800,
-          page: 1 + Math.floor(Math.random() * 3)
-        });
-      }
-    } else {
-      pool = MOVIES.slice();
-    }
-  } catch (e) {
-    pool = MOVIES.slice();
+  let tries = 0;
+  while (_deck.length < 6 && tries < 4) {
+    const pool = await fetchDeckPage();
+    if (token !== _deckToken) return;
+    const seen = new Set(Taste.d.seen);
+    const have = new Set(_deck.map((e) => e.movie.id));
+    const add = pool
+      .filter((m) => (m.poster || !m.tmdb) && !seen.has(m.id) && !have.has(m.id))
+      .map((m) => { cacheMovie(m); m.why = m.why || tmdbWhy(m, State.answers); return { movie: m, match: matchFor(m) }; })
+      .sort((a, b) => b.match - a.match);
+    _deck = _deck.concat(add);
+    _deckPage += 1;
+    tries += 1;
+    if (!TMDB.enabled()) break;   // demo library is a single pool
   }
   if (token !== _deckToken) return;
-
-  const seen = new Set(Taste.d.seen);
-  _deck = pool
-    .filter((m) => m.poster || !m.tmdb)
-    .filter((m) => !seen.has(m.id))
-    .map((m) => { cacheMovie(m); m.why = m.why || tmdbWhy(m, State.answers); return { movie: m, match: matchFor(m) }; })
-    .sort((a, b) => b.match - a.match);
-
   renderDeck();
 }
 
 function advanceDeck() {
   _deck.shift();
   renderDeck();
-  if (_deck.length <= 1) fillDeck(true); // prefetch the next batch
+  if (_deck.length <= 2) fillDeck(false); // prefetch the next batch
 }
 
 function deckSave() {

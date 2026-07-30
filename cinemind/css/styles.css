@@ -1308,3 +1308,8 @@ img { display: block; max-width: 100%; }
 .mini-badge .mb-prog { font-size: 11px; color: var(--text-dim); }
 
 @media (max-width: 760px) { .dna-row { grid-template-columns: 80px 1fr 36px; } .ob-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); } }
+
+/* Brand logo (icon) */
+.hero__logo { width: 104px; height: 104px; border-radius: 26px; display: block; margin: 0 auto 24px; box-shadow: 0 20px 60px -16px var(--accent-glow), 0 0 0 1px rgba(255,255,255,.06); animation: reveal .8s var(--ease) both; }
+.home__brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 17px; letter-spacing: -0.01em; margin-bottom: 16px; }
+.home__logo { width: 34px; height: 34px; border-radius: 10px; box-shadow: 0 6px 18px -6px var(--accent-glow); }
