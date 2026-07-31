@@ -64,7 +64,7 @@ function HeroScreen() {
   return `<section class="page hero">
     <div class="hero__collage">${tiles}</div>
     <div class="hero__inner">
-      <img class="hero__logo" src="icons/cinemind.png?v=3" alt="CineMind" />
+      <img class="hero__logo" src="icons/cinemind.png?v=4" alt="CineMind" />
       <span class="hero__badge"><span class="dot"></span> Your personal AI movie companion</span>
       <h1>Stop scrolling.<br><span class="accent">Start watching.</span></h1>
       <p class="hero__sub">CineMind learns your taste and finds the perfect movie in 30 seconds — not another endless database.</p>
@@ -133,7 +133,7 @@ function HomeScreen() {
 
   return `<section class="page container home page-pad">
     <div class="home__brand">
-      <img class="home__logo" src="icons/cinemind.png?v=3" alt="CineMind" />
+      <img class="home__logo" src="icons/cinemind.png?v=4" alt="CineMind" />
       <span>CineMind</span>
     </div>
     <div class="home__top">
