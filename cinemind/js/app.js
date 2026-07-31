@@ -97,7 +97,7 @@ function renderDeck() {
 // Fetches one page of candidates for the active mood (or taste default).
 async function fetchDeckPage() {
   try {
-    if (!TMDB.enabled()) return MOVIES.slice();
+    if (!TMDB.enabled()) return demoPool();
     const chip = MOOD_CHIPS.find((c) => c.label === State.mood);
     const params = { page: chip && chip.random ? 1 + Math.floor(Math.random() * 40) : _deckPage };
     if (chip) {
@@ -112,7 +112,19 @@ async function fetchDeckPage() {
       params["vote_count.gte"] = 500;
     }
     return await TMDB.discover(params);
-  } catch (e) { return MOVIES.slice(); }
+  } catch (e) { return demoPool(); }
+}
+
+// Offline pool for the active mood: filters the bundled library by the mood
+// chip's genres so different moods surface different films (not the same list).
+function demoPool() {
+  const chip = MOOD_CHIPS.find((c) => c.label === State.mood);
+  if (!chip || !chip.g || !chip.g.length) return MOVIES.slice();
+  const inc = chip.g.map((id) => TMDB.ID_GENRE[id]).filter(Boolean);
+  const exc = (chip.not || []).map((id) => TMDB.ID_GENRE[id]).filter(Boolean);
+  const filtered = MOVIES.filter((m) =>
+    m.genres.some((g) => inc.includes(g)) && !m.genres.some((g) => exc.includes(g)));
+  return filtered.length >= 3 ? filtered : MOVIES.slice();
 }
 
 // Endless deck: keeps paging TMDB until it has a healthy buffer of unseen

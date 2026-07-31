@@ -64,7 +64,7 @@ function HeroScreen() {
   return `<section class="page hero">
     <div class="hero__collage">${tiles}</div>
     <div class="hero__inner">
-      <img class="hero__logo" src="icons/cinemind.png?v=4" alt="CineMind" />
+      <img class="hero__logo" src="${CINEMIND_LOGO}" alt="CineMind" />
       <span class="hero__badge"><span class="dot"></span> Your personal AI movie companion</span>
       <h1>Stop scrolling.<br><span class="accent">Start watching.</span></h1>
       <p class="hero__sub">CineMind learns your taste and finds the perfect movie in 30 seconds — not another endless database.</p>
@@ -133,7 +133,7 @@ function HomeScreen() {
 
   return `<section class="page container home page-pad">
     <div class="home__brand">
-      <img class="home__logo" src="icons/cinemind.png?v=4" alt="CineMind" />
+      <img class="home__logo" src="${CINEMIND_LOGO}" alt="CineMind" />
       <span>CineMind</span>
     </div>
     <div class="home__top">
@@ -145,6 +145,11 @@ function HomeScreen() {
         <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" stroke="currentColor" stroke-width="1.6"/><path d="M19.4 13a7.8 7.8 0 0 0 0-2l2-1.5-2-3.5-2.4 1a7.6 7.6 0 0 0-1.7-1l-.4-2.5h-4l-.4 2.5a7.6 7.6 0 0 0-1.7 1l-2.4-1-2 3.5L4.6 11a7.8 7.8 0 0 0 0 2l-2 1.5 2 3.5 2.4-1a7.6 7.6 0 0 0 1.7 1l.4 2.5h4l.4-2.5a7.6 7.6 0 0 0 1.7-1l2.4 1 2-3.5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
       </button>
     </div>
+
+    ${TMDB.enabled() ? "" : `<div class="data-banner" style="margin:14px 0 4px">
+      <span>🎬 You're on the ${MOVIES.length}-film demo. Connect the full library (100,000+ movies, real posters).</span>
+      <button class="data-banner__btn data-banner__btn--cta" data-action="open-settings">Unlock full library</button>
+    </div>`}
 
     <div class="mood-scroll">${chips}</div>
 
