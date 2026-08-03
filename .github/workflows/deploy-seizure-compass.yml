@@ -1,0 +1,46 @@
+name: Deploy Seizure Compass to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'seizure_compass/**'
+      - '.github/workflows/deploy-seizure-compass.yml'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        working-directory: seizure_compass
+        run: flutter pub get
+
+      - name: Analyze
+        working-directory: seizure_compass
+        run: flutter analyze
+
+      - name: Build web (release)
+        working-directory: seizure_compass
+        run: flutter build web --release --base-href /Najm-icucalc/seizure-compass/
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: seizure_compass/build/web
+          destination_dir: seizure-compass
+          keep_files: true
+          commit_message: 'Deploy Seizure Compass: ${{ github.event.head_commit.message }}'
