@@ -860,7 +860,7 @@
     box-shadow: 0 4px 12px -6px rgba(34,211,238,.5);
   }
 
-  /* -------- Patient switcher (pills for Patient 1 / 2 / 3…) -------- */
+  /* -------- Patient switcher (pills for P1 / P2 / P3…, each renameable) -------- */
   .patients-bar {
     max-width: 1200px; margin: 0 auto;
     padding: 8px 14px 0;
@@ -880,12 +880,13 @@
     color: var(--brand-i); border-color: transparent;
     box-shadow: 0 4px 12px -6px rgba(34,211,238,.5);
   }
-  .patient-chip .pc-x {
+  .patient-chip .pc-x, .patient-chip .pc-edit {
     display: inline-flex; align-items: center; justify-content: center;
     width: 15px; height: 15px; border-radius: 50%;
     font-size: 12px; line-height: 1; opacity: .6;
   }
-  .patient-chip .pc-x:hover { opacity: 1; background: rgba(0,0,0,.18); }
+  .patient-chip .pc-edit { font-size: 10.5px; }
+  .patient-chip .pc-x:hover, .patient-chip .pc-edit:hover { opacity: 1; background: rgba(0,0,0,.18); }
   .patient-chip-add {
     appearance: none; cursor: pointer;
     display: inline-flex; align-items: center; gap: 4px;
@@ -1830,7 +1831,7 @@ const state = {
   // hold the ACTIVE patient's live, in-progress values. `patients[i].data`
   // is a snapshot of each OTHER (inactive) patient; the active slot's own
   // `.data` is stale/unused until the user switches away from it.
-  patients: [{ id: "p1", label: "Patient 1", data: null }],
+  patients: [{ id: "p1", label: "P1", data: null }],
   activeIndex: 0,
 };
 
@@ -1838,7 +1839,7 @@ const state = {
 // load for anyone who saved data before this feature existed.
 function ensurePatientsValid() {
   if (!Array.isArray(state.patients) || state.patients.length === 0) {
-    state.patients = [{ id: "p1", label: "Patient 1", data: null }];
+    state.patients = [{ id: "p1", label: "P1", data: null }];
     state.activeIndex = 0;
   }
   if (typeof state.activeIndex !== "number" || state.activeIndex < 0 || state.activeIndex >= state.patients.length) {
@@ -1946,8 +1947,8 @@ function bindPatient() {
 }
 
 /* ============================================================
-   PATIENTS — switch between Patient 1 / 2 / 3…, each keeping its
-   own demographics, inputs, scores and notes.
+   PATIENTS — switch between P1 / P2 / P3… (renameable, e.g. "P15"),
+   each keeping its own demographics, inputs, scores and notes.
    ============================================================ */
 function blankPatientData() {
   return { patient: { weight: "", height: "", age: "", sex: "", cr: "" }, inputs: {}, scores: {}, notes: "" };
@@ -1995,14 +1996,27 @@ function addPatient() {
   captureActivePatientData();
   let n = state.patients.length + 1;
   const used = new Set(state.patients.map(p => p.label));
-  while (used.has("Patient " + n)) n++;
-  state.patients.push({ id: "p" + Date.now(), label: "Patient " + n, data: blankPatientData() });
+  while (used.has("P" + n)) n++;
+  state.patients.push({ id: "p" + Date.now(), label: "P" + n, data: blankPatientData() });
   state.activeIndex = state.patients.length - 1;
   applyPatientData(state.patients[state.activeIndex].data);
   saveState();
   renderPatientsBar();
   rehydrateUI();
   showToast("Added " + state.patients[state.activeIndex].label);
+}
+// Lets the user rename a patient pill to anything they want — bed/room
+// numbers like "P15" or "P30", not just the sequential default.
+function renamePatient(i) {
+  const p = state.patients[i];
+  if (!p) return;
+  const next = prompt("Rename patient", p.label);
+  if (next === null) return; // cancelled
+  const trimmed = next.trim().slice(0, 24);
+  if (!trimmed) return;
+  p.label = trimmed;
+  saveState();
+  renderPatientsBar();
 }
 function removePatient(i) {
   if (state.patients.length <= 1) { showToast("At least one patient required"); return; }
@@ -2026,20 +2040,33 @@ function removePatient(i) {
   rehydrateUI();
   showToast(label + " removed");
 }
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+}
 function renderPatientsBar() {
   const bar = $("#patientsBar");
   if (!bar) return;
-  bar.innerHTML = state.patients.map((p, i) => `
+  bar.innerHTML = state.patients.map((p, i) => {
+    const label = escapeHtml(p.label);
+    return `
     <button type="button" class="patient-chip ${i === state.activeIndex ? "active" : ""}" data-idx="${i}" role="tab" aria-selected="${i === state.activeIndex}">
-      ${p.label}
-      ${state.patients.length > 1 ? `<span class="pc-x" data-remove="${i}" title="Remove ${p.label}">×</span>` : ""}
+      ${label}
+      <span class="pc-edit" data-rename="${i}" title="Rename ${label}">✎</span>
+      ${state.patients.length > 1 ? `<span class="pc-x" data-remove="${i}" title="Remove ${label}">×</span>` : ""}
     </button>
-  `).join("") + `<button type="button" class="patient-chip-add" id="addPatientBtn">+ Add patient</button>`;
+  `;
+  }).join("") + `<button type="button" class="patient-chip-add" id="addPatientBtn">+ Add patient</button>`;
 
   bar.querySelectorAll(".patient-chip").forEach(btn => {
     btn.addEventListener("click", e => {
-      if (e.target.closest(".pc-x")) return;
+      if (e.target.closest(".pc-x") || e.target.closest(".pc-edit")) return;
       switchPatient(+btn.dataset.idx);
+    });
+  });
+  bar.querySelectorAll(".pc-edit").forEach(ed => {
+    ed.addEventListener("click", e => {
+      e.stopPropagation();
+      renamePatient(+ed.dataset.rename);
     });
   });
   bar.querySelectorAll(".pc-x").forEach(x => {
