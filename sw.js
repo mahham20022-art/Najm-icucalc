@@ -1,19 +1,18 @@
 /* Najm ICUCalc — Production Service Worker
-   v15 · offline-first · versioned caches · graceful fallback.
+   v18 · offline-first · versioned caches · graceful fallback.
+   No third-party origins are ever fetched — fonts are system fonts only.
    Split caches:
      PRECACHE  = app-shell that MUST be there for offline first-paint
      RUNTIME   = network-first HTML (updates land instantly on refresh)
      ASSETS    = cache-first for icons/CSS/JS/manifest (stable)
-     FONTS     = stale-while-revalidate for Google Fonts
      IMAGES    = cache-first with size cap for user-added images
 */
-const VERSION  = "v17";
+const VERSION  = "v18";
 const PRECACHE = `najm-precache-${VERSION}`;
 const RUNTIME  = `najm-runtime-${VERSION}`;
 const ASSETS   = `najm-assets-${VERSION}`;
-const FONTS    = `najm-fonts-${VERSION}`;
 const IMAGES   = `najm-images-${VERSION}`;
-const ALL_CACHES = [PRECACHE, RUNTIME, ASSETS, FONTS, IMAGES];
+const ALL_CACHES = [PRECACHE, RUNTIME, ASSETS, IMAGES];
 
 // App shell — loaded on first install so the app opens offline immediately.
 const APP_SHELL = [
@@ -79,15 +78,6 @@ async function cacheFirst(req, cacheName) {
     return hit || Response.error();
   }
 }
-async function staleWhileRevalidate(req, cacheName) {
-  const cache = await caches.open(cacheName);
-  const cached = await cache.match(req);
-  const fetchPromise = fetch(req).then(res => {
-    if (res && res.status === 200) cache.put(req, res.clone());
-    return res;
-  }).catch(() => null);
-  return cached || fetchPromise || Response.error();
-}
 
 /* ── minimal offline fallback if index.html itself isn't cached yet ── */
 function offlinePage() {
@@ -102,12 +92,6 @@ self.addEventListener("fetch", event => {
   const req = event.request;
   if (req.method !== "GET") return;
   const url = new URL(req.url);
-
-  // Google Fonts — SWR
-  if (url.origin === "https://fonts.googleapis.com" || url.origin === "https://fonts.gstatic.com") {
-    event.respondWith(staleWhileRevalidate(req, FONTS));
-    return;
-  }
 
   // Never intercept analytics or 3rd-party APIs — let them go to network.
   if (url.origin !== self.location.origin) return;
