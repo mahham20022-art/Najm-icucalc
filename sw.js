@@ -1,5 +1,5 @@
 /* Najm ICUCalc — Production Service Worker
-   v18 · offline-first · versioned caches · graceful fallback.
+   v20 · offline-first · versioned caches · graceful fallback.
    No third-party origins are ever fetched — fonts are system fonts only.
    Split caches:
      PRECACHE  = app-shell that MUST be there for offline first-paint
@@ -7,7 +7,7 @@
      ASSETS    = cache-first for icons/CSS/JS/manifest (stable)
      IMAGES    = cache-first with size cap for user-added images
 */
-const VERSION  = "v19"; // app 1.3.1
+const VERSION  = "v20"; // app 1.4.0
 const PRECACHE = `najm-precache-${VERSION}`;
 const RUNTIME  = `najm-runtime-${VERSION}`;
 const ASSETS   = `najm-assets-${VERSION}`;
