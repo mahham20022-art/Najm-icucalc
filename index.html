@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#071A2F" />
 <meta name="color-scheme" content="dark" />
-<meta name="description" content="Intelligent ICU calculator and clinical assistant — infusions, antibiotics, antidotes, RSI, neuroprotection, ABG, ventilator, electrolytes, renal, scores." />
-<title>Najm ICUCalc — Intelligent ICU Assistant</title>
+<meta name="description" content="ICU calculator and bedside reference — infusions, antibiotics, antidotes, RSI, neuroprotection, ABG, ventilator, electrolytes, renal, scores." />
+<title>Najm ICUCalc — ICU calculator</title>
 <link rel="manifest" href="manifest.webmanifest" />
 <link rel="icon" type="image/x-icon" href="icons/favicon.ico" />
 <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png" />
@@ -24,14 +24,14 @@
 <meta name="msapplication-TileColor" content="#071A2F" />
 <meta name="msapplication-TileImage" content="icons/icon-192.png" />
 <meta name="msapplication-navbutton-color" content="#071A2F" />
-<meta property="og:title" content="Najm ICUCalc — Intelligent ICU Assistant" />
-<meta property="og:description" content="Intelligent ICU calculator and clinical assistant. By Dr. Mohamed Najm." />
+<meta property="og:title" content="Najm ICUCalc — ICU calculator" />
+<meta property="og:description" content="ICU calculator and bedside reference, with its sources and limits shown. By Dr. Mohamed Najm." />
 <meta property="og:image" content="icons/icon-512.png" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://mahham20022-art.github.io/Najm-icucalc/" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Najm ICUCalc" />
-<meta name="twitter:description" content="Intelligent ICU calculator and clinical assistant." />
+<meta name="twitter:description" content="ICU calculator and bedside reference." />
 <meta name="twitter:image" content="icons/icon-512.png" />
 <style>
   /* ============================================================
@@ -784,6 +784,32 @@
   }
   .rsi-step p b { color: var(--warn); }
 
+  /* -------- Source lines + evidence panel -------- */
+  .src { margin-top: var(--s-2); font-size: 11px; color: var(--muted); line-height: 1.45; }
+  .module-src { margin: calc(-1 * var(--s-2)) 0 var(--s-3); font-size: 11.5px; color: var(--muted); line-height: 1.45; }
+  .trust dl { margin: 0; }
+  .trust dt { margin-top: var(--s-3); font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--brand-3); }
+  .trust dt:first-child { margin-top: 0; }
+  .trust dd { margin: 4px 0 0; font-size: 13px; line-height: 1.55; color: var(--text-2); }
+  .trust ul, .changelog ul { margin: 4px 0 0; padding-left: 18px; }
+  .trust li, .changelog li { font-size: 12.5px; color: var(--text-2); line-height: 1.55; margin: 3px 0; }
+  .trust code { font-family: var(--f-mono); font-size: 11.5px; color: var(--text); }
+  .changelog h4 { margin: var(--s-3) 0 0; font-size: 13px; font-weight: 700; }
+  .changelog h4:first-of-type { margin-top: 0; }
+  .changelog h4 span { color: var(--muted); font-weight: 500; }
+  .onb-trust {
+    padding: var(--s-4); border-radius: var(--r-lg);
+    border: 1px solid rgba(251,191,36,.28); background: rgba(251,191,36,.05);
+    font-size: 12.5px; color: var(--text-2); line-height: 1.55;
+  }
+  .onb-trust h3 { margin: 0 0 6px; font-size: 14px; font-weight: 700; color: var(--warn); }
+  .onb-trust p { margin: 0 0 6px; }
+  .onb-trust b { color: var(--text); }
+  .onb-link {
+    appearance: none; background: none; border: 0; padding: 4px 0 0; cursor: pointer;
+    color: var(--brand-3); font-weight: 700; font-size: 13px; text-decoration: underline; text-underline-offset: 3px;
+  }
+
   /* -------- Verdict -------- */
   .verdict {
     margin-top: var(--s-3);
@@ -1020,8 +1046,8 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 7h8M8 11h3M13 11h3M8 15h3M13 15h3M8 19h3M13 19h3"/></svg>
         </div>
         <div class="feature-body">
-          <h3>Comprehensive Calculators</h3>
-          <p>Essential formulas and scores for daily ICU practice.</p>
+          <h3>Core ICU calculators</h3>
+          <p>Common formulas and scores for daily ICU practice.</p>
         </div>
       </div>
       <div class="feature">
@@ -1051,6 +1077,14 @@
           <p>Designed by clinicians, for clinicians. By Dr. Mohamed Najm.</p>
         </div>
       </div>
+    </div>
+
+    <div class="onb-trust" role="note" aria-labelledby="onbTrustTitle">
+      <h3 id="onbTrustTitle">Before you use it</h3>
+      <p><b>For</b> ICU/CCU doctors, pharmacists and nurses who already know these drugs and scores. It does the arithmetic; the clinical decision stays with you.</p>
+      <p><b>Not prospectively validated.</b> Decision support only. Check every result against your protocol and the drug label.</p>
+      <p>Version 1.3.1 · last reviewed 9 October 2026 · what you enter stays in this browser.</p>
+      <button class="onb-link" type="button" id="onbEvidence">Evidence, limits and data handling</button>
     </div>
 
     <div class="onboarding-cta">
@@ -1086,7 +1120,7 @@
       <button class="units-toggle" type="button" id="unitsToggle" aria-label="Toggle units US or SI" title="Switch between US (mg/dL) and SI (mmol/L, μmol/L)">
         <span id="unitsLabel">US</span>
       </button>
-      <span class="save-dot" id="saveDot" title="Patient-bar values and inputs are saved in this browser only. Use Clear, or About → Wipe all data, when you finish.">Saved on this device</span>
+      <span class="save-dot" id="saveDot" title="Patient-bar values and inputs are saved in this browser only. Use Clear, or About &amp; evidence → Clear saved data, when you finish.">Saved on this device</span>
     </div>
 
     <div class="patient">
@@ -1179,7 +1213,7 @@
         </button>
         <button class="tab" type="button" data-tab="about">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 12h1v5h1"/></svg>
-          About
+          About &amp; evidence
         </button>
       </div>
     </nav>
@@ -1199,6 +1233,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
         <input id="drugSearch" type="search" placeholder="Search drug…" autocomplete="off" />
       </div>
+      <div class="module-src">Dose ranges: Marino, <i>The ICU Book</i>, 5th ed., 2023. Default concentrations are common preparations; confirm yours.</div>
       <div class="chips" id="catChips"></div>
       <div class="cards" id="drugCards" aria-live="polite"></div>
     </section>
@@ -1216,6 +1251,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
         <input id="abxSearch" type="search" placeholder="Search antibiotic…" autocomplete="off" />
       </div>
+      <div class="module-src">Sources: Sanford Guide to Antimicrobial Therapy, 2024; IDSA/ATS HAP/VAP guideline, 2016.</div>
       <div class="chips" id="abxClassChips"></div>
       <div class="cards" id="abxCards" aria-live="polite"></div>
     </section>
@@ -1262,6 +1298,7 @@
           </div>
           <div class="row"><span class="k">NE equivalent</span><span class="v" id="ne-total">—</span></div>
           <div class="verdict" id="ne-verdict">Sum of norepi-equivalent support.</div>
+          <div class="src">Source: Khanna et al., NEJM 2017</div>
         </div>
       </div>
     </section>
@@ -1277,6 +1314,7 @@
           <div class="row"><span class="k">TV 4 mL/kg (low)</span><span class="v" id="v-tv4">—</span></div>
           <div class="row"><span class="k">TV 6 mL/kg (target)</span><span class="v mid" id="v-tv6">—</span></div>
           <div class="row"><span class="k">TV 8 mL/kg (max ARDS)</span><span class="v" id="v-tv8">—</span></div>
+          <div class="src">Source: ARDS Network, NEJM 2000</div>
         </div>
 
         <div class="card">
@@ -1289,6 +1327,7 @@
           <div class="row"><span class="k">P/F ratio</span><span class="v" id="v-pf">—</span></div>
           <div class="row"><span class="k">SpO₂/FiO₂</span><span class="v" id="v-sf">—</span></div>
           <div class="verdict" id="v-pfverdict">Enter PaO₂ and FiO₂ for Berlin classification.</div>
+          <div class="src">Source: ARDS Definition Task Force (Berlin), JAMA 2012</div>
         </div>
 
         <div class="card">
@@ -1301,6 +1340,7 @@
           <div class="row"><span class="k">Driving pressure</span><span class="v" id="v-dp">—</span></div>
           <div class="row"><span class="k">Static compliance</span><span class="v" id="v-cstat">—</span></div>
           <div class="verdict" id="v-dpverdict">Target driving pressure &lt; 15 cmH₂O.</div>
+          <div class="src">Source: Amato et al., NEJM 2015</div>
         </div>
       </div>
     </section>
@@ -1332,6 +1372,7 @@
           <div class="row"><span class="k">Δ-Δ ratio</span><span class="v" id="ab-dd">—</span></div>
           <div class="row"><span class="k">A–a gradient</span><span class="v" id="ab-aa">—</span></div>
           <div class="verdict" id="ab-verdict">Enter pH, PaCO₂, HCO₃ to start.</div>
+          <div class="src">Source: Winters, Ann NY Acad Sci 1966 (expected compensation)</div>
         </div>
       </div>
     </section>
@@ -1385,6 +1426,7 @@
           </div>
           <div class="row"><span class="k">Free water deficit</span><span class="v" id="fwd-out">—</span></div>
           <div class="verdict">Correct ≤ 10 mEq/L per 24 hr to avoid cerebral edema.</div>
+          <div class="src">Source: Adrogué &amp; Madias, NEJM 2000</div>
         </div>
 
         <div class="card">
@@ -1408,6 +1450,7 @@
           <div class="sub">Cockcroft–Gault: (140 − age) × W / (72 × Cr); × 0.85 (F).</div>
           <div class="row"><span class="k">CrCl</span><span class="v" id="rn-crcl">—</span></div>
           <div class="verdict" id="rn-crclv">Set age, weight, sex, creatinine in the patient bar.</div>
+          <div class="src">Source: Cockcroft &amp; Gault, Nephron 1976</div>
         </div>
 
         <div class="card">
@@ -1419,6 +1462,7 @@
           </div>
           <div class="row"><span class="k">Rate</span><span class="v" id="uo-rate">—</span></div>
           <div class="verdict" id="uo-verdict">Enter volume + hours.</div>
+          <div class="src">Source: KDIGO AKI guideline, 2012 (oliguria threshold)</div>
         </div>
 
         <div class="card">
@@ -1427,6 +1471,7 @@
           <div class="row"><span class="k">Target volume</span><span class="v" id="sep-vol">—</span></div>
           <div class="row"><span class="k">¼ bolus (250 mL)</span><span class="v" id="sep-quarter">—</span></div>
           <div class="verdict">Reassess after each bolus — avoid over-resuscitation.</div>
+          <div class="src">Source: Surviving Sepsis Campaign, 2021</div>
         </div>
 
         <div class="card">
@@ -1443,11 +1488,11 @@
       <div class="cards">
         <div class="card"><h3>GCS</h3><div class="sub">Glasgow Coma Scale (3–15)</div><div id="score-gcs"></div></div>
         <div class="card"><h3>qSOFA</h3><div class="sub">≥ 2 → higher sepsis mortality risk.</div><div id="score-qsofa"></div></div>
-        <div class="card"><h3>SOFA</h3><div class="sub">Organ dysfunction (0–24).</div><div id="score-sofa"></div></div>
-        <div class="card"><h3>CHA₂DS₂-VASc</h3><div class="sub">Stroke risk in AF.</div><div id="score-chads"></div></div>
-        <div class="card"><h3>HAS-BLED</h3><div class="sub">Bleeding risk on anticoagulation.</div><div id="score-hasbled"></div></div>
-        <div class="card"><h3>Wells (PE)</h3><div class="sub">Pretest probability of PE.</div><div id="score-wells"></div></div>
-        <div class="card"><h3>RASS</h3><div class="sub">Richmond Agitation–Sedation Scale.</div><div id="score-rass"></div></div>
+        <div class="card"><h3>SOFA</h3><div class="sub">Organ dysfunction (0–24).</div><div id="score-sofa"></div><div class="src">Source: Vincent et al., Intensive Care Med 1996</div></div>
+        <div class="card"><h3>CHA₂DS₂-VASc</h3><div class="sub">Stroke risk in AF.</div><div id="score-chads"></div><div class="src">Source: ESC AF guidelines, 2020</div></div>
+        <div class="card"><h3>HAS-BLED</h3><div class="sub">Bleeding risk on anticoagulation.</div><div id="score-hasbled"></div><div class="src">Source: ESC AF guidelines, 2020</div></div>
+        <div class="card"><h3>Wells (PE)</h3><div class="sub">Pretest probability of PE.</div><div id="score-wells"></div><div class="src">Source: ESC PE guidelines, 2019</div></div>
+        <div class="card"><h3>RASS</h3><div class="sub">Richmond Agitation–Sedation Scale.</div><div id="score-rass"></div><div class="src">Source: Sessler et al., Am J Respir Crit Care Med 2002</div></div>
       </div>
     </section>
 
@@ -1511,7 +1556,7 @@
       <div class="module-head">
         <div>
           <h2>Neuroprotective Strategy</h2>
-          <p>Evidence-based bundle for TBI, SAH, ischemic stroke, ICH, and post-arrest.</p>
+          <p>Bedside bundle for TBI, SAH, ischemic stroke, ICH and post-arrest care. Check it against your unit’s protocol.</p>
         </div>
       </div>
       <div class="cards" id="neuroCards"></div>
@@ -1519,14 +1564,44 @@
 
     <!-- ABOUT -->
     <section class="module" id="m-about">
-      <div class="module-head"><div><h2>About</h2><p>Najm ICUCalc — bedside clinical assistant.</p></div></div>
+      <div class="module-head"><div><h2>About &amp; evidence</h2><p>What this tool is for, what it rests on, and how to report a problem.</p></div></div>
+      <div class="card trust" id="evidence">
+        <h3>Evidence and limits</h3>
+        <div class="sub">Read this once before relying on any number here.</div>
+        <dl>
+          <dt>Who it is for</dt>
+          <dd>ICU/CCU doctors, pharmacists and nurses who already know these drugs and scores and want quick arithmetic at the bedside: infusion rates, renal dose bands, ventilator targets, acid–base workup, electrolyte corrections and common scores.</dd>
+          <dt>What it does not do</dt>
+          <dd>Choose a drug or a dose for a patient, replace a pharmacy check, know your unit’s drug concentrations, or apply every renal or hepatic adjustment.</dd>
+          <dt>Methods and evidence</dt>
+          <dd>Each calculator applies a published formula or score as written (Cockcroft–Gault, Winters, Berlin, ARDSnet, SOFA, RASS and others). Dose ranges come from standard ICU references and guidelines. Where a calculator has a source, it is printed under the result; the full list is under Clinical references.</dd>
+          <dt>Validation and known limitations</dt>
+          <dd><ul>
+            <li>Not prospectively or independently validated, and the code and dose tables have not been externally audited.</li>
+            <li>Decision support only. It does not replace clinical judgement, local protocols or the drug label.</li>
+            <li>Default concentrations are common preparations, not necessarily yours. If your bag differs, the mL/hr is wrong.</li>
+            <li>Cockcroft–Gault is unreliable when creatinine is changing, at extremes of body weight and in augmented renal clearance.</li>
+            <li>Some results have no individual citation yet: MAP, shock index, CPP, anion gap, A–a gradient, corrected Ca and Na, osmolality, K⁺ replacement, maintenance fluids, GCS, qSOFA, RSI, antidotes and neuroprotection.</li>
+            <li>Not a regulated medical device.</li>
+          </ul></dd>
+          <dt>Version</dt>
+          <dd>1.3.1 · last reviewed 9 October 2026.</dd>
+          <dt>Report a suspected error</dt>
+          <dd>Say what you entered, what the app showed and what you expected, with a source if you have one. Leave out patient identifiers.</dd>
+        </dl>
+        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.3.1&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+          <span>Report an error · contact@thetract.org</span>
+        </a>
+      </div>
+
       <div class="card">
         <h3>Designed by</h3>
         <div class="sub">Author &amp; clinical lead</div>
         <div class="row"><span class="k">Name</span><span class="v">Dr. Mohamed Najm</span></div>
         <div class="row"><span class="k">Credentials</span><span class="v">MBBS · PgDip EM · FEBN · MRCEM SECONDARY</span></div>
-        <div class="row"><span class="k">Version</span><span class="v">1.3.0</span></div>
-        <div class="row"><span class="k">Build</span><span class="v" id="app-build">—</span></div>
+        <div class="row"><span class="k">Version</span><span class="v">1.3.1</span></div>
+        <div class="row"><span class="k">Last reviewed</span><span class="v">9 Oct 2026</span></div>
       </div>
 
       <div class="card">
@@ -1538,18 +1613,74 @@
         </a>
       </div>
 
-      <div class="card">
-        <h3>Who this is for, and its limits</h3>
-        <div class="sub"><b>For:</b> ICU/CCU doctors, pharmacists and nurses who already know these drugs and scores and want fast arithmetic at the bedside.</div>
-        <div class="sub"><b>It does:</b> dose and infusion-rate arithmetic from the values you enter, standard formulas and scores, and quick references.</div>
-        <div class="sub"><b>It does not:</b> choose a drug or a dose for a patient, replace a pharmacy check, know your unit’s drug concentrations (check the concentration shown matches your preparation), or apply every renal or hepatic adjustment.</div>
-        <div class="sub"><b>How it was checked:</b> formulas and ranges follow the published references below. The calculator has not been independently validated; if a result looks wrong, trust your protocol and tell us.</div>
+      <div class="card trust" id="data">
+        <h3>Data on this device</h3>
+        <dl>
+          <dt>What is stored</dt>
+          <dd>One unencrypted browser storage entry (<code>localStorage</code>, key <code>najmICU_v2</code>) holding the patient bar (weight, height, age, sex, creatinine), values typed into calculators, score selections, shift notes, and display settings (units, last tab, search filters, whether you have seen the welcome screen). The offline cache holds only the app’s own files.</dd>
+          <dt>What leaves the device</dt>
+          <dd>Nothing you enter, unless you choose to send it. Smart Assistant sends a prompt only when you press “Open in Claude” or “Open in ChatGPT”, and shift notes go with it only if you tick the box. Separately, page views are counted with GoatCounter: no cookies and none of your entries, and it is skipped if your browser sends Do Not Track.</dd>
+          <dt>Shared computers</dt>
+          <dd>Anyone using this browser profile can read what is saved. Don’t enter names, MRNs, dates of birth or bed numbers, and clear the data at the end of your shift.</dd>
+        </dl>
+        <div class="note-actions">
+          <button class="btn danger" type="button" id="wipeAllBtn">Clear saved data</button>
+        </div>
+      </div>
+
+      <div class="card trust" id="install">
+        <h3>Install and offline use</h3>
+        <dl>
+          <dt>iPhone or iPad (Safari)</dt>
+          <dd>Tap Share, then “Add to Home Screen”.</dd>
+          <dt>Android (Chrome)</dt>
+          <dd>Open the ⋮ menu, then “Install app” (or “Add to Home screen”).</dd>
+          <dt>Desktop (Chrome or Edge)</dt>
+          <dd>Use the install icon at the right of the address bar.</dd>
+          <dt>Offline</dt>
+          <dd>After one online visit, all calculators, scores, references and the notes pad work without a connection. Updates load the next time you open the app online.</dd>
+          <dt>Needs a connection</dt>
+          <dd><ul>
+            <li>Smart Assistant’s “Open in Claude” and “Open in ChatGPT” (they open claude.ai or chatgpt.com).</li>
+            <li>The Source link (GitHub) and email links (your mail app).</li>
+            <li>The page-view count, which is simply skipped offline.</li>
+          </ul></dd>
+        </dl>
       </div>
 
       <div class="card">
         <h3>Clinical References</h3>
         <div class="sub">Sources for dose ranges, formulas, and score interpretations.</div>
         <div id="ref-list"></div>
+      </div>
+
+      <div class="card changelog" id="changelog">
+        <h3>Changelog</h3>
+        <h4>1.3.1 <span>· 9 October 2026</span></h4>
+        <ul>
+          <li>Evidence and limits panel on the welcome screen and under About &amp; evidence.</li>
+          <li>Source line under each calculator that has a published reference.</li>
+          <li>Install, offline and stored-data notes; “Clear saved data” moved beside them.</li>
+          <li>Page-view counter now skipped under Do Not Track; privacy policy corrected to disclose it.</li>
+          <li>“Intelligent assistant” wording removed.</li>
+        </ul>
+        <h4>1.3.0 <span>· 9 October 2026</span></h4>
+        <ul>
+          <li>Shift notes no longer attached to AI links by default; opt-in with a no-identifiers check.</li>
+          <li>“What leaves this device” note in Smart Assistant.</li>
+          <li>Unsupported claims (“precise”, “latest guidelines”) removed.</li>
+          <li>Google Fonts dropped; contact email unified to contact@thetract.org.</li>
+        </ul>
+        <h4>1.2.0 <span>· 28–29 July 2026</span></h4>
+        <ul>
+          <li>Rocuronium and cisatracurium infusions, Neuroprotective Strategy tab, contact block.</li>
+          <li>Production service worker; manifest paths made relative.</li>
+        </ul>
+        <h4>1.1.0 <span>· 28 July 2026</span></h4>
+        <ul>
+          <li>High-contrast inputs and missing-input hints; eight more neuromuscular blockers.</li>
+          <li>RSI moved to its own tab with the 7 P’s; creatinine input width fixed.</li>
+        </ul>
       </div>
 
       <div class="card">
@@ -1565,7 +1696,6 @@
           <a class="btn" href="privacy-policy.html">Privacy policy</a>
           <a class="btn" href="https://github.com/mahham20022-art/Najm-icucalc" target="_blank" rel="noopener">Source</a>
           <button class="btn" type="button" id="showOnbBtn">Show welcome again</button>
-          <button class="btn danger" type="button" id="wipeAllBtn">Wipe all data</button>
         </div>
       </div>
     </section>
@@ -1574,7 +1704,7 @@
 
   <footer>
     <div class="fine"><strong>Reference aid — not a medical device.</strong> Always verify against institutional protocols and drug labels.</div>
-    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc · Designed by Dr. Mohamed Najm</div>
+    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.3.1 · last reviewed 9 Oct 2026 · Designed by Dr. Mohamed Najm</div>
   </footer>
 </div>
 
@@ -3096,15 +3226,11 @@ function renderAbout() {
     ).join("");
     list.dataset.rendered = "1";
   }
-  const bd = $("#app-build");
-  if (bd && !bd.dataset.set) {
-    bd.textContent = new Date().toISOString().slice(0, 10);
-    bd.dataset.set = "1";
-  }
 }
 function bindAbout() {
   $("#wipeAllBtn").addEventListener("click", () => {
-    if (!confirm("Erase ALL local data? This cannot be undone.")) return;
+    if (!confirm("Clear everything this app has saved in this browser: patient bar, inputs, scores, notes and settings? This cannot be undone.")) return;
+    clearTimeout(saveTimer);
     try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
     location.reload();
   });
@@ -3298,6 +3424,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // Onboarding CTAs
     $("#onbStart").addEventListener("click", showApp);
     $("#onbSkip").addEventListener("click", showApp);
+    $("#onbEvidence").addEventListener("click", () => {
+      showApp();
+      const aboutTab = $('#tabs .tab[data-tab="about"]');
+      if (aboutTab) aboutTab.click();
+      const ev = $("#evidence");
+      if (ev) ev.scrollIntoView({ block: "start" });
+    });
 
     // Year
     $("#year").textContent = new Date().getFullYear();
@@ -3342,13 +3475,15 @@ if ("serviceWorker" in navigator && location.protocol !== "file:") {
 }
 </script>
 
-<!-- GoatCounter — privacy-friendly analytics (no cookies, no PII, respects Do-Not-Track).
-     Skips only file:// and localhost; everywhere else count.js loads and self-registers. -->
+<!-- GoatCounter page-view count (no cookies, no entered values). Disclosed under About & evidence.
+     Skipped on file://, localhost, and when the browser sends Do Not Track. -->
 <script>
   (function () {
     var h = location.hostname;
     var localHost = h === "localhost" || h === "127.0.0.1" || h === "" || location.protocol === "file:";
     if (localHost) return;
+    var dnt = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+    if (dnt === "1" || dnt === "yes") return;
 
     window.goatcounter = { endpoint: "https://najmsd.goatcounter.com/count", no_onload: true };
 
