@@ -860,6 +860,42 @@
     box-shadow: 0 4px 12px -6px rgba(34,211,238,.5);
   }
 
+  /* -------- Patient switcher (pills for Patient 1 / 2 / 3…) -------- */
+  .patients-bar {
+    max-width: 1200px; margin: 0 auto;
+    padding: 8px 14px 0;
+    display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  }
+  .patient-chip {
+    appearance: none; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(15,30,53,.6); border: 1px solid var(--line);
+    color: var(--text-2); padding: 6px 8px 6px 12px; border-radius: var(--r-pill);
+    font-size: 11.5px; font-weight: 700;
+    transition: background .15s, border-color .15s, color .15s;
+  }
+  .patient-chip:hover { background: var(--ink-700); border-color: var(--line-2); color: var(--text); }
+  .patient-chip.active {
+    background: linear-gradient(135deg, var(--brand), var(--brand-2));
+    color: var(--brand-i); border-color: transparent;
+    box-shadow: 0 4px 12px -6px rgba(34,211,238,.5);
+  }
+  .patient-chip .pc-x {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 15px; height: 15px; border-radius: 50%;
+    font-size: 12px; line-height: 1; opacity: .6;
+  }
+  .patient-chip .pc-x:hover { opacity: 1; background: rgba(0,0,0,.18); }
+  .patient-chip-add {
+    appearance: none; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 4px;
+    background: transparent; border: 1px dashed var(--line-2);
+    color: var(--muted); padding: 6px 12px; border-radius: var(--r-pill);
+    font-size: 11.5px; font-weight: 700;
+    transition: border-color .15s, color .15s;
+  }
+  .patient-chip-add:hover { color: var(--text); border-color: var(--brand); }
+
   /* -------- Scores dropdowns -------- */
   .score-row {
     display: flex; align-items: center; justify-content: space-between;
@@ -1122,6 +1158,8 @@
       </button>
       <span class="save-dot" id="saveDot" title="Patient-bar values and inputs are saved in this browser only. Use Clear, or About &amp; evidence → Clear saved data, when you finish.">Saved on this device</span>
     </div>
+
+    <div class="patients-bar" id="patientsBar" role="tablist" aria-label="Patients"></div>
 
     <div class="patient">
       <div class="patient-inner">
@@ -1600,7 +1638,7 @@
         <div class="sub">Author &amp; clinical lead</div>
         <div class="row"><span class="k">Name</span><span class="v">Dr. Mohamed Najm</span></div>
         <div class="row"><span class="k">Credentials</span><span class="v">MBBS · PgDip EM · FEBN · MRCEM SECONDARY</span></div>
-        <div class="row"><span class="k">Version</span><span class="v">1.3.1</span></div>
+        <div class="row"><span class="k">Version</span><span class="v">1.4.0</span></div>
         <div class="row"><span class="k">Last reviewed</span><span class="v">9 Oct 2026</span></div>
       </div>
 
@@ -1788,13 +1826,32 @@ const state = {
   scores: {},
   notes: "",
   onboarded: false,
+  // Multi-patient switcher: `patient`/`inputs`/`scores`/`notes` above always
+  // hold the ACTIVE patient's live, in-progress values. `patients[i].data`
+  // is a snapshot of each OTHER (inactive) patient; the active slot's own
+  // `.data` is stale/unused until the user switches away from it.
+  patients: [{ id: "p1", label: "Patient 1", data: null }],
+  activeIndex: 0,
 };
+
+// Guards against a missing/corrupt `patients` array — including the first
+// load for anyone who saved data before this feature existed.
+function ensurePatientsValid() {
+  if (!Array.isArray(state.patients) || state.patients.length === 0) {
+    state.patients = [{ id: "p1", label: "Patient 1", data: null }];
+    state.activeIndex = 0;
+  }
+  if (typeof state.activeIndex !== "number" || state.activeIndex < 0 || state.activeIndex >= state.patients.length) {
+    state.activeIndex = 0;
+  }
+}
 
 function loadState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) Object.assign(state, JSON.parse(raw));
   } catch (e) {}
+  ensurePatientsValid();
 }
 let saveTimer = null;
 function saveState() {
@@ -1886,6 +1943,113 @@ function bindPatient() {
     runAll();
     showToast("Patient cleared");
   });
+}
+
+/* ============================================================
+   PATIENTS — switch between Patient 1 / 2 / 3…, each keeping its
+   own demographics, inputs, scores and notes.
+   ============================================================ */
+function blankPatientData() {
+  return { patient: { weight: "", height: "", age: "", sex: "", cr: "" }, inputs: {}, scores: {}, notes: "" };
+}
+function captureActivePatientData() {
+  const p = state.patients[state.activeIndex];
+  if (p) p.data = { patient: state.patient, inputs: state.inputs, scores: state.scores, notes: state.notes };
+}
+function applyPatientData(data) {
+  const d = data || blankPatientData();
+  state.patient = d.patient || { weight: "", height: "", age: "", sex: "", cr: "" };
+  state.inputs  = d.inputs  || {};
+  state.scores  = d.scores  || {};
+  state.notes   = d.notes   || "";
+}
+// Re-populates every DOM input from `state` and recomputes everything —
+// needed after switching the active patient, since typing-driven updates
+// normally flow the other way (DOM → state).
+function rehydrateUI() {
+  for (const [id, key] of PATIENT_FIELDS) {
+    const el = $("#" + id);
+    if (el) el.value = state.patient[key] || "";
+  }
+  ALL_INPUT_IDS.forEach(id => {
+    const el = $("#" + id);
+    if (el) el.value = state.inputs[id.replace("-", "_")] || "";
+  });
+  const notesEl = $("#notes");
+  if (notesEl) notesEl.value = state.notes || "";
+  renderAllScores();
+  applyUnits();
+  runAll();
+}
+function switchPatient(i) {
+  if (i === state.activeIndex || !state.patients[i]) return;
+  captureActivePatientData();
+  state.activeIndex = i;
+  applyPatientData(state.patients[i].data);
+  saveState();
+  renderPatientsBar();
+  rehydrateUI();
+  showToast("Switched to " + state.patients[i].label);
+}
+function addPatient() {
+  captureActivePatientData();
+  let n = state.patients.length + 1;
+  const used = new Set(state.patients.map(p => p.label));
+  while (used.has("Patient " + n)) n++;
+  state.patients.push({ id: "p" + Date.now(), label: "Patient " + n, data: blankPatientData() });
+  state.activeIndex = state.patients.length - 1;
+  applyPatientData(state.patients[state.activeIndex].data);
+  saveState();
+  renderPatientsBar();
+  rehydrateUI();
+  showToast("Added " + state.patients[state.activeIndex].label);
+}
+function removePatient(i) {
+  if (state.patients.length <= 1) { showToast("At least one patient required"); return; }
+  const label = state.patients[i].label;
+  if (!confirm(`Remove ${label}? This clears their saved values.`)) return;
+
+  const removingActive = i === state.activeIndex;
+  state.patients.splice(i, 1);
+
+  if (removingActive) {
+    // Pick a sensible neighbor to become active — same slot, or the last one.
+    const newIndex = Math.min(i, state.patients.length - 1);
+    state.activeIndex = newIndex;
+    applyPatientData(state.patients[newIndex].data);
+  } else if (i < state.activeIndex) {
+    state.activeIndex--; // same active patient, just shifted left — its live data is untouched
+  }
+
+  saveState();
+  renderPatientsBar();
+  rehydrateUI();
+  showToast(label + " removed");
+}
+function renderPatientsBar() {
+  const bar = $("#patientsBar");
+  if (!bar) return;
+  bar.innerHTML = state.patients.map((p, i) => `
+    <button type="button" class="patient-chip ${i === state.activeIndex ? "active" : ""}" data-idx="${i}" role="tab" aria-selected="${i === state.activeIndex}">
+      ${p.label}
+      ${state.patients.length > 1 ? `<span class="pc-x" data-remove="${i}" title="Remove ${p.label}">×</span>` : ""}
+    </button>
+  `).join("") + `<button type="button" class="patient-chip-add" id="addPatientBtn">+ Add patient</button>`;
+
+  bar.querySelectorAll(".patient-chip").forEach(btn => {
+    btn.addEventListener("click", e => {
+      if (e.target.closest(".pc-x")) return;
+      switchPatient(+btn.dataset.idx);
+    });
+  });
+  bar.querySelectorAll(".pc-x").forEach(x => {
+    x.addEventListener("click", e => {
+      e.stopPropagation();
+      removePatient(+x.dataset.remove);
+    });
+  });
+  const addBtn = $("#addPatientBtn");
+  if (addBtn) addBtn.addEventListener("click", addPatient);
 }
 
 function pbw() {
@@ -3373,15 +3537,18 @@ function runAll() {
   // global US/SI toggle, or per-field unit cycle.
 }
 
-function bindAllInputs() {
-  ["hd-sbp","hd-dbp","hd-hr","cpp-icp","cpp-map",
+// Shared with rehydrateUI() (see the PATIENTS section), which re-populates
+// these same fields from state when switching the active patient.
+const ALL_INPUT_IDS = ["hd-sbp","hd-dbp","hd-hr","cpp-icp","cpp-map",
    "ne-norepi","ne-epi","ne-phenyl","ne-dop","ne-vaso",
    "v-pao2","v-spo2","v-fio2","v-pplat","v-peep","v-tv",
    "ab-ph","ab-co2","ab-hco3","ab-na","ab-cl","ab-alb","ab-pao2","ab-fio2",
    "ca-ca","ca-alb","na-na","na-glu",
    "os-na","os-glu","os-bun","os-etoh","os-meas",
    "fwd-na","fwd-tgt","k-k",
-   "uo-vol","uo-hr"].forEach(id => bindInput(id, id.replace("-", "_")));
+   "uo-vol","uo-hr"];
+function bindAllInputs() {
+  ALL_INPUT_IDS.forEach(id => bindInput(id, id.replace("-", "_")));
 }
 
 function showApp() {
@@ -3406,6 +3573,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Init app
     bindPatient();
+    renderPatientsBar();
     bindTabs();
     bindInfusionControls();
     bindAntibioticControls();
