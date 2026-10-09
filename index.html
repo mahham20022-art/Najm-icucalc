@@ -882,10 +882,13 @@
   }
   .patient-chip .pc-x, .patient-chip .pc-edit {
     display: inline-flex; align-items: center; justify-content: center;
-    width: 15px; height: 15px; border-radius: 50%;
+    width: 22px; height: 22px; border-radius: 50%;
     font-size: 12px; line-height: 1; opacity: .6;
   }
   .patient-chip .pc-edit { font-size: 10.5px; }
+  .patient-chip button { appearance: none; background: none; border: 0; color: inherit; font: inherit; cursor: pointer; padding: 0; }
+  .patient-chip .pc-main { padding: 2px 2px; }
+  .patient-chip button:focus-visible, .patient-chip-add:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 6px; }
   .patient-chip .pc-x:hover, .patient-chip .pc-edit:hover { opacity: 1; background: rgba(0,0,0,.18); }
   .patient-chip-add {
     appearance: none; cursor: pointer;
@@ -1120,7 +1123,7 @@
       <h3 id="onbTrustTitle">Before you use it</h3>
       <p><b>For</b> ICU/CCU doctors, pharmacists and nurses who already know these drugs and scores. It does the arithmetic; the clinical decision stays with you.</p>
       <p><b>Not prospectively validated.</b> Decision support only. Check every result against your protocol and the drug label.</p>
-      <p>Version 1.3.1 · last reviewed 9 October 2026 · what you enter stays in this browser.</p>
+      <p>Version 1.4.1 · last reviewed 9 October 2026 · what you enter stays in this browser.</p>
       <button class="onb-link" type="button" id="onbEvidence">Evidence, limits and data handling</button>
     </div>
 
@@ -1160,7 +1163,7 @@
       <span class="save-dot" id="saveDot" title="Patient-bar values and inputs are saved in this browser only. Use Clear, or About &amp; evidence → Clear saved data, when you finish.">Saved on this device</span>
     </div>
 
-    <div class="patients-bar" id="patientsBar" role="tablist" aria-label="Patients"></div>
+    <div class="patients-bar" id="patientsBar" role="group" aria-label="Patients"></div>
 
     <div class="patient">
       <div class="patient-inner">
@@ -1624,11 +1627,11 @@
             <li>Not a regulated medical device.</li>
           </ul></dd>
           <dt>Version</dt>
-          <dd>1.3.1 · last reviewed 9 October 2026.</dd>
+          <dd>1.4.1 · last reviewed 9 October 2026.</dd>
           <dt>Report a suspected error</dt>
           <dd>Say what you entered, what the app showed and what you expected, with a source if you have one. Leave out patient identifiers.</dd>
         </dl>
-        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.3.1&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
+        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.4.1&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
           <span>Report an error · contact@thetract.org</span>
         </a>
@@ -1639,7 +1642,7 @@
         <div class="sub">Author &amp; clinical lead</div>
         <div class="row"><span class="k">Name</span><span class="v">Dr. Mohamed Najm</span></div>
         <div class="row"><span class="k">Credentials</span><span class="v">MBBS · PgDip EM · FEBN · MRCEM SECONDARY</span></div>
-        <div class="row"><span class="k">Version</span><span class="v">1.4.0</span></div>
+        <div class="row"><span class="k">Version</span><span class="v">1.4.1</span></div>
         <div class="row"><span class="k">Last reviewed</span><span class="v">9 Oct 2026</span></div>
       </div>
 
@@ -1656,11 +1659,11 @@
         <h3>Data on this device</h3>
         <dl>
           <dt>What is stored</dt>
-          <dd>One unencrypted browser storage entry (<code>localStorage</code>, key <code>najmICU_v2</code>) holding the patient bar (weight, height, age, sex, creatinine), values typed into calculators, score selections, shift notes, and display settings (units, last tab, search filters, whether you have seen the welcome screen). The offline cache holds only the app’s own files.</dd>
+          <dd>One unencrypted browser storage entry (<code>localStorage</code>, key <code>najmICU_v2</code>) holding, for each patient pill, its label, patient bar (weight, height, age, sex, creatinine), values typed into calculators, score selections and shift notes; plus and display settings (units, last tab, search filters, whether you have seen the welcome screen). The offline cache holds only the app’s own files.</dd>
           <dt>What leaves the device</dt>
           <dd>Nothing you enter, unless you choose to send it. Smart Assistant sends a prompt only when you press “Open in Claude” or “Open in ChatGPT”, and shift notes go with it only if you tick the box. Separately, page views are counted with GoatCounter: no cookies and none of your entries, and it is skipped if your browser sends Do Not Track.</dd>
           <dt>Shared computers</dt>
-          <dd>Anyone using this browser profile can read what is saved. Don’t enter names, MRNs, dates of birth or bed numbers, and clear the data at the end of your shift.</dd>
+          <dd>Anyone using this browser profile can read what is saved. Don’t enter names, MRNs or dates of birth. On a shared device, keep pill labels neutral (P1, P2) rather than bed numbers, and clear the data at the end of your shift.</dd>
         </dl>
         <div class="note-actions">
           <button class="btn danger" type="button" id="wipeAllBtn">Clear saved data</button>
@@ -1695,6 +1698,17 @@
 
       <div class="card changelog" id="changelog">
         <h3>Changelog</h3>
+        <h4>1.4.1 <span>· 9 October 2026</span></h4>
+        <ul>
+          <li>Patient pills are now real, keyboard-reachable buttons (switch, rename, remove), with screen-reader labels.</li>
+          <li>“Clear” in the patient bar now clears the active patient’s calculator inputs and scores as well, so a new patient in the same slot never inherits old values.</li>
+          <li>Rename asks for a short label and warns against names and MRNs; the data notice now covers multiple patients.</li>
+          <li>Version shown consistently everywhere.</li>
+        </ul>
+        <h4>1.4.0 <span>· 9 October 2026</span></h4>
+        <ul>
+          <li>Patient switcher: P1, P2, P3…, each with its own patient bar, inputs, scores and notes; pills can be renamed.</li>
+        </ul>
         <h4>1.3.1 <span>· 9 October 2026</span></h4>
         <ul>
           <li>Evidence and limits panel on the welcome screen and under About &amp; evidence.</li>
@@ -1743,7 +1757,7 @@
 
   <footer>
     <div class="fine"><strong>Reference aid — not a medical device.</strong> Always verify against institutional protocols and drug labels.</div>
-    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.3.1 · last reviewed 9 Oct 2026 · Designed by Dr. Mohamed Najm</div>
+    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.4.1 · last reviewed 9 Oct 2026 · Designed by Dr. Mohamed Najm</div>
   </footer>
 </div>
 
@@ -1938,11 +1952,14 @@ function bindPatient() {
     });
   }
   $("#resetPt").addEventListener("click", () => {
+    const lbl = (state.patients && state.patients[state.activeIndex] || {}).label || "patient";
+    if (!confirm("Clear " + lbl + "? This empties the patient bar, calculator inputs and score selections for this patient. Shift notes are kept.")) return;
     state.patient = { weight: "", height: "", age: "", sex: "", cr: "" };
-    for (const [id] of PATIENT_FIELDS) $("#" + id).value = "";
+    state.inputs = {};
+    state.scores = {};
     saveState();
-    runAll();
-    showToast("Patient cleared");
+    if (typeof rehydrateUI === "function") rehydrateUI(); else runAll();
+    showToast(lbl + " cleared");
   });
 }
 
@@ -2010,7 +2027,7 @@ function addPatient() {
 function renamePatient(i) {
   const p = state.patients[i];
   if (!p) return;
-  const next = prompt("Rename patient", p.label);
+  const next = prompt("Short label for this patient (e.g. P3 or a bed number). No names or MRNs.", p.label);
   if (next === null) return; // cancelled
   const trimmed = next.trim().slice(0, 24);
   if (!trimmed) return;
@@ -2046,35 +2063,22 @@ function escapeHtml(s) {
 function renderPatientsBar() {
   const bar = $("#patientsBar");
   if (!bar) return;
+  const many = state.patients.length > 1;
   bar.innerHTML = state.patients.map((p, i) => {
     const label = escapeHtml(p.label);
+    const on = i === state.activeIndex;
     return `
-    <button type="button" class="patient-chip ${i === state.activeIndex ? "active" : ""}" data-idx="${i}" role="tab" aria-selected="${i === state.activeIndex}">
-      ${label}
-      <span class="pc-edit" data-rename="${i}" title="Rename ${label}">✎</span>
-      ${state.patients.length > 1 ? `<span class="pc-x" data-remove="${i}" title="Remove ${label}">×</span>` : ""}
-    </button>
+    <span class="patient-chip ${on ? "active" : ""}">
+      <button type="button" class="pc-main" data-idx="${i}" aria-pressed="${on}" aria-label="${on ? "Active patient: " : "Switch to "}${label}">${label}</button>
+      <button type="button" class="pc-edit" data-rename="${i}" aria-label="Rename ${label}" title="Rename ${label}">✎</button>
+      ${many ? `<button type="button" class="pc-x" data-remove="${i}" aria-label="Remove ${label}" title="Remove ${label}">×</button>` : ""}
+    </span>
   `;
   }).join("") + `<button type="button" class="patient-chip-add" id="addPatientBtn">+ Add patient</button>`;
 
-  bar.querySelectorAll(".patient-chip").forEach(btn => {
-    btn.addEventListener("click", e => {
-      if (e.target.closest(".pc-x") || e.target.closest(".pc-edit")) return;
-      switchPatient(+btn.dataset.idx);
-    });
-  });
-  bar.querySelectorAll(".pc-edit").forEach(ed => {
-    ed.addEventListener("click", e => {
-      e.stopPropagation();
-      renamePatient(+ed.dataset.rename);
-    });
-  });
-  bar.querySelectorAll(".pc-x").forEach(x => {
-    x.addEventListener("click", e => {
-      e.stopPropagation();
-      removePatient(+x.dataset.remove);
-    });
-  });
+  bar.querySelectorAll(".pc-main").forEach(btn => btn.addEventListener("click", () => switchPatient(+btn.dataset.idx)));
+  bar.querySelectorAll(".pc-edit").forEach(ed => ed.addEventListener("click", () => renamePatient(+ed.dataset.rename)));
+  bar.querySelectorAll(".pc-x").forEach(x => x.addEventListener("click", () => removePatient(+x.dataset.remove)));
   const addBtn = $("#addPatientBtn");
   if (addBtn) addBtn.addEventListener("click", addPatient);
 }
@@ -3420,7 +3424,7 @@ function renderAbout() {
 }
 function bindAbout() {
   $("#wipeAllBtn").addEventListener("click", () => {
-    if (!confirm("Clear everything this app has saved in this browser: patient bar, inputs, scores, notes and settings? This cannot be undone.")) return;
+    if (!confirm("Clear everything this app has saved in this browser: every patient pill with its patient bar, inputs, scores and notes, plus settings? This cannot be undone.")) return;
     clearTimeout(saveTimer);
     try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
     location.reload();
