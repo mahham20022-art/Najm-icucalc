@@ -7,7 +7,7 @@
      FONTS     = stale-while-revalidate for Google Fonts
      IMAGES    = cache-first with size cap for user-added images
 */
-const VERSION  = "v16";
+const VERSION  = "v17";
 const PRECACHE = `najm-precache-${VERSION}`;
 const RUNTIME  = `najm-runtime-${VERSION}`;
 const ASSETS   = `najm-assets-${VERSION}`;
