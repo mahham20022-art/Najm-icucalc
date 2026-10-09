@@ -1,6 +1,6 @@
 # Najm ICUCalc
 
-A bedside personal assistant for ICU/CCU clinicians. Set the patient once, and
+A bedside calculator and reference for ICU/CCU clinicians. Set the patient once, and
 every module — infusions, hemodynamics, ventilator, ABG, electrolytes, renal,
 scores, notes — reacts live. All data stays on the device.
 
@@ -25,9 +25,18 @@ Enter once, used everywhere:
 
 ## Privacy
 
-Every input is stored in your browser's `localStorage` only. Nothing is sent
-to any server. To wipe everything, clear site data in your browser settings
-or use **Clear patient** / **Clear** in Notes.
+Every input is stored in your browser's `localStorage` (key `najmICU_v2`) only.
+Nothing you enter is sent anywhere unless you use Smart Assistant's
+"Open in Claude/ChatGPT" links (shift notes only if you opt in). Page views are
+counted with GoatCounter (no cookies, no entered values; skipped under Do Not
+Track). To wipe everything, use **About & evidence → Clear saved data**.
+
+## Evidence, limits and changelog
+
+See the **About & evidence** tab in the app: intended users, methods and
+sources, validation status (not prospectively validated; decision support
+only), version and last-reviewed date, how to report an error, and the
+changelog. Current version: **1.3.1**, last reviewed 9 October 2026.
 
 ## Running locally
 
@@ -37,7 +46,7 @@ python3 -m http.server 8080
 ```
 
 Or open `index.html` directly in any modern browser. The app is installable
-as a PWA (Add to Home Screen) and works fully offline once loaded.
+as a PWA (Add to Home Screen) and works offline once loaded.
 
 ## Disclaimer
 

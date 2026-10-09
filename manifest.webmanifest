@@ -1,7 +1,7 @@
 {
   "name": "Najm ICUCalc",
   "short_name": "ICUCalc",
-  "description": "Intelligent ICU calculator and clinical assistant",
+  "description": "ICU calculator and bedside reference",
   "start_url": "./",
   "scope": "./",
   "id": "./",

@@ -38,29 +38,30 @@
 <body>
 <main>
   <h1>Privacy Policy</h1>
-  <p class="muted">Najm ICUCalc — last updated <span id="dt"></span>.</p>
+  <p class="muted">Najm ICUCalc — last updated 9 October 2026 (app version 1.3.1).</p>
 
   <div class="card">
-    <p><strong>Summary:</strong> Najm ICUCalc does not collect, transmit, or share any personal data. Every value you enter — patient parameters, lab results, notes — is stored only on your own device in the browser's <code>localStorage</code>, and never leaves it.</p>
+    <p><strong>Summary:</strong> Everything you enter (patient values, lab results, notes) is stored only in your own browser’s <code>localStorage</code> and is not sent anywhere unless you choose to use Smart Assistant. The app counts page views with GoatCounter, which uses no cookies and receives none of your entries.</p>
   </div>
 
   <h2>1. Data we collect</h2>
-  <p><strong>None.</strong> The app has no analytics, no telemetry, no crash reporting, and no advertising SDKs. There are no third-party trackers, cookies for tracking, or fingerprinting scripts.</p>
+  <p>A page-view count through <a href="https://www.goatcounter.com/">GoatCounter</a>. Each visit sends the page address, referrer, browser type and screen size to GoatCounter; it sets no cookies and receives nothing you type into the app. The count is skipped when your browser sends Do Not Track, on localhost, and when you are offline. There is no crash reporting and no advertising.</p>
 
   <h2>2. Data you enter</h2>
-  <p>Patient data (weight, height, age, sex, creatinine), clinical inputs (blood pressure, ABG values, ventilator settings, scores, etc.), and free-text notes are stored locally in your device's browser storage. This data:</p>
+  <p>Patient data (weight, height, age, sex, creatinine), clinical inputs (blood pressure, ABG values, ventilator settings, scores and so on), free-text notes and display settings are stored unencrypted in your browser under the key <code>najmICU_v2</code>. This data:</p>
   <ul>
-    <li>Never leaves your device.</li>
-    <li>Is not sent to any server.</li>
-    <li>Is not accessible to the developers or any third party.</li>
-    <li>Can be erased at any time by tapping <em>Clear patient</em>, <em>Clear notes</em>, or by clearing site data in your browser settings.</li>
+    <li>Is not sent to any server by the app.</li>
+    <li>Is not accessible to the developer.</li>
+    <li>Can be read by anyone else using the same browser profile, so don’t enter names, MRNs, dates of birth or bed numbers.</li>
+    <li>Can be erased at any time with <em>About &amp; evidence → Clear saved data</em>, the <em>Clear</em> buttons on the patient bar and notes, or by clearing site data in your browser settings.</li>
   </ul>
+  <p><strong>Smart Assistant (optional).</strong> If you press “Open in Claude” or “Open in ChatGPT”, your question and the patient-bar context are placed in a link to claude.ai or chatgpt.com and processed under that company’s terms. Shift notes are attached only if you tick the box. The link also stays in your browser history.</p>
 
   <h2>3. Permissions</h2>
   <p>The app requests no runtime permissions. It does not access your camera, microphone, location, contacts, files, or health data.</p>
 
   <h2>4. Network use</h2>
-  <p>After the first load, the app functions fully offline via a service worker cache. No API calls are made to any external service during normal use.</p>
+  <p>After the first load, the app works offline from a service-worker cache that holds only the app’s own files. The only outbound requests are the page-view count above, links you choose to open (Smart Assistant, GitHub, email), and update checks for the app itself.</p>
 
   <h2>5. Children</h2>
   <p>The app is intended for use by licensed clinicians. It is not directed at children and does not knowingly collect any information from children under 13.</p>
@@ -72,13 +73,10 @@
   <p>If this policy changes, the update date at the top of the page will change. Continued use of the app after a change constitutes acceptance of the updated policy.</p>
 
   <h2>8. Contact</h2>
-  <p>Questions about this policy can be sent by opening an issue on the project repository at <a href="https://github.com/mahham20022-art/Najm-icucalc/issues">github.com/mahham20022-art/Najm-icucalc</a>.</p>
+  <p>Questions about this policy: <a href="mailto:contact@thetract.org?subject=Najm%20ICUCalc%20privacy">contact@thetract.org</a>.</p>
 
   <hr />
   <a href="./" class="back">← Back to app</a>
 </main>
-<script>
-  document.getElementById("dt").textContent = new Date().toISOString().slice(0, 10);
-</script>
 </body>
 </html>
