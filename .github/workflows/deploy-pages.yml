@@ -32,6 +32,8 @@ jobs:
           cp manifest.webmanifest     _site/manifest.webmanifest
           cp sw.js                    _site/sw.js
           cp privacy-policy.html      _site/privacy-policy.html
+          cp sitemap.xml              _site/sitemap.xml
+          cp robots.txt               _site/robots.txt
           mkdir -p _site/icons
           cp icons/*.png              _site/icons/
           # A .nojekyll so GitHub Pages serves files starting with _ or .

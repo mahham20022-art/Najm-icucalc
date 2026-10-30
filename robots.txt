@@ -1,0 +1,8 @@
+# Najm ICUCalc — robots policy
+# Every clinical calculator and protocol is public reference material. Index it all.
+
+User-agent: *
+Allow: /
+
+# Point search engines at the sitemap
+Sitemap: https://mahham20022-art.github.io/Najm-icucalc/sitemap.xml

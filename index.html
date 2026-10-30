@@ -5,8 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#071A2F" />
 <meta name="color-scheme" content="dark" />
-<meta name="description" content="ICU calculator and bedside reference — infusions, antibiotics, antidotes, RSI, neuroprotection, ABG, ventilator, electrolytes, renal, scores." />
-<title>Najm ICUCalc — ICU calculator</title>
+<meta name="description" content="Free online ICU calculator and bedside reference for intensivists, EM doctors and ICU nurses. Drug infusion rates (mcg/kg/min, mL/hr), APACHE II, HEART, TIMI, CURB-65, ICH score, QTc (Bazett/Fridericia/Framingham), ROX index, hyperkalaemia protocol, DKA/HHS pathway, massive transfusion, Surviving Sepsis bundle, Modified Duke, RSI protocol, antidotes, neuroprotection, ABG with differential." />
+<meta name="keywords" content="ICU calculator, intensive care calculator, APACHE II calculator, HEART score, TIMI score, CURB-65, ICH score, QTc calculator, ROX index, hyperkalemia protocol, DKA protocol, massive transfusion protocol, surviving sepsis, modified Duke criteria, RSI calculator, rapid sequence intubation, antidote reference, naloxone dose, sugammadex, mcg/kg/min to mL/hr, drip rate calculator, Cockcroft-Gault, CrCl, IBW, PBW, Berlin ARDS, driving pressure, anion gap, free water deficit, neuroprotective bundle" />
+<meta name="author" content="Dr. Mohamed Najm" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<meta name="googlebot" content="index, follow" />
+<link rel="canonical" href="https://mahham20022-art.github.io/Najm-icucalc/" />
+<title>Najm ICUCalc — free ICU calculator (APACHE II, HEART, QTc, drip rates) by Dr Mohamed Najm</title>
 <link rel="manifest" href="manifest.webmanifest" />
 <link rel="icon" type="image/x-icon" href="icons/favicon.ico" />
 <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png" />
@@ -24,15 +29,119 @@
 <meta name="msapplication-TileColor" content="#071A2F" />
 <meta name="msapplication-TileImage" content="icons/icon-192.png" />
 <meta name="msapplication-navbutton-color" content="#071A2F" />
-<meta property="og:title" content="Najm ICUCalc — ICU calculator" />
-<meta property="og:description" content="ICU calculator and bedside reference, with its sources and limits shown. By Dr. Mohamed Najm." />
+<meta property="og:title" content="Najm ICUCalc — free ICU calculator by Dr Mohamed Najm" />
+<meta property="og:description" content="APACHE II · HEART · TIMI · CURB-65 · ICH · QTc · ROX · drug drip rates (mcg/kg/min → mL/hr) · Surviving Sepsis bundle · hyperkalaemia, DKA, MTP protocols · RSI · antidotes · neuroprotection. Bedside reference for ICU & ED clinicians. Offline. Free." />
 <meta property="og:image" content="icons/icon-512.png" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://mahham20022-art.github.io/Najm-icucalc/" />
+<meta property="og:site_name" content="Najm ICUCalc" />
+<meta property="og:locale" content="en_US" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Najm ICUCalc" />
-<meta name="twitter:description" content="ICU calculator and bedside reference." />
+<meta name="twitter:title" content="Najm ICUCalc — free ICU calculator" />
+<meta name="twitter:description" content="APACHE II · HEART · TIMI · QTc · ROX · drip rates · Sepsis / Hyperkalaemia / DKA / MTP protocols. Bedside reference for ICU/ED. Offline. Free." />
 <meta name="twitter:image" content="icons/icon-512.png" />
+
+<!-- Rich structured data for Google — tells crawlers this is a Medical Web Page + Medical Calculator app -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": "https://mahham20022-art.github.io/Najm-icucalc/#app",
+      "name": "Najm ICUCalc",
+      "alternateName": ["ICU Calculator", "Najm ICU Calculator"],
+      "url": "https://mahham20022-art.github.io/Najm-icucalc/",
+      "description": "Free online ICU calculator and bedside reference. 50+ clinical calculators and protocols for intensivists, emergency medicine doctors and ICU/CCU nurses.",
+      "applicationCategory": "MedicalApplication",
+      "applicationSubCategory": "MedicalCalculator",
+      "operatingSystem": "Any (PWA, iOS, Android, Windows, macOS, Linux)",
+      "browserRequirements": "Modern browser with JavaScript",
+      "softwareVersion": "1.5.2",
+      "datePublished": "2026-07-25",
+      "dateModified": "2026-10-30",
+      "inLanguage": "en",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "featureList": [
+        "APACHE II mortality calculator",
+        "HEART Score for chest pain",
+        "TIMI UA/NSTEMI risk score",
+        "CURB-65 pneumonia severity",
+        "ICH Score 30-day mortality",
+        "Modified Duke Criteria for infective endocarditis",
+        "QTc calculator (Bazett, Fridericia, Framingham)",
+        "ROX Index for HFNC success",
+        "Weight-based drug infusion drip rate calculator (mcg/kg/min to mL/hr)",
+        "Antibiotic dose adjustment by CrCl",
+        "Antidote reference (naloxone, flumazenil, sugammadex, fomepizole, hydroxocobalamin...)",
+        "Rapid Sequence Intubation (RSI) 7 P's protocol",
+        "Neuroprotective strategy bundle (TBI, SAH, ICH)",
+        "Surviving Sepsis Campaign 2021 bundle",
+        "Hyperkalaemia emergency protocol",
+        "DKA / HHS management pathway",
+        "Massive Transfusion Protocol (1:1:1)",
+        "ABG interpretation with differential diagnosis",
+        "Berlin ARDS classification, driving pressure, compliance",
+        "Cockcroft-Gault CrCl, IBW, BSA",
+        "Corrected calcium, sodium, osmolality, free water deficit",
+        "GCS, qSOFA, SOFA, CHA2DS2-VASc, HAS-BLED, Wells, RASS scoring"
+      ],
+      "author": {
+        "@type": "Person",
+        "name": "Dr Mohamed Najm",
+        "jobTitle": "Emergency medicine physician / Intensivist",
+        "honorificSuffix": "MBBS, PgDip EM, FEBN, MRCEM SECONDARY",
+        "telephone": "+966564762990"
+      },
+      "creator": {
+        "@type": "Person",
+        "name": "Dr Mohamed Najm"
+      }
+    },
+    {
+      "@type": "MedicalWebPage",
+      "@id": "https://mahham20022-art.github.io/Najm-icucalc/#page",
+      "name": "Najm ICUCalc",
+      "description": "Bedside clinical calculators and protocols for ICU, CCU and emergency medicine.",
+      "audience": {
+        "@type": "MedicalAudience",
+        "audienceType": "Clinician",
+        "requiredMinAge": 18
+      },
+      "medicalAudience": ["Clinician", "Physician", "Nurse"],
+      "lastReviewed": "2026-10-30",
+      "specialty": ["Critical Care Medicine", "Emergency Medicine", "Internal Medicine"],
+      "mainContentOfPage": "ICU bedside calculators including APACHE II, HEART, TIMI, CURB-65, ICH score, QTc, ROX index, drug infusion rates, antibiotic renal adjustment, antidotes, RSI protocol, neuroprotection, Surviving Sepsis, hyperkalaemia and DKA pathways."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is Najm ICUCalc free?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. The app and all calculators are free to use, with no ads, no sign-up, and no account required." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does Najm ICUCalc work offline?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. After the first visit, the app is cached and works fully offline. You can also Add to Home Screen on iPhone or install as a PWA on Android for a native-like experience." }
+        },
+        {
+          "@type": "Question",
+          "name": "What calculators does Najm ICUCalc include?",
+          "acceptedAnswer": { "@type": "Answer", "text": "APACHE II, HEART, TIMI, CURB-65, ICH, Modified Duke, GCS, qSOFA, SOFA, CHA2DS2-VASc, HAS-BLED, Wells, RASS; QTc (Bazett/Fridericia/Framingham); ROX index; CrCl, IBW, BSA; corrected Ca/Na, osmolality, free water deficit; drug infusion drip rates (mcg/kg/min to mL/hr); and protocol bundles for RSI, neuroprotection, Surviving Sepsis, hyperkalaemia, DKA/HHS and massive transfusion." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is Najm ICUCalc a regulated medical device?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. It is a decision-support reference, not a regulated medical device. Every result must be verified against your institutional protocols, drug labels and the patient's clinical context." }
+        }
+      ]
+    }
+  ]
+}
+</script>
 <style>
   /* ============================================================
      TOKENS — premium ICU palette + 8pt spacing
