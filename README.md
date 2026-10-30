@@ -36,7 +36,7 @@ Track). To wipe everything, use **About & evidence → Clear saved data**.
 See the **About & evidence** tab in the app: intended users, methods and
 sources, validation status (not prospectively validated; decision support
 only), version and last-reviewed date, how to report an error, and the
-changelog. Current version: **1.3.1**, last reviewed 9 October 2026.
+changelog. Current version: **1.5.2**, last reviewed 30 October 2026.
 
 ## Running locally
 
