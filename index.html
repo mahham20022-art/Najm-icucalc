@@ -1253,6 +1253,10 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 13a3.5 3.5 0 0 0-3.5 3.5v1a3.5 3.5 0 1 1-7 0"/><path d="M8.5 21a3.5 3.5 0 1 1-7 0v-1a3.5 3.5 0 0 1 3.5-3.5"/><path d="M17.5 16a3.5 3.5 0 1 0 0-7h-1a3.5 3.5 0 1 1 0-7"/><path d="M22.5 8a3.5 3.5 0 0 0-3.5-3.5"/></svg>
           Neuro
         </button>
+        <button class="tab tab-danger" type="button" data-tab="sepsis">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          Sepsis
+        </button>
         <button class="tab" type="button" data-tab="about">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 12h1v5h1"/></svg>
           About &amp; evidence
@@ -1536,6 +1540,7 @@
         <div class="card"><h3>Wells (PE)</h3><div class="sub">Pretest probability of PE.</div><div id="score-wells"></div><div class="src">Source: ESC PE guidelines, 2019</div></div>
         <div class="card"><h3>RASS</h3><div class="sub">Richmond Agitation–Sedation Scale.</div><div id="score-rass"></div><div class="src">Source: Sessler et al., Am J Respir Crit Care Med 2002</div></div>
         <div class="card"><h3>Modified Duke Criteria</h3><div class="sub">Infective endocarditis diagnosis — 2 major, or 1 major + 3 minor, or 5 minor = Definite IE.</div><div id="score-duke"></div><div class="src">Source: Li JS et al., Clin Infect Dis 2000;30:633–8 (modified Duke)</div></div>
+        <div class="card"><h3>APACHE II</h3><div class="sub">ICU mortality prediction — use the <b>worst</b> value in first 24 h of admission.</div><div id="score-apache2"></div><div class="src">Source: Knaus WA et al., Crit Care Med 1985;13:818–29</div></div>
       </div>
     </section>
 
@@ -1603,6 +1608,17 @@
         </div>
       </div>
       <div class="cards" id="neuroCards"></div>
+    </section>
+
+    <!-- SEPSIS -->
+    <section class="module" id="m-sepsis">
+      <div class="module-head">
+        <div>
+          <h2>Sepsis &amp; Septic Shock</h2>
+          <p>Surviving Sepsis Campaign 2021 — bedside bundle, resuscitation, pressors, source control, adjuncts.</p>
+        </div>
+      </div>
+      <div class="cards" id="sepsisCards"></div>
     </section>
 
     <!-- ABOUT -->
@@ -2167,6 +2183,7 @@ function bindTabs() {
     if (name === "antidotes") renderAntidotes();
     if (name === "rsi") renderRSI();
     if (name === "neuro") renderNeuro();
+    if (name === "sepsis") renderSepsis();
 
     // Scroll active tab into view within the tab bar
     const activeBtn = container.querySelector(`.tab[data-tab="${name}"]`);
@@ -2706,6 +2723,55 @@ function renderNeuro() {
   `).join("");
   el.dataset.rendered = "1";
 }
+
+/* ============================================================
+   SEPSIS & SEPTIC SHOCK — Surviving Sepsis Campaign 2021
+   ============================================================ */
+const SEPSIS_BUNDLE = [
+  { icon: "⏰", title: "Hour-1 Bundle (SSC 2021)", verdict: "bad",
+    body: "Start every intervention within the first hour of recognition:<br>• <b>Lactate</b> — measure; re-check if initial > 2 mmol/L<br>• <b>Blood cultures ×2</b> BEFORE antibiotics (do not delay abx &gt; 45 min)<br>• <b>Broad-spectrum antibiotics</b> within 1 hour of recognition<br>• <b>30 mL/kg crystalloid</b> for hypotension OR lactate ≥ 4 mmol/L — give in 3 h<br>• <b>Vasopressors</b> for MAP &lt; 65 mmHg if still hypotensive after fluids" },
+  { icon: "🔍", title: "Recognise septic shock",
+    body: "<b>Sepsis</b> = suspected infection + ΔSOFA ≥ 2 (new organ dysfunction).<br><b>Septic shock</b> = sepsis + persisting hypotension requiring vasopressor to maintain MAP ≥ 65 + lactate &gt; 2 mmol/L despite adequate fluid.<br><b>qSOFA</b> at bedside (≥ 2 of RR ≥ 22, altered mental status, SBP ≤ 100) → trigger workup; not a diagnostic rule." },
+  { icon: "💧", title: "Fluid resuscitation",
+    body: "<b>30 mL/kg balanced crystalloid</b> within 3 h (ideal body weight, cap at 70 kg if obese is reasonable).<br>Preferred: <b>Lactated Ringer / Plasmalyte</b> (balanced) over 0.9 % NS (SMART, SALT-ED).<br>After initial bolus → <b>dynamic reassessment</b>: PLR, SV/PP variation, IVC collapsibility, cardiac echo, lactate trend. Avoid routine CVP.<br>Consider <b>albumin 20 %</b> when crystalloid volume &gt; 50 mL/kg or persistent hypoalbuminaemia (ALBIOS)." },
+  { icon: "💉", title: "Vasopressor ladder",
+    body: "<b>1st · Norepinephrine</b> 0.05–1 mcg/kg/min — target MAP ≥ 65.<br><b>2nd · Vasopressin</b> 0.03 U/min fixed — add when NE 0.25–0.5 (spares catecholamine, improves renal flow).<br><b>3rd · Epinephrine</b> 0.05–0.5 mcg/kg/min — if still inadequate.<br><b>4th · Angiotensin II</b> 10–40 ng/kg/min — refractory shock (ATHOS-3).<br><b>Dobutamine</b> 2.5–20 mcg/kg/min — add for low cardiac output + ongoing hypoperfusion despite MAP target." },
+  { icon: "💊", title: "Empiric antibiotics (ICU septic shock)",
+    body: "Cover: <b>MRSA + Pseudomonas + ESBL</b> based on local antibiogram.<br>• <b>Vancomycin</b> 25–30 mg/kg load, then AUC-guided (400–600) <b>+</b><br>• <b>Piperacillin-tazobactam</b> 4.5 g q6h (extended infusion) <b>OR Cefepime</b> 2 g q8h<br>• <b>Carbapenem</b> (meropenem 1 g q8h) if prior ESBL/high local resistance<br>• Add <b>metronidazole / clindamycin</b> for intra-abdominal / necrotising fasciitis<br>• Add <b>micafungin 100 mg qD</b> if candidaemia risk<br>De-escalate within 48–72 h based on cultures + procalcitonin trend." },
+  { icon: "🔪", title: "Source control",
+    body: "<b>Within 6–12 h</b> of recognition where feasible. Common missed sources: abscess, cholangitis, necrotising skin/soft-tissue, prosthetic infection, infected catheter.<br>• <b>Remove</b> infected intravascular catheters without delay once another access is secured.<br>• <b>Drain</b> abscesses percutaneously or surgically.<br>• <b>Debride</b> necrotising fasciitis immediately — survival drops with each hour." },
+  { icon: "🌞", title: "Corticosteroids",
+    body: "<b>Hydrocortisone 200 mg/day IV</b> (50 mg q6h or 200 mg continuous infusion) when septic shock requires NE ≥ 0.25 mcg/kg/min for ≥ 4 h (SSC weak recommendation; ADRENAL/APROCCHSS supportive). Taper when vasopressor weaned.<br>No role for sepsis without shock." },
+  { icon: "🫁", title: "Mechanical ventilation",
+    body: "<b>Low TV 6 mL/kg PBW</b> · plateau ≤ 30 · driving pressure &lt; 15 cmH₂O.<br>Target SpO₂ 94–98 % (avoid hyperoxia).<br><b>Prone position ≥ 12–16 h/day</b> if P/F &lt; 150 (PROSEVA — 50 % mortality reduction).<br>Conservative fluid strategy once resuscitated (FACTT)." },
+  { icon: "🍬", title: "Glycaemic control",
+    body: "Start insulin when BG > 180 mg/dL (10 mmol/L). Target 140–180 mg/dL. Check q1–2 h on infusion. Avoid tight control (NICE-SUGAR: 80–110 harmful)." },
+  { icon: "🩸", title: "Transfusion thresholds",
+    body: "<b>Hb 7 g/dL</b> for most septic patients (TRISS).<br><b>Hb 8 g/dL</b> if active ACS, chronic cardiac disease. <br>Platelets &lt; 10 (prophylactic) or &lt; 20 (bleeding risk) or &lt; 50 (active bleeding / procedure).<br>FFP only for active bleeding + coagulopathy (not prophylactic for lab abnormalities)." },
+  { icon: "💧", title: "Renal replacement therapy",
+    body: "Standard indications only (K+ > 6.5, pH < 7.1 refractory, severe azotaemia, volume overload refractory). Do NOT start RRT just for creatinine rise in septic AKI (STARRT-AKI, IDEAL-ICU). Continuous RRT if hemodynamically unstable; intermittent if stable." },
+  { icon: "🍽️", title: "Nutrition",
+    body: "Start <b>enteral feeds within 72 h</b> (ESICM 2021). Trophic 10–20 mL/h first 24–48 h in shock, advance as perfusion improves. Target 25–30 kcal/kg + 1.2–2 g protein/kg once stable. Avoid parenteral &lt; 7 d unless EN not possible." },
+  { icon: "🧊", title: "DVT & stress-ulcer prophylaxis",
+    body: "<b>DVT:</b> LMWH (enoxaparin 40 mg SC daily) preferred over UFH; add IPCs if bleed risk. Weight-adjust LMWH if BMI > 40 or renal.<br><b>Stress ulcer:</b> PPI or H₂-blocker only if risk factors (mechanical ventilation ≥ 48 h, coagulopathy, GI bleed hx). De-escalate when feeding." },
+  { icon: "🧪", title: "Procalcitonin — not for diagnosis, use for de-escalation",
+    body: "PCT trend can shorten antibiotic duration safely in ICU sepsis (SAPS, PRORATA). Stop antibiotics when PCT falls > 80 % from peak OR &lt; 0.5 ng/mL AND clinical improvement + source controlled. Do not withhold empiric abx based on a low PCT." },
+  { icon: "📞", title: "When to call for help",
+    body: "• Lactate not clearing by 2–4 h → re-assess source + fluids + pressors<br>• MAP &lt; 65 on NE &gt; 0.5 mcg/kg/min — add vasopressin + consider steroids + angio II / epinephrine<br>• Rising lactate + oliguria + rising Cr → consider RRT, imaging for missed source<br>• Still hypoxic despite 100 % FiO₂ → prone, consider ECMO (P/F &lt; 80 refractory)" },
+];
+
+function renderSepsis() {
+  const el = $("#sepsisCards");
+  if (!el || el.dataset.rendered) return;
+  el.innerHTML = SEPSIS_BUNDLE.map(n => `
+    <div class="card">
+      <h3>${n.icon} ${n.title}</h3>
+      <div class="verdict ${n.verdict || "info"}" style="margin-top:6px;line-height:1.7">${n.body}</div>
+    </div>
+  `).join("");
+  el.dataset.rendered = "1";
+}
+
 
 function renderRSIProtocol() {
   const el = $("#rsiProtocol");
@@ -3337,6 +3403,69 @@ const SCORES = {
     if (majors === 1 && minors === 0) return [`${summary} → POSSIBLE IE`, "warn"];
     return [`${summary} → Criteria not met (rejected unless alternate dx / resolution ≤ 4 d abx)`, "ok"];
   } },
+  apache2: { items: [
+    { k:"Temperature (rectal, °C) — worst value in 24 h", opts:[
+      ["≥ 41 or ≤ 29.9",4],["39–40.9 or 30–31.9",3],["32–33.9",2],
+      ["38.5–38.9 or 34–35.9",1],["36–38.4 (normal)",0]
+    ]},
+    { k:"MAP (mmHg)", opts:[
+      ["≥ 160 or ≤ 49",4],["130–159",3],["110–129 or 50–69",2],["70–109 (normal)",0]
+    ]},
+    { k:"Heart rate (bpm)", opts:[
+      ["≥ 180 or ≤ 39",4],["140–179 or 40–54",3],["110–139 or 55–69",2],["70–109 (normal)",0]
+    ]},
+    { k:"Respiratory rate (/min)", opts:[
+      ["≥ 50 or ≤ 5",4],["35–49",3],["10–11 or 6–9",2],["25–34",1],["12–24 (normal)",0]
+    ]},
+    { k:"Oxygenation — FiO₂ ≥ 50% use A–a gradient; FiO₂ < 50% use PaO₂", opts:[
+      ["A–a ≥ 500  or  PaO₂ < 55",4],["A–a 350–499  or  PaO₂ 55–60",3],
+      ["A–a 200–349",2],["PaO₂ 61–70",1],["A–a < 200  or  PaO₂ > 70",0]
+    ]},
+    { k:"Arterial pH", opts:[
+      ["≥ 7.7 or < 7.15",4],["7.6–7.69 or 7.15–7.24",3],
+      ["7.25–7.32",2],["7.5–7.59",1],["7.33–7.49 (normal)",0]
+    ]},
+    { k:"Serum Na (mEq/L)", opts:[
+      ["≥ 180 or ≤ 110",4],["160–179 or 111–119",3],
+      ["155–159 or 120–129",2],["150–154",1],["130–149 (normal)",0]
+    ]},
+    { k:"Serum K (mEq/L)", opts:[
+      ["≥ 7 or < 2.5",4],["6–6.9",3],["2.5–2.9",2],
+      ["5.5–5.9 or 3–3.4",1],["3.5–5.4 (normal)",0]
+    ]},
+    { k:"Creatinine (mg/dL) — ×2 if ARF", opts:[
+      ["≥ 3.5",4],["2–3.4",3],["1.5–1.9 or < 0.6",2],["0.6–1.4 (normal)",0]
+    ]},
+    { k:"Hematocrit (%)", opts:[
+      ["≥ 60 or < 20",4],["50–59.9 or 20–29.9",2],
+      ["46–49.9",1],["30–45.9 (normal)",0]
+    ]},
+    { k:"WBC (× 10³/μL)", opts:[
+      ["≥ 40 or < 1",4],["20–39.9 or 1–2.9",2],["15–19.9",1],["3–14.9 (normal)",0]
+    ]},
+    { k:"GCS (points = 15 − GCS)", opts:[
+      ["GCS 3  (12 pts)",12],["GCS 4  (11 pts)",11],["GCS 5  (10 pts)",10],
+      ["GCS 6  (9 pts)",9],["GCS 7  (8 pts)",8],["GCS 8  (7 pts)",7],
+      ["GCS 9  (6 pts)",6],["GCS 10 (5 pts)",5],["GCS 11 (4 pts)",4],
+      ["GCS 12 (3 pts)",3],["GCS 13 (2 pts)",2],["GCS 14 (1 pt)",1],
+      ["GCS 15 (0 pts) (normal)",0]
+    ]},
+    { k:"Age (years)", opts:[
+      ["≥ 75",6],["65–74",5],["55–64",3],["45–54",2],["≤ 44",0]
+    ]},
+    { k:"Chronic health (cirrhosis / NYHA IV / COPD on home O₂ / dialysis / immunocompromised)", opts:[
+      ["None",0],["Yes + elective postop",2],["Yes + non-operative or emergency postop",5]
+    ]},
+  ], i: (t) => {
+    if (t <= 4)  return [`${t} pts → ~4% mortality`, "ok"];
+    if (t <= 9)  return [`${t} pts → ~8% mortality`, "ok"];
+    if (t <= 14) return [`${t} pts → ~15% mortality`, "warn"];
+    if (t <= 19) return [`${t} pts → ~25% mortality`, "warn"];
+    if (t <= 24) return [`${t} pts → ~40% mortality`, "bad"];
+    if (t <= 29) return [`${t} pts → ~55% mortality`, "bad"];
+    if (t <= 34) return [`${t} pts → ~73% mortality`, "bad"];
+    return [`${t} pts → ~85% mortality (critical)`, "bad"];
+  }},
 };
 function renderScore(key) {
   const sc = SCORES[key];
