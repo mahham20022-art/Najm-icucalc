@@ -1535,6 +1535,7 @@
         <div class="card"><h3>HAS-BLED</h3><div class="sub">Bleeding risk on anticoagulation.</div><div id="score-hasbled"></div><div class="src">Source: ESC AF guidelines, 2020</div></div>
         <div class="card"><h3>Wells (PE)</h3><div class="sub">Pretest probability of PE.</div><div id="score-wells"></div><div class="src">Source: ESC PE guidelines, 2019</div></div>
         <div class="card"><h3>RASS</h3><div class="sub">Richmond Agitation–Sedation Scale.</div><div id="score-rass"></div><div class="src">Source: Sessler et al., Am J Respir Crit Care Med 2002</div></div>
+        <div class="card"><h3>Modified Duke Criteria</h3><div class="sub">Infective endocarditis diagnosis — 2 major, or 1 major + 3 minor, or 5 minor = Definite IE.</div><div id="score-duke"></div><div class="src">Source: Li JS et al., Clin Infect Dis 2000;30:633–8 (modified Duke)</div></div>
       </div>
     </section>
 
@@ -3314,6 +3315,28 @@ const SCORES = {
       ["−3 Moderate sedation",-3],["−4 Deep sedation",-4],["−5 Unarousable",-5],
     ] },
   ], i: t => t >= 2 ? ["Agitated — assess pain/delirium.","warn"] : t <= -3 ? ["Deep sedation.","warn"] : ["Acceptable.","ok"] },
+  duke: { items: [
+    { k:"MAJOR · Blood cultures positive for IE (typical organism × 2 BC, or persistently positive, or single Coxiella / anti-phase I IgG ≥ 1:800)", opts:[["No",0],["Yes",2]] },
+    { k:"MAJOR · Endocardial involvement (echo: vegetation / abscess / new prosthetic dehiscence, or new valvular regurgitation)", opts:[["No",0],["Yes",2]] },
+    { k:"MINOR · Predisposition (predisposing heart condition or IV drug use)", opts:[["No",0],["Yes",1]] },
+    { k:"MINOR · Fever > 38 °C (100.4 °F)", opts:[["No",0],["Yes",1]] },
+    { k:"MINOR · Vascular (arterial emboli, septic pulmonary infarct, mycotic aneurysm, ICH, Janeway lesions, conjunctival hemorrhages)", opts:[["No",0],["Yes",1]] },
+    { k:"MINOR · Immunologic (glomerulonephritis, Osler nodes, Roth spots, rheumatoid factor)", opts:[["No",0],["Yes",1]] },
+    { k:"MINOR · Microbiologic (positive BC not meeting major, or serological evidence of IE-consistent organism)", opts:[["No",0],["Yes",1]] },
+  ], i: (_t, vals) => {
+    let majors = 0, minors = 0;
+    for (const v of Object.values(vals || {})) {
+      if (v === 2) majors++; else if (v === 1) minors++;
+    }
+    const summary = `${majors} major + ${minors} minor`;
+    if (majors >= 2) return [`${summary} → DEFINITE IE`, "bad"];
+    if (majors === 1 && minors >= 3) return [`${summary} → DEFINITE IE`, "bad"];
+    if (minors >= 5) return [`${summary} → DEFINITE IE`, "bad"];
+    if (majors === 1 && minors >= 1 && minors <= 2) return [`${summary} → POSSIBLE IE`, "warn"];
+    if (majors === 0 && minors >= 3 && minors <= 4) return [`${summary} → POSSIBLE IE`, "warn"];
+    if (majors === 1 && minors === 0) return [`${summary} → POSSIBLE IE`, "warn"];
+    return [`${summary} → Criteria not met (rejected unless alternate dx / resolution ≤ 4 d abx)`, "ok"];
+  } },
 };
 function renderScore(key) {
   const sc = SCORES[key];
@@ -3359,9 +3382,11 @@ function tallyScore(key) {
     box.style.background = c[0]; box.style.borderColor = c[1]; el.style.color = c[2];
     return;
   }
-  const [msg, level] = sc.i(total);
+  const [msg, level] = sc.i(total, vals, sc.items);
   const c = colors[level] || colors.info;
-  el.textContent = total + " · " + msg;
+  // Duke tally is categorical (major/minor combo), not a single number — don't
+  // prefix the message with a raw total that could be misread.
+  el.textContent = key === "duke" ? msg : (total + " · " + msg);
   box.style.background = c[0]; box.style.borderColor = c[1]; el.style.color = c[2];
 }
 function renderAllScores() { Object.keys(SCORES).forEach(renderScore); }
