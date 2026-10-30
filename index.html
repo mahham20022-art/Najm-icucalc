@@ -3689,32 +3689,113 @@ function bindNotes() {
    ABOUT
    ============================================================ */
 const REFERENCES = [
+  // General ICU reference
+  "__H__ General ICU reference",
   "Marino PL. The ICU Book, 5th ed. Wolters Kluwer, 2023.",
-  "Evans L et al. Surviving Sepsis Campaign 2021. Crit Care Med 2021;49(11):e1063–e1143.",
-  "ARDS Definition Task Force. Berlin definition. JAMA 2012;307(23):2526–33.",
-  "ARDSnet. Low tidal volumes for ARDS. NEJM 2000;342(18):1301–08.",
-  "Amato MBP et al. Driving pressure and survival in ARDS. NEJM 2015;372(8):747–55.",
-  "Panchal AR et al. 2020 AHA CPR & ECC Guidelines. Circulation 2020;142(16_suppl_2).",
+
+  // Sepsis & septic shock
+  "__H__ Sepsis & septic shock",
+  "Evans L et al. Surviving Sepsis Campaign International Guidelines for Sepsis and Septic Shock 2021. Crit Care Med 2021;49(11):e1063–e1143.",
+  "Singer M et al. Sepsis-3: The Third International Consensus Definitions (qSOFA, septic shock). JAMA 2016;315(8):801–10.",
+  "Venkatesh B et al. ADRENAL — Adjunctive glucocorticoid therapy in patients with septic shock. NEJM 2018;378(9):797–808.",
+  "Annane D et al. APROCCHSS — Hydrocortisone plus fludrocortisone for adults with septic shock. NEJM 2018;378(9):809–18.",
+  "Caironi P et al. ALBIOS — Albumin replacement in severe sepsis / septic shock. NEJM 2014;370(15):1412–21.",
+  "Bouadma L et al. PRORATA — Procalcitonin-guided antibiotic therapy in the ICU. Lancet 2010;375(9713):463–74.",
+  "Holst LB et al. TRISS — Lower vs higher Hb threshold in septic shock. NEJM 2014;371(15):1381–91.",
+  "Bagshaw SM et al. STARRT-AKI — Timing of initiation of RRT in acute kidney injury. NEJM 2020;383(3):240–51.",
+  "NICE-SUGAR Study Investigators. Intensive vs conventional glucose control in critically ill patients. NEJM 2009;360(13):1283–97.",
+
+  // Ventilation / ARDS
+  "__H__ Ventilation & ARDS",
+  "ARDS Network. Ventilation with lower tidal volumes for ALI and ARDS. NEJM 2000;342(18):1301–8.",
+  "Amato MBP et al. Driving pressure and survival in the acute respiratory distress syndrome. NEJM 2015;372(8):747–55.",
+  "ARDS Definition Task Force. Acute respiratory distress syndrome — the Berlin definition. JAMA 2012;307(23):2526–33.",
+  "Guérin C et al. PROSEVA — Prone positioning in severe acute respiratory distress syndrome. NEJM 2013;368(23):2159–68.",
+  "Semler MW et al. SMART — Balanced crystalloids vs saline in critically ill adults. NEJM 2018;378(9):829–39.",
+  "Roca O et al. An index combining respiratory rate and oxygenation to predict outcome of nasal high-flow therapy (ROX). Am J Respir Crit Care Med 2019;199(11):1368–76.",
+
+  // Resuscitation & haemorrhage
+  "__H__ Resuscitation, trauma & massive transfusion",
+  "Panchal AR et al. Part 3: adult basic and advanced life support — 2020 AHA Guidelines for CPR & ECC. Circulation 2020;142(16_suppl_2):S366–S468.",
+  "Khanna A et al. ATHOS-3 — Angiotensin II for the treatment of vasodilatory shock (basis for NE equivalents). NEJM 2017;377(5):419–30.",
+  "CRASH-2 Trial collaborators. Effects of tranexamic acid on death, vascular occlusive events and blood transfusion in trauma patients with significant haemorrhage. Lancet 2010;376(9734):23–32.",
+  "Holcomb JB et al. PROPPR — Transfusion of plasma, platelets, and red blood cells in a 1:1:1 vs a 1:1:2 ratio and mortality in patients with severe trauma. JAMA 2015;313(5):471–82.",
+
+  // Scoring systems
+  "__H__ Clinical scoring systems",
+  "Knaus WA et al. APACHE II: a severity of disease classification system. Crit Care Med 1985;13(10):818–29.",
+  "Vincent JL et al. The SOFA score to describe organ dysfunction/failure. Intensive Care Med 1996;22(7):707–10.",
+  "Teasdale G, Jennett B. Assessment of coma and impaired consciousness — the Glasgow Coma Scale. Lancet 1974;2(7872):81–4.",
+  "Sessler CN et al. The Richmond Agitation–Sedation Scale: validity and reliability in adult ICU patients. Am J Respir Crit Care Med 2002;166(10):1338–44.",
+  "Six AJ, Backus BE, Kelder JC. Chest pain in the emergency room — value of the HEART score. Neth Heart J 2008;16(6):191–6.",
+  "Backus BE et al. A prospective validation of the HEART score for chest-pain patients at the ED. Int J Cardiol 2013;168(3):2153–8.",
+  "Antman EM et al. The TIMI risk score for unstable angina / non-ST elevation MI. JAMA 2000;284(7):835–42.",
+  "Lim WS et al. Defining community-acquired pneumonia severity on presentation — the CURB-65 score. Thorax 2003;58(5):377–82.",
+  "Hemphill JC et al. The ICH score — a simple reliable grading scale for intracerebral haemorrhage. Stroke 2001;32(4):891–7.",
+  "Li JS et al. Proposed modifications to the Duke criteria for the diagnosis of infective endocarditis. Clin Infect Dis 2000;30(4):633–8.",
+  "Hindricks G et al. 2020 ESC Guidelines for atrial fibrillation (CHA₂DS₂-VASc, HAS-BLED). Eur Heart J 2021;42(5):373–498.",
+  "Konstantinides SV et al. 2019 ESC Guidelines for the diagnosis and management of acute pulmonary embolism (Wells criteria). Eur Heart J 2020;41(4):543–603.",
+
+  // Formulas & physiology
+  "__H__ Formulas & physiology",
+  "Cockcroft DW, Gault MH. Prediction of creatinine clearance from serum creatinine. Nephron 1976;16(1):31–41.",
+  "Bazett HC. An analysis of the time relations of electrocardiograms (QTc = QT / √RR). Heart 1920;7:353–70.",
+  "Fridericia LS. The duration of systole in an electrocardiogram in normal humans and in heart patients (QTc = QT / ∛RR). Acta Med Scand 1920;53:469–86.",
+  "Sagie A et al. An improved method for adjusting the QT interval for heart rate (Framingham correction). Am J Cardiol 1992;70(7):797–801.",
+  "Winters RW. Terminology of acid-base disorders — expected compensation. Ann NY Acad Sci 1966;133(1):211–24.",
+  "Adrogué HJ, Madias NE. Hypernatraemia (free water deficit equation). NEJM 2000;342(20):1493–9.",
+  "Mosteller RD. Simplified calculation of body-surface area. NEJM 1987;317(17):1098.",
+  "Devine BJ. Gentamicin therapy (ideal body weight formula). Drug Intell Clin Pharm 1974;8:650–5.",
+
+  // Antibiotics
+  "__H__ Antibiotics",
   "Gilbert DN et al. The Sanford Guide to Antimicrobial Therapy 2024.",
-  "Kalil AC et al. IDSA/ATS HAP/VAP 2016. Clin Infect Dis 2016;63(5):e61–e111.",
-  "KDIGO. AKI clinical practice guideline. Kidney Int Suppl 2012;2(1):1–138.",
-  "Hindricks G et al. 2020 ESC AF Guidelines. Eur Heart J 2021;42(5):373–498.",
-  "Konstantinides SV et al. 2019 ESC PE Guidelines. Eur Heart J 2020;41(4):543–603.",
-  "Sessler CN et al. RASS. Am J Respir Crit Care Med 2002;166(10):1338–44.",
-  "Vincent JL et al. SOFA. Intensive Care Med 1996;22(7):707–10.",
-  "Cockcroft DW, Gault MH. Nephron 1976;16(1):31–41 (CrCl).",
-  "Winters RW. Ann NY Acad Sci 1966;133(1):211–24 (compensation).",
-  "Adrogué HJ, Madias NE. Hypernatremia. NEJM 2000;342(20):1493–99 (FWD).",
-  "Khanna A et al. NEJM 2017;377(5):419–30 (NE equivalents).",
+  "Kalil AC et al. Management of Adults with HAP/VAP — IDSA/ATS 2016. Clin Infect Dis 2016;63(5):e61–e111.",
+  "Rybak MJ et al. Therapeutic monitoring of vancomycin — consensus guideline of ASHP/IDSA/PIDS/SIDP (AUC-guided). Am J Health-Syst Pharm 2020;77(11):835–64.",
+
+  // Toxicology & antidotes
+  "__H__ Toxicology & antidotes",
+  "Nelson LS, Howland MA, Lewin NA et al. Goldfrank's Toxicologic Emergencies, 11th ed. McGraw-Hill, 2019.",
+  "Brent J et al. Fomepizole for the treatment of ethylene glycol poisoning. NEJM 2001;344(6):424–9.",
+  "Prescott LF et al. Intravenous N-acetylcysteine — the treatment of choice for paracetamol poisoning. BMJ 1979;2(6198):1097–100.",
+  "Jahr JS et al. A comparison of sugammadex and neostigmine — safety and efficacy. Anesth Analg 2015;121(6):1573–83.",
+  "Borron SW et al. Hydroxocobalamin for severe acute cyanide poisoning by ingestion or inhalation. Ann Emerg Med 2007;49(6):794–801.",
+
+  // Hyperkalaemia & DKA
+  "__H__ Hyperkalaemia, DKA & endocrine emergencies",
+  "Kovesdy CP. Management of hyperkalaemia in chronic kidney disease. Nat Rev Nephrol 2014;10(11):653–62.",
+  "Lindner G et al. Acute hyperkalaemia in the ED — a European Society for Emergency Medicine position paper. Eur J Emerg Med 2020;27(5):329–37.",
+  "Kitabchi AE et al. Hyperglycemic crises in adult patients with diabetes — ADA consensus (DKA/HHS). Diabetes Care 2009;32(7):1335–43.",
+  "American Diabetes Association. Standards of Care in Diabetes — Hyperglycemic Crises in Adults, 2024. Diabetes Care 2024;47(Suppl 1).",
+
+  // Neuroprotection / neurocritical care
+  "__H__ Neuroprotection & neurocritical care",
+  "Carney N et al. Guidelines for the Management of Severe Traumatic Brain Injury, 4th ed. (Brain Trauma Foundation). Neurosurgery 2017;80(1):6–15.",
+  "Hoh BL et al. 2023 Guideline for the Management of Aneurysmal Subarachnoid Haemorrhage — AHA/ASA. Stroke 2023;54(7):e314–e370.",
+  "Greenberg SM et al. 2022 Guideline for the Management of Patients with Spontaneous ICH — AHA/ASA. Stroke 2022;53(7):e282–e361.",
+  "Powers WJ et al. 2019 Guidelines for the Early Management of Patients with Acute Ischemic Stroke — AHA/ASA. Stroke 2019;50(12):e344–e418.",
+
+  // Nephrology
+  "__H__ Nephrology & fluids",
+  "KDIGO. Clinical Practice Guideline for Acute Kidney Injury. Kidney Int Suppl 2012;2(1):1–138.",
 ];
 function renderAbout() {
   const list = $("#ref-list");
-  if (list && !list.dataset.rendered) {
-    list.innerHTML = REFERENCES.map((r, i) =>
-      `<div class="row"><span class="k">${i+1}.</span><span class="v" style="text-align:right;font-weight:600;line-height:1.55;font-family:inherit;font-size:12.5px">${r}</span></div>`
-    ).join("");
-    list.dataset.rendered = "1";
-  }
+  if (!list || list.dataset.rendered) return;
+  let n = 0;
+  list.innerHTML = REFERENCES.map(r => {
+    if (r.startsWith("__H__ ")) {
+      // Section heading row — spans both cells, cyan accent
+      return `<div class="row" style="border-top:1px solid var(--line);padding-top:14px;margin-top:6px">
+        <span style="color:var(--brand);font-size:11px;font-weight:800;letter-spacing:0.06em;text-transform:uppercase">
+          ${r.slice(6)}
+        </span>
+      </div>`;
+    }
+    n++;
+    return `<div class="row"><span class="k">${n}.</span><span class="v" style="text-align:right;font-weight:600;line-height:1.55;font-family:inherit;font-size:12.5px">${r}</span></div>`;
+  }).join("");
+  list.dataset.rendered = "1";
 }
 function bindAbout() {
   $("#wipeAllBtn").addEventListener("click", () => {

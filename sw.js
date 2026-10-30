@@ -7,7 +7,7 @@
      ASSETS    = cache-first for icons/CSS/JS/manifest (stable)
      IMAGES    = cache-first with size cap for user-added images
 */
-const VERSION  = "v24"; // app 1.5.0 — Tier-1 batch: HEART, TIMI, CURB-65, ICH, QTc, ROX, Hyperkalemia + DKA + MTP pathways
+const VERSION  = "v25"; // app 1.5.1 — expanded references (12 sections, 50+ citations)
 const PRECACHE = `najm-precache-${VERSION}`;
 const RUNTIME  = `najm-runtime-${VERSION}`;
 const ASSETS   = `najm-assets-${VERSION}`;
