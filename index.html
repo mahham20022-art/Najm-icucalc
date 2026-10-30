@@ -1304,8 +1304,20 @@
 
     <!-- HEMODYNAMICS -->
     <section class="module" id="m-hemo">
-      <div class="module-head"><div><h2>Hemodynamics</h2><p>MAP, shock index, CPP, and pressor load.</p></div></div>
+      <div class="module-head"><div><h2>Hemodynamics</h2><p>MAP, shock index, CPP, pressor load, QTc.</p></div></div>
       <div class="cards">
+        <div class="card">
+          <h3>QTc Calculator</h3>
+          <div class="sub">Bazett · Fridericia · Framingham formulas. Verify before QT-prolonging drugs.</div>
+          <div class="grid-in">
+            <div class="field"><label>QT interval</label><div class="input"><input id="qt-qt" type="number" inputmode="numeric" /><span class="unit">ms</span></div></div>
+            <div class="field"><label>HR</label><div class="input"><input id="qt-hr" type="number" inputmode="numeric" /><span class="unit">bpm</span></div></div>
+          </div>
+          <div class="row"><span class="k">Bazett QTc (QT/√RR)</span><span class="v" id="qt-baz">—</span></div>
+          <div class="row"><span class="k">Fridericia QTc (QT/∛RR)</span><span class="v" id="qt-fri">—</span></div>
+          <div class="row"><span class="k">Framingham QTc</span><span class="v" id="qt-fra">—</span></div>
+          <div class="verdict" id="qt-verdict">Enter QT (ms) + HR to compute. Fridericia preferred at HR &lt; 60 or &gt; 100.</div>
+        </div>
         <div class="card">
           <h3>Blood Pressure</h3>
           <div class="sub">Enter cuff or arterial line values.</div>
@@ -1351,8 +1363,20 @@
 
     <!-- VENTILATOR -->
     <section class="module" id="m-vent">
-      <div class="module-head"><div><h2>Ventilator</h2><p>PBW-based TV, Berlin ARDS, driving pressure.</p></div></div>
+      <div class="module-head"><div><h2>Ventilator</h2><p>PBW-based TV, Berlin ARDS, driving pressure, ROX index.</p></div></div>
       <div class="cards">
+        <div class="card">
+          <h3>ROX Index (HFNC success)</h3>
+          <div class="sub">(SpO₂ / FiO₂) / RR — predicts need for intubation during HFNC. Measure at 2 h, 6 h, 12 h.</div>
+          <div class="grid-in three">
+            <div class="field"><label>SpO₂</label><div class="input"><input id="rox-spo2" type="number" inputmode="numeric" max="100" /><span class="unit">%</span></div></div>
+            <div class="field"><label>FiO₂</label><div class="input"><input id="rox-fio2" type="number" inputmode="decimal" step="0.01" /><span class="unit">%</span></div></div>
+            <div class="field"><label>RR</label><div class="input"><input id="rox-rr" type="number" inputmode="numeric" /><span class="unit">/min</span></div></div>
+          </div>
+          <div class="row"><span class="k">ROX Index</span><span class="v" id="rox-val">—</span></div>
+          <div class="verdict" id="rox-verdict">Enter SpO₂, FiO₂ (0.4 or 40), RR. Cut-offs: ≥ 4.88 at 2 h · ≥ 4.88 at 6 h · ≥ 4.88 at 12 h = low intubation risk.</div>
+          <div class="src">Source: Roca O et al., AJRCCM 2019;199:1368–76</div>
+        </div>
         <div class="card">
           <h3>Tidal Volume (Predicted BW)</h3>
           <div class="sub">PBW needs height + sex. Targets: 4 / 6 / 8 mL/kg.</div>
@@ -1484,6 +1508,25 @@
           <div class="row"><span class="k">Suggested replacement</span><span class="v" id="k-out">—</span></div>
           <div class="verdict">Max peripheral 10 mEq/hr; central 20 mEq/hr with monitoring.</div>
         </div>
+
+        <div class="card rsi-protocol-card">
+          <h3 class="rsi-protocol-title">⚡ Hyperkalemia Emergency Protocol</h3>
+          <div class="sub">K⁺ &gt; 6.0 with ECG changes, or K⁺ &gt; 6.5 regardless.</div>
+          <div class="rsi-step"><h4>1. Stabilise cardiac membrane (within minutes)</h4><p><b>Calcium gluconate 10%</b> 30 mL IV over 10 min (or Ca chloride 10% 10 mL via central). Repeat q10 min if ECG changes persist. Onset 1–3 min, duration 30–60 min.</p></div>
+          <div class="rsi-step"><h4>2. Shift K⁺ intracellularly</h4><p><b>Insulin</b> 10 units IV + <b>Dextrose 25 g IV</b> (50 mL D50W). Check glucose q1h × 6 — hypoglycaemia common.<br><b>Salbutamol</b> 10–20 mg nebulised. Avoid in tachyarrhythmia.<br><b>Sodium bicarbonate</b> only if co-existing metabolic acidosis (not routine).</p></div>
+          <div class="rsi-step"><h4>3. Remove K⁺ from body</h4><p><b>Furosemide</b> 20–80 mg IV if volume replete + urine output.<br><b>Patiromer</b> 8.4 g PO (or <b>SZC/Lokelma</b> 10 g PO) — slow onset.<br><b>Haemodialysis</b> if refractory, severe (K &gt; 6.5 unresponsive), AKI with oliguria, or symptomatic.</p></div>
+          <div class="rsi-step"><h4>4. Monitor + root-cause</h4><p>Continuous ECG; recheck K⁺ at 1 h and q2h. Stop ACEi/ARB/K-sparing diuretics/trimethoprim. Treat AKI, acidosis, rhabdo, tumour lysis.</p></div>
+        </div>
+
+        <div class="card rsi-protocol-card">
+          <h3 class="rsi-protocol-title">🩸 DKA / HHS Protocol</h3>
+          <div class="sub">Adult diabetic ketoacidosis / hyperosmolar hyperglycaemic state.</div>
+          <div class="rsi-step"><h4>1. Fluids (first hour)</h4><p><b>0.9% NaCl 15–20 mL/kg</b> IV over 1 h (1–1.5 L adult). Then 250–500 mL/hr adjusted to haemodynamics. Switch to <b>0.45% NaCl</b> once corrected Na is normal/high.<br>Add <b>D5 ½ NS</b> when glucose &lt; 250 mg/dL (14 mmol/L) to allow insulin continuation.</p></div>
+          <div class="rsi-step"><h4>2. Insulin</h4><p>Check K⁺ FIRST. If K⁺ &lt; 3.3 → <b>hold insulin</b>, replace K⁺ first.<br>Regular insulin <b>0.1 U/kg IV bolus</b>, then <b>0.1 U/kg/hr infusion</b>. Target glucose fall 50–75 mg/dL/hr.<br>When glucose ≤ 200 (DKA) or ≤ 300 (HHS) → cut infusion in half (0.02–0.05 U/kg/hr) and add dextrose.<br>Transition to subcutaneous when AG closed + patient eating.</p></div>
+          <div class="rsi-step"><h4>3. Potassium (always deplete!)</h4><p>K⁺ &gt; 5.2 → no replacement, recheck q2h<br>K⁺ 3.3–5.2 → 20–30 mEq KCl in each litre of IVF<br>K⁺ &lt; 3.3 → HOLD insulin, give 20–40 mEq/hr until &gt; 3.3</p></div>
+          <div class="rsi-step"><h4>4. Bicarbonate (rarely)</h4><p>Only if pH &lt; 6.9: 100 mEq NaHCO₃ in 400 mL water + 20 mEq KCl, over 2 h. Not routine — may worsen hypokalaemia + cerebral acidosis.</p></div>
+          <div class="rsi-step"><h4>5. Monitoring + resolution</h4><p>q1–2h: glucose, electrolytes (K, Mg, Phos), AG, pH. Resolution: AG &lt; 12, HCO₃ &gt; 15, pH &gt; 7.3, glucose &lt; 200. Treat precipitant (infection, missed insulin, MI, pancreatitis).</p></div>
+        </div>
       </div>
     </section>
 
@@ -1525,6 +1568,16 @@
           <div class="sub">First 10 kg ×4, next 10 kg ×2, remainder ×1 mL/kg/hr.</div>
           <div class="row"><span class="k">Maintenance rate</span><span class="v" id="mn-rate">—</span></div>
         </div>
+
+        <div class="card rsi-protocol-card">
+          <h3 class="rsi-protocol-title">🩸 Massive Transfusion Protocol (MTP)</h3>
+          <div class="sub">Trigger: ABC score ≥ 2, SI &gt; 1 with ongoing bleeding, &gt; 10 units PRBC/24 h anticipated, or &gt; 4 units in 1 h.</div>
+          <div class="rsi-step"><h4>1. Ratio-based resuscitation (1 : 1 : 1)</h4><p>For every <b>6 units PRBC</b> → <b>6 units FFP</b> → <b>1 adult dose platelets</b> (= 1 apheresis unit or 6-pack).<br>Order by MTP pack. Resist crystalloid &gt; 1 L (dilutes clotting factors).</p></div>
+          <div class="rsi-step"><h4>2. Adjunctive haemostatic drugs</h4><p><b>Tranexamic acid</b> 1 g IV over 10 min, then 1 g over 8 h — give <b>within 3 h</b> of trauma (CRASH-2).<br><b>Fibrinogen</b> replacement: cryoprecipitate 10 units (adult) or fibrinogen concentrate 2–4 g if fibrinogen &lt; 1.5 g/L.<br><b>Prothrombin complex (PCC)</b> 25–50 U/kg for warfarin / Xa reversal + major haemorrhage.<br><b>DDAVP</b> 0.3 mcg/kg IV if uraemic bleeding / aspirin.</p></div>
+          <div class="rsi-step"><h4>3. Correct the lethal triad</h4><p><b>Hypothermia:</b> warm all fluids (37 °C), forced-air warmer, cover head.<br><b>Acidosis:</b> treat shock first; bicarbonate only if pH &lt; 7.1 persisting.<br><b>Coagulopathy:</b> see ratio above; add TXA + fibrinogen + Ca.</p></div>
+          <div class="rsi-step"><h4>4. Monitor + endpoints</h4><p>q 30 min: TEG/ROTEM if available, INR, fibrinogen, ionised Ca (target &gt; 1.1 — give <b>1 g Ca gluconate</b> per 4 units blood), K⁺, lactate, temp.<br><b>Stop MTP</b> when haemodynamically stable, SBP &gt; 90 for 30 min, HR &lt; 110, no further transfusion requirement in 30 min, source controlled.</p></div>
+          <div class="rsi-step"><h4>5. Target values</h4><p>Hb 7–9 · platelets &gt; 50 (&gt; 100 if head injury / ongoing haemorrhage) · fibrinogen &gt; 1.5–2 · INR &lt; 1.5 · ionised Ca &gt; 1.1 · temp &gt; 36 °C · pH &gt; 7.2 · base deficit &lt; 6.</p></div>
+        </div>
       </div>
     </section>
 
@@ -1541,6 +1594,10 @@
         <div class="card"><h3>RASS</h3><div class="sub">Richmond Agitation–Sedation Scale.</div><div id="score-rass"></div><div class="src">Source: Sessler et al., Am J Respir Crit Care Med 2002</div></div>
         <div class="card"><h3>Modified Duke Criteria</h3><div class="sub">Infective endocarditis diagnosis — 2 major, or 1 major + 3 minor, or 5 minor = Definite IE.</div><div id="score-duke"></div><div class="src">Source: Li JS et al., Clin Infect Dis 2000;30:633–8 (modified Duke)</div></div>
         <div class="card"><h3>APACHE II</h3><div class="sub">ICU mortality prediction — use the <b>worst</b> value in first 24 h of admission.</div><div id="score-apache2"></div><div class="src">Source: Knaus WA et al., Crit Care Med 1985;13:818–29</div></div>
+        <div class="card"><h3>HEART Score</h3><div class="sub">6-week MACE risk for undifferentiated chest pain in ED.</div><div id="score-heart"></div><div class="src">Source: Six AJ et al., Neth Heart J 2008;16(6):191–6</div></div>
+        <div class="card"><h3>TIMI (UA/NSTEMI)</h3><div class="sub">14-day risk of death / new MI / urgent revascularisation.</div><div id="score-timi"></div><div class="src">Source: Antman EM et al., JAMA 2000;284(7):835–42</div></div>
+        <div class="card"><h3>CURB-65</h3><div class="sub">Pneumonia severity — triages outpatient vs inpatient vs ICU.</div><div id="score-curb65"></div><div class="src">Source: Lim WS et al., Thorax 2003;58(5):377–82</div></div>
+        <div class="card"><h3>ICH Score</h3><div class="sub">30-day mortality after spontaneous intracerebral haemorrhage.</div><div id="score-ich"></div><div class="src">Source: Hemphill JC et al., Stroke 2001;32(4):891–7</div></div>
       </div>
     </section>
 
@@ -2955,6 +3012,27 @@ function bindUnitsToggle() {
    HEMODYNAMICS
    ============================================================ */
 function runHemo() {
+  // ── QTc (Bazett + Fridericia + Framingham) ──
+  const qt = num(state.inputs.qt_qt), qhr = num(state.inputs.qt_hr);
+  if (qt != null && qhr != null && qhr > 0) {
+    const rr = 60 / qhr; // in seconds
+    const baz = qt / Math.sqrt(rr);
+    const fri = qt / Math.cbrt(rr);
+    const fra = qt + 154 * (1 - rr);
+    $("#qt-baz").textContent = fmt(baz, 0) + " ms";
+    $("#qt-fri").textContent = fmt(fri, 0) + " ms";
+    $("#qt-fra").textContent = fmt(fra, 0) + " ms";
+    const qv = $("#qt-verdict"); qv.classList.remove("ok","warn","bad");
+    // Use Fridericia for interpretation at extremes, Bazett otherwise
+    const qtc = (qhr < 60 || qhr > 100) ? fri : baz;
+    if (qtc >= 500) { qv.innerHTML = `<b>Fridericia QTc ${fmt(qtc,0)} ms — DANGER:</b> torsades risk, stop QT-prolonging drugs, correct K/Mg/Ca.`; qv.classList.add("bad"); }
+    else if (qtc >= 480) { qv.innerHTML = `<b>QTc ${fmt(qtc,0)} ms — prolonged.</b> Avoid new QT-prolonging drugs. Check K/Mg.`; qv.classList.add("warn"); }
+    else if (qtc >= 460) { qv.innerHTML = `QTc ${fmt(qtc,0)} ms — borderline (upper limit F ~460, M ~450). Monitor.`; qv.classList.add("warn"); }
+    else { qv.innerHTML = `QTc ${fmt(qtc,0)} ms — normal.`; qv.classList.add("ok"); }
+  } else {
+    $("#qt-baz").textContent = "—"; $("#qt-fri").textContent = "—"; $("#qt-fra").textContent = "—";
+  }
+
   const sbp = num(state.inputs.hd_sbp), dbp = num(state.inputs.hd_dbp), hr = num(state.inputs.hd_hr);
   const map = (sbp != null && dbp != null) ? (sbp + 2 * dbp) / 3 : null;
   const pp = (sbp != null && dbp != null) ? sbp - dbp : null;
@@ -3010,6 +3088,19 @@ function runHemo() {
    ============================================================ */
 function fioFraction(x) { if (x == null) return null; return x > 1 ? x / 100 : x; }
 function runVent() {
+  // ── ROX Index ──
+  const rSpO2 = num(state.inputs.rox_spo2);
+  const rFi   = fioFraction(num(state.inputs.rox_fio2));
+  const rRR   = num(state.inputs.rox_rr);
+  if (rSpO2 != null && rFi && rRR) {
+    const rox = (rSpO2 / (rFi * 100)) / rRR; // SpO2% / FiO2% / RR
+    $("#rox-val").textContent = fmt(rox, 2);
+    const rv = $("#rox-verdict"); rv.classList.remove("ok","warn","bad");
+    if (rox >= 4.88) { rv.innerHTML = `<b>ROX ${fmt(rox,2)} ≥ 4.88</b> → low risk of HFNC failure. Continue + reassess.`; rv.classList.add("ok"); }
+    else if (rox >= 3.85) { rv.innerHTML = `<b>ROX ${fmt(rox,2)} 3.85–4.87</b> → indeterminate. Monitor closely, repeat in 1–2 h.`; rv.classList.add("warn"); }
+    else { rv.innerHTML = `<b>ROX ${fmt(rox,2)} &lt; 3.85</b> → high intubation risk. Prepare for intubation / escalation.`; rv.classList.add("bad"); }
+  } else { $("#rox-val").textContent = "—"; }
+
   const p = pbw();
   $("#v-pbw").textContent = p != null ? fmt(p, 1) + " kg" : "—";
   $("#v-tv4").textContent = p != null ? fmt(p*4, 0) + " mL" : "—";
@@ -3466,6 +3557,55 @@ const SCORES = {
     if (t <= 34) return [`${t} pts → ~73% mortality`, "bad"];
     return [`${t} pts → ~85% mortality (critical)`, "bad"];
   }},
+  heart: { items: [
+    { k:"History", opts:[["Slightly suspicious",0],["Moderately suspicious",1],["Highly suspicious",2]] },
+    { k:"ECG", opts:[["Normal",0],["Non-specific repolarization",1],["Significant ST deviation (not from LBBB/LVH)",2]] },
+    { k:"Age", opts:[["< 45",0],["45–64",1],["≥ 65",2]] },
+    { k:"Risk factors (HTN, hyperlipidemia, DM, BMI > 30, smoker, FHx CAD < 60)", opts:[["None known",0],["1–2",1],["≥ 3 OR known atherosclerotic disease",2]] },
+    { k:"Troponin (institution's limit of detection)", opts:[["≤ normal",0],["1–3 × normal",1],["> 3 × normal",2]] },
+  ], i:(t) => {
+    if (t <= 3) return [`${t} pts → low risk (~1.7% MACE at 6 w) — discharge with early f/u`, "ok"];
+    if (t <= 6) return [`${t} pts → moderate risk (~17% MACE) — admit, serial troponin, stress/CTA`, "warn"];
+    return [`${t} pts → high risk (~50% MACE) — early invasive strategy`, "bad"];
+  }},
+  timi: { items: [
+    { k:"Age ≥ 65", opts:[["No",0],["Yes",1]] },
+    { k:"≥ 3 CAD risk factors (HTN, hyperlipidemia, DM, smoker, FHx CAD)", opts:[["No",0],["Yes",1]] },
+    { k:"Known CAD (stenosis ≥ 50 %)", opts:[["No",0],["Yes",1]] },
+    { k:"Aspirin use in the past 7 days", opts:[["No",0],["Yes",1]] },
+    { k:"≥ 2 anginal episodes in the past 24 h", opts:[["No",0],["Yes",1]] },
+    { k:"ST deviation ≥ 0.5 mm on ECG", opts:[["No",0],["Yes",1]] },
+    { k:"Positive cardiac biomarker (troponin / CK-MB)", opts:[["No",0],["Yes",1]] },
+  ], i:(t) => {
+    if (t <= 1) return [`${t} pts → 4.7% risk of death/MI/urgent revasc at 14 d`, "ok"];
+    if (t === 2) return [`${t} pts → 8.3% risk`, "warn"];
+    if (t === 3) return [`${t} pts → 13.2% risk`, "warn"];
+    if (t === 4) return [`${t} pts → 19.9% risk`, "bad"];
+    if (t === 5) return [`${t} pts → 26.2% risk`, "bad"];
+    return [`${t} pts → 40.9% risk — early invasive`, "bad"];
+  }},
+  curb65: { items: [
+    { k:"Confusion (new disorientation to person/place/time)", opts:[["No",0],["Yes",1]] },
+    { k:"Urea > 7 mmol/L (BUN > 19 mg/dL)", opts:[["No",0],["Yes",1]] },
+    { k:"Respiratory rate ≥ 30/min", opts:[["No",0],["Yes",1]] },
+    { k:"Blood pressure — SBP < 90 OR DBP ≤ 60", opts:[["No",0],["Yes",1]] },
+    { k:"Age ≥ 65 years", opts:[["No",0],["Yes",1]] },
+  ], i:(t) => {
+    if (t <= 1) return [`${t} pts → low (~1.5% 30-day mortality) — outpatient treatment`, "ok"];
+    if (t === 2) return [`${t} pts → moderate (~9.2%) — consider short inpatient`, "warn"];
+    return [`${t} pts → severe (~22%) — inpatient, assess ICU`, "bad"];
+  }},
+  ich: { items: [
+    { k:"GCS", opts:[["GCS 13–15",0],["GCS 5–12",1],["GCS 3–4",2]] },
+    { k:"ICH volume on CT", opts:[["< 30 cm³",0],["≥ 30 cm³",1]] },
+    { k:"Intraventricular haemorrhage present", opts:[["No",0],["Yes",1]] },
+    { k:"Infratentorial origin (brainstem / cerebellum)", opts:[["No",0],["Yes",1]] },
+    { k:"Age ≥ 80 years", opts:[["No",0],["Yes",1]] },
+  ], i:(t) => {
+    const mort = ["0%","13%","26%","72%","97%","100%","100%"][t] || "100%";
+    const band = t <= 1 ? "ok" : t === 2 ? "warn" : "bad";
+    return [`${t} pts → 30-day mortality ${mort}`, band];
+  }},
 };
 function renderScore(key) {
   const sc = SCORES[key];
@@ -3726,7 +3866,9 @@ function runAll() {
 // these same fields from state when switching the active patient.
 const ALL_INPUT_IDS = ["hd-sbp","hd-dbp","hd-hr","cpp-icp","cpp-map",
    "ne-norepi","ne-epi","ne-phenyl","ne-dop","ne-vaso",
+   "qt-qt","qt-hr",
    "v-pao2","v-spo2","v-fio2","v-pplat","v-peep","v-tv",
+   "rox-spo2","rox-fio2","rox-rr",
    "ab-ph","ab-co2","ab-hco3","ab-na","ab-cl","ab-alb","ab-pao2","ab-fio2",
    "ca-ca","ca-alb","na-na","na-glu",
    "os-na","os-glu","os-bun","os-etoh","os-meas",
