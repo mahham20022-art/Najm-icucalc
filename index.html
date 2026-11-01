@@ -58,7 +58,7 @@
       "applicationSubCategory": "MedicalCalculator",
       "operatingSystem": "Any (PWA, iOS, Android, Windows, macOS, Linux)",
       "browserRequirements": "Modern browser with JavaScript",
-      "softwareVersion": "1.5.2",
+      "softwareVersion": "1.5.4",
       "datePublished": "2026-07-25",
       "dateModified": "2026-10-30",
       "inLanguage": "en",
@@ -1233,7 +1233,7 @@
       <h3 id="onbTrustTitle">Before you use it</h3>
       <p><b>For</b> ICU/CCU doctors, pharmacists and nurses who already know these drugs and scores. It does the arithmetic; the clinical decision stays with you.</p>
       <p><b>Not prospectively validated.</b> Decision support only. Check every result against your protocol and the drug label.</p>
-      <p>Version 1.5.2 · last reviewed 30 October 2026 · what you enter stays in this browser.</p>
+      <p>Version 1.5.4 · last reviewed 01 November 2026 · what you enter stays in this browser.</p>
       <button class="onb-link" type="button" id="onbEvidence">Evidence, limits and data handling</button>
     </div>
 
@@ -1583,18 +1583,34 @@
         </div>
 
         <div class="card">
-          <h3>Serum Osmolality</h3>
-          <div class="sub">2·Na + Glucose/18 + BUN/2.8 (+ EtOH/3.7)</div>
+          <h3>Osmolal Gap & Toxic Alcohols</h3>
+          <div class="sub">Calc = 2·Na + Glucose/18 + BUN/2.8 (+ EtOH/3.7). Gap = Measured − Calculated.</div>
           <div class="grid-in three">
-            <div class="field"><label>Na</label><div class="input"><input id="os-na" type="number" inputmode="numeric" /></div></div>
+            <div class="field"><label>Na</label><div class="input"><input id="os-na" type="number" inputmode="numeric" /><span class="unit">mEq/L</span></div></div>
             <div class="field"><label>Glucose</label><div class="input"><input id="os-glu" type="number" inputmode="numeric" /><button type="button" class="unit unit-cycle" data-uf="glu" aria-label="Cycle unit" tabindex="-1">mg/dL</button></div></div>
             <div class="field"><label>BUN</label><div class="input"><input id="os-bun" type="number" inputmode="numeric" /><button type="button" class="unit unit-cycle" data-uf="bun" aria-label="Cycle unit" tabindex="-1">mg/dL</button></div></div>
-            <div class="field"><label>EtOH</label><div class="input"><input id="os-etoh" type="number" inputmode="numeric" /></div></div>
-            <div class="field"><label>Measured</label><div class="input"><input id="os-meas" type="number" inputmode="numeric" /></div></div>
+            <div class="field"><label>EtOH</label><div class="input"><input id="os-etoh" type="number" inputmode="numeric" /><span class="unit">mg/dL</span></div></div>
+            <div class="field"><label>Measured osm</label><div class="input"><input id="os-meas" type="number" inputmode="numeric" /><span class="unit">mOsm/kg</span></div></div>
           </div>
-          <div class="row"><span class="k">Calculated osm</span><span class="v" id="os-calc">—</span></div>
-          <div class="row"><span class="k">Osmolar gap</span><span class="v" id="os-gap">—</span></div>
-          <div class="verdict" id="os-verdict">Normal gap &lt; 10.</div>
+          <div class="row"><span class="k">Calculated (with EtOH)</span><span class="v" id="os-calc">—</span></div>
+          <div class="row"><span class="k">Calculated (without EtOH)</span><span class="v" id="os-calc-no-etoh">—</span></div>
+          <div class="row"><span class="k">Osmolal gap</span><span class="v" id="os-gap">—</span></div>
+          <div class="row"><span class="k">Severity band</span><span class="v" id="os-band">—</span></div>
+          <div class="verdict" id="os-verdict">Normal gap &lt; 10 mOsm/kg (upper range 6 – 14 in healthy adults).</div>
+          <details style="margin-top:8px">
+            <summary style="cursor:pointer;color:var(--brand);font-weight:600">Toxic alcohol differential (tap)</summary>
+            <ul style="margin:8px 0 0;padding-left:18px;line-height:1.6;font-size:14px">
+              <li><strong>Methanol</strong> — HAGMA + ↑gap, retinal/optic Sx, formic acid; antidote: <em>fomepizole</em>, folate, HD if severe.</li>
+              <li><strong>Ethylene glycol</strong> — HAGMA + ↑gap, Ca-oxalate crystals in urine, AKI; antidote: <em>fomepizole</em>, thiamine + pyridoxine, HD if severe.</li>
+              <li><strong>Isopropyl alcohol</strong> — ↑gap <em>without</em> HAGMA (ketosis without acidosis); supportive care, HD rarely.</li>
+              <li><strong>Propylene glycol</strong> — IV lorazepam/phenobarb/TMP-SMX infusions; stop offending agent, HD if severe.</li>
+              <li><strong>Mannitol / glycerol / sorbitol</strong> — iatrogenic; ↑gap <em>without</em> acidosis.</li>
+              <li><strong>Severe ketoacidosis</strong> (DKA, AKA, starvation) — mild ↑gap from ketones.</li>
+              <li><strong>Lactic acidosis</strong> — mild ↑gap from lactate.</li>
+            </ul>
+            <div class="sub" style="margin-top:8px">Red flag: <strong>HAGMA + osm gap &gt; 10</strong> → start fomepizole empirically; call toxicology/nephrology for HD assessment.</div>
+          </details>
+          <div class="src">Sources: Krasowski et al., BMC Clin Pathol 2012; Kraut & Mullins, NEJM 2018</div>
         </div>
 
         <div class="card">
@@ -1811,11 +1827,11 @@
             <li>Not a regulated medical device.</li>
           </ul></dd>
           <dt>Version</dt>
-          <dd>1.5.2 · last reviewed 30 October 2026.</dd>
+          <dd>1.5.4 · last reviewed 01 November 2026.</dd>
           <dt>Report a suspected error</dt>
           <dd>Say what you entered, what the app showed and what you expected, with a source if you have one. Leave out patient identifiers.</dd>
         </dl>
-        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.2&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
+        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.4&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
           <span>Report an error · contact@thetract.org</span>
         </a>
@@ -1827,8 +1843,8 @@
         <div class="row"><span class="k">Name</span><span class="v">Dr. Mohamed Najm</span></div>
         <div class="row"><span class="k">Credentials</span><span class="v">MBBS · PgDip EM · FEBN · MRCEM SECONDARY</span></div>
         <div class="row"><span class="k">Phone / WhatsApp</span><span class="v"><a href="tel:+966564762990" style="color:var(--brand-3);text-decoration:none">+966&nbsp;56&nbsp;476&nbsp;2990</a></span></div>
-        <div class="row"><span class="k">Version</span><span class="v">1.5.2</span></div>
-        <div class="row"><span class="k">Last reviewed</span><span class="v">30 Oct 2026</span></div>
+        <div class="row"><span class="k">Version</span><span class="v">1.5.4</span></div>
+        <div class="row"><span class="k">Last reviewed</span><span class="v">01 Nov 2026</span></div>
       </div>
 
       <div class="card">
@@ -1883,17 +1899,22 @@
 
       <div class="card changelog" id="changelog">
         <h3>Changelog</h3>
-        <h4>1.5.2 <span>· 30 October 2026</span></h4>
+        <h4>1.5.4 <span>· 01 November 2026</span></h4>
+        <ul>
+          <li>Osmolal gap card rebuilt: severity bands (normal / mild / moderate / severe), parallel calc with and without ethanol, toxic-alcohol differential diagnosis (methanol, ethylene glycol, isopropyl, propylene glycol, mannitol) with escalation plan (fomepizole + HD trigger).</li>
+          <li>References: added Krasowski 2012 (osmolal gap performance), Kraut & Mullins NEJM 2018 (toxic alcohols), Purssell 2001 (ethanol correction).</li>
+        </ul>
+        <h4>1.5.3 <span>· 30 October 2026</span></h4>
         <ul>
           <li>Added author's phone / WhatsApp (+966 56 476 2990) to the About card.</li>
           <li>Version and last-reviewed date brought up to date across the app.</li>
         </ul>
-        <h4>1.5.1 <span>· 30 October 2026</span></h4>
+        <h4>1.5.1 <span>· 01 November 2026</span></h4>
         <ul>
           <li>References expanded to 11 sections and 57 citations (Sepsis, ARDS, Trauma/MT, Scores, Formulas, Antibiotics, Toxicology, Hyperkalaemia/DKA, Neuroprotection, Nephrology, general ICU).</li>
           <li>Clinical references now rendered with cyan section headings for easier scanning.</li>
         </ul>
-        <h4>1.5.0 <span>· 30 October 2026</span></h4>
+        <h4>1.5.0 <span>· 01 November 2026</span></h4>
         <ul>
           <li>Tier-1 batch for daily ICU/ED use:</li>
           <li>HEART Score (6-week MACE for undifferentiated chest pain).</li>
@@ -1906,7 +1927,7 @@
           <li>DKA / HHS Protocol — fluids → insulin → K replacement → bicarb thresholds → resolution.</li>
           <li>Massive Transfusion Protocol — 1:1:1 ratio, TXA, lethal-triad fixes, target values.</li>
         </ul>
-        <h4>1.4.3 <span>· 30 October 2026</span></h4>
+        <h4>1.4.3 <span>· 01 November 2026</span></h4>
         <ul>
           <li>APACHE II score added to Scores with mortality band interpretation.</li>
           <li>Sepsis &amp; Septic Shock tab added — full Surviving Sepsis Campaign 2021 bundle (Hour-1, fluids, pressor ladder, empiric abx, source control, steroids, vent, glucose, transfusion, RRT, nutrition, prophylaxis, procalcitonin, when-to-call).</li>
@@ -1975,7 +1996,7 @@
 
   <footer>
     <div class="fine"><strong>Reference aid — not a medical device.</strong> Always verify against institutional protocols and drug labels.</div>
-    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.2 · last reviewed 30 Oct 2026 · Designed by Dr. Mohamed Najm</div>
+    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.4 · last reviewed 01 Nov 2026 · Designed by Dr. Mohamed Najm</div>
   </footer>
 </div>
 
@@ -3487,17 +3508,34 @@ function runLytes() {
   const oNa = num(state.inputs.os_na), oG = num(state.inputs.os_glu), oB = num(state.inputs.os_bun);
   const oE = num(state.inputs.os_etoh), oM = num(state.inputs.os_meas);
   if (oNa != null && oG != null && oB != null) {
-    let calc = 2 * oNa + oG / 18 + oB / 2.8;
-    if (oE != null) calc += oE / 3.7;
+    const calcNoEtoh = 2 * oNa + oG / 18 + oB / 2.8;
+    const calc = oE != null ? calcNoEtoh + oE / 3.7 : calcNoEtoh;
     $("#os-calc").textContent = fmt(calc, 0) + " mOsm/kg";
+    $("#os-calc-no-etoh").textContent = fmt(calcNoEtoh, 0) + " mOsm/kg";
     const v = $("#os-verdict"); v.classList.remove("ok","warn","bad");
+    const band = $("#os-band"); band.classList.remove("ok","warn","bad");
     if (oM != null) {
       const gap = oM - calc;
-      $("#os-gap").textContent = fmt(gap, 1);
-      if (gap > 10) { v.textContent = "Gap > 10 → consider toxic alcohols."; v.classList.add("bad"); }
-      else { v.textContent = "Normal osmolar gap."; v.classList.add("ok"); }
-    } else { $("#os-gap").textContent = "—"; v.textContent = "Add measured osm for gap."; }
-  } else { $("#os-calc").textContent = "—"; $("#os-gap").textContent = "—"; }
+      $("#os-gap").textContent = fmt(gap, 1) + " mOsm/kg";
+      if (gap < 10) {
+        band.textContent = "Normal (< 10)";
+        v.textContent = "Normal osmolal gap. Toxic alcohol unlikely but does not fully exclude early methanol/ethylene glycol if presentation is suspicious.";
+        v.classList.add("ok");
+      } else if (gap < 25) {
+        band.textContent = "Mild elevation (10 – 25)";
+        v.textContent = "Mild gap. Consider lactic acidosis, ketoacidosis, chronic kidney disease, or small ingestion. Repeat and correlate with anion gap.";
+        v.classList.add("warn");
+      } else if (gap < 50) {
+        band.textContent = "Moderate (25 – 50)";
+        v.textContent = "Moderate gap. Suspect toxic alcohol ingestion (methanol / ethylene glycol / isopropyl / propylene glycol) or large infusion of osmoles (mannitol, glycerol).";
+        v.classList.add("bad");
+      } else {
+        band.textContent = "Severe (> 50)";
+        v.textContent = "Severe gap. Toxic alcohol highly likely — start fomepizole empirically, call toxicology and nephrology for haemodialysis assessment, send serum methanol/ethylene glycol levels.";
+        v.classList.add("bad");
+      }
+    } else { $("#os-gap").textContent = "—"; $("#os-band").textContent = "—"; v.textContent = "Add measured serum osmolality (lab) to calculate the gap."; }
+  } else { $("#os-calc").textContent = "—"; $("#os-calc-no-etoh").textContent = "—"; $("#os-gap").textContent = "—"; $("#os-band").textContent = "—"; }
 
   const fNa = num(state.inputs.fwd_na), fTgt = num(state.inputs.fwd_tgt) || 140;
   const w = num(state.patient.weight), sex = state.patient.sex;
@@ -3904,6 +3942,9 @@ const REFERENCES = [
   "Prescott LF et al. Intravenous N-acetylcysteine — the treatment of choice for paracetamol poisoning. BMJ 1979;2(6198):1097–100.",
   "Jahr JS et al. A comparison of sugammadex and neostigmine — safety and efficacy. Anesth Analg 2015;121(6):1573–83.",
   "Borron SW et al. Hydroxocobalamin for severe acute cyanide poisoning by ingestion or inhalation. Ann Emerg Med 2007;49(6):794–801.",
+  "Krasowski MD et al. A retrospective analysis of glycol and toxic alcohol screening tests — osmolal gap performance. BMC Clin Pathol 2012;12:1.",
+  "Kraut JA, Mullins ME. Toxic alcohols (methanol, ethylene glycol, isopropyl, propylene glycol). NEJM 2018;378(3):270–80.",
+  "Purssell RA et al. The relationship between the osmol gap and ethanol concentration. Ann Emerg Med 2001;38(6):653–9.",
 
   // Hyperkalaemia & DKA
   "__H__ Hyperkalaemia, DKA & endocrine emergencies",
