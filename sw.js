@@ -7,7 +7,7 @@
      ASSETS    = cache-first for icons/CSS/JS/manifest (stable)
      IMAGES    = cache-first with size cap for user-added images
 */
-const VERSION  = "v29"; // app 1.5.5 — Tier-2: NIHSS, Hunt-Hess, Fisher, MELD-Na, Child-Pugh, CAM-ICU, Padua, Vanco AUC, Parkland, Status Epilepticus
+const VERSION  = "v30"; // app 1.5.6 — ARDS Management Bundle + Murray Lung Injury Score (ECMO criteria)
 const PRECACHE = `najm-precache-${VERSION}`;
 const RUNTIME  = `najm-runtime-${VERSION}`;
 const ASSETS   = `najm-assets-${VERSION}`;
