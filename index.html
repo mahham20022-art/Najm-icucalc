@@ -58,7 +58,7 @@
       "applicationSubCategory": "MedicalCalculator",
       "operatingSystem": "Any (PWA, iOS, Android, Windows, macOS, Linux)",
       "browserRequirements": "Modern browser with JavaScript",
-      "softwareVersion": "1.5.6",
+      "softwareVersion": "1.5.7",
       "datePublished": "2026-07-25",
       "dateModified": "2026-10-30",
       "inLanguage": "en",
@@ -1233,7 +1233,7 @@
       <h3 id="onbTrustTitle">Before you use it</h3>
       <p><b>For</b> ICU/CCU doctors, pharmacists and nurses who already know these drugs and scores. It does the arithmetic; the clinical decision stays with you.</p>
       <p><b>Not prospectively validated.</b> Decision support only. Check every result against your protocol and the drug label.</p>
-      <p>Version 1.5.6 · last reviewed 01 November 2026 · what you enter stays in this browser.</p>
+      <p>Version 1.5.7 · last reviewed 01 November 2026 · what you enter stays in this browser.</p>
       <button class="onb-link" type="button" id="onbEvidence">Evidence, limits and data handling</button>
     </div>
 
@@ -1522,6 +1522,29 @@
           <div class="verdict" id="v-dpverdict">Target driving pressure &lt; 15 cmH₂O.</div>
           <div class="src">Source: Amato et al., NEJM 2015</div>
         </div>
+
+        <div class="card">
+          <h3>Weaning Readiness &amp; RSBI</h3>
+          <div class="sub">Daily SBT if criteria met. RSBI = RR / TV (L); &lt; 105 predicts successful extubation (Yang &amp; Tobin NEJM 1991).</div>
+          <div class="grid-in">
+            <div class="field"><label>RR (on SBT)</label><div class="input"><input id="wn-rr" type="number" inputmode="numeric" /><span class="unit">/min</span></div></div>
+            <div class="field"><label>TV (on SBT)</label><div class="input"><input id="wn-tv" type="number" inputmode="numeric" /><span class="unit">mL</span></div></div>
+          </div>
+          <div class="row"><span class="k">RSBI</span><span class="v" id="wn-rsbi">—</span></div>
+          <div class="verdict" id="wn-verdict">Enter RR and TV during SBT (PS 0 – 8 cmH₂O, PEEP ≤ 5) × 30 – 120 min.</div>
+          <details style="margin-top:8px">
+            <summary style="cursor:pointer;color:var(--brand);font-weight:600">SBT + extubation checklist (tap)</summary>
+            <ul style="margin:8px 0 0;padding-left:18px;line-height:1.6;font-size:14px">
+              <li><b>SBT eligibility:</b> cause of resp failure resolving · FiO₂ ≤ 0.5 and PEEP ≤ 8 · P/F &gt; 150 · haemodynamic stability (MAP ≥ 65 on minimal pressors) · adequate cough / airway reflex · GCS adequate / RASS − 1 to + 1 · pH ≥ 7.30 · Hb ≥ 7 · electrolytes OK.</li>
+              <li><b>SBT settings:</b> PS 0 – 8 cmH₂O (or T-piece) + PEEP 0 – 5 × 30 – 120 min. CPAP alone acceptable.</li>
+              <li><b>Pass criteria:</b> RSBI &lt; 105 · RR &lt; 35 · SpO₂ ≥ 90 (or FiO₂ unchanged) · HR &lt; 140 (and no &gt; 20 % change) · SBP 90 – 180 (no &gt; 20 % change) · no respiratory distress (accessory muscles, diaphoresis, agitation).</li>
+              <li><b>Cuff-leak test</b> (high-risk airway): leak &lt; 110 mL or &lt; 10 – 24 % of TV → high stridor risk → dexamethasone 20 mg or 4 × 5 mg q 6 h × 24 h before extubate.</li>
+              <li><b>Post-extubation NIV / HFNC:</b> COPD / CHF → NIV cuts reintubation + mortality. Hypoxaemic without hypercapnia → HFNC first-line.</li>
+              <li><b>Reintubation</b> within 48 h = failure (high mortality). Review cause before next trial (volume overload, cardiac, sputum, mental status, upper airway).</li>
+            </ul>
+          </details>
+          <div class="src">Source: Yang KL &amp; Tobin MJ. A prospective study of indexes predicting the outcome of weaning (RSBI). NEJM 1991;324(21):1445–50. Thille AW et al. HFNC vs NIV after extubation. JAMA 2019;322(15):1465–75.</div>
+        </div>
       </div>
 
       <div class="cards" style="margin-top:16px">
@@ -1722,6 +1745,75 @@
         </div>
 
         <div class="card">
+          <h3>Transfusion Thresholds</h3>
+          <div class="sub">Restrictive strategy is standard (TRICC, TRISS, TITRe-2). Transfuse one unit at a time, re-check Hb, re-assess need.</div>
+          <table style="width:100%;border-collapse:collapse;font-size:14px;margin-top:8px">
+            <thead><tr style="border-bottom:1px solid var(--line)"><th style="text-align:left;padding:4px 6px">Product</th><th style="text-align:left;padding:4px 6px">Trigger</th><th style="text-align:left;padding:4px 6px">Dose / expected rise</th></tr></thead>
+            <tbody style="line-height:1.5">
+              <tr><td style="padding:4px 6px">PRBC — general ICU</td><td>Hb &lt; 7 g/dL</td><td>1 unit → ↑ Hb ~ 1 g/dL</td></tr>
+              <tr><td style="padding:4px 6px">PRBC — ACS / cardiac</td><td>Hb &lt; 8 g/dL</td><td>same</td></tr>
+              <tr><td style="padding:4px 6px">PRBC — septic shock (early)</td><td>Hb &lt; 7 g/dL (TRISS)</td><td>same</td></tr>
+              <tr><td style="padding:4px 6px">PRBC — active major bleeding</td><td>Clinical, target Hb ≥ 7</td><td>See MTP card</td></tr>
+              <tr><td style="padding:4px 6px">Platelets — spontaneous bleed risk</td><td>&lt; 10 × 10⁹/L</td><td>1 adult dose → ↑ 20 – 40</td></tr>
+              <tr><td style="padding:4px 6px">Platelets — minor procedure, LP, line</td><td>&lt; 20 – 50</td><td>same</td></tr>
+              <tr><td style="padding:4px 6px">Platelets — major surgery / neurosurg</td><td>&lt; 100</td><td>same</td></tr>
+              <tr><td style="padding:4px 6px">Platelets — active bleeding</td><td>Keep &gt; 50 (&gt; 100 if CNS)</td><td>same</td></tr>
+              <tr><td style="padding:4px 6px">FFP — INR &gt; 1.5 + bleeding / pre-procedure</td><td>INR &gt; 1.5 – 1.7</td><td>10 – 15 mL/kg</td></tr>
+              <tr><td style="padding:4px 6px">Cryoprecipitate</td><td>Fibrinogen &lt; 1.5 g/L (bleeding) OR &lt; 2 g/L (obstetric)</td><td>10 units adult → ↑ fib ~ 0.5 g/L</td></tr>
+              <tr><td style="padding:4px 6px">PCC (4-factor)</td><td>Warfarin / factor Xa reversal + major bleed</td><td>25 – 50 U/kg + vit K 10 mg IV</td></tr>
+            </tbody>
+          </table>
+          <details style="margin-top:10px">
+            <summary style="cursor:pointer;color:var(--brand);font-weight:600">TRALI vs TACO — differential (tap)</summary>
+            <table style="width:100%;border-collapse:collapse;font-size:13px;margin-top:6px">
+              <thead><tr style="border-bottom:1px solid var(--line)"><th style="text-align:left;padding:3px 6px">Feature</th><th style="text-align:left;padding:3px 6px">TRALI</th><th style="text-align:left;padding:3px 6px">TACO</th></tr></thead>
+              <tbody style="line-height:1.5">
+                <tr><td style="padding:3px 6px">Onset</td><td>&lt; 6 h post-transfusion</td><td>&lt; 6 h, often during</td></tr>
+                <tr><td style="padding:3px 6px">Mechanism</td><td>Anti-HLA / neutrophil Ab → non-cardiogenic pulm oedema</td><td>Volume overload — cardiogenic</td></tr>
+                <tr><td style="padding:3px 6px">BP</td><td>Hypotension (classic)</td><td>Hypertension (classic)</td></tr>
+                <tr><td style="padding:3px 6px">BNP</td><td>Normal</td><td>Elevated (&gt; 1 200 pg/mL)</td></tr>
+                <tr><td style="padding:3px 6px">LV function</td><td>Normal</td><td>Reduced / overloaded</td></tr>
+                <tr><td style="padding:3px 6px">Response to diuretics</td><td>Poor</td><td>Good</td></tr>
+                <tr><td style="padding:3px 6px">Treatment</td><td>Supportive, lung-protective vent, report donor</td><td>Diurese, slow / stop transfusion</td></tr>
+              </tbody>
+            </table>
+          </details>
+          <div class="src">Source: Hébert TRICC NEJM 1999 · Holst TRISS NEJM 2014 · Hajjar TRACS JAMA 2010 · Carson 2016 AABB guideline. ISBT 2019 TRALI definition.</div>
+        </div>
+
+        <div class="card">
+          <h3>Nutrition Targets (ICU)</h3>
+          <div class="sub">Mifflin-St Jeor REE × stress factor; protein 1.2 – 2.0 g/kg (higher if burns / sepsis / CRRT). Start enteral &lt; 48 h; trophic rate (10 – 20 mL/hr) acceptable early (EDEN).</div>
+          <div class="grid-in">
+            <div class="field"><label>Height override</label><div class="input"><input id="nu-ht" type="number" inputmode="numeric" /><span class="unit">auto cm</span></div></div>
+            <div class="field"><label>Age override</label><div class="input"><input id="nu-age" type="number" inputmode="numeric" /><span class="unit">auto yr</span></div></div>
+            <div class="field"><label>Stress factor</label><div class="input"><select id="nu-stress">
+              <option value="1.0">1.0 — baseline / recovery</option>
+              <option value="1.2" selected>1.2 — mild stress / post-op</option>
+              <option value="1.3">1.3 — moderate stress / sepsis</option>
+              <option value="1.5">1.5 — severe sepsis / major trauma</option>
+              <option value="1.8">1.8 — major burns (&gt; 40 % TBSA)</option>
+            </select></div></div>
+          </div>
+          <div class="row"><span class="k">REE (Mifflin-St Jeor)</span><span class="v" id="nu-ree">—</span></div>
+          <div class="row"><span class="k">Target kcal (REE × stress)</span><span class="v" id="nu-kcal">—</span></div>
+          <div class="row"><span class="k">Protein 1.2 g/kg</span><span class="v" id="nu-pro-low">—</span></div>
+          <div class="row"><span class="k">Protein 2.0 g/kg (sepsis / CRRT / burns)</span><span class="v" id="nu-pro-high">—</span></div>
+          <div class="verdict" id="nu-verdict">Needs weight, height, age, sex (from patient bar). Overrides above are optional.</div>
+          <details style="margin-top:8px">
+            <summary style="cursor:pointer;color:var(--brand);font-weight:600">Refeeding risk + practical tips (tap)</summary>
+            <ul style="margin:8px 0 0;padding-left:18px;line-height:1.6;font-size:14px">
+              <li><b>Refeeding risk (NICE):</b> BMI &lt; 16 · ≥ 15 % weight loss in 3 – 6 mo · little/no intake &gt; 10 d · low K/Mg/PO₄ before feeding. Start at <b>5 – 10 kcal/kg/d</b>, advance slowly over 4 – 7 d; replace K, Mg, PO₄; <b>thiamine 100 – 300 mg IV</b> before feeding.</li>
+              <li><b>EDEN (NEJM 2012):</b> trophic feeds (10 – 20 mL/hr) non-inferior to full feeds for 6 d in ARDS — ventilator-free days equal.</li>
+              <li><b>TARGET (NEJM 2018):</b> 1.5 kcal/mL concentrated feed non-inferior to 1.0 kcal/mL in critically ill — no mortality or infection difference.</li>
+              <li><b>Protein — critical illness:</b> 1.3 g/kg/d (ASPEN/SCCM); 1.5 – 2.0 if burns, trauma, sepsis, CRRT, polytrauma, pressure injury.</li>
+              <li><b>Parenteral nutrition</b> if enteral contraindicated (bowel obstruction, GI bleed, severe ileus) and ≥ 7 d expected NPO — start low (EPaNIC NEJM 2011).</li>
+            </ul>
+          </details>
+          <div class="src">Source: McClave SA et al. ASPEN / SCCM nutrition support in the adult critically ill patient. JPEN 2016;40(2):159–211. Rice TW et al. EDEN trial, NEJM 2012. NICE CG32 (refeeding).</div>
+        </div>
+
+        <div class="card">
           <h3>Parkland Formula (burns)</h3>
           <div class="sub"><b>4 mL × kg × %TBSA</b> of Lactated Ringer's over 24 h — ½ in first 8 h (from time of burn), ½ over next 16 h. Count only 2nd + 3rd degree burns.</div>
           <div class="grid-in">
@@ -1902,6 +1994,24 @@
           <div class="rsi-step"><h4>Monitoring + special situations</h4><p>Continuous EEG mandatory in refractory + after convulsions stop (non-convulsive SE in ≥ 20 % of persistent coma post-SE).<br><b>Eclampsia:</b> MgSO₄ 4 – 6 g IV loading → 1 – 2 g/hr; deliver fetus.<br><b>Alcohol withdrawal:</b> benzodiazepines + thiamine; avoid phenytoin (ineffective).<br><b>Toxic:</b> INH → pyridoxine · TCA → NaHCO₃ · theophylline → HD · cocaine → benzos.</p></div>
           <div class="src">Source: Glauser T et al. Evidence-based guideline — treatment of convulsive status epilepticus (NCS). Epilepsy Curr 2016;16(1):48–61. ESETT investigators, NEJM 2019;381(22):2103–13. RAMPART (Silbergleit), NEJM 2012;366(7):591–600.</div>
         </div>
+
+        <div class="card rsi-protocol-card">
+          <h3 class="rsi-protocol-title">🧠 ABCDEF ICU Liberation Bundle</h3>
+          <div class="sub">SCCM ICU Liberation / PADIS 2018. Daily implementation cuts mortality (OR 0.68), delirium (OR 0.60), coma, physical restraint, discharge-home disability, 7-day readmission. Round on <em>every</em> element every shift.</div>
+
+          <div class="rsi-step"><h4>A · Assess, prevent and manage PAIN</h4><p>Tool: <b>CPOT ≥ 3</b> (non-verbal) OR <b>NRS ≥ 4</b> (verbal) = pain.<br>Treat pain FIRST before adding sedation (analgo-sedation).<br>First-line: <b>fentanyl 25 – 100 μg/hr</b> infusion, titrate to CPOT &lt; 3. Avoid morphine in renal failure (metabolite accumulation).<br>Adjuncts: paracetamol 1 g IV q 6 h · ketamine 0.1 – 0.5 mg/kg/hr for opioid-sparing · gabapentin / regional blocks if appropriate. Avoid long-term NSAIDs in critical illness.</p></div>
+
+          <div class="rsi-step"><h4>B · BOTH Spontaneous Awakening (SAT) + Spontaneous Breathing Trial (SBT)</h4><p><b>SAT safety:</b> no active seizures, no alcohol withdrawal, no neuromuscular blockade, no agitation on current sedation, no myocardial ischaemia in prior 24 h, no ↑ICP.<br>SAT = stop sedation (± opioid continued for pain). If RASS ≥ − 1 within 4 h → go to SBT.<br><b>SBT:</b> see the Weaning Readiness card in Ventilator tab for criteria + RSBI.<br>Awake Breathing Controlled trial (ABC, Girard Lancet 2008): more vent-free days (14.7 vs 11.6), lower 1-yr mortality (44 vs 58 %).</p></div>
+
+          <div class="rsi-step"><h4>C · Choice of analgesia and sedation</h4><p>Target light sedation: <b>RASS 0 to − 2</b> unless specific indication for deeper (ARDS prone, severe asynchrony, ↑ICP, status epilepticus).<br>Prefer <b>non-benzodiazepines</b>:<br>• <b>Propofol</b> 5 – 50 μg/kg/min (watch PRIS &gt; 80 μg/kg/min &gt; 48 h)<br>• <b>Dexmedetomidine</b> 0.2 – 1.5 μg/kg/hr (SPICE-III, MENDS2: non-inferior to propofol, less delirium in some trials)<br>Avoid benzodiazepine infusions (midazolam, lorazepam) unless alcohol/benzo withdrawal or refractory status.<br>Reassess sedation level + need q 4 h.</p></div>
+
+          <div class="rsi-step"><h4>D · Delirium — assess, prevent, manage</h4><p><b>Assess:</b> CAM-ICU each shift (see Scores tab) + RASS first.<br><b>Prevent:</b> re-orientate, open blinds in day / dim at night, hearing aids / glasses on, early mobility, family at bedside, pain + sedation per above, avoid tethers.<br><b>Manage (DELIRIUMS mnemonic — find a cause):</b> <b>D</b>rugs (anticholinergics, steroids, opioids, benzos) · <b>E</b>lectrolytes / endocrine (Na, Ca, Mg, glucose, thyroid) · <b>L</b>ow O₂ (hypoxia, hypoperfusion, anaemia, MI) · <b>I</b>nfection / sepsis · <b>R</b>etention (urinary, faecal) · <b>I</b>ctal / post-ictal · <b>U</b>nder-hydration / under-nutrition · <b>M</b>etabolic (uraemia, hepatic encephalopathy, acid-base) · <b>S</b>ubdural / stroke / CNS.<br><b>Pharmacology:</b> antipsychotics (haloperidol 2 – 5 mg IV q 4 – 6 h, olanzapine, quetiapine 25 – 100 mg BID) only for severe agitation / safety — <em>no mortality benefit</em> (MIND-USA). Dexmedetomidine for hyperactive delirium at night.</p></div>
+
+          <div class="rsi-step"><h4>E · Early mobility and exercise</h4><p>Begin ROM within 24 – 48 h of ICU admit when haemodynamically stable (MAP ≥ 65 off escalating pressors, FiO₂ ≤ 0.6, PEEP ≤ 10, no active ischaemia / arrhythmia).<br>Progression: passive ROM → active ROM → sitting edge of bed → standing → marching → walking in room → walking in corridor.<br>Needs 2 – 3 staff + physio + RT; portable ventilator OK. Mobility within 72 h cuts ICU LOS by 1.5 d (Schweickert Lancet 2009).</p></div>
+
+          <div class="rsi-step"><h4>F · Family engagement + empowerment</h4><p>Open / flexible visitation. Involve family in rounds, delirium prevention (orientation, familiar objects, voice recordings), SAT/SBT coaching.<br>Daily communication: diagnosis, prognosis, goals of care, estimated LOS. Document family meetings. Offer palliative care consult when prognosis guarded.<br>ICU diary, follow-up clinic reduces PTSD (RACHEL, Jones et al.).</p></div>
+          <div class="src">Sources: Devlin JW et al. PADIS Guidelines — Pain, Agitation/Sedation, Delirium, Immobility, Sleep. Crit Care Med 2018;46(9):e825–73. Pun BT et al. Caring for critically ill patients with the ABCDEF bundle — ICU Liberation Collaborative. Crit Care Med 2019;47(1):3–14. Girard TD et al. ABC trial. Lancet 2008;371(9607):126–34. Schweickert WD et al. Early physical and occupational therapy. Lancet 2009;373(9678):1874–82. Girard TD et al. MIND-USA — haloperidol/ziprasidone for delirium in ICU. NEJM 2018;379(26):2506–16.</div>
+        </div>
       </div>
     </section>
 
@@ -1939,11 +2049,11 @@
             <li>Not a regulated medical device.</li>
           </ul></dd>
           <dt>Version</dt>
-          <dd>1.5.6 · last reviewed 01 November 2026.</dd>
+          <dd>1.5.7 · last reviewed 01 November 2026.</dd>
           <dt>Report a suspected error</dt>
           <dd>Say what you entered, what the app showed and what you expected, with a source if you have one. Leave out patient identifiers.</dd>
         </dl>
-        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.6&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
+        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.7&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
           <span>Report an error · contact@thetract.org</span>
         </a>
@@ -1955,7 +2065,7 @@
         <div class="row"><span class="k">Name</span><span class="v">Dr. Mohamed Najm</span></div>
         <div class="row"><span class="k">Credentials</span><span class="v">MBBS · PgDip EM · FEBN · MRCEM SECONDARY</span></div>
         <div class="row"><span class="k">Phone / WhatsApp</span><span class="v"><a href="tel:+966564762990" style="color:var(--brand-3);text-decoration:none">+966&nbsp;56&nbsp;476&nbsp;2990</a></span></div>
-        <div class="row"><span class="k">Version</span><span class="v">1.5.6</span></div>
+        <div class="row"><span class="k">Version</span><span class="v">1.5.7</span></div>
         <div class="row"><span class="k">Last reviewed</span><span class="v">01 Nov 2026</span></div>
       </div>
 
@@ -2011,6 +2121,14 @@
 
       <div class="card changelog" id="changelog">
         <h3>Changelog</h3>
+        <h4>1.5.7 <span>· 01 November 2026</span></h4>
+        <ul>
+          <li>New protocol: <b>ABCDEF ICU Liberation Bundle</b> red-themed card in Neuroprotection — Assess pain (CPOT/NRS), Both SAT + SBT, Choice of light sedation (RASS 0 to − 2, prefer non-benzos), Delirium (CAM-ICU + DELIRIUMS mnemonic), Early mobility, Family engagement.</li>
+          <li>New calculator: <b>Weaning Readiness + RSBI</b> in Ventilator tab — SBT eligibility, pass criteria, cuff-leak test, post-extubation HFNC/NIV guidance.</li>
+          <li>New card: <b>Transfusion Thresholds</b> in Renal &amp; Fluids — Hb / platelet / FFP / cryo / PCC triggers with expected rise, plus <b>TRALI vs TACO</b> comparison table (onset, mechanism, BP, BNP, LV, treatment).</li>
+          <li>New calculator: <b>Nutrition Targets</b> in Renal &amp; Fluids — Mifflin-St Jeor REE × stress factor, protein 1.2 – 2.0 g/kg, refeeding risk and tips (EDEN, TARGET, EPaNIC).</li>
+          <li>References: added Yang &amp; Tobin 1991 (RSBI), Thille HFNC 2019, PADIS 2018, ICU Liberation (Pun 2019), ABC trial 2008, Schweickert 2009, MIND-USA 2018, TRICC 1999, TRISS 2014, AABB 2016, ISBT TRALI 2019, ASPEN/SCCM 2016, EDEN 2012, TARGET 2018.</li>
+        </ul>
         <h4>1.5.6 <span>· 01 November 2026</span></h4>
         <ul>
           <li>New protocol: <b>ARDS Management Bundle</b> red-themed card in Ventilator tab — Berlin severity, lung-protective ventilation (TV 6/PBW, Pplat ≤ 30, DP &lt; 15, permissive hypercapnia pH ≥ 7.20), ARDSnet lower PEEP/FiO₂ ladder, PROSEVA prone criteria (P/F &lt; 150, 16 h/day), ACURASYS/ROSE neuromuscular blockade, FACTT conservative fluid, DEXA-ARDS/RECOVERY steroids, rescue therapies (recruitment, iNO), EOLIA ECMO criteria, SBT/weaning.</li>
@@ -2122,7 +2240,7 @@
 
   <footer>
     <div class="fine"><strong>Reference aid — not a medical device.</strong> Always verify against institutional protocols and drug labels.</div>
-    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.6 · last reviewed 01 Nov 2026 · Designed by Dr. Mohamed Najm</div>
+    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.7 · last reviewed 01 Nov 2026 · Designed by Dr. Mohamed Najm</div>
   </footer>
 </div>
 
@@ -3798,6 +3916,40 @@ function runScoreCalcs() {
   if (wt) {
     $("#vanco-load").textContent = fmt(wt*25, 0) + " – " + fmt(Math.min(wt*30, 3000), 0) + " mg";
   } else $("#vanco-load").textContent = "—";
+
+  // RSBI
+  const wnRR = num(state.inputs.wn_rr), wnTV = num(state.inputs.wn_tv);
+  const wnV = $("#wn-verdict"); if (wnV) wnV.classList.remove("ok","warn","bad");
+  if (wnRR != null && wnTV != null && wnTV > 0) {
+    const rsbi = wnRR / (wnTV / 1000);
+    $("#wn-rsbi").textContent = fmt(rsbi, 0) + " breaths/min/L";
+    if (wnV) {
+      if (rsbi < 105) { wnV.textContent = `RSBI ${fmt(rsbi,0)} < 105 — favourable; proceed with SBT per checklist. Positive predictive value ~ 78 %.`; wnV.classList.add("ok"); }
+      else { wnV.textContent = `RSBI ${fmt(rsbi,0)} ≥ 105 — likely weaning failure; address underlying cause (volume, cardiac, sepsis, sputum, delirium) and re-trial tomorrow.`; wnV.classList.add("bad"); }
+    }
+  } else { $("#wn-rsbi").textContent = "—"; }
+
+  // Nutrition — Mifflin-St Jeor
+  const nAge = num(state.inputs.nu_age) || num(state.patient.age);
+  const nHt  = num(state.inputs.nu_ht)  || num(state.patient.height);
+  const nWt  = num(state.patient.weight);
+  const nSex = state.patient.sex;
+  const nStress = parseFloat(state.inputs.nu_stress) || 1.2;
+  const nV = $("#nu-verdict"); if (nV) nV.classList.remove("ok","warn","bad");
+  if (nAge && nHt && nWt && nSex) {
+    const ree = nSex === "M"
+      ? 10 * nWt + 6.25 * nHt - 5 * nAge + 5
+      : 10 * nWt + 6.25 * nHt - 5 * nAge - 161;
+    const kcalTgt = ree * nStress;
+    $("#nu-ree").textContent  = fmt(ree, 0) + " kcal/day";
+    $("#nu-kcal").textContent = fmt(kcalTgt, 0) + " kcal/day";
+    $("#nu-pro-low").textContent  = fmt(nWt * 1.2, 0) + " g/day";
+    $("#nu-pro-high").textContent = fmt(nWt * 2.0, 0) + " g/day";
+    if (nV) { nV.textContent = `For ${nWt} kg, kcal/kg range ${fmt(kcalTgt/nWt,0)} (stress ${nStress}×). Start trophic (10 – 20 mL/hr) and advance over 48 – 72 h if tolerated.`; nV.classList.add("ok"); }
+  } else {
+    $("#nu-ree").textContent = "—"; $("#nu-kcal").textContent = "—";
+    $("#nu-pro-low").textContent = "—"; $("#nu-pro-high").textContent = "—";
+  }
 }
 
 /* ============================================================
@@ -4241,7 +4393,20 @@ const REFERENCES = [
   "Wiedemann HP et al. FACTT — comparison of two fluid-management strategies in acute lung injury. NEJM 2006;354(24):2564–75.",
   "Villar J et al. DEXA-ARDS — dexamethasone treatment for the acute respiratory distress syndrome: a multicentre, randomised controlled trial. Lancet Respir Med 2020;8(3):267–76.",
   "Combes A et al. EOLIA — extracorporeal membrane oxygenation for severe acute respiratory distress syndrome. NEJM 2018;378(21):1965–75.",
-  "Amato MBP et al. Driving pressure and survival in the acute respiratory distress syndrome. NEJM 2015;372(8):747–55.",
+  "Yang KL, Tobin MJ. A prospective study of indexes predicting the outcome of weaning (RSBI). NEJM 1991;324(21):1445–50.",
+  "Thille AW et al. Effect of post-extubation HFNC vs NIV on reintubation. JAMA 2019;322(15):1465–75.",
+  "Devlin JW et al. PADIS Guidelines — Pain, Agitation/Sedation, Delirium, Immobility, Sleep. Crit Care Med 2018;46(9):e825–73.",
+  "Pun BT et al. Caring for critically ill patients with the ABCDEF bundle — ICU Liberation Collaborative. Crit Care Med 2019;47(1):3–14.",
+  "Girard TD et al. ABC trial — awakening and breathing controlled trial. Lancet 2008;371(9607):126–34.",
+  "Schweickert WD et al. Early physical and occupational therapy in mechanically ventilated patients. Lancet 2009;373(9678):1874–82.",
+  "Girard TD et al. MIND-USA — haloperidol / ziprasidone for delirium in the ICU. NEJM 2018;379(26):2506–16.",
+  "Hébert PC et al. TRICC — a multicenter, randomised, controlled clinical trial of transfusion requirements in critical care. NEJM 1999;340(6):409–17.",
+  "Holst LB et al. TRISS — lower vs higher haemoglobin threshold for transfusion in septic shock. NEJM 2014;371(15):1381–91.",
+  "Carson JL et al. Clinical practice guidelines from the AABB — red blood cell transfusion thresholds and storage. JAMA 2016;316(19):2025–35.",
+  "Vlaar APJ et al. A consensus redefinition of transfusion-related acute lung injury. Transfusion 2019;59(7):2465–76.",
+  "McClave SA et al. ASPEN / SCCM guidelines for the provision of nutrition support therapy in the adult critically ill patient. JPEN 2016;40(2):159–211.",
+  "Rice TW et al. EDEN study — initial trophic vs full enteral feeding in acute lung injury. NEJM 2012;307(8):795–803.",
+  "Chapman M et al. TARGET investigators — energy-dense vs routine enteral nutrition in the critically ill. NEJM 2018;379(19):1823–34.",
 
   // Formulas & physiology
   "__H__ Formulas & physiology",
@@ -4473,7 +4638,9 @@ const ALL_INPUT_IDS = ["hd-sbp","hd-dbp","hd-hr","cpp-icp","cpp-map",
    "uo-vol","uo-hr",
    "pk-tbsa",
    "meld-bili","meld-inr","meld-cr","meld-na","meld-hd",
-   "vanco-dose","vanco-tau","vanco-crcl"];
+   "vanco-dose","vanco-tau","vanco-crcl",
+   "wn-rr","wn-tv",
+   "nu-ht","nu-age","nu-stress"];
 function bindAllInputs() {
   ALL_INPUT_IDS.forEach(id => bindInput(id, id.replace("-", "_")));
 }

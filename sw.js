@@ -7,7 +7,7 @@
      ASSETS    = cache-first for icons/CSS/JS/manifest (stable)
      IMAGES    = cache-first with size cap for user-added images
 */
-const VERSION  = "v30"; // app 1.5.6 — ARDS Management Bundle + Murray Lung Injury Score (ECMO criteria)
+const VERSION  = "v31"; // app 1.5.7 — ABCDEF bundle + Weaning/RSBI + Transfusion thresholds + Nutrition targets
 const PRECACHE = `najm-precache-${VERSION}`;
 const RUNTIME  = `najm-runtime-${VERSION}`;
 const ASSETS   = `najm-assets-${VERSION}`;
