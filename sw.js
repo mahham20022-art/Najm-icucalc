@@ -7,7 +7,7 @@
      ASSETS    = cache-first for icons/CSS/JS/manifest (stable)
      IMAGES    = cache-first with size cap for user-added images
 */
-const VERSION  = "v28"; // app 1.5.4 — Osmolal gap: severity bands + toxic alcohol differential
+const VERSION  = "v29"; // app 1.5.5 — Tier-2: NIHSS, Hunt-Hess, Fisher, MELD-Na, Child-Pugh, CAM-ICU, Padua, Vanco AUC, Parkland, Status Epilepticus
 const PRECACHE = `najm-precache-${VERSION}`;
 const RUNTIME  = `najm-runtime-${VERSION}`;
 const ASSETS   = `najm-assets-${VERSION}`;

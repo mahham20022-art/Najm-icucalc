@@ -58,7 +58,7 @@
       "applicationSubCategory": "MedicalCalculator",
       "operatingSystem": "Any (PWA, iOS, Android, Windows, macOS, Linux)",
       "browserRequirements": "Modern browser with JavaScript",
-      "softwareVersion": "1.5.4",
+      "softwareVersion": "1.5.5",
       "datePublished": "2026-07-25",
       "dateModified": "2026-10-30",
       "inLanguage": "en",
@@ -1233,7 +1233,7 @@
       <h3 id="onbTrustTitle">Before you use it</h3>
       <p><b>For</b> ICU/CCU doctors, pharmacists and nurses who already know these drugs and scores. It does the arithmetic; the clinical decision stays with you.</p>
       <p><b>Not prospectively validated.</b> Decision support only. Check every result against your protocol and the drug label.</p>
-      <p>Version 1.5.4 · last reviewed 01 November 2026 · what you enter stays in this browser.</p>
+      <p>Version 1.5.5 · last reviewed 01 November 2026 · what you enter stays in this browser.</p>
       <button class="onb-link" type="button" id="onbEvidence">Evidence, limits and data handling</button>
     </div>
 
@@ -1695,6 +1695,33 @@
           <div class="row"><span class="k">Maintenance rate</span><span class="v" id="mn-rate">—</span></div>
         </div>
 
+        <div class="card">
+          <h3>Parkland Formula (burns)</h3>
+          <div class="sub"><b>4 mL × kg × %TBSA</b> of Lactated Ringer's over 24 h — ½ in first 8 h (from time of burn), ½ over next 16 h. Count only 2nd + 3rd degree burns.</div>
+          <div class="grid-in">
+            <div class="field"><label>Burn %TBSA</label><div class="input"><input id="pk-tbsa" type="number" step="1" inputmode="numeric" /><span class="unit">%</span></div></div>
+          </div>
+          <div class="row"><span class="k">24-hour total LR</span><span class="v" id="pk-total">—</span></div>
+          <div class="row"><span class="k">First 8 hr</span><span class="v" id="pk-first8">—</span></div>
+          <div class="row"><span class="k">Next 16 hr</span><span class="v" id="pk-next16">—</span></div>
+          <div class="row"><span class="k">Target urine output</span><span class="v" id="pk-uo">—</span></div>
+          <div class="verdict" id="pk-verdict">Enter %TBSA. Weight read from patient bar.</div>
+          <details style="margin-top:8px">
+            <summary style="cursor:pointer;color:var(--brand);font-weight:600">Rule of Nines — adult TBSA reference (tap)</summary>
+            <ul style="margin:8px 0 0;padding-left:18px;line-height:1.6;font-size:14px">
+              <li>Head &amp; neck — <b>9 %</b></li>
+              <li>Each upper limb — <b>9 %</b></li>
+              <li>Each lower limb — <b>18 %</b></li>
+              <li>Anterior trunk — <b>18 %</b></li>
+              <li>Posterior trunk — <b>18 %</b></li>
+              <li>Perineum — <b>1 %</b></li>
+              <li>Palm (patient's own) — <b>~ 1 %</b> (handy for patchy burns)</li>
+            </ul>
+            <div class="sub" style="margin-top:8px">Transfer-to-burn-centre criteria (ABA): partial-thickness &gt; 10 % TBSA · any face / hands / feet / genitalia / perineum / major joints · 3rd degree in any age group · electrical / chemical / inhalation injury · burn with trauma / co-morbidity / child in a non-paediatric centre.</div>
+          </details>
+          <div class="src">Source: Baxter CR &amp; Shires GT, Ann NY Acad Sci 1968;150:874–94 (Parkland); ABA criteria 2016.</div>
+        </div>
+
         <div class="card rsi-protocol-card">
           <h3 class="rsi-protocol-title">🩸 Massive Transfusion Protocol (MTP)</h3>
           <div class="sub">Trigger: ABC score ≥ 2, SI &gt; 1 with ongoing bleeding, &gt; 10 units PRBC/24 h anticipated, or &gt; 4 units in 1 h.</div>
@@ -1724,6 +1751,44 @@
         <div class="card"><h3>TIMI (UA/NSTEMI)</h3><div class="sub">14-day risk of death / new MI / urgent revascularisation.</div><div id="score-timi"></div><div class="src">Source: Antman EM et al., JAMA 2000;284(7):835–42</div></div>
         <div class="card"><h3>CURB-65</h3><div class="sub">Pneumonia severity — triages outpatient vs inpatient vs ICU.</div><div id="score-curb65"></div><div class="src">Source: Lim WS et al., Thorax 2003;58(5):377–82</div></div>
         <div class="card"><h3>ICH Score</h3><div class="sub">30-day mortality after spontaneous intracerebral haemorrhage.</div><div id="score-ich"></div><div class="src">Source: Hemphill JC et al., Stroke 2001;32(4):891–7</div></div>
+        <div class="card"><h3>NIHSS</h3><div class="sub">NIH Stroke Scale — 11 items, 0–42. Used for tPA eligibility, severity staging, and serial neuro checks.</div><div id="score-nihss"></div><div class="src">Source: Brott T et al., Stroke 1989;20(7):864–70</div></div>
+        <div class="card"><h3>Hunt &amp; Hess (SAH)</h3><div class="sub">Clinical grading of subarachnoid haemorrhage — predicts surgical mortality.</div><div id="score-hunthess"></div><div class="src">Source: Hunt WE &amp; Hess RM, J Neurosurg 1968;28(1):14–20</div></div>
+        <div class="card"><h3>Modified Fisher (SAH)</h3><div class="sub">CT grading of SAH thickness + IVH — predicts symptomatic vasospasm risk.</div><div id="score-fisher"></div><div class="src">Source: Frontera JA et al., Neurosurgery 2006;59(1):21–7</div></div>
+        <div class="card"><h3>Child-Pugh</h3><div class="sub">Cirrhosis severity — A (5–6), B (7–9), C (10–15).</div><div id="score-childpugh"></div><div class="src">Source: Pugh RN et al., Br J Surg 1973;60(8):646–9</div></div>
+        <div class="card"><h3>CAM-ICU</h3><div class="sub">Confusion Assessment Method for the ICU — delirium screen in intubated/non-verbal patients. Positive = Feature 1 + 2 + (3 OR 4).</div><div id="score-camicu"></div><div class="src">Source: Ely EW et al., JAMA 2001;286(21):2703–10</div></div>
+        <div class="card"><h3>Padua VTE</h3><div class="sub">Medical-inpatient VTE risk. Score ≥ 4 → start pharmacologic prophylaxis.</div><div id="score-padua"></div><div class="src">Source: Barbar S et al., J Thromb Haemost 2010;8(11):2450–7</div></div>
+
+        <div class="card">
+          <h3>MELD-Na</h3>
+          <div class="sub">90-day mortality in cirrhosis; drives liver-transplant priority (UNOS, Feb 2016+). Range 6–40.</div>
+          <div class="grid-in">
+            <div class="field"><label>Bilirubin</label><div class="input"><input id="meld-bili" type="number" step="0.1" inputmode="decimal" /><span class="unit">mg/dL</span></div></div>
+            <div class="field"><label>INR</label><div class="input"><input id="meld-inr" type="number" step="0.01" inputmode="decimal" /></div></div>
+            <div class="field"><label>Creatinine</label><div class="input"><input id="meld-cr" type="number" step="0.01" inputmode="decimal" /><span class="unit">mg/dL</span></div></div>
+            <div class="field"><label>Sodium</label><div class="input"><input id="meld-na" type="number" inputmode="numeric" /><span class="unit">mEq/L</span></div></div>
+            <div class="field"><label>On dialysis ≥ 2 × past wk?</label><div class="input"><select id="meld-hd"><option value="0">No</option><option value="1">Yes</option></select></div></div>
+          </div>
+          <div class="row"><span class="k">MELD</span><span class="v" id="meld-base">—</span></div>
+          <div class="row"><span class="k">MELD-Na</span><span class="v" id="meld-na-out">—</span></div>
+          <div class="verdict" id="meld-verdict">Enter bilirubin, INR, creatinine, sodium.</div>
+          <div class="src">Source: Kim WR et al., NEJM 2008;359(10):1018–26 (MELD-Na); OPTN/UNOS policy 2016.</div>
+        </div>
+
+        <div class="card">
+          <h3>Vancomycin AUC₂₄ (bedside estimate)</h3>
+          <div class="sub">Target AUC₂₄ = <b>400 – 600 mg·h/L</b> for serious MRSA (ASHP/IDSA 2020). Simplified estimate: AUC₂₄ ≈ daily dose / (0.045 × CrCl).</div>
+          <div class="grid-in">
+            <div class="field"><label>Dose per interval</label><div class="input"><input id="vanco-dose" type="number" inputmode="numeric" /><span class="unit">mg</span></div></div>
+            <div class="field"><label>Interval (τ)</label><div class="input"><input id="vanco-tau" type="number" inputmode="numeric" value="12" /><span class="unit">hr</span></div></div>
+            <div class="field"><label>CrCl override</label><div class="input"><input id="vanco-crcl" type="number" inputmode="numeric" /><span class="unit">auto</span></div></div>
+          </div>
+          <div class="row"><span class="k">Daily dose</span><span class="v" id="vanco-daily">—</span></div>
+          <div class="row"><span class="k">CrCl used</span><span class="v" id="vanco-crcl-used">—</span></div>
+          <div class="row"><span class="k">Estimated AUC₂₄</span><span class="v" id="vanco-auc">—</span></div>
+          <div class="row"><span class="k">Loading dose (25–30 mg/kg)</span><span class="v" id="vanco-load">—</span></div>
+          <div class="verdict" id="vanco-verdict">Enter dose. CrCl is auto-filled from the patient bar.</div>
+          <div class="src">Source: Rybak MJ et al., ASHP/IDSA/PIDS/SIDP vancomycin consensus guideline. Am J Health-Syst Pharm 2020;77(11):835–64.</div>
+        </div>
       </div>
     </section>
 
@@ -1791,6 +1856,26 @@
         </div>
       </div>
       <div class="cards" id="neuroCards"></div>
+
+      <div class="cards" style="margin-top:16px">
+        <div class="card rsi-protocol-card">
+          <h3 class="rsi-protocol-title">⚡ Status Epilepticus Protocol</h3>
+          <div class="sub">Convulsive status epilepticus = ≥ 5 min continuous seizure OR ≥ 2 seizures without recovery. Treat as emergency — brain injury begins at 30 min of continuous activity.</div>
+
+          <div class="rsi-step"><h4>0 – 5 min · Stabilisation</h4><p>ABC · O₂ · IV access · attach monitor · <b>finger-stick glucose</b> immediately.<br>Labs: electrolytes (Na, Mg, Ca, PO₄), BUN, LFT, CBC, toxicology, AED levels, pregnancy test (women of reproductive age), ABG, blood culture if febrile.<br>If hypoglycaemia → <b>thiamine 100 mg IV</b> THEN <b>dextrose 25 g IV</b> (D50 50 mL).</p></div>
+
+          <div class="rsi-step"><h4>5 – 20 min · Initial therapy (benzodiazepine)</h4><p>Choose ONE, give full dose, repeat ONCE if seizures continue:<br>• <b>Midazolam 10 mg IM</b> (adult ≥ 40 kg) — preferred when no IV, superior to IV lorazepam in RAMPART trial.<br>• <b>Lorazepam 0.1 mg/kg IV</b> (max 4 mg) over 2 min — gold standard with IV access.<br>• <b>Diazepam 0.15 – 0.2 mg/kg IV</b> (max 10 mg) over 2 min — short duration, follow with 2nd-line.<br>Underdosing is the commonest error — give the FULL dose.</p></div>
+
+          <div class="rsi-step"><h4>20 – 40 min · Second-line therapy</h4><p>Pick ONE (no evidence of superiority between the three — ESETT trial):<br>• <b>Levetiracetam 60 mg/kg IV</b> (max 4 500 mg) over 10 min — fewest drug interactions.<br>• <b>Fosphenytoin 20 mg PE/kg IV</b> (max 1 500 mg PE) at ≤ 150 mg PE/min — cardiac monitor, avoid in heart block / torsades.<br>• <b>Valproate 40 mg/kg IV</b> (max 3 000 mg) over 10 min — avoid in hepatic failure, mitochondrial disease, pregnancy.</p></div>
+
+          <div class="rsi-step"><h4>40 – 60 min · Refractory status — intubate + anaesthetic infusion</h4><p>Intubate (RSI tab). Start continuous EEG. Choose ONE anaesthetic — target burst suppression × 24 – 48 h, then wean:<br>• <b>Midazolam</b> 0.2 mg/kg bolus → <b>0.05 – 2 mg/kg/hr</b> infusion (titrate every 5 min).<br>• <b>Propofol</b> 1 – 2 mg/kg bolus → <b>20 – 200 μg/kg/min</b> (watch for PRIS at &gt; 80 μg/kg/min &gt; 48 h).<br>• <b>Pentobarbital</b> 5 – 15 mg/kg bolus (≤ 50 mg/min) → <b>0.5 – 5 mg/kg/hr</b> — hypotension, ileus common, prolonged recovery.</p></div>
+
+          <div class="rsi-step"><h4>Super-refractory (&gt; 24 h) — adjuncts</h4><p>Ketamine 1 – 5 mg/kg/hr · hypothermia 32 – 35 °C · magnesium 4 g IV (eclampsia) · pyridoxine 70 mg/kg (INH toxicity, infants) · ketogenic diet · immunotherapy (steroids, IVIG, plasmapheresis) · surgery for lesional cases.</p></div>
+
+          <div class="rsi-step"><h4>Monitoring + special situations</h4><p>Continuous EEG mandatory in refractory + after convulsions stop (non-convulsive SE in ≥ 20 % of persistent coma post-SE).<br><b>Eclampsia:</b> MgSO₄ 4 – 6 g IV loading → 1 – 2 g/hr; deliver fetus.<br><b>Alcohol withdrawal:</b> benzodiazepines + thiamine; avoid phenytoin (ineffective).<br><b>Toxic:</b> INH → pyridoxine · TCA → NaHCO₃ · theophylline → HD · cocaine → benzos.</p></div>
+          <div class="src">Source: Glauser T et al. Evidence-based guideline — treatment of convulsive status epilepticus (NCS). Epilepsy Curr 2016;16(1):48–61. ESETT investigators, NEJM 2019;381(22):2103–13. RAMPART (Silbergleit), NEJM 2012;366(7):591–600.</div>
+        </div>
+      </div>
     </section>
 
     <!-- SEPSIS -->
@@ -1827,11 +1912,11 @@
             <li>Not a regulated medical device.</li>
           </ul></dd>
           <dt>Version</dt>
-          <dd>1.5.4 · last reviewed 01 November 2026.</dd>
+          <dd>1.5.5 · last reviewed 01 November 2026.</dd>
           <dt>Report a suspected error</dt>
           <dd>Say what you entered, what the app showed and what you expected, with a source if you have one. Leave out patient identifiers.</dd>
         </dl>
-        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.4&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
+        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.5&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
           <span>Report an error · contact@thetract.org</span>
         </a>
@@ -1843,7 +1928,7 @@
         <div class="row"><span class="k">Name</span><span class="v">Dr. Mohamed Najm</span></div>
         <div class="row"><span class="k">Credentials</span><span class="v">MBBS · PgDip EM · FEBN · MRCEM SECONDARY</span></div>
         <div class="row"><span class="k">Phone / WhatsApp</span><span class="v"><a href="tel:+966564762990" style="color:var(--brand-3);text-decoration:none">+966&nbsp;56&nbsp;476&nbsp;2990</a></span></div>
-        <div class="row"><span class="k">Version</span><span class="v">1.5.4</span></div>
+        <div class="row"><span class="k">Version</span><span class="v">1.5.5</span></div>
         <div class="row"><span class="k">Last reviewed</span><span class="v">01 Nov 2026</span></div>
       </div>
 
@@ -1899,10 +1984,18 @@
 
       <div class="card changelog" id="changelog">
         <h3>Changelog</h3>
+        <h4>1.5.5 <span>· 01 November 2026</span></h4>
+        <ul>
+          <li><b>Tier-2 clinical additions</b> — seven new scores and three new calculators:</li>
+          <li>New scores: NIHSS (11-item, 0–42) · Hunt &amp; Hess (SAH clinical grade 1–5) · Modified Fisher (SAH CT, vasospasm risk) · Child-Pugh (A/B/C, 1-yr survival) · CAM-ICU (delirium screen) · Padua VTE (prophylaxis trigger ≥ 4).</li>
+          <li>New calculators: MELD-Na (UNOS 2016 formula, 90-day mortality bands) · Vancomycin AUC₂₄ bedside estimate (ASHP/IDSA 2020 target 400–600 mg·h/L) · Parkland burns formula (4 mL·kg·%TBSA LR split 8 h/16 h, Rule of Nines).</li>
+          <li>New protocol: <b>Status Epilepticus</b> red-themed card in Neuroprotection — timed escalation (0–5 min stabilisation → 5–20 benzos → 20–40 min 2nd-line → 40–60 min anaesthetic infusion → super-refractory adjuncts).</li>
+          <li>References: added Brott 1989 (NIHSS), Hunt &amp; Hess 1968, Frontera 2006 (mod Fisher), Pugh 1973, Kim 2008 (MELD-Na), Ely 2001 (CAM-ICU), Barbar 2010 (Padua), Glauser 2016 + Kapur ESETT 2019 + Silbergleit RAMPART 2012 (status epilepticus), Baxter &amp; Shires 1968 (Parkland), ABA 2016 (burn transfer).</li>
+        </ul>
         <h4>1.5.4 <span>· 01 November 2026</span></h4>
         <ul>
           <li>Osmolal gap card rebuilt: severity bands (normal / mild / moderate / severe), parallel calc with and without ethanol, toxic-alcohol differential diagnosis (methanol, ethylene glycol, isopropyl, propylene glycol, mannitol) with escalation plan (fomepizole + HD trigger).</li>
-          <li>References: added Krasowski 2012 (osmolal gap performance), Kraut & Mullins NEJM 2018 (toxic alcohols), Purssell 2001 (ethanol correction).</li>
+          <li>References: added Krasowski 2012 (osmolal gap performance), Kraut &amp; Mullins NEJM 2018 (toxic alcohols), Purssell 2001 (ethanol correction).</li>
         </ul>
         <h4>1.5.3 <span>· 30 October 2026</span></h4>
         <ul>
@@ -1996,7 +2089,7 @@
 
   <footer>
     <div class="fine"><strong>Reference aid — not a medical device.</strong> Always verify against institutional protocols and drug labels.</div>
-    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.4 · last reviewed 01 Nov 2026 · Designed by Dr. Mohamed Najm</div>
+    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.5 · last reviewed 01 Nov 2026 · Designed by Dr. Mohamed Najm</div>
   </footer>
 </div>
 
@@ -3593,6 +3686,85 @@ function runRenal() {
     else r = 60 + (w-20);
     $("#mn-rate").textContent = fmt(r, 0) + " mL/hr";
   } else $("#mn-rate").textContent = "—";
+
+  // Parkland (burns) — needs weight + TBSA%
+  const tbsa = num(state.inputs.pk_tbsa);
+  if (w && tbsa != null && tbsa > 0) {
+    const total24 = 4 * w * tbsa;              // mL LR over 24 h
+    const first8  = total24 / 2;               // first half in 8 h
+    const next16  = total24 / 2;
+    const rate8   = first8 / 8;
+    const rate16  = next16 / 16;
+    $("#pk-total").textContent = fmt(total24, 0) + " mL LR / 24 h";
+    $("#pk-first8").textContent = fmt(first8, 0) + " mL  (≈ " + fmt(rate8, 0) + " mL/hr)";
+    $("#pk-next16").textContent = fmt(next16, 0) + " mL  (≈ " + fmt(rate16, 0) + " mL/hr)";
+    const uo = w * 0.5;
+    $("#pk-uo").textContent = fmt(uo, 0) + " – " + fmt(uo*2, 0) + " mL/hr (0.5 – 1 mL/kg/hr)";
+    const pv = $("#pk-verdict"); pv.classList.remove("ok","warn","bad");
+    if (tbsa < 15) { pv.textContent = "TBSA < 15 % in adults rarely needs full Parkland resuscitation — oral + maintenance may suffice. Treat pain, tetanus, transfer criteria."; pv.classList.add("ok"); }
+    else if (tbsa >= 20) { pv.textContent = "Major burn — admit burn centre. Titrate rate to UO 0.5 – 1 mL/kg/hr (1 – 1.5 if myoglobinuria / electrical). Beware fluid creep."; pv.classList.add("bad"); }
+    else { pv.textContent = "Moderate burn — start Parkland, reassess hourly."; pv.classList.add("warn"); }
+  } else { $("#pk-total").textContent = "—"; $("#pk-first8").textContent = "—"; $("#pk-next16").textContent = "—"; $("#pk-uo").textContent = "—"; }
+}
+
+/* ============================================================
+   MELD-Na + Vancomycin AUC₂₄ (bedside estimates)
+   ============================================================ */
+function runScoreCalcs() {
+  // MELD-Na
+  let bili = num(state.inputs.meld_bili), inr = num(state.inputs.meld_inr), cr = num(state.inputs.meld_cr);
+  const naM = num(state.inputs.meld_na), hd = state.inputs.meld_hd === "1" ? 1 : 0;
+  const mv = $("#meld-verdict"); if (mv) mv.classList.remove("ok","warn","bad");
+  if (bili != null && inr != null && cr != null) {
+    // UNOS clamp: all labs ≥ 1.0; Cr capped at 4.0 OR = 4.0 if ≥ 2 dialysis in past wk
+    bili = Math.max(bili, 1);
+    inr  = Math.max(inr, 1);
+    cr   = hd ? 4 : Math.min(Math.max(cr, 1), 4);
+    const meld = Math.round(0.957 * Math.log(cr) * 10 + 0.378 * Math.log(bili) * 10 + 1.120 * Math.log(inr) * 10 + 6.43);
+    $("#meld-base").textContent = meld + " pts";
+    if (naM != null) {
+      const naClamp = Math.min(Math.max(naM, 125), 137);
+      let meldna = meld + 1.32 * (137 - naClamp) - (0.033 * meld * (137 - naClamp));
+      meldna = Math.round(meldna);
+      meldna = Math.max(meldna, meld);           // MELD-Na can never be < MELD
+      meldna = Math.min(meldna, 40);             // cap at 40
+      $("#meld-na-out").textContent = meldna + " pts";
+      if (mv) {
+        if (meldna < 10) { mv.textContent = `MELD-Na ${meldna} — 90-day mortality < 2 %.`; mv.classList.add("ok"); }
+        else if (meldna < 20) { mv.textContent = `MELD-Na ${meldna} — 90-day mortality ~ 6 %.`; mv.classList.add("ok"); }
+        else if (meldna < 30) { mv.textContent = `MELD-Na ${meldna} — 90-day mortality ~ 20 %. Transplant evaluation.`; mv.classList.add("warn"); }
+        else if (meldna < 40) { mv.textContent = `MELD-Na ${meldna} — 90-day mortality ~ 53 %. Priority listing.`; mv.classList.add("bad"); }
+        else { mv.textContent = `MELD-Na ${meldna} — 90-day mortality ~ 71 %. Highest urgency.`; mv.classList.add("bad"); }
+      }
+    } else { $("#meld-na-out").textContent = "—"; if (mv) mv.textContent = "Add serum sodium to compute MELD-Na."; }
+  } else { $("#meld-base").textContent = "—"; $("#meld-na-out").textContent = "—"; }
+
+  // Vanco AUC₂₄
+  const vd = num(state.inputs.vanco_dose), vt = num(state.inputs.vanco_tau) || 12;
+  const vcOverride = num(state.inputs.vanco_crcl);
+  const crcl = vcOverride != null ? vcOverride : computedCrCl();
+  const wt = num(state.patient.weight);
+  const vv = $("#vanco-verdict"); if (vv) vv.classList.remove("ok","warn","bad");
+  if (vd != null && vt > 0) {
+    const daily = vd * (24 / vt);
+    $("#vanco-daily").textContent = fmt(daily, 0) + " mg/day";
+    if (crcl != null) {
+      $("#vanco-crcl-used").textContent = fmt(crcl, 0) + " mL/min";
+      const auc = daily / (0.045 * crcl);         // simplified: CL ≈ 0.045 × CrCl (L/hr per mL/min of CrCl)
+      $("#vanco-auc").textContent = fmt(auc, 0) + " mg·h/L";
+      if (vv) {
+        if (auc < 400) { vv.textContent = `AUC ${fmt(auc,0)} — SUBTHERAPEUTIC. Increase total daily dose or shorten interval; confirm with trough + repeat level.`; vv.classList.add("bad"); }
+        else if (auc <= 600) { vv.textContent = `AUC ${fmt(auc,0)} — TARGET range (400 – 600). Monitor trough + renal function.`; vv.classList.add("ok"); }
+        else { vv.textContent = `AUC ${fmt(auc,0)} — TOXIC risk (nephrotoxicity rises). Hold or reduce dose; recheck trough + Cr.`; vv.classList.add("bad"); }
+      }
+    } else {
+      $("#vanco-crcl-used").textContent = "—"; $("#vanco-auc").textContent = "—";
+      if (vv) vv.textContent = "Need CrCl — fill patient age, weight, sex and creatinine, or override above.";
+    }
+  } else { $("#vanco-daily").textContent = "—"; $("#vanco-auc").textContent = "—"; $("#vanco-crcl-used").textContent = crcl != null ? fmt(crcl,0)+" mL/min" : "—"; }
+  if (wt) {
+    $("#vanco-load").textContent = fmt(wt*25, 0) + " – " + fmt(Math.min(wt*30, 3000), 0) + " mg";
+  } else $("#vanco-load").textContent = "—";
 }
 
 /* ============================================================
@@ -3788,6 +3960,100 @@ const SCORES = {
     const band = t <= 1 ? "ok" : t === 2 ? "warn" : "bad";
     return [`${t} pts → 30-day mortality ${mort}`, band];
   }},
+  nihss: { items: [
+    { k:"1a · Level of consciousness", opts:[["Alert, keenly responsive (0)",0],["Not alert, but arouses to minor stim (1)",1],["Not alert, requires repeated stim / painful stim (2)",2],["Reflex motor only or unresponsive (3)",3]] },
+    { k:"1b · LOC questions (ask month + age)", opts:[["Both correct (0)",0],["One correct (1)",1],["Zero correct / aphasic / intubated (2)",2]] },
+    { k:"1c · LOC commands (open/close eyes, grip hand)", opts:[["Both correct (0)",0],["One correct (1)",1],["Zero (2)",2]] },
+    { k:"2 · Best gaze (horizontal)", opts:[["Normal (0)",0],["Partial gaze palsy (1)",1],["Forced deviation / total palsy (2)",2]] },
+    { k:"3 · Visual fields", opts:[["No loss (0)",0],["Partial hemianopia (1)",1],["Complete hemianopia (2)",2],["Bilateral hemianopia / cortical blind (3)",3]] },
+    { k:"4 · Facial palsy", opts:[["Normal (0)",0],["Minor (flattened NLF) (1)",1],["Partial (lower face) (2)",2],["Complete (upper + lower) (3)",3]] },
+    { k:"5a · Motor L arm (hold 90°/45° × 10 s)", opts:[["No drift (0)",0],["Drift < 10 s (1)",1],["Falls to bed, some effort (2)",2],["No effort against gravity (3)",3],["No movement (4)",4]] },
+    { k:"5b · Motor R arm", opts:[["No drift (0)",0],["Drift < 10 s (1)",1],["Falls to bed, some effort (2)",2],["No effort against gravity (3)",3],["No movement (4)",4]] },
+    { k:"6a · Motor L leg (hold 30° × 5 s)", opts:[["No drift (0)",0],["Drift < 5 s (1)",1],["Falls, some effort (2)",2],["No effort against gravity (3)",3],["No movement (4)",4]] },
+    { k:"6b · Motor R leg", opts:[["No drift (0)",0],["Drift < 5 s (1)",1],["Falls, some effort (2)",2],["No effort against gravity (3)",3],["No movement (4)",4]] },
+    { k:"7 · Limb ataxia (finger–nose, heel–shin)", opts:[["Absent (0)",0],["Present in 1 limb (1)",1],["Present in 2 limbs (2)",2]] },
+    { k:"8 · Sensory (pinprick)", opts:[["Normal (0)",0],["Mild-to-moderate loss (1)",1],["Severe / total loss (2)",2]] },
+    { k:"9 · Best language (name objects, read sentences)", opts:[["Normal (0)",0],["Mild-moderate aphasia (1)",1],["Severe aphasia (2)",2],["Mute / global (3)",3]] },
+    { k:"10 · Dysarthria", opts:[["Normal (0)",0],["Mild-moderate (1)",1],["Severe / unintelligible / mute (2)",2]] },
+    { k:"11 · Extinction / inattention (double simul stim)", opts:[["Normal (0)",0],["Mild inattention (1 modality) (1)",1],["Profound (2+ modalities) (2)",2]] },
+  ], i:(t) => {
+    if (t === 0) return [`${t} pts → no stroke symptoms`, "ok"];
+    if (t <= 4)  return [`${t} pts → minor stroke`, "ok"];
+    if (t <= 15) return [`${t} pts → moderate stroke`, "warn"];
+    if (t <= 20) return [`${t} pts → moderate-to-severe stroke`, "bad"];
+    return [`${t} pts → severe stroke`, "bad"];
+  }},
+  hunthess: { items: [
+    { k:"Clinical grade", opts:[
+      ["Grade 1 — asymptomatic or minimal HA, mild nuchal rigidity",1],
+      ["Grade 2 — moderate-severe HA, nuchal rigidity, no deficit except CN palsy",2],
+      ["Grade 3 — drowsy, confused, mild focal deficit",3],
+      ["Grade 4 — stuporous, moderate-severe hemiparesis, early decerebrate",4],
+      ["Grade 5 — deep coma, decerebrate rigidity, moribund",5],
+    ] },
+  ], i:(t) => {
+    if (t <= 1) return [`Grade ${t} — surgical mortality ~ 3 %`, "ok"];
+    if (t === 2) return [`Grade 2 — surgical mortality ~ 7 %`, "ok"];
+    if (t === 3) return [`Grade 3 — surgical mortality ~ 20 %`, "warn"];
+    if (t === 4) return [`Grade 4 — surgical mortality ~ 40 %`, "bad"];
+    return [`Grade 5 — surgical mortality ~ 80 %`, "bad"];
+  }},
+  fisher: { items: [
+    { k:"Modified Fisher CT grade (SAH thickness + IVH)", opts:[
+      ["0 — no SAH or IVH",0],
+      ["1 — thin SAH (< 1 mm), no IVH",1],
+      ["2 — thin SAH, with IVH",2],
+      ["3 — thick SAH (≥ 1 mm), no IVH",3],
+      ["4 — thick SAH, with IVH",4],
+    ] },
+  ], i:(t) => {
+    const spasm = ["0 %","6–24 %","15–33 %","33–35 %","34–40 %"][t] || "—";
+    const band = t <= 1 ? "ok" : t === 2 ? "warn" : "bad";
+    return [`Grade ${t} — symptomatic vasospasm risk ~ ${spasm}`, band];
+  }},
+  childpugh: { items: [
+    { k:"Encephalopathy", opts:[["None (1)",1],["Grade I–II / medically controlled (2)",2],["Grade III–IV / refractory (3)",3]] },
+    { k:"Ascites", opts:[["None (1)",1],["Mild / diuretic-responsive (2)",2],["Moderate-severe / refractory (3)",3]] },
+    { k:"Bilirubin (mg/dL)", opts:[["< 2 (1)",1],["2 – 3 (2)",2],["> 3 (3)",3]] },
+    { k:"Albumin (g/dL)", opts:[["> 3.5 (1)",1],["2.8 – 3.5 (2)",2],["< 2.8 (3)",3]] },
+    { k:"INR / Prothrombin seconds over control", opts:[["INR < 1.7 / PT < 4 s (1)",1],["INR 1.7 – 2.3 / PT 4 – 6 s (2)",2],["INR > 2.3 / PT > 6 s (3)",3]] },
+  ], i:(t) => {
+    if (t === 0) return ["Select each row to score (minimum 5).","ok"];
+    if (t <= 6)  return [`${t} pts — Child-Pugh A · 1-yr survival ~ 100 %, 2-yr ~ 85 %`, "ok"];
+    if (t <= 9)  return [`${t} pts — Child-Pugh B · 1-yr survival ~ 80 %, 2-yr ~ 60 %`, "warn"];
+    return [`${t} pts — Child-Pugh C · 1-yr survival ~ 45 %, 2-yr ~ 35 %`, "bad"];
+  }},
+  camicu: { items: [
+    { k:"Feature 1 · Acute change OR fluctuating course of mental status (baseline vs now, in last 24 h)", opts:[["No (0)",0],["Yes (1)",1]] },
+    { k:"Feature 2 · Inattention (ASE Letters: squeeze on A — > 2 errors; or SAVE A HAART: ≥ 2 errors)", opts:[["< 2 errors — attentive (0)",0],["≥ 2 errors — inattentive (1)",1]] },
+    { k:"Feature 3 · Altered level of consciousness (RASS other than 0)", opts:[["RASS = 0 (0)",0],["RASS ≠ 0 but not − 4/− 5 (1)",1]] },
+    { k:"Feature 4 · Disorganised thinking (4 yes/no questions + 2-step command — ≥ 2 errors)", opts:[["< 2 errors (0)",0],["≥ 2 errors (1)",1]] },
+  ], i:(_t, vals) => {
+    const f1 = vals && vals[0] === 1;
+    const f2 = vals && vals[1] === 1;
+    const f3 = vals && vals[2] === 1;
+    const f4 = vals && vals[3] === 1;
+    if (!f1 && !f2 && !f3 && !f4) return ["Select each feature to screen.","ok"];
+    const positive = f1 && f2 && (f3 || f4);
+    if (positive) return ["CAM-ICU POSITIVE — delirium present. Address causes (DELIRIUM mnemonic), treat pain, review sedation, mobilise, re-orient.", "bad"];
+    return ["CAM-ICU negative — no delirium at this assessment. Re-screen each shift / with any change.", "ok"];
+  }},
+  padua: { items: [
+    { k:"Active cancer (local/distant mets, or Rx in last 6 mo)", opts:[["No",0],["Yes (3)",3]] },
+    { k:"Previous VTE (excluding superficial)", opts:[["No",0],["Yes (3)",3]] },
+    { k:"Reduced mobility — expected bed rest ≥ 3 d", opts:[["No",0],["Yes (3)",3]] },
+    { k:"Known thrombophilia (AT III, protein C/S, factor V Leiden, prothrombin, APL)", opts:[["No",0],["Yes (3)",3]] },
+    { k:"Recent (≤ 1 month) trauma OR surgery", opts:[["No",0],["Yes (2)",2]] },
+    { k:"Age ≥ 70 years", opts:[["No",0],["Yes (1)",1]] },
+    { k:"Heart and/or respiratory failure", opts:[["No",0],["Yes (1)",1]] },
+    { k:"Acute MI or ischaemic stroke", opts:[["No",0],["Yes (1)",1]] },
+    { k:"Acute infection and/or rheumatologic disorder", opts:[["No",0],["Yes (1)",1]] },
+    { k:"BMI ≥ 30", opts:[["No",0],["Yes (1)",1]] },
+    { k:"Current hormonal treatment (OCP, HRT)", opts:[["No",0],["Yes (1)",1]] },
+  ], i:(t) => {
+    if (t >= 4) return [`${t} pts — HIGH VTE risk · give pharmacologic prophylaxis (LMWH enoxaparin 40 mg SC daily or UFH 5000 SC q 8 h) unless bleeding risk prohibits — then mechanical.`, "bad"];
+    return [`${t} pts — low VTE risk · pharmacologic prophylaxis not routinely required; use mechanical if any bleeding risk.`, "ok"];
+  }},
 };
 function renderScore(key) {
   const sc = SCORES[key];
@@ -3917,6 +4183,13 @@ const REFERENCES = [
   "Li JS et al. Proposed modifications to the Duke criteria for the diagnosis of infective endocarditis. Clin Infect Dis 2000;30(4):633–8.",
   "Hindricks G et al. 2020 ESC Guidelines for atrial fibrillation (CHA₂DS₂-VASc, HAS-BLED). Eur Heart J 2021;42(5):373–498.",
   "Konstantinides SV et al. 2019 ESC Guidelines for the diagnosis and management of acute pulmonary embolism (Wells criteria). Eur Heart J 2020;41(4):543–603.",
+  "Brott T et al. Measurements of acute cerebral infarction — a clinical examination scale (NIHSS). Stroke 1989;20(7):864–70.",
+  "Hunt WE, Hess RM. Surgical risk as related to time of intervention in the repair of intracranial aneurysms (Hunt & Hess grading). J Neurosurg 1968;28(1):14–20.",
+  "Frontera JA et al. Prediction of symptomatic vasospasm after subarachnoid hemorrhage — modified Fisher scale. Neurosurgery 2006;59(1):21–7.",
+  "Pugh RN et al. Transection of the oesophagus for bleeding oesophageal varices (Child-Pugh classification). Br J Surg 1973;60(8):646–9.",
+  "Kim WR et al. Hyponatremia and mortality among patients on the liver-transplant waiting list — MELD-Na. NEJM 2008;359(10):1018–26.",
+  "Ely EW et al. Delirium in mechanically ventilated patients — validity and reliability of the Confusion Assessment Method for the ICU (CAM-ICU). JAMA 2001;286(21):2703–10.",
+  "Barbar S et al. A risk assessment model for the identification of hospitalized medical patients at risk for venous thromboembolism — the Padua Prediction Score. J Thromb Haemost 2010;8(11):2450–7.",
 
   // Formulas & physiology
   "__H__ Formulas & physiology",
@@ -3945,6 +4218,11 @@ const REFERENCES = [
   "Krasowski MD et al. A retrospective analysis of glycol and toxic alcohol screening tests — osmolal gap performance. BMC Clin Pathol 2012;12:1.",
   "Kraut JA, Mullins ME. Toxic alcohols (methanol, ethylene glycol, isopropyl, propylene glycol). NEJM 2018;378(3):270–80.",
   "Purssell RA et al. The relationship between the osmol gap and ethanol concentration. Ann Emerg Med 2001;38(6):653–9.",
+  "Glauser T et al. Evidence-based guideline — treatment of convulsive status epilepticus. Report of the Guideline Committee of the American Epilepsy Society. Epilepsy Curr 2016;16(1):48–61.",
+  "Kapur J et al. ESETT investigators. Randomised trial of three anticonvulsant medications for status epilepticus. NEJM 2019;381(22):2103–13.",
+  "Silbergleit R et al. RAMPART — Intramuscular versus intravenous therapy for prehospital status epilepticus. NEJM 2012;366(7):591–600.",
+  "Baxter CR, Shires GT. Physiological response to crystalloid resuscitation of severe burns (Parkland formula). Ann NY Acad Sci 1968;150(3):874–94.",
+  "American Burn Association. Resources for optimal care of the injured patient — burn-centre referral criteria. 2016.",
 
   // Hyperkalaemia & DKA
   "__H__ Hyperkalaemia, DKA & endocrine emergencies",
@@ -4121,6 +4399,7 @@ function runAll() {
   safeRun(runABG,           "runABG");
   safeRun(runLytes,         "runLytes");
   safeRun(runRenal,         "runRenal");
+  safeRun(runScoreCalcs,    "runScoreCalcs");
   safeRun(renderAntibiotics,"renderAntibiotics");
   safeRun(renderAntidotes,  "renderAntidotes");
   // NOTE: applyUnits is intentionally NOT called here. It writes to input
@@ -4139,7 +4418,10 @@ const ALL_INPUT_IDS = ["hd-sbp","hd-dbp","hd-hr","cpp-icp","cpp-map",
    "ca-ca","ca-alb","na-na","na-glu",
    "os-na","os-glu","os-bun","os-etoh","os-meas",
    "fwd-na","fwd-tgt","k-k",
-   "uo-vol","uo-hr"];
+   "uo-vol","uo-hr",
+   "pk-tbsa",
+   "meld-bili","meld-inr","meld-cr","meld-na","meld-hd",
+   "vanco-dose","vanco-tau","vanco-crcl"];
 function bindAllInputs() {
   ALL_INPUT_IDS.forEach(id => bindInput(id, id.replace("-", "_")));
 }
