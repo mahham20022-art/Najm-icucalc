@@ -34,6 +34,7 @@ jobs:
           cp privacy-policy.html      _site/privacy-policy.html
           cp sitemap.xml              _site/sitemap.xml
           cp robots.txt               _site/robots.txt
+          cp CNAME                    _site/CNAME
           # Google Search Console ownership verification
           cp google*.html             _site/ 2>/dev/null || true
           mkdir -p _site/icons

@@ -5,4 +5,4 @@ User-agent: *
 Allow: /
 
 # Point search engines at the sitemap
-Sitemap: https://mahham20022-art.github.io/Najm-icucalc/sitemap.xml
+Sitemap: https://icucalc.thetract.org/sitemap.xml
