@@ -58,7 +58,7 @@
       "applicationSubCategory": "MedicalCalculator",
       "operatingSystem": "Any (PWA, iOS, Android, Windows, macOS, Linux)",
       "browserRequirements": "Modern browser with JavaScript",
-      "softwareVersion": "1.5.7",
+      "softwareVersion": "1.5.8",
       "datePublished": "2026-07-25",
       "dateModified": "2026-10-30",
       "inLanguage": "en",
@@ -1233,7 +1233,7 @@
       <h3 id="onbTrustTitle">Before you use it</h3>
       <p><b>For</b> ICU/CCU doctors, pharmacists and nurses who already know these drugs and scores. It does the arithmetic; the clinical decision stays with you.</p>
       <p><b>Not prospectively validated.</b> Decision support only. Check every result against your protocol and the drug label.</p>
-      <p>Version 1.5.7 · last reviewed 01 November 2026 · what you enter stays in this browser.</p>
+      <p>Version 1.5.8 · last reviewed 05 November 2026 · what you enter stays in this browser.</p>
       <button class="onb-link" type="button" id="onbEvidence">Evidence, limits and data handling</button>
     </div>
 
@@ -1427,6 +1427,7 @@
           <div class="row"><span class="k">Fridericia QTc (QT/∛RR)</span><span class="v" id="qt-fri">—</span></div>
           <div class="row"><span class="k">Framingham QTc</span><span class="v" id="qt-fra">—</span></div>
           <div class="verdict" id="qt-verdict">Enter QT (ms) + HR to compute. Fridericia preferred at HR &lt; 60 or &gt; 100.</div>
+          <div class="src">Source: Bazett, Heart 1920 · Fridericia, Acta Med Scand 1920 · Sagie (Framingham), Am J Cardiol 1992</div>
         </div>
         <div class="card">
           <h3>Blood Pressure</h3>
@@ -1441,6 +1442,7 @@
           <div class="row"><span class="k">Shock Index</span><span class="v" id="hd-si">—</span></div>
           <div class="row"><span class="k">Modified SI</span><span class="v" id="hd-msi">—</span></div>
           <div class="verdict" id="hd-verdict">Enter SBP/DBP to interpret.</div>
+          <div class="src">Source: Shock index — Allgöwer & Buri, Dtsch Med Wochenschr 1967. Modified SI — Liu YC et al., Am J Emerg Med 2012.</div>
         </div>
 
         <div class="card">
@@ -1452,6 +1454,7 @@
           </div>
           <div class="row"><span class="k">CPP</span><span class="v" id="cpp-out">—</span></div>
           <div class="verdict" id="cpp-verdict">Enter ICP to compute.</div>
+          <div class="src">Source: Brain Trauma Foundation Guidelines for Severe TBI, 4th ed. Neurosurgery 2017.</div>
         </div>
 
         <div class="card">
@@ -1619,6 +1622,7 @@
           </div>
           <div class="row"><span class="k">Corrected Ca</span><span class="v" id="ca-corr">—</span></div>
           <div class="verdict" id="ca-verdict">Reference 8.5 – 10.5 mg/dL.</div>
+          <div class="src">Source: Payne RB et al. BMJ 1973;4(5893):643–6 (albumin-corrected Ca).</div>
         </div>
 
         <div class="card">
@@ -1629,6 +1633,7 @@
             <div class="field"><label>Glucose</label><div class="input"><input id="na-glu" type="number" inputmode="numeric" /><button type="button" class="unit unit-cycle" data-uf="glu" aria-label="Cycle unit" tabindex="-1">mg/dL</button></div></div>
           </div>
           <div class="row"><span class="k">Corrected Na</span><span class="v" id="na-corr">—</span></div>
+          <div class="src">Source: Katz MA. NEJM 1973;289(16):843–4 (original) · Hillier TA et al. Am J Med 1999;106(4):399–403 (1.6 factor validated).</div>
         </div>
 
         <div class="card">
@@ -1682,6 +1687,7 @@
           </div>
           <div class="row"><span class="k">Suggested replacement</span><span class="v" id="k-out">—</span></div>
           <div class="verdict">Max peripheral 10 mEq/hr; central 20 mEq/hr with monitoring.</div>
+          <div class="src">Source: Kraft MD et al. Treatment of electrolyte disorders in adult ICU patients. Am J Health-Syst Pharm 2005;62(16):1663–82.</div>
         </div>
 
         <div class="card rsi-protocol-card">
@@ -1742,6 +1748,7 @@
           <h3>Maintenance Fluids (4-2-1)</h3>
           <div class="sub">First 10 kg ×4, next 10 kg ×2, remainder ×1 mL/kg/hr.</div>
           <div class="row"><span class="k">Maintenance rate</span><span class="v" id="mn-rate">—</span></div>
+          <div class="src">Source: Holliday MA, Segar WE. The maintenance need for water in parenteral fluid therapy. Pediatrics 1957;19(5):823–32.</div>
         </div>
 
         <div class="card">
@@ -1856,8 +1863,8 @@
     <section class="module" id="m-scores">
       <div class="module-head"><div><h2>Clinical Scores</h2><p>Live scoring with interpretation.</p></div></div>
       <div class="cards">
-        <div class="card"><h3>GCS</h3><div class="sub">Glasgow Coma Scale (3–15)</div><div id="score-gcs"></div></div>
-        <div class="card"><h3>qSOFA</h3><div class="sub">≥ 2 → higher sepsis mortality risk.</div><div id="score-qsofa"></div></div>
+        <div class="card"><h3>GCS</h3><div class="sub">Glasgow Coma Scale (3–15)</div><div id="score-gcs"></div><div class="src">Source: Teasdale G &amp; Jennett B. Lancet 1974;2(7872):81–4.</div></div>
+        <div class="card"><h3>qSOFA</h3><div class="sub">≥ 2 → higher sepsis mortality risk.</div><div id="score-qsofa"></div><div class="src">Source: Singer M et al. Sepsis-3. JAMA 2016;315(8):801–10.</div></div>
         <div class="card"><h3>SOFA</h3><div class="sub">Organ dysfunction (0–24).</div><div id="score-sofa"></div><div class="src">Source: Vincent et al., Intensive Care Med 1996</div></div>
         <div class="card"><h3>CHA₂DS₂-VASc</h3><div class="sub">Stroke risk in AF.</div><div id="score-chads"></div><div class="src">Source: ESC AF guidelines, 2020</div></div>
         <div class="card"><h3>HAS-BLED</h3><div class="sub">Bleeding risk on anticoagulation.</div><div id="score-hasbled"></div><div class="src">Source: ESC AF guidelines, 2020</div></div>
@@ -2049,11 +2056,11 @@
             <li>Not a regulated medical device.</li>
           </ul></dd>
           <dt>Version</dt>
-          <dd>1.5.7 · last reviewed 01 November 2026.</dd>
+          <dd>1.5.8 · last reviewed 05 November 2026.</dd>
           <dt>Report a suspected error</dt>
           <dd>Say what you entered, what the app showed and what you expected, with a source if you have one. Leave out patient identifiers.</dd>
         </dl>
-        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.7&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
+        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.8&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
           <span>Report an error · contact@thetract.org</span>
         </a>
@@ -2064,9 +2071,13 @@
         <div class="sub">Author &amp; clinical lead</div>
         <div class="row"><span class="k">Name</span><span class="v">Dr. Mohamed Najm</span></div>
         <div class="row"><span class="k">Credentials</span><span class="v">MBBS · PgDip EM · FEBN · MRCEM SECONDARY</span></div>
+        <div class="row"><span class="k">Role</span><span class="v">Neurology &amp; Neurocritical Care</span></div>
+        <div class="row"><span class="k">Affiliation</span><span class="v">KMGH / King Fahad Medical City, Saudi Arabia</span></div>
+        <div class="row"><span class="k">Why this app</span><span class="v" style="text-align:right;font-size:13px;line-height:1.5">Built after one shift too many spent flipping between five different apps at a shock patient's bedside.</span></div>
         <div class="row"><span class="k">Phone / WhatsApp</span><span class="v"><a href="tel:+966564762990" style="color:var(--brand-3);text-decoration:none">+966&nbsp;56&nbsp;476&nbsp;2990</a></span></div>
-        <div class="row"><span class="k">Version</span><span class="v">1.5.7</span></div>
-        <div class="row"><span class="k">Last reviewed</span><span class="v">01 Nov 2026</span></div>
+        <div class="row"><span class="k">Website</span><span class="v"><a href="https://thetract.org" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">thetract.org</a></span></div>
+        <div class="row"><span class="k">Version</span><span class="v">1.5.8</span></div>
+        <div class="row"><span class="k">Last reviewed</span><span class="v">05 Nov 2026</span></div>
       </div>
 
       <div class="card">
@@ -2121,6 +2132,11 @@
 
       <div class="card changelog" id="changelog">
         <h3>Changelog</h3>
+        <h4>1.5.8 <span>· 05 November 2026</span></h4>
+        <ul>
+          <li><b>Per-card source citations</b> — every formula now shows its reference under the card itself, not only in the Clinical References list. Added: Bazett / Fridericia / Framingham (QTc), Allgöwer &amp; Buri + Liu 2012 (shock index), Brain Trauma Foundation 2017 (CPP), Payne 1973 (corrected Ca), Katz 1973 + Hillier 1999 (corrected Na), Kraft 2005 (K⁺ replacement), Holliday &amp; Segar 1957 (4-2-1 maintenance), Teasdale &amp; Jennett 1974 (GCS card), Singer Sepsis-3 2016 (qSOFA card).</li>
+          <li>About card: added Role (Neurology &amp; Neurocritical Care), Affiliation (KMGH / KFMC), Website link (thetract.org), and a one-line "Why this app".</li>
+        </ul>
         <h4>1.5.7 <span>· 01 November 2026</span></h4>
         <ul>
           <li>New protocol: <b>ABCDEF ICU Liberation Bundle</b> red-themed card in Neuroprotection — Assess pain (CPOT/NRS), Both SAT + SBT, Choice of light sedation (RASS 0 to − 2, prefer non-benzos), Delirium (CAM-ICU + DELIRIUMS mnemonic), Early mobility, Family engagement.</li>
@@ -2129,13 +2145,13 @@
           <li>New calculator: <b>Nutrition Targets</b> in Renal &amp; Fluids — Mifflin-St Jeor REE × stress factor, protein 1.2 – 2.0 g/kg, refeeding risk and tips (EDEN, TARGET, EPaNIC).</li>
           <li>References: added Yang &amp; Tobin 1991 (RSBI), Thille HFNC 2019, PADIS 2018, ICU Liberation (Pun 2019), ABC trial 2008, Schweickert 2009, MIND-USA 2018, TRICC 1999, TRISS 2014, AABB 2016, ISBT TRALI 2019, ASPEN/SCCM 2016, EDEN 2012, TARGET 2018.</li>
         </ul>
-        <h4>1.5.6 <span>· 01 November 2026</span></h4>
+        <h4>1.5.6 <span>· 05 November 2026</span></h4>
         <ul>
           <li>New protocol: <b>ARDS Management Bundle</b> red-themed card in Ventilator tab — Berlin severity, lung-protective ventilation (TV 6/PBW, Pplat ≤ 30, DP &lt; 15, permissive hypercapnia pH ≥ 7.20), ARDSnet lower PEEP/FiO₂ ladder, PROSEVA prone criteria (P/F &lt; 150, 16 h/day), ACURASYS/ROSE neuromuscular blockade, FACTT conservative fluid, DEXA-ARDS/RECOVERY steroids, rescue therapies (recruitment, iNO), EOLIA ECMO criteria, SBT/weaning.</li>
           <li>New score: <b>Murray Lung Injury Score</b> — 4-item (CXR, P/F, PEEP, compliance); average &gt; 2.5 = ECMO criterion.</li>
           <li>References: added Murray 1988, Guérin PROSEVA NEJM 2013, Papazian ACURASYS NEJM 2010, PETAL ROSE NEJM 2019, Wiedemann FACTT NEJM 2006, Villar DEXA-ARDS Lancet Resp Med 2020, Combes EOLIA NEJM 2018, Amato NEJM 2015.</li>
         </ul>
-        <h4>1.5.5 <span>· 01 November 2026</span></h4>
+        <h4>1.5.5 <span>· 05 November 2026</span></h4>
         <ul>
           <li><b>Tier-2 clinical additions</b> — seven new scores and three new calculators:</li>
           <li>New scores: NIHSS (11-item, 0–42) · Hunt &amp; Hess (SAH clinical grade 1–5) · Modified Fisher (SAH CT, vasospasm risk) · Child-Pugh (A/B/C, 1-yr survival) · CAM-ICU (delirium screen) · Padua VTE (prophylaxis trigger ≥ 4).</li>
@@ -2143,7 +2159,7 @@
           <li>New protocol: <b>Status Epilepticus</b> red-themed card in Neuroprotection — timed escalation (0–5 min stabilisation → 5–20 benzos → 20–40 min 2nd-line → 40–60 min anaesthetic infusion → super-refractory adjuncts).</li>
           <li>References: added Brott 1989 (NIHSS), Hunt &amp; Hess 1968, Frontera 2006 (mod Fisher), Pugh 1973, Kim 2008 (MELD-Na), Ely 2001 (CAM-ICU), Barbar 2010 (Padua), Glauser 2016 + Kapur ESETT 2019 + Silbergleit RAMPART 2012 (status epilepticus), Baxter &amp; Shires 1968 (Parkland), ABA 2016 (burn transfer).</li>
         </ul>
-        <h4>1.5.4 <span>· 01 November 2026</span></h4>
+        <h4>1.5.4 <span>· 05 November 2026</span></h4>
         <ul>
           <li>Osmolal gap card rebuilt: severity bands (normal / mild / moderate / severe), parallel calc with and without ethanol, toxic-alcohol differential diagnosis (methanol, ethylene glycol, isopropyl, propylene glycol, mannitol) with escalation plan (fomepizole + HD trigger).</li>
           <li>References: added Krasowski 2012 (osmolal gap performance), Kraut &amp; Mullins NEJM 2018 (toxic alcohols), Purssell 2001 (ethanol correction).</li>
@@ -2153,12 +2169,12 @@
           <li>Added author's phone / WhatsApp (+966 56 476 2990) to the About card.</li>
           <li>Version and last-reviewed date brought up to date across the app.</li>
         </ul>
-        <h4>1.5.1 <span>· 01 November 2026</span></h4>
+        <h4>1.5.1 <span>· 05 November 2026</span></h4>
         <ul>
           <li>References expanded to 11 sections and 57 citations (Sepsis, ARDS, Trauma/MT, Scores, Formulas, Antibiotics, Toxicology, Hyperkalaemia/DKA, Neuroprotection, Nephrology, general ICU).</li>
           <li>Clinical references now rendered with cyan section headings for easier scanning.</li>
         </ul>
-        <h4>1.5.0 <span>· 01 November 2026</span></h4>
+        <h4>1.5.0 <span>· 05 November 2026</span></h4>
         <ul>
           <li>Tier-1 batch for daily ICU/ED use:</li>
           <li>HEART Score (6-week MACE for undifferentiated chest pain).</li>
@@ -2171,7 +2187,7 @@
           <li>DKA / HHS Protocol — fluids → insulin → K replacement → bicarb thresholds → resolution.</li>
           <li>Massive Transfusion Protocol — 1:1:1 ratio, TXA, lethal-triad fixes, target values.</li>
         </ul>
-        <h4>1.4.3 <span>· 01 November 2026</span></h4>
+        <h4>1.4.3 <span>· 05 November 2026</span></h4>
         <ul>
           <li>APACHE II score added to Scores with mortality band interpretation.</li>
           <li>Sepsis &amp; Septic Shock tab added — full Surviving Sepsis Campaign 2021 bundle (Hour-1, fluids, pressor ladder, empiric abx, source control, steroids, vent, glucose, transfusion, RRT, nutrition, prophylaxis, procalcitonin, when-to-call).</li>
@@ -2240,7 +2256,7 @@
 
   <footer>
     <div class="fine"><strong>Reference aid — not a medical device.</strong> Always verify against institutional protocols and drug labels.</div>
-    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.7 · last reviewed 01 Nov 2026 · Designed by Dr. Mohamed Najm</div>
+    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.8 · last reviewed 05 Nov 2026 · Designed by Dr. Mohamed Najm</div>
   </footer>
 </div>
 

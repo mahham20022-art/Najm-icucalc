@@ -7,7 +7,7 @@
      ASSETS    = cache-first for icons/CSS/JS/manifest (stable)
      IMAGES    = cache-first with size cap for user-added images
 */
-const VERSION  = "v31"; // app 1.5.7 — ABCDEF bundle + Weaning/RSBI + Transfusion thresholds + Nutrition targets
+const VERSION  = "v32"; // app 1.5.8 — Per-card source citations + About card role/affiliation (Medmastery prep)
 const PRECACHE = `najm-precache-${VERSION}`;
 const RUNTIME  = `najm-runtime-${VERSION}`;
 const ASSETS   = `najm-assets-${VERSION}`;
