@@ -7,7 +7,7 @@
      ASSETS    = cache-first for icons/CSS/JS/manifest (stable)
      IMAGES    = cache-first with size cap for user-added images
 */
-const VERSION  = "v33"; // app 1.5.9 — Custom domain icucalc.thetract.org + LinkedIn/GitHub + formula audit
+const VERSION  = "v34"; // app 1.5.9 — author full name + ORCID
 const PRECACHE = `najm-precache-${VERSION}`;
 const RUNTIME  = `najm-runtime-${VERSION}`;
 const ASSETS   = `najm-assets-${VERSION}`;
