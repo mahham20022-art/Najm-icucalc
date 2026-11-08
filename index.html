@@ -1149,6 +1149,13 @@
     .patient-derived .reset-btn { grid-column: 1 / -1; }
   }
 
+  /* Tablets and computers: keep content off the screen edge; a little wider on big monitors */
+  @media (min-width: 700px) {
+    .topbar-inner, .patient-inner, .patient-derived, .tabs-inner, main, .patients-bar { padding-left: clamp(20px, 3.5vw, 40px); padding-right: clamp(20px, 3.5vw, 40px); }
+  }
+  @media (min-width: 1600px) {
+    .topbar-inner, .patient-inner, .patient-derived, .tabs-inner, main, .patients-bar { max-width: 1360px; }
+  }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
     html { scroll-behavior: auto; }

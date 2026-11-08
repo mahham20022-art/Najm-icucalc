@@ -7,7 +7,7 @@
      ASSETS    = cache-first for icons/CSS/JS/manifest (stable)
      IMAGES    = cache-first with size cap for user-added images
 */
-const VERSION  = "v34"; // app 1.5.9 — author full name + ORCID
+const VERSION  = "v35"; // app 1.5.9 — tablet/desktop gutters
 const PRECACHE = `najm-precache-${VERSION}`;
 const RUNTIME  = `najm-runtime-${VERSION}`;
 const ASSETS   = `najm-assets-${VERSION}`;
