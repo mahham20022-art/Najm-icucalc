@@ -58,7 +58,7 @@
       "applicationSubCategory": "MedicalCalculator",
       "operatingSystem": "Any (PWA, iOS, Android, Windows, macOS, Linux)",
       "browserRequirements": "Modern browser with JavaScript",
-      "softwareVersion": "1.5.10",
+      "softwareVersion": "1.5.11",
       "datePublished": "2026-07-25",
       "dateModified": "2026-10-30",
       "inLanguage": "en",
@@ -733,6 +733,33 @@
   }
   .reset-btn:hover { color: var(--text); border-color: var(--line-2); background: rgba(255,255,255,.02); }
 
+  /* -------- Awareness banner (dynamic by date) -------- */
+  .aware-banner {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 14px;
+    background: linear-gradient(90deg, var(--aware-bg, rgba(34,211,238,.12)), transparent);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--aware-accent, var(--brand));
+    color: var(--text);
+    font-size: 13px; font-weight: 600;
+    overflow: hidden;
+  }
+  .aware-emoji { font-size: 18px; line-height: 1; flex-shrink: 0; }
+  .aware-text { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--aware-accent, var(--brand)); }
+  .aware-link {
+    color: var(--aware-accent, var(--brand));
+    text-decoration: underline;
+    font-weight: 600; font-size: 12px;
+    flex-shrink: 0; padding: 2px 6px; border-radius: 4px;
+  }
+  .aware-link:hover { background: rgba(255,255,255,.05); }
+  .aware-close {
+    appearance: none; background: transparent; border: 0;
+    color: var(--muted); cursor: pointer; font-size: 22px;
+    line-height: 1; padding: 0 4px; flex-shrink: 0;
+  }
+  .aware-close:hover { color: var(--text); }
+
   /* -------- Tabs -------- */
   .tabs {
     background: rgba(6,13,25,.4);
@@ -1233,7 +1260,7 @@
       <h3 id="onbTrustTitle">Before you use it</h3>
       <p><b>For</b> ICU/CCU doctors, pharmacists and nurses who already know these drugs and scores. It does the arithmetic; the clinical decision stays with you.</p>
       <p><b>Not prospectively validated.</b> Decision support only. Check every result against your protocol and the drug label.</p>
-      <p>Version 1.5.10 · last reviewed 05 November 2026 · what you enter stays in this browser.</p>
+      <p>Version 1.5.11 · last reviewed 08 November 2026 · what you enter stays in this browser.</p>
       <button class="onb-link" type="button" id="onbEvidence">Evidence, limits and data handling</button>
     </div>
 
@@ -1311,6 +1338,13 @@
         <div class="field derived"><label>CrCl</label><div class="input"><span class="val" id="d-crcl">—</span><span class="unit">mL/min</span></div></div>
         <button class="reset-btn" type="button" id="resetPt">Clear</button>
       </div>
+    </div>
+
+    <div id="awareBanner" class="aware-banner hide" role="status" aria-live="polite">
+      <span class="aware-emoji" id="awareEmoji"></span>
+      <span class="aware-text" id="awareText"></span>
+      <a class="aware-link hide" id="awareLink" target="_blank" rel="noopener">Learn more</a>
+      <button class="aware-close" id="awareClose" type="button" aria-label="Dismiss">&times;</button>
     </div>
 
     <nav class="tabs" aria-label="Modules">
@@ -2056,11 +2090,11 @@
             <li>Not a regulated medical device.</li>
           </ul></dd>
           <dt>Version</dt>
-          <dd>1.5.10 · last reviewed 05 November 2026.</dd>
+          <dd>1.5.11 · last reviewed 08 November 2026.</dd>
           <dt>Report a suspected error</dt>
           <dd>Say what you entered, what the app showed and what you expected, with a source if you have one. Leave out patient identifiers.</dd>
         </dl>
-        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.10&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
+        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.11&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
           <span>Report an error · contact@thetract.org</span>
         </a>
@@ -2077,8 +2111,8 @@
         <div class="row"><span class="k">Website</span><span class="v"><a href="https://thetract.org" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">thetract.org</a></span></div>
         <div class="row"><span class="k">LinkedIn</span><span class="v"><a href="https://www.linkedin.com/in/dr-mohamed-najm-aldeen-aa6452135" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">linkedin.com/in/dr-mohamed-najm-aldeen</a></span></div>
         <div class="row"><span class="k">GitHub</span><span class="v"><a href="https://github.com/mahham20022-art" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">@mahham20022-art</a></span></div>
-        <div class="row"><span class="k">Version</span><span class="v">1.5.10</span></div>
-        <div class="row"><span class="k">Last reviewed</span><span class="v">05 Nov 2026</span></div>
+        <div class="row"><span class="k">Version</span><span class="v">1.5.11</span></div>
+        <div class="row"><span class="k">Last reviewed</span><span class="v">08 Nov 2026</span></div>
       </div>
 
       <div class="card">
@@ -2133,17 +2167,21 @@
 
       <div class="card changelog" id="changelog">
         <h3>Changelog</h3>
+        <h4>1.5.11 <span>· 08 November 2026</span></h4>
+        <ul>
+          <li><b>International awareness days banner</b> — slim top-of-app banner appears automatically on 22 international health awareness days with emoji, name, accent-coloured border and "Learn more" link to the official campaign. One-tap dismissible, re-appears next year. Includes Sepsis (Sep 13), Patient Safety (Sep 17), Heart (Sep 29), Mental Health (Oct 10), Thrombosis (Oct 13), Anaesthesia + Restart-a-Heart (Oct 16), Trauma (Oct 17), Stroke (Oct 29), Pneumonia (Nov 12), Diabetes (Nov 14), AMR Awareness Week (Nov 18-24), AIDS (Dec 1), Epidemic Preparedness (Dec 27), Rare Disease (Feb 28), Cancer (Feb 4), Tuberculosis (Mar 24), Doctors' Day (Mar 30), Health Day (Apr 7), Hand Hygiene (May 5), Nurses (May 12), Blood Donor (Jun 14), Hepatitis (Jul 28).</li>
+        </ul>
         <h4>1.5.10 <span>· 05 November 2026</span></h4>
         <ul>
           <li>About card polish: removed the "Affiliation" row; updated Role to "Neurology Emergency Medicine &amp; Neurocritical Care"; fixed the long-text rows (Role, Why this app) that were right-aligned in a monospaced font and looked like Arabic script when they wrapped — now left-aligned in the body sans font.</li>
         </ul>
-        <h4>1.5.9 <span>· 05 November 2026</span></h4>
+        <h4>1.5.9 <span>· 08 November 2026</span></h4>
         <ul>
           <li><b>Custom domain</b> — Najm ICUCalc now lives at <code>https://icucalc.thetract.org/</code>. CNAME file + sitemap.xml + robots.txt + canonical + Open Graph all point at the new domain. Old github.io URL continues to work via Pages redirect.</li>
           <li>About card: added LinkedIn + GitHub rows.</li>
           <li>Formula audit: 17 core calculators verified against published worked examples (CrCl, MAP, QTc Bazett, AG, osmolal gap, P/F, corrected Ca, driving pressure, ROX, MELD-Na, Parkland, Devine IBW, Mosteller BSA, RSBI, Mifflin REE).</li>
         </ul>
-        <h4>1.5.8 <span>· 05 November 2026</span></h4>
+        <h4>1.5.8 <span>· 08 November 2026</span></h4>
         <ul>
           <li><b>Per-card source citations</b> — every formula now shows its reference under the card itself, not only in the Clinical References list. Added: Bazett / Fridericia / Framingham (QTc), Allgöwer &amp; Buri + Liu 2012 (shock index), Brain Trauma Foundation 2017 (CPP), Payne 1973 (corrected Ca), Katz 1973 + Hillier 1999 (corrected Na), Kraft 2005 (K⁺ replacement), Holliday &amp; Segar 1957 (4-2-1 maintenance), Teasdale &amp; Jennett 1974 (GCS card), Singer Sepsis-3 2016 (qSOFA card).</li>
           <li>About card: added Role (Neurology &amp; Neurocritical Care), Affiliation (KMGH / KFMC), Website link (thetract.org), and a one-line "Why this app".</li>
@@ -2156,13 +2194,13 @@
           <li>New calculator: <b>Nutrition Targets</b> in Renal &amp; Fluids — Mifflin-St Jeor REE × stress factor, protein 1.2 – 2.0 g/kg, refeeding risk and tips (EDEN, TARGET, EPaNIC).</li>
           <li>References: added Yang &amp; Tobin 1991 (RSBI), Thille HFNC 2019, PADIS 2018, ICU Liberation (Pun 2019), ABC trial 2008, Schweickert 2009, MIND-USA 2018, TRICC 1999, TRISS 2014, AABB 2016, ISBT TRALI 2019, ASPEN/SCCM 2016, EDEN 2012, TARGET 2018.</li>
         </ul>
-        <h4>1.5.6 <span>· 05 November 2026</span></h4>
+        <h4>1.5.6 <span>· 08 November 2026</span></h4>
         <ul>
           <li>New protocol: <b>ARDS Management Bundle</b> red-themed card in Ventilator tab — Berlin severity, lung-protective ventilation (TV 6/PBW, Pplat ≤ 30, DP &lt; 15, permissive hypercapnia pH ≥ 7.20), ARDSnet lower PEEP/FiO₂ ladder, PROSEVA prone criteria (P/F &lt; 150, 16 h/day), ACURASYS/ROSE neuromuscular blockade, FACTT conservative fluid, DEXA-ARDS/RECOVERY steroids, rescue therapies (recruitment, iNO), EOLIA ECMO criteria, SBT/weaning.</li>
           <li>New score: <b>Murray Lung Injury Score</b> — 4-item (CXR, P/F, PEEP, compliance); average &gt; 2.5 = ECMO criterion.</li>
           <li>References: added Murray 1988, Guérin PROSEVA NEJM 2013, Papazian ACURASYS NEJM 2010, PETAL ROSE NEJM 2019, Wiedemann FACTT NEJM 2006, Villar DEXA-ARDS Lancet Resp Med 2020, Combes EOLIA NEJM 2018, Amato NEJM 2015.</li>
         </ul>
-        <h4>1.5.5 <span>· 05 November 2026</span></h4>
+        <h4>1.5.5 <span>· 08 November 2026</span></h4>
         <ul>
           <li><b>Tier-2 clinical additions</b> — seven new scores and three new calculators:</li>
           <li>New scores: NIHSS (11-item, 0–42) · Hunt &amp; Hess (SAH clinical grade 1–5) · Modified Fisher (SAH CT, vasospasm risk) · Child-Pugh (A/B/C, 1-yr survival) · CAM-ICU (delirium screen) · Padua VTE (prophylaxis trigger ≥ 4).</li>
@@ -2170,7 +2208,7 @@
           <li>New protocol: <b>Status Epilepticus</b> red-themed card in Neuroprotection — timed escalation (0–5 min stabilisation → 5–20 benzos → 20–40 min 2nd-line → 40–60 min anaesthetic infusion → super-refractory adjuncts).</li>
           <li>References: added Brott 1989 (NIHSS), Hunt &amp; Hess 1968, Frontera 2006 (mod Fisher), Pugh 1973, Kim 2008 (MELD-Na), Ely 2001 (CAM-ICU), Barbar 2010 (Padua), Glauser 2016 + Kapur ESETT 2019 + Silbergleit RAMPART 2012 (status epilepticus), Baxter &amp; Shires 1968 (Parkland), ABA 2016 (burn transfer).</li>
         </ul>
-        <h4>1.5.4 <span>· 05 November 2026</span></h4>
+        <h4>1.5.4 <span>· 08 November 2026</span></h4>
         <ul>
           <li>Osmolal gap card rebuilt: severity bands (normal / mild / moderate / severe), parallel calc with and without ethanol, toxic-alcohol differential diagnosis (methanol, ethylene glycol, isopropyl, propylene glycol, mannitol) with escalation plan (fomepizole + HD trigger).</li>
           <li>References: added Krasowski 2012 (osmolal gap performance), Kraut &amp; Mullins NEJM 2018 (toxic alcohols), Purssell 2001 (ethanol correction).</li>
@@ -2180,12 +2218,12 @@
           <li>Added author's phone / WhatsApp (+966 56 476 2990) to the About card.</li>
           <li>Version and last-reviewed date brought up to date across the app.</li>
         </ul>
-        <h4>1.5.1 <span>· 05 November 2026</span></h4>
+        <h4>1.5.1 <span>· 08 November 2026</span></h4>
         <ul>
           <li>References expanded to 11 sections and 57 citations (Sepsis, ARDS, Trauma/MT, Scores, Formulas, Antibiotics, Toxicology, Hyperkalaemia/DKA, Neuroprotection, Nephrology, general ICU).</li>
           <li>Clinical references now rendered with cyan section headings for easier scanning.</li>
         </ul>
-        <h4>1.5.0 <span>· 05 November 2026</span></h4>
+        <h4>1.5.0 <span>· 08 November 2026</span></h4>
         <ul>
           <li>Tier-1 batch for daily ICU/ED use:</li>
           <li>HEART Score (6-week MACE for undifferentiated chest pain).</li>
@@ -2198,7 +2236,7 @@
           <li>DKA / HHS Protocol — fluids → insulin → K replacement → bicarb thresholds → resolution.</li>
           <li>Massive Transfusion Protocol — 1:1:1 ratio, TXA, lethal-triad fixes, target values.</li>
         </ul>
-        <h4>1.4.3 <span>· 05 November 2026</span></h4>
+        <h4>1.4.3 <span>· 08 November 2026</span></h4>
         <ul>
           <li>APACHE II score added to Scores with mortality band interpretation.</li>
           <li>Sepsis &amp; Septic Shock tab added — full Surviving Sepsis Campaign 2021 bundle (Hour-1, fluids, pressor ladder, empiric abx, source control, steroids, vent, glucose, transfusion, RRT, nutrition, prophylaxis, procalcitonin, when-to-call).</li>
@@ -2267,7 +2305,7 @@
 
   <footer>
     <div class="fine"><strong>Reference aid — not a medical device.</strong> Always verify against institutional protocols and drug labels.</div>
-    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.10 · last reviewed 05 Nov 2026 · Designed by Dr. Mohamed Najm</div>
+    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.11 · last reviewed 08 Nov 2026 · Designed by Dr. Mohamed Najm</div>
   </footer>
 </div>
 
@@ -4679,6 +4717,83 @@ function showApp() {
   saveState();
 }
 
+/* ============================================================
+   AWARENESS DAYS — international health awareness days,
+   rendered dynamically as a slim banner at the top of the app.
+   Each day has: m/d (1-12, 1-31), optional rangeDays (for weeks),
+   name, emoji, color (accent, used as border + text), url.
+   Dismissed state stored per-year in localStorage so it reappears
+   next year.
+   ============================================================ */
+const AWARENESS_DAYS = [
+  { m: 2,  d: 28, name: "Rare Disease Day",                                            emoji: "🧬", color: "#a855f7", url: "https://www.rarediseaseday.org/" },
+  { m: 2,  d: 4,  name: "World Cancer Day",                                            emoji: "🎗️", color: "#f97316", url: "https://www.worldcancerday.org/" },
+  { m: 3,  d: 24, name: "World Tuberculosis Day",                                      emoji: "🫁", color: "#ef4444", url: "https://www.who.int/campaigns/world-tb-day" },
+  { m: 3,  d: 30, name: "International Doctors' Day",                                  emoji: "⚕️", color: "#14b8a6" },
+  { m: 4,  d: 7,  name: "World Health Day (WHO)",                                      emoji: "🌍", color: "#10b981", url: "https://www.who.int/campaigns/world-health-day" },
+  { m: 5,  d: 5,  name: "World Hand Hygiene Day",                                      emoji: "🧼", color: "#06b6d4", url: "https://www.who.int/campaigns/world-hand-hygiene-day" },
+  { m: 5,  d: 12, name: "International Nurses Day",                                    emoji: "👩‍⚕️", color: "#ec4899", url: "https://www.icn.ch/how-we-do-it/campaigns/international-nurses-day" },
+  { m: 6,  d: 14, name: "World Blood Donor Day",                                       emoji: "🩸", color: "#dc2626", url: "https://www.who.int/campaigns/world-blood-donor-day" },
+  { m: 7,  d: 28, name: "World Hepatitis Day",                                         emoji: "🫀", color: "#eab308", url: "https://www.who.int/campaigns/world-hepatitis-day" },
+  { m: 9,  d: 13, name: "World Sepsis Day",                                            emoji: "🛡️", color: "#9333ea", url: "https://www.worldsepsisday.org/" },
+  { m: 9,  d: 17, name: "World Patient Safety Day",                                    emoji: "🧯", color: "#0ea5e9", url: "https://www.who.int/campaigns/world-patient-safety-day" },
+  { m: 9,  d: 29, name: "World Heart Day",                                             emoji: "❤️", color: "#dc2626", url: "https://world-heart-federation.org/world-heart-day/" },
+  { m: 10, d: 10, name: "World Mental Health Day",                                     emoji: "🧠", color: "#8b5cf6", url: "https://www.who.int/campaigns/world-mental-health-day" },
+  { m: 10, d: 13, name: "World Thrombosis Day",                                        emoji: "🧪", color: "#ea580c", url: "https://www.worldthrombosisday.org/" },
+  { m: 10, d: 16, name: "World Anaesthesia Day · Restart a Heart Day (ILCOR)",         emoji: "💉", color: "#0284c7", url: "https://wfsahq.org/world-anaesthesia-day/" },
+  { m: 10, d: 17, name: "World Trauma Day",                                            emoji: "🚑", color: "#ef4444" },
+  { m: 10, d: 29, name: "World Stroke Day",                                            emoji: "🧠", color: "#f59e0b", url: "https://www.world-stroke.org/world-stroke-day" },
+  { m: 11, d: 12, name: "World Pneumonia Day",                                         emoji: "🫁", color: "#3b82f6", url: "https://stoppneumonia.org/" },
+  { m: 11, d: 14, name: "World Diabetes Day",                                          emoji: "💉", color: "#06b6d4", url: "https://worlddiabetesday.org/" },
+  { m: 11, d: 18, name: "World Antimicrobial Resistance Awareness Week",               emoji: "💊", color: "#f97316", rangeDays: 7, url: "https://www.who.int/campaigns/world-amr-awareness-week" },
+  { m: 12, d: 1,  name: "World AIDS Day",                                              emoji: "🎗️", color: "#dc2626", url: "https://www.who.int/campaigns/world-aids-day" },
+  { m: 12, d: 27, name: "International Day of Epidemic Preparedness",                  emoji: "🧫", color: "#059669" },
+];
+
+function findAwarenessForToday() {
+  const now = new Date();
+  const m = now.getMonth() + 1, d = now.getDate();
+  // Direct day match first
+  for (const a of AWARENESS_DAYS) {
+    if (a.m === m && a.d === d) return a;
+  }
+  // Range (weeks) — e.g. AMR awareness week starts Nov 18, lasts 7 days
+  for (const a of AWARENESS_DAYS) {
+    if (!a.rangeDays || a.m !== m) continue;
+    if (d > a.d && d < a.d + a.rangeDays) return a;
+  }
+  return null;
+}
+function renderAwarenessBanner() {
+  const banner = document.getElementById("awareBanner");
+  if (!banner) return;
+  const today = findAwarenessForToday();
+  if (!today) { banner.classList.add("hide"); return; }
+  const year = new Date().getFullYear();
+  const key = `najmAware_${year}_${today.m}_${today.d}`;
+  try { if (localStorage.getItem(key) === "1") { banner.classList.add("hide"); return; } } catch (_) {}
+  // Fill content
+  document.getElementById("awareEmoji").textContent = today.emoji;
+  document.getElementById("awareText").textContent = today.name;
+  const linkEl = document.getElementById("awareLink");
+  if (today.url) {
+    linkEl.href = today.url;
+    linkEl.classList.remove("hide");
+  } else {
+    linkEl.classList.add("hide");
+  }
+  // Theme — set accent color via CSS variables on the banner itself
+  banner.style.setProperty("--aware-accent", today.color);
+  banner.style.setProperty("--aware-bg", today.color + "22"); // 22 = ~13% alpha hex
+  banner.classList.remove("hide");
+  // Close handler (per-day-per-year)
+  const closeBtn = document.getElementById("awareClose");
+  closeBtn.onclick = () => {
+    banner.classList.add("hide");
+    try { localStorage.setItem(key, "1"); } catch (_) {}
+  };
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   try {
     loadState();
@@ -4696,6 +4811,7 @@ document.addEventListener("DOMContentLoaded", () => {
     bindPatient();
     renderPatientsBar();
     bindTabs();
+    renderAwarenessBanner();
     bindInfusionControls();
     bindAntibioticControls();
     bindAntidoteControls();

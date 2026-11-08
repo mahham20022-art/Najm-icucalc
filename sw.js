@@ -7,7 +7,7 @@
      ASSETS    = cache-first for icons/CSS/JS/manifest (stable)
      IMAGES    = cache-first with size cap for user-added images
 */
-const VERSION  = "v34"; // app 1.5.10 — About card: remove affiliation, fix RTL-looking long text alignment
+const VERSION  = "v35"; // app 1.5.11 — Dynamic international awareness-days banner (22 days)
 const PRECACHE = `najm-precache-${VERSION}`;
 const RUNTIME  = `najm-runtime-${VERSION}`;
 const ASSETS   = `najm-assets-${VERSION}`;
