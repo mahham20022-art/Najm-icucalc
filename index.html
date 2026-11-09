@@ -58,7 +58,7 @@
       "applicationSubCategory": "MedicalCalculator",
       "operatingSystem": "Any (PWA, iOS, Android, Windows, macOS, Linux)",
       "browserRequirements": "Modern browser with JavaScript",
-      "softwareVersion": "1.5.12",
+      "softwareVersion": "1.5.13",
       "datePublished": "2026-07-25",
       "dateModified": "2026-10-30",
       "inLanguage": "en",
@@ -745,14 +745,13 @@
     overflow: hidden;
   }
   .aware-emoji { font-size: 18px; line-height: 1; flex-shrink: 0; }
-  .aware-text { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--aware-accent, var(--brand)); }
-  .aware-link {
+  .aware-text {
+    flex: 1; min-width: 0;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     color: var(--aware-accent, var(--brand));
-    text-decoration: underline;
-    font-weight: 600; font-size: 12px;
-    flex-shrink: 0; padding: 2px 6px; border-radius: 4px;
+    text-decoration: none;
   }
-  .aware-link:hover { background: rgba(255,255,255,.05); }
+  .aware-text[href]:hover { text-decoration: underline; }
   .aware-close {
     appearance: none; background: transparent; border: 0;
     color: var(--muted); cursor: pointer; font-size: 22px;
@@ -1260,7 +1259,7 @@
       <h3 id="onbTrustTitle">Before you use it</h3>
       <p><b>For</b> ICU/CCU doctors, pharmacists and nurses who already know these drugs and scores. It does the arithmetic; the clinical decision stays with you.</p>
       <p><b>Not prospectively validated.</b> Decision support only. Check every result against your protocol and the drug label.</p>
-      <p>Version 1.5.12 · last reviewed 09 November 2026 · what you enter stays in this browser.</p>
+      <p>Version 1.5.13 · last reviewed 09 November 2026 · what you enter stays in this browser.</p>
       <button class="onb-link" type="button" id="onbEvidence">Evidence, limits and data handling</button>
     </div>
 
@@ -1340,10 +1339,9 @@
       </div>
     </div>
 
-    <div id="awareBanner" class="aware-banner hide" role="status" aria-live="polite">
+    <div id="awareBanner" class="aware-banner" role="status" aria-live="polite" style="display:none">
       <span class="aware-emoji" id="awareEmoji"></span>
-      <span class="aware-text" id="awareText"></span>
-      <a class="aware-link hide" id="awareLink" target="_blank" rel="noopener">Learn more</a>
+      <a id="awareText" class="aware-text" target="_blank" rel="noopener"></a>
       <button class="aware-close" id="awareClose" type="button" aria-label="Dismiss">&times;</button>
     </div>
 
@@ -2091,11 +2089,11 @@
             <li>Not a regulated medical device.</li>
           </ul></dd>
           <dt>Version</dt>
-          <dd>1.5.12 · last reviewed 09 November 2026.</dd>
+          <dd>1.5.13 · last reviewed 09 November 2026.</dd>
           <dt>Report a suspected error</dt>
           <dd>Say what you entered, what the app showed and what you expected, with a source if you have one. Leave out patient identifiers.</dd>
         </dl>
-        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.12&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
+        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.13&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
           <span>Report an error · contact@thetract.org</span>
         </a>
@@ -2112,7 +2110,7 @@
         <div class="row"><span class="k">Website</span><span class="v"><a href="https://thetract.org" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">thetract.org</a></span></div>
         <div class="row"><span class="k">LinkedIn</span><span class="v"><a href="https://www.linkedin.com/in/dr-mohamed-najm-aldeen-aa6452135" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">linkedin.com/in/dr-mohamed-najm-aldeen</a></span></div>
         <div class="row"><span class="k">GitHub</span><span class="v"><a href="https://github.com/mahham20022-art" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">@mahham20022-art</a></span></div>
-        <div class="row"><span class="k">Version</span><span class="v">1.5.12</span></div>
+        <div class="row"><span class="k">Version</span><span class="v">1.5.13</span></div>
         <div class="row"><span class="k">Last reviewed</span><span class="v">09 Nov 2026</span></div>
       </div>
 
@@ -2168,6 +2166,10 @@
 
       <div class="card changelog" id="changelog">
         <h3>Changelog</h3>
+        <h4>1.5.13 <span>· 09 November 2026</span></h4>
+        <ul>
+          <li>Awareness banner fixes: dropped the separate "Learn more" button (the day's name is itself the link when a campaign URL exists), and fixed a visibility bug where the banner kept showing an empty skeleton on days with no event because the generic <code>.hide</code> CSS utility was never defined — now toggled via inline <code>display</code>.</li>
+        </ul>
         <h4>1.5.12 <span>· 09 November 2026</span></h4>
         <ul>
           <li>New score: <b>Candida Score (León 2006)</b> in the Scores tab — 4-item (TPN, surgery, multifocal colonisation, severe sepsis). Threshold ≥ 3 triggers an empirical echinocandin recommendation in non-neutropenic ICU patients with persistent colonisation and unexplained sepsis. References added: León Crit Care Med 2006 and the EPCAN 2009 validation study.</li>
@@ -2310,7 +2312,7 @@
 
   <footer>
     <div class="fine"><strong>Reference aid — not a medical device.</strong> Always verify against institutional protocols and drug labels.</div>
-    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.12 · last reviewed 09 Nov 2026 · Designed by Dr. Mohamed Najm</div>
+    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.13 · last reviewed 09 Nov 2026 · Designed by Dr. Mohamed Najm</div>
   </footer>
 </div>
 
@@ -4784,28 +4786,29 @@ function renderAwarenessBanner() {
   const banner = document.getElementById("awareBanner");
   if (!banner) return;
   const today = findAwarenessForToday();
-  if (!today) { banner.classList.add("hide"); return; }
+  if (!today) { banner.style.display = "none"; return; }
   const year = new Date().getFullYear();
   const key = `najmAware_${year}_${today.m}_${today.d}`;
-  try { if (localStorage.getItem(key) === "1") { banner.classList.add("hide"); return; } } catch (_) {}
+  try { if (localStorage.getItem(key) === "1") { banner.style.display = "none"; return; } } catch (_) {}
   // Fill content
   document.getElementById("awareEmoji").textContent = today.emoji;
-  document.getElementById("awareText").textContent = today.name;
-  const linkEl = document.getElementById("awareLink");
+  const textEl = document.getElementById("awareText");
+  textEl.textContent = today.name;
   if (today.url) {
-    linkEl.href = today.url;
-    linkEl.classList.remove("hide");
+    textEl.setAttribute("href", today.url);
+    textEl.setAttribute("target", "_blank");
+    textEl.setAttribute("rel", "noopener");
   } else {
-    linkEl.classList.add("hide");
+    textEl.removeAttribute("href");
   }
   // Theme — set accent color via CSS variables on the banner itself
   banner.style.setProperty("--aware-accent", today.color);
   banner.style.setProperty("--aware-bg", today.color + "22"); // 22 = ~13% alpha hex
-  banner.classList.remove("hide");
+  banner.style.display = "flex";
   // Close handler (per-day-per-year)
   const closeBtn = document.getElementById("awareClose");
   closeBtn.onclick = () => {
-    banner.classList.add("hide");
+    banner.style.display = "none";
     try { localStorage.setItem(key, "1"); } catch (_) {}
   };
 }

@@ -7,7 +7,7 @@
      ASSETS    = cache-first for icons/CSS/JS/manifest (stable)
      IMAGES    = cache-first with size cap for user-added images
 */
-const VERSION  = "v36"; // app 1.5.12 — Candida Score (León 2006) — invasive candidiasis risk
+const VERSION  = "v37"; // app 1.5.13 — Awareness banner: remove Learn-more button + fix empty-banner bug
 const PRECACHE = `najm-precache-${VERSION}`;
 const RUNTIME  = `najm-runtime-${VERSION}`;
 const ASSETS   = `najm-assets-${VERSION}`;
