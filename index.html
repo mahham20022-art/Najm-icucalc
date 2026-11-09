@@ -58,7 +58,7 @@
       "applicationSubCategory": "MedicalCalculator",
       "operatingSystem": "Any (PWA, iOS, Android, Windows, macOS, Linux)",
       "browserRequirements": "Modern browser with JavaScript",
-      "softwareVersion": "1.5.13",
+      "softwareVersion": "1.5.14",
       "datePublished": "2026-07-25",
       "dateModified": "2026-10-30",
       "inLanguage": "en",
@@ -1259,7 +1259,7 @@
       <h3 id="onbTrustTitle">Before you use it</h3>
       <p><b>For</b> ICU/CCU doctors, pharmacists and nurses who already know these drugs and scores. It does the arithmetic; the clinical decision stays with you.</p>
       <p><b>Not prospectively validated.</b> Decision support only. Check every result against your protocol and the drug label.</p>
-      <p>Version 1.5.13 · last reviewed 09 November 2026 · what you enter stays in this browser.</p>
+      <p>Version 1.5.14 · last reviewed 09 November 2026 · what you enter stays in this browser.</p>
       <button class="onb-link" type="button" id="onbEvidence">Evidence, limits and data handling</button>
     </div>
 
@@ -1502,6 +1502,35 @@
           <div class="row"><span class="k">NE equivalent</span><span class="v" id="ne-total">—</span></div>
           <div class="verdict" id="ne-verdict">Sum of norepi-equivalent support.</div>
           <div class="src">Source: Khanna et al., NEJM 2017</div>
+        </div>
+
+        <div class="card">
+          <h3>🩺 Thrombolysis — Doses &amp; Contraindications</h3>
+          <div class="sub">Pick indication → see dose for each agent and tick contraindications. Weight is read from the patient bar for weight-based regimens.</div>
+
+          <div class="grid-in">
+            <div class="field"><label>Indication</label><div class="input"><select id="tx-ind">
+              <option value="stroke">Acute Ischaemic Stroke (AIS)</option>
+              <option value="stemi">STEMI</option>
+              <option value="pe">Massive / sub-massive PE</option>
+            </select></div></div>
+          </div>
+
+          <div id="tx-doses" style="margin-top:10px;font-size:13px;line-height:1.6"></div>
+
+          <h4 style="margin:14px 0 6px;font-size:14px;color:var(--danger)">Absolute contraindications (any = DO NOT GIVE)</h4>
+          <div id="tx-abs-list" style="display:flex;flex-direction:column;gap:4px;font-size:13px;line-height:1.5"></div>
+
+          <h4 style="margin:14px 0 6px;font-size:14px;color:var(--warn)">Relative contraindications (weigh risk vs benefit)</h4>
+          <div id="tx-rel-list" style="display:flex;flex-direction:column;gap:4px;font-size:13px;line-height:1.5"></div>
+
+          <div class="row" style="margin-top:12px"><span class="k">Absolute ticked</span><span class="v" id="tx-abs-count">0</span></div>
+          <div class="row"><span class="k">Relative ticked</span><span class="v" id="tx-rel-count">0</span></div>
+          <div class="verdict" id="tx-verdict">Select indication, then review each item.</div>
+
+          <button class="btn" type="button" id="tx-reset" style="margin-top:8px">Reset checklist</button>
+
+          <div class="src">Sources: AHA/ASA Stroke 2019 (update 2024). ESC STEMI 2017. ESC PE 2019. Tenecteplase: EXTEND-IA TNK (NEJM 2018), ACT (Lancet 2022), AcT (Lancet 2022), ASSENT-2 (Lancet 1999).</div>
         </div>
       </div>
     </section>
@@ -2089,11 +2118,11 @@
             <li>Not a regulated medical device.</li>
           </ul></dd>
           <dt>Version</dt>
-          <dd>1.5.13 · last reviewed 09 November 2026.</dd>
+          <dd>1.5.14 · last reviewed 09 November 2026.</dd>
           <dt>Report a suspected error</dt>
           <dd>Say what you entered, what the app showed and what you expected, with a source if you have one. Leave out patient identifiers.</dd>
         </dl>
-        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.13&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
+        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.14&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
           <span>Report an error · contact@thetract.org</span>
         </a>
@@ -2110,7 +2139,7 @@
         <div class="row"><span class="k">Website</span><span class="v"><a href="https://thetract.org" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">thetract.org</a></span></div>
         <div class="row"><span class="k">LinkedIn</span><span class="v"><a href="https://www.linkedin.com/in/dr-mohamed-najm-aldeen-aa6452135" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">linkedin.com/in/dr-mohamed-najm-aldeen</a></span></div>
         <div class="row"><span class="k">GitHub</span><span class="v"><a href="https://github.com/mahham20022-art" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">@mahham20022-art</a></span></div>
-        <div class="row"><span class="k">Version</span><span class="v">1.5.13</span></div>
+        <div class="row"><span class="k">Version</span><span class="v">1.5.14</span></div>
         <div class="row"><span class="k">Last reviewed</span><span class="v">09 Nov 2026</span></div>
       </div>
 
@@ -2166,6 +2195,10 @@
 
       <div class="card changelog" id="changelog">
         <h3>Changelog</h3>
+        <h4>1.5.14 <span>· 09 November 2026</span></h4>
+        <ul>
+          <li>New: <b>Thrombolysis — Doses &amp; Contraindications</b> card in Hemodynamics. Indication selector (AIS / STEMI / massive PE) renders the dose for every current agent — <b>alteplase (tPA)</b>, <b>tenecteplase (TNK)</b> single bolus, <b>reteplase</b>, <b>streptokinase</b> — with weight-based calculations when the patient bar has a weight (STEMI TNK weight band 30 – 50 mg, stroke TNK 0.25 mg/kg bolus max 25 mg, stroke alteplase 0.9 mg/kg max 90 mg split 10 % bolus + 90 % over 60 min). Below the doses, a tickable checklist of <b>absolute</b> and <b>relative</b> contraindications per indication, with a live tally and a traffic-light verdict (any absolute ticked ⇒ DO NOT GIVE). Ticks persist in localStorage per indication. Sources: AHA/ASA 2019 update 2024, ESC STEMI 2017, ESC PE 2019, EXTEND-IA TNK NEJM 2018, ACT &amp; AcT Lancet 2022, ASSENT-2 Lancet 1999, STREAM NEJM 2013.</li>
+        </ul>
         <h4>1.5.13 <span>· 09 November 2026</span></h4>
         <ul>
           <li>Awareness banner fixes: dropped the separate "Learn more" button (the day's name is itself the link when a campaign URL exists), and fixed a visibility bug where the banner kept showing an empty skeleton on days with no event because the generic <code>.hide</code> CSS utility was never defined — now toggled via inline <code>display</code>.</li>
@@ -2312,7 +2345,7 @@
 
   <footer>
     <div class="fine"><strong>Reference aid — not a medical device.</strong> Always verify against institutional protocols and drug labels.</div>
-    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.13 · last reviewed 09 Nov 2026 · Designed by Dr. Mohamed Najm</div>
+    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.14 · last reviewed 09 Nov 2026 · Designed by Dr. Mohamed Najm</div>
   </footer>
 </div>
 
@@ -3492,7 +3525,183 @@ function bindUnitsToggle() {
 /* ============================================================
    HEMODYNAMICS
    ============================================================ */
+/* ============================================================
+   THROMBOLYSIS — doses by indication + contraindication checklist
+   ============================================================ */
+const THROMBO = {
+  stroke: {
+    title: "Acute Ischaemic Stroke (within 4.5 h; 4.5 – 9 h or wake-up in selected imaging-guided cases)",
+    doseHtml: (w) => `
+      <b>Alteplase (tPA)</b> — <b>0.9 mg/kg IV (max 90 mg)</b>: 10 % bolus over 1 min, then 90 % infusion over 60 min.<br>
+      ${w ? `→ For ${w} kg: total <b>${fmt(Math.min(w*0.9,90),1)} mg</b>, bolus <b>${fmt(Math.min(w*0.9,90)*0.1,1)} mg</b>, infusion <b>${fmt(Math.min(w*0.9,90)*0.9,1)} mg over 60 min</b>.` : "Enter weight in patient bar for a calculated dose."}<br>
+      <br>
+      <b>Tenecteplase (TNK)</b> — <b>0.25 mg/kg single IV bolus over 5 s (max 25 mg)</b>.
+      ${w ? `→ For ${w} kg: <b>${fmt(Math.min(w*0.25,25),1)} mg single bolus</b>.` : ""}<br>
+      Non-inferior to alteplase (ACT, AcT Lancet 2022). Superior reperfusion pre-thrombectomy in LVO (EXTEND-IA TNK NEJM 2018). Growing first-line use.
+    `,
+    abs: [
+      "Prior intracranial haemorrhage",
+      "Ischaemic stroke or head trauma in prior 3 months",
+      "Intra-axial brain tumour, AVM or aneurysm",
+      "Active internal bleeding",
+      "Suspected aortic dissection or endocarditis",
+      "Platelets < 100 ×10⁹/L",
+      "INR > 1.7 or PT > 15 s",
+      "Heparin < 48 h with elevated aPTT, or current therapeutic LMWH",
+      "DOAC within 48 h (anti-Xa / dTT not reversed)",
+      "SBP > 185 or DBP > 110 that cannot be lowered",
+      "Blood glucose < 50 mg/dL (2.7 mmol/L)",
+      "CT shows hypodensity > ⅓ MCA territory or acute haemorrhage",
+    ],
+    rel: [
+      "Minor (NIHSS < 4) or rapidly improving symptoms",
+      "Seizure at onset with postictal residual deficit",
+      "Major surgery / serious trauma in prior 14 days",
+      "GI or GU haemorrhage in prior 21 days",
+      "Recent MI (prior 3 months)",
+      "Pregnancy",
+      "Age > 80 (still eligible 0 – 4.5 h; evidence slightly weaker)",
+    ],
+  },
+  stemi: {
+    title: "STEMI — PCI not available within 120 min of first medical contact",
+    doseHtml: (w) => {
+      const tnkBand = !w ? "weight-based (see table)"
+        : w < 60 ? "<b>30 mg</b> (6 mL) — &lt; 60 kg"
+        : w < 70 ? "<b>35 mg</b> (7 mL) — 60–69 kg"
+        : w < 80 ? "<b>40 mg</b> (8 mL) — 70–79 kg"
+        : w < 90 ? "<b>45 mg</b> (9 mL) — 80–89 kg"
+        : "<b>50 mg</b> (10 mL) — ≥ 90 kg";
+      return `
+      <b>Tenecteplase (TNK) — single IV bolus over 5 s</b>: ${tnkBand}.<br>
+      (Halve the dose in age ≥ 75 yrs per STREAM 2013.)<br>
+      <br>
+      <b>Alteplase accelerated (90 min) regimen</b> — <b>15 mg bolus → 0.75 mg/kg over 30 min (max 50 mg) → 0.5 mg/kg over 60 min (max 35 mg)</b>; total max 100 mg.<br>
+      ${w ? `→ For ${w} kg: 15 + ${fmt(Math.min(w*0.75,50),1)} + ${fmt(Math.min(w*0.5,35),1)} mg.` : ""}<br>
+      <br>
+      <b>Reteplase</b> — 10 U IV bolus, repeat 10 U after 30 min.<br>
+      <b>Streptokinase</b> — 1.5 M U in 100 mL NS over 30 – 60 min.<br>
+      <br>
+      <b>Adjuncts:</b> aspirin 162 – 325 mg chewed + clopidogrel 300 mg load (75 mg if ≥ 75 yrs) + enoxaparin 30 mg IV bolus → 1 mg/kg SC q 12 h (0.75 mg/kg SC if ≥ 75 yrs, no bolus).
+    `;
+    },
+    abs: [
+      "Any previous intracranial haemorrhage",
+      "Ischaemic stroke in prior 6 months (3 months in AHA; 6 months in ESC)",
+      "Known cerebral vascular malformation or malignant intracranial tumour",
+      "Significant closed-head or facial trauma in prior 3 months",
+      "Suspected aortic dissection",
+      "Active bleeding or bleeding diathesis (menses excluded)",
+      "Intracranial or spinal surgery in prior 2 months",
+    ],
+    rel: [
+      "Severe uncontrolled hypertension (SBP > 180 or DBP > 110 at presentation)",
+      "History of chronic severe poorly-controlled hypertension",
+      "History of prior ischaemic stroke > 3 months, dementia, or known intracranial pathology",
+      "Traumatic / prolonged CPR (> 10 min) or major surgery in prior 3 weeks",
+      "Recent internal bleeding (prior 2 – 4 weeks)",
+      "Non-compressible vascular puncture (e.g. subclavian / IJV CVC)",
+      "Pregnancy or first week postpartum",
+      "Active peptic ulcer",
+      "Current anticoagulation (warfarin, DOAC)",
+    ],
+  },
+  pe: {
+    title: "Massive (haemodynamic instability) or selected sub-massive PE",
+    doseHtml: (w) => `
+      <b>Alteplase</b> — <b>100 mg IV over 2 h</b> (standard).<br>
+      <b>Cardiac arrest from PE</b>: <b>50 mg IV bolus</b> over 1 – 2 min, repeat after 15 min if no ROSC (AHA 2020).<br>
+      <b>MOPETT (sub-massive, half dose)</b>: <b>50 mg over 2 h</b> (10 mg bolus + 40 mg infusion).<br>
+      <br>
+      <b>Tenecteplase</b> — same weight-based single bolus as STEMI (${!w ? "weight-based" : (w<60?"30":w<70?"35":w<80?"40":w<90?"45":"50")+" mg"}). PEITHO showed benefit + risk in sub-massive; reserve for massive / arrest.<br>
+      <br>
+      <b>Streptokinase</b> — 250 000 U IV load over 30 min → 100 000 U/hr × 24 h.<br>
+      <br>
+      <b>Adjunct:</b> UFH, hold during tPA infusion, restart when aPTT &lt; 2× baseline.
+    `,
+    abs: [
+      "Any previous intracranial haemorrhage",
+      "Known cerebral vascular malformation or malignant intracranial tumour",
+      "Ischaemic stroke in prior 3 months (not applicable if within 3 h and considered as CPR candidate)",
+      "Significant closed-head or facial trauma in prior 3 months",
+      "Active bleeding or bleeding diathesis (menses excluded)",
+      "Intracranial or spinal surgery in prior 2 months",
+      "Suspected aortic dissection",
+    ],
+    rel: [
+      "SBP > 180 or DBP > 110 at presentation (lower first)",
+      "Chronic severe poorly-controlled hypertension",
+      "Prior ischaemic stroke > 3 months, dementia, intracranial pathology",
+      "Traumatic / prolonged CPR, major surgery in prior 3 weeks",
+      "Recent internal bleeding (prior 2 – 4 weeks)",
+      "Non-compressible vascular puncture",
+      "Pregnancy or first week postpartum",
+      "Active peptic ulcer",
+      "Current anticoagulation (warfarin, DOAC)",
+    ],
+  },
+};
+function renderThrombolysis() {
+  const sel = document.getElementById("tx-ind");
+  if (!sel) return;
+  const key = sel.value || "stroke";
+  const t = THROMBO[key];
+  const w = num(state.patient.weight);
+  // Doses
+  document.getElementById("tx-doses").innerHTML = `<div style="color:var(--muted);margin-bottom:6px"><em>${t.title}</em></div>${t.doseHtml(w)}`;
+  // Checklists — preserve ticks on re-render by indication
+  state.thromb = state.thromb || { stroke:{abs:[],rel:[]}, stemi:{abs:[],rel:[]}, pe:{abs:[],rel:[]} };
+  const absS = state.thromb[key].abs, relS = state.thromb[key].rel;
+  const absHtml = t.abs.map((x,i) => `<label style="display:flex;gap:6px;align-items:flex-start;cursor:pointer"><input type="checkbox" data-kind="abs" data-i="${i}" ${absS.includes(i)?"checked":""} style="margin-top:3px;flex-shrink:0"><span>${x}</span></label>`).join("");
+  const relHtml = t.rel.map((x,i) => `<label style="display:flex;gap:6px;align-items:flex-start;cursor:pointer"><input type="checkbox" data-kind="rel" data-i="${i}" ${relS.includes(i)?"checked":""} style="margin-top:3px;flex-shrink:0"><span>${x}</span></label>`).join("");
+  document.getElementById("tx-abs-list").innerHTML = absHtml;
+  document.getElementById("tx-rel-list").innerHTML = relHtml;
+  // Tick handlers
+  document.querySelectorAll("#tx-abs-list input, #tx-rel-list input").forEach(box => {
+    box.addEventListener("change", (e) => {
+      const kind = e.target.dataset.kind, i = Number(e.target.dataset.i);
+      const arr = state.thromb[key][kind];
+      if (e.target.checked) { if (!arr.includes(i)) arr.push(i); }
+      else { const j = arr.indexOf(i); if (j >= 0) arr.splice(j, 1); }
+      saveState();
+      updateThrombVerdict(key);
+    });
+  });
+  updateThrombVerdict(key);
+}
+function updateThrombVerdict(key) {
+  const absN = state.thromb[key].abs.length, relN = state.thromb[key].rel.length;
+  document.getElementById("tx-abs-count").textContent = absN;
+  document.getElementById("tx-rel-count").textContent = relN;
+  const v = document.getElementById("tx-verdict");
+  v.classList.remove("ok","warn","bad");
+  if (absN > 0) { v.textContent = `${absN} absolute contraindication${absN>1?"s":""} ticked — DO NOT give thrombolytic. Consider PCI / endovascular / surgery.`; v.classList.add("bad"); }
+  else if (relN >= 3) { v.textContent = `${relN} relative contraindications — high risk, multidisciplinary discussion advised.`; v.classList.add("bad"); }
+  else if (relN > 0) { v.textContent = `${relN} relative contraindication${relN>1?"s":""} — weigh benefit vs bleeding risk, informed consent.`; v.classList.add("warn"); }
+  else { v.textContent = "No contraindications ticked. If clinically indicated and within therapeutic window, proceed per local protocol."; v.classList.add("ok"); }
+}
+function bindThrombolysis() {
+  const sel = document.getElementById("tx-ind");
+  if (!sel) return;
+  sel.addEventListener("change", renderThrombolysis);
+  const reset = document.getElementById("tx-reset");
+  if (reset) reset.addEventListener("click", () => {
+    state.thromb = { stroke:{abs:[],rel:[]}, stemi:{abs:[],rel:[]}, pe:{abs:[],rel:[]} };
+    saveState();
+    renderThrombolysis();
+  });
+  renderThrombolysis();
+}
+
 function runHemo() {
+  // Keep thrombolysis dose text in sync with current weight (no checklist re-render)
+  const doseEl = document.getElementById("tx-doses");
+  const sel = document.getElementById("tx-ind");
+  if (doseEl && sel && THROMBO[sel.value]) {
+    const t = THROMBO[sel.value];
+    const w = num(state.patient.weight);
+    doseEl.innerHTML = `<div style="color:var(--muted);margin-bottom:6px"><em>${t.title}</em></div>${t.doseHtml(w)}`;
+  }
   // ── QTc (Bazett + Fridericia + Framingham) ──
   const qt = num(state.inputs.qt_qt), qhr = num(state.inputs.qt_hr);
   if (qt != null && qhr != null && qhr > 0) {
@@ -4469,6 +4678,15 @@ const REFERENCES = [
   "Barbar S et al. A risk assessment model for the identification of hospitalized medical patients at risk for venous thromboembolism — the Padua Prediction Score. J Thromb Haemost 2010;8(11):2450–7.",
   "León C et al. A bedside scoring system (Candida score) for early antifungal treatment in nonneutropenic critically ill patients with Candida colonization. Crit Care Med 2006;34(3):730–7.",
   "León C et al. Usefulness of the Candida score for discriminating between Candida colonization and invasive candidiasis in non-neutropenic critically ill patients — a prospective multicenter study. Crit Care Med 2009;37(5):1624–33.",
+  "Powers WJ et al. 2019 Guidelines for the Early Management of Patients With Acute Ischaemic Stroke (update of 2024 focused). Stroke 2019;50(12):e344–418.",
+  "Campbell BCV et al. EXTEND-IA TNK — Tenecteplase vs alteplase before thrombectomy for ischaemic stroke. NEJM 2018;378(17):1573–82.",
+  "Menon BK et al. ACT investigators. Intravenous tenecteplase compared with alteplase for acute ischaemic stroke (Lancet 2022).",
+  "Warach SJ et al. AcT trial. Intravenous tenecteplase vs alteplase in acute ischaemic stroke. Lancet 2022;400(10347):161–9.",
+  "Ibanez B et al. 2017 ESC Guidelines for the management of acute myocardial infarction in patients presenting with ST-segment elevation (STEMI). Eur Heart J 2018;39(2):119–77.",
+  "ASSENT-2 investigators. Single-bolus tenecteplase compared with front-loaded alteplase in acute myocardial infarction. Lancet 1999;354(9180):716–22.",
+  "Armstrong PW et al. STREAM — fibrinolysis or primary PCI in ST-segment-elevation MI. NEJM 2013;368(15):1379–87.",
+  "Konstantinides SV et al. 2019 ESC Guidelines for the diagnosis and management of acute pulmonary embolism. Eur Heart J 2020;41(4):543–603.",
+  "Sharifi M et al. MOPETT — moderate pulmonary embolism treated with thrombolysis trial. Am J Cardiol 2013;111(2):273–7.",
   "Murray JF et al. An expanded definition of the adult respiratory distress syndrome (Lung Injury Score). Am Rev Respir Dis 1988;138(3):720–3.",
   "Guérin C et al. PROSEVA study — prone positioning in severe acute respiratory distress syndrome. NEJM 2013;368(23):2159–68.",
   "Papazian L et al. ACURASYS — neuromuscular blockers in early acute respiratory distress syndrome. NEJM 2010;363(12):1107–16.",
@@ -4831,6 +5049,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderPatientsBar();
     bindTabs();
     renderAwarenessBanner();
+    bindThrombolysis();
     bindInfusionControls();
     bindAntibioticControls();
     bindAntidoteControls();

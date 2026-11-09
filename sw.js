@@ -7,7 +7,7 @@
      ASSETS    = cache-first for icons/CSS/JS/manifest (stable)
      IMAGES    = cache-first with size cap for user-added images
 */
-const VERSION  = "v37"; // app 1.5.13 — Awareness banner: remove Learn-more button + fix empty-banner bug
+const VERSION  = "v38"; // app 1.5.14 — Thrombolysis card: dose per indication + contraindication checklist
 const PRECACHE = `najm-precache-${VERSION}`;
 const RUNTIME  = `najm-runtime-${VERSION}`;
 const ASSETS   = `najm-assets-${VERSION}`;
