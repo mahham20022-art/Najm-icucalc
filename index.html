@@ -58,7 +58,7 @@
       "applicationSubCategory": "MedicalCalculator",
       "operatingSystem": "Any (PWA, iOS, Android, Windows, macOS, Linux)",
       "browserRequirements": "Modern browser with JavaScript",
-      "softwareVersion": "1.5.15",
+      "softwareVersion": "1.5.16",
       "datePublished": "2026-07-25",
       "dateModified": "2026-10-30",
       "inLanguage": "en",
@@ -1259,7 +1259,7 @@
       <h3 id="onbTrustTitle">Before you use it</h3>
       <p><b>For</b> ICU/CCU doctors, pharmacists and nurses who already know these drugs and scores. It does the arithmetic; the clinical decision stays with you.</p>
       <p><b>Not prospectively validated.</b> Decision support only. Check every result against your protocol and the drug label.</p>
-      <p>Version 1.5.15 · last reviewed 10 November 2026 · what you enter stays in this browser.</p>
+      <p>Version 1.5.16 · last reviewed 10 November 2026 · what you enter stays in this browser.</p>
       <button class="onb-link" type="button" id="onbEvidence">Evidence, limits and data handling</button>
     </div>
 
@@ -1930,68 +1930,25 @@
 
         <div class="card">
           <h3>Antibiotic Dosing on CRRT</h3>
-          <div class="sub">Reference doses for standard CVVH / CVVHDF 20 – 30 mL/kg/hr effluent. Confirm with therapeutic drug monitoring where available — the single biggest error is UNDER-dosing in sepsis.</div>
-          <details open style="margin-top:8px">
-            <summary style="cursor:pointer;color:var(--brand);font-weight:600">β-lactams (give full loading dose; adjust interval, not single dose)</summary>
-            <table style="width:100%;border-collapse:collapse;font-size:13px;margin-top:6px">
-              <thead><tr style="border-bottom:1px solid var(--line)"><th style="text-align:left;padding:3px 6px">Drug</th><th style="text-align:left;padding:3px 6px">Dose on CRRT</th><th style="text-align:left;padding:3px 6px">Notes</th></tr></thead>
-              <tbody style="line-height:1.5">
-                <tr><td style="padding:3px 6px"><b>Meropenem</b></td><td>1 g IV q 8 h (consider 2 g q 8 h or extended 3 h infusion in sepsis)</td><td>Avoid under-dosing. Target T&gt;MIC &gt; 50 %.</td></tr>
-                <tr><td style="padding:3px 6px"><b>Imipenem-cilastatin</b></td><td>500 mg IV q 6 – 8 h</td><td>Monitor for seizures.</td></tr>
-                <tr><td style="padding:3px 6px"><b>Piperacillin-tazobactam</b></td><td>4.5 g IV q 6 – 8 h (extended infusion 4 h)</td><td>Loading 4.5 g then extended infusion improves PK/PD.</td></tr>
-                <tr><td style="padding:3px 6px"><b>Cefepime</b></td><td>2 g IV q 12 h</td><td>Watch neurotoxicity if under-filtered.</td></tr>
-                <tr><td style="padding:3px 6px"><b>Ceftazidime</b></td><td>2 g IV q 12 h</td><td></td></tr>
-                <tr><td style="padding:3px 6px"><b>Ceftazidime-avibactam</b></td><td>1.25 g IV q 8 h</td><td>Lower than normal renal dose; follow local protocol.</td></tr>
-                <tr><td style="padding:3px 6px"><b>Ceftriaxone</b></td><td>2 g IV q 24 h</td><td>No adjustment — not dialysed.</td></tr>
-                <tr><td style="padding:3px 6px"><b>Cefazolin</b></td><td>2 g IV q 12 h</td><td></td></tr>
-                <tr><td style="padding:3px 6px"><b>Aztreonam</b></td><td>1 – 2 g IV q 12 h</td><td></td></tr>
-              </tbody>
-            </table>
-          </details>
-          <details style="margin-top:8px">
-            <summary style="cursor:pointer;color:var(--brand);font-weight:600">Glycopeptides, aminoglycosides, lipopeptide (TDM essential)</summary>
-            <table style="width:100%;border-collapse:collapse;font-size:13px;margin-top:6px">
-              <tbody style="line-height:1.5">
-                <tr><td style="padding:3px 6px"><b>Vancomycin</b></td><td>LD 25 – 30 mg/kg → 10 – 15 mg/kg q 24 h (or 7.5 – 10 q 12 h); target trough 15 – 20 or AUC₂₄ 400 – 600.</td></tr>
-                <tr><td style="padding:3px 6px"><b>Teicoplanin</b></td><td>LD 400 mg q 12 h × 3 doses → 400 mg q 24 h; target trough 20 – 30.</td></tr>
-                <tr><td style="padding:3px 6px"><b>Gentamicin / Tobramycin</b></td><td>2 – 2.5 mg/kg q 24 – 48 h; target trough &lt; 1.</td></tr>
-                <tr><td style="padding:3px 6px"><b>Amikacin</b></td><td>7.5 – 10 mg/kg q 24 – 48 h; target trough &lt; 5.</td></tr>
-                <tr><td style="padding:3px 6px"><b>Daptomycin</b></td><td>6 – 8 mg/kg IV q 48 h (10 mg/kg q 48 h if staph bacteraemia / endocarditis).</td></tr>
-                <tr><td style="padding:3px 6px"><b>Colistin</b></td><td>LD 9 M IU (300 mg CBA) → 4.5 M IU (150 mg CBA) q 12 h.</td></tr>
-                <tr><td style="padding:3px 6px"><b>Polymyxin B</b></td><td>LD 2.5 mg/kg → 1.25 – 1.5 mg/kg q 12 h (no renal adjustment).</td></tr>
-              </tbody>
-            </table>
-          </details>
-          <details style="margin-top:8px">
-            <summary style="cursor:pointer;color:var(--brand);font-weight:600">Fluoroquinolones, oxazolidinones, lincosamides, nitroimidazoles</summary>
-            <table style="width:100%;border-collapse:collapse;font-size:13px;margin-top:6px">
-              <tbody style="line-height:1.5">
-                <tr><td style="padding:3px 6px"><b>Ciprofloxacin</b></td><td>400 mg IV q 12 h</td></tr>
-                <tr><td style="padding:3px 6px"><b>Levofloxacin</b></td><td>500 – 750 mg IV q 24 h</td></tr>
-                <tr><td style="padding:3px 6px"><b>Linezolid</b></td><td>600 mg IV q 12 h — no adjustment</td></tr>
-                <tr><td style="padding:3px 6px"><b>Tedizolid</b></td><td>200 mg IV q 24 h — no adjustment</td></tr>
-                <tr><td style="padding:3px 6px"><b>Clindamycin</b></td><td>600 – 900 mg IV q 8 h — no adjustment</td></tr>
-                <tr><td style="padding:3px 6px"><b>Metronidazole</b></td><td>500 mg IV q 8 h</td></tr>
-                <tr><td style="padding:3px 6px"><b>TMP-SMX</b> (Pneumocystis)</td><td>Dose by TMP 5 mg/kg IV q 8 – 12 h; monitor K⁺.</td></tr>
-              </tbody>
-            </table>
-          </details>
-          <details style="margin-top:8px">
-            <summary style="cursor:pointer;color:var(--brand);font-weight:600">Antifungals &amp; antivirals</summary>
-            <table style="width:100%;border-collapse:collapse;font-size:13px;margin-top:6px">
-              <tbody style="line-height:1.5">
-                <tr><td style="padding:3px 6px"><b>Fluconazole</b></td><td>LD 800 mg → <b>800 mg IV q 24 h</b> (↑ vs normal renal dose — significantly cleared by CRRT).</td></tr>
-                <tr><td style="padding:3px 6px"><b>Voriconazole IV</b></td><td>LD 6 mg/kg × 2 doses → 4 mg/kg q 12 h. Avoid IV formulation if possible (SBECD accumulation); use PO.</td></tr>
-                <tr><td style="padding:3px 6px"><b>Caspofungin</b></td><td>LD 70 mg → 50 mg IV q 24 h — no adjustment.</td></tr>
-                <tr><td style="padding:3px 6px"><b>Micafungin</b></td><td>100 – 150 mg IV q 24 h — no adjustment.</td></tr>
-                <tr><td style="padding:3px 6px"><b>Anidulafungin</b></td><td>LD 200 mg → 100 mg IV q 24 h — no adjustment.</td></tr>
-                <tr><td style="padding:3px 6px"><b>Liposomal amphotericin B</b></td><td>3 – 5 mg/kg IV q 24 h — no adjustment.</td></tr>
-                <tr><td style="padding:3px 6px"><b>Acyclovir</b></td><td>5 – 10 mg/kg IV q 24 h (herpes), 10 mg/kg q 12 h (encephalitis / zoster).</td></tr>
-                <tr><td style="padding:3px 6px"><b>Ganciclovir</b></td><td>2.5 mg/kg IV q 24 h.</td></tr>
-                <tr><td style="padding:3px 6px"><b>Oseltamivir</b></td><td>75 mg PO q 24 h (vs q 12 h normal).</td></tr>
-              </tbody>
-            </table>
-          </details>
+          <div class="sub">Live-adjusted by CRRT <b>mode</b> and <b>effluent intensity</b>. Confirm with TDM where available — the single biggest error is UNDER-dosing in sepsis.</div>
+
+          <div class="grid-in">
+            <div class="field"><label>CRRT mode</label><div class="input"><select id="crrt-mode">
+              <option value="cvvhdf">CVVHDF (combined — standard)</option>
+              <option value="cvvh">CVVH (convection)</option>
+              <option value="cvvhd">CVVHD (diffusion)</option>
+              <option value="scuf">SCUF (fluid only)</option>
+            </select></div></div>
+            <div class="field"><label>Effluent intensity</label><div class="input"><select id="crrt-intensity">
+              <option value="low">Low — 20 mL/kg/hr</option>
+              <option value="standard" selected>Standard — 25 – 30 mL/kg/hr</option>
+              <option value="high">High — 35 – 45 mL/kg/hr (intox / augmented)</option>
+            </select></div></div>
+          </div>
+
+          <div id="crrt-note" class="verdict" style="margin-top:8px"></div>
+          <div id="crrt-abx-tables" style="margin-top:4px"></div>
+
           <div class="sub" style="margin-top:10px">
             <b>Golden rules on CRRT:</b> (1) always give the <em>full loading dose</em> — Vd is unchanged or increased in sepsis. (2) Under-dosing is more dangerous than over-dosing in sepsis — therapeutic failure + resistance. (3) Use <em>extended / continuous infusion</em> for β-lactams when possible. (4) Request TDM for vancomycin, aminoglycosides, voriconazole. (5) Effluent rate affects clearance linearly — if increased to 35 – 40 mL/kg/hr (e.g. intoxication), raise antibiotic doses proportionally.
           </div>
@@ -2208,11 +2165,11 @@
             <li>Not a regulated medical device.</li>
           </ul></dd>
           <dt>Version</dt>
-          <dd>1.5.15 · last reviewed 10 November 2026.</dd>
+          <dd>1.5.16 · last reviewed 10 November 2026.</dd>
           <dt>Report a suspected error</dt>
           <dd>Say what you entered, what the app showed and what you expected, with a source if you have one. Leave out patient identifiers.</dd>
         </dl>
-        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.15&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
+        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.16&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
           <span>Report an error · contact@thetract.org</span>
         </a>
@@ -2229,7 +2186,7 @@
         <div class="row"><span class="k">Website</span><span class="v"><a href="https://thetract.org" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">thetract.org</a></span></div>
         <div class="row"><span class="k">LinkedIn</span><span class="v"><a href="https://www.linkedin.com/in/dr-mohamed-najm-aldeen-aa6452135" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">linkedin.com/in/dr-mohamed-najm-aldeen</a></span></div>
         <div class="row"><span class="k">GitHub</span><span class="v"><a href="https://github.com/mahham20022-art" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">@mahham20022-art</a></span></div>
-        <div class="row"><span class="k">Version</span><span class="v">1.5.15</span></div>
+        <div class="row"><span class="k">Version</span><span class="v">1.5.16</span></div>
         <div class="row"><span class="k">Last reviewed</span><span class="v">10 Nov 2026</span></div>
       </div>
 
@@ -2285,6 +2242,10 @@
 
       <div class="card changelog" id="changelog">
         <h3>Changelog</h3>
+        <h4>1.5.16 <span>· 10 November 2026</span></h4>
+        <ul>
+          <li>Antibiotic Dosing on CRRT is now <b>mode-aware + intensity-aware</b>. Two dropdowns at the top of the card (Mode: SCUF / CVVH / CVVHD / CVVHDF · Intensity: Low 20 / Standard 25-30 / High 35-45 mL/kg/hr). Each drug row carries a coloured badge that updates live: "as shown", "↑ dose ~10 – 20 %", "↑ dose ~25 – 40 %", "↓ dose or ↑ interval", or "use CrCl dose" (SCUF). Highly protein-bound or minimally-cleared drugs (ceftriaxone, daptomycin, linezolid, echinocandins, polymyxin B, clindamycin) are tagged "no change" in every mode.</li>
+        </ul>
         <h4>1.5.15 <span>· 10 November 2026</span></h4>
         <ul>
           <li>New protocol: <b>🫘 CRRT — Prescription &amp; Monitoring</b> red card in Renal &amp; Fluids. 7-step bundle: indications (AEIOU + fluid overload), modes (SCUF / CVVH / CVVHD / CVVHDF), standard prescription (effluent 20 – 25 mL/kg/hr, Qb, Qd, FF &lt; 25 %, fluid balance), anticoagulation (regional citrate first-line per KDIGO 2024 update; heparin; none), monitoring intervals, troubleshooting (clotting, citrate accumulation, hypophosphataemia), and when to stop.</li>
@@ -2441,7 +2402,7 @@
 
   <footer>
     <div class="fine"><strong>Reference aid — not a medical device.</strong> Always verify against institutional protocols and drug labels.</div>
-    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.15 · last reviewed 10 Nov 2026 · Designed by Dr. Mohamed Najm</div>
+    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.16 · last reviewed 10 Nov 2026 · Designed by Dr. Mohamed Najm</div>
   </footer>
 </div>
 
@@ -3787,6 +3748,144 @@ function bindThrombolysis() {
     renderThrombolysis();
   });
   renderThrombolysis();
+}
+
+/* ============================================================
+   CRRT — Antibiotic Dosing table (mode + effluent aware)
+   Each drug has a base dose at STANDARD effluent and is tagged
+   with a "scaling profile":
+     fixed    → does not change with mode or effluent
+     clearedS → cleared by convection + diffusion (most β-lactams,
+                vanco, aminoglycosides, fluconazole, acyclovir).
+                Scales with effluent; SCUF = use CrCl dosing.
+     middle   → middle-molecule (vanco, teicoplanin). Cleared best
+                by CVVH/CVVHDF; CVVHD a bit lower.
+     protein  → highly protein-bound (daptomycin, ceftriaxone,
+                linezolid). Minimal clearance in any mode.
+   ============================================================ */
+const CRRT_MODE_CTX = {
+  cvvhdf: { label: "CVVHDF — convection + diffusion",            factor: 1.00, note: "Convection + diffusion. Standard in most ICUs. Doses below assume this mode." },
+  cvvh:   { label: "CVVH — convection",                          factor: 1.00, note: "Pure convection. Excellent for middle molecules (vancomycin, β-lactams). Same antibiotic doses as CVVHDF." },
+  cvvhd:  { label: "CVVHD — diffusion",                          factor: 0.90, note: "Diffusion best for small solutes. Middle-molecule drugs (vancomycin, teicoplanin) cleared ~10 % less than CVVH/CVVHDF — consider slightly higher dose or shorter interval." },
+  scuf:   { label: "SCUF — fluid removal only",                  factor: 0.00, note: "⚠️ SCUF removes fluid but gives NO solute clearance. Dose antibiotics by the patient's CrCl (Antibiotics tab), NOT the 'CRRT dose' below." },
+};
+const CRRT_INTENSITY_CTX = {
+  low:      { label: "Low effluent 20 mL/kg/hr",                            factor: 0.85, note: "Below-standard dose. Consider slightly lower interval for cleared drugs." },
+  standard: { label: "Standard effluent 25 – 30 mL/kg/hr",                  factor: 1.00, note: "KDIGO-recommended delivered dose. Reference regimens below assume this." },
+  high:     { label: "High effluent 35 – 45 mL/kg/hr (intox / augmented)",  factor: 1.35, note: "Expect 25 – 40 % extra clearance. Shorten interval or raise dose for cleared drugs; TDM strongly recommended." },
+};
+const CRRT_ABX = {
+  betaLactams: {
+    label: "β-lactams (give full loading dose; adjust interval, not single dose)",
+    rows: [
+      { drug:"Meropenem",              base:"1 g IV q 8 h (consider 2 g q 8 h / extended 3 h in sepsis)", profile:"clearedS", note:"Target T&gt;MIC &gt; 50 %." },
+      { drug:"Imipenem-cilastatin",    base:"500 mg IV q 6 – 8 h",                                        profile:"clearedS", note:"Monitor for seizures." },
+      { drug:"Piperacillin-tazobactam",base:"4.5 g IV q 6 – 8 h (extended infusion 4 h)",                 profile:"clearedS", note:"Loading 4.5 g then extended infusion improves PK/PD." },
+      { drug:"Cefepime",               base:"2 g IV q 12 h",                                              profile:"clearedS", note:"Watch neurotoxicity if under-filtered." },
+      { drug:"Ceftazidime",            base:"2 g IV q 12 h",                                              profile:"clearedS" },
+      { drug:"Ceftazidime-avibactam",  base:"1.25 g IV q 8 h",                                           profile:"clearedS", note:"Lower than normal renal dose; follow local protocol." },
+      { drug:"Ceftriaxone",            base:"2 g IV q 24 h",                                              profile:"protein",  note:"Highly protein-bound — not dialysed. No adjustment in any mode." },
+      { drug:"Cefazolin",              base:"2 g IV q 12 h",                                              profile:"clearedS" },
+      { drug:"Aztreonam",              base:"1 – 2 g IV q 12 h",                                          profile:"clearedS" },
+    ],
+  },
+  glyco: {
+    label: "Glycopeptides, aminoglycosides, lipopeptide (TDM essential)",
+    rows: [
+      { drug:"Vancomycin",             base:"LD 25 – 30 mg/kg → 10 – 15 mg/kg q 24 h (or 7.5 – 10 q 12 h); trough 15 – 20 / AUC₂₄ 400 – 600", profile:"middle" },
+      { drug:"Teicoplanin",            base:"LD 400 mg q 12 h × 3 → 400 mg q 24 h; trough 20 – 30", profile:"middle" },
+      { drug:"Gentamicin / Tobramycin",base:"2 – 2.5 mg/kg q 24 – 48 h; trough &lt; 1",             profile:"clearedS", note:"TDM mandatory." },
+      { drug:"Amikacin",               base:"7.5 – 10 mg/kg q 24 – 48 h; trough &lt; 5",             profile:"clearedS", note:"TDM mandatory." },
+      { drug:"Daptomycin",             base:"6 – 8 mg/kg IV q 48 h (10 mg/kg q 48 h if S. aureus bacteraemia / endocarditis)", profile:"protein", note:"Highly protein-bound — minimal CRRT clearance in any mode." },
+      { drug:"Colistin",               base:"LD 9 M IU (300 mg CBA) → 4.5 M IU (150 mg CBA) q 12 h", profile:"clearedS" },
+      { drug:"Polymyxin B",            base:"LD 2.5 mg/kg → 1.25 – 1.5 mg/kg q 12 h",                profile:"fixed",   note:"No renal adjustment in any CRRT mode." },
+    ],
+  },
+  misc: {
+    label: "Fluoroquinolones, oxazolidinones, lincosamides, nitroimidazoles",
+    rows: [
+      { drug:"Ciprofloxacin",          base:"400 mg IV q 12 h",      profile:"clearedS" },
+      { drug:"Levofloxacin",           base:"500 – 750 mg IV q 24 h", profile:"clearedS" },
+      { drug:"Linezolid",              base:"600 mg IV q 12 h",      profile:"fixed",    note:"No adjustment — minor CRRT clearance." },
+      { drug:"Tedizolid",              base:"200 mg IV q 24 h",      profile:"fixed",    note:"No adjustment." },
+      { drug:"Clindamycin",            base:"600 – 900 mg IV q 8 h",  profile:"protein",  note:"Highly protein-bound — no adjustment." },
+      { drug:"Metronidazole",          base:"500 mg IV q 8 h",        profile:"clearedS" },
+      { drug:"TMP-SMX",                base:"TMP 5 mg/kg IV q 8 – 12 h (Pneumocystis); monitor K⁺", profile:"clearedS" },
+    ],
+  },
+  antifungal: {
+    label: "Antifungals &amp; antivirals",
+    rows: [
+      { drug:"Fluconazole",            base:"LD 800 mg → <b>800 mg IV q 24 h</b> (↑ vs normal renal dose — well-cleared by CRRT)", profile:"clearedS" },
+      { drug:"Voriconazole IV",        base:"LD 6 mg/kg × 2 → 4 mg/kg q 12 h. Avoid IV formulation if possible (SBECD accumulation); prefer PO.", profile:"clearedS" },
+      { drug:"Caspofungin",            base:"LD 70 mg → 50 mg IV q 24 h",              profile:"fixed", note:"No adjustment." },
+      { drug:"Micafungin",             base:"100 – 150 mg IV q 24 h",                   profile:"fixed", note:"No adjustment." },
+      { drug:"Anidulafungin",          base:"LD 200 mg → 100 mg IV q 24 h",            profile:"fixed", note:"No adjustment." },
+      { drug:"Liposomal amphotericin B",base:"3 – 5 mg/kg IV q 24 h",                   profile:"fixed", note:"No adjustment." },
+      { drug:"Acyclovir",              base:"5 – 10 mg/kg IV q 24 h (herpes); 10 mg/kg q 12 h (encephalitis / zoster)", profile:"clearedS" },
+      { drug:"Ganciclovir",            base:"2.5 mg/kg IV q 24 h",                      profile:"clearedS" },
+      { drug:"Oseltamivir",            base:"75 mg PO q 24 h (vs q 12 h normal)",      profile:"clearedS" },
+    ],
+  },
+};
+function crrtAdjustmentBadge(profile, modeKey, intKey) {
+  // SCUF: no clearance → every cleared drug should use CrCl dosing
+  if (modeKey === "scuf") {
+    if (profile === "fixed" || profile === "protein") return `<span style="color:var(--ok);font-size:11px;font-weight:700">no change</span>`;
+    return `<span style="color:var(--warn);font-size:11px;font-weight:700">use CrCl dose</span>`;
+  }
+  if (profile === "fixed" || profile === "protein") return `<span style="color:var(--ok);font-size:11px;font-weight:700">no change</span>`;
+
+  const modeF = CRRT_MODE_CTX[modeKey].factor;
+  const intF  = CRRT_INTENSITY_CTX[intKey].factor;
+  // middle-molecule gets a touch less from CVVHD
+  const modeFactor = (profile === "middle" && modeKey === "cvvhd") ? 0.90 : 1.00;
+  const combined = modeF * intF * modeFactor;
+  if (combined >= 1.25) return `<span style="color:var(--danger);font-size:11px;font-weight:700">↑ dose ~25 – 40 %</span>`;
+  if (combined >= 1.10) return `<span style="color:var(--warn);font-size:11px;font-weight:700">↑ dose ~10 – 20 %</span>`;
+  if (combined <= 0.90) return `<span style="color:var(--brand);font-size:11px;font-weight:700">↓ dose or ↑ interval</span>`;
+  return `<span style="color:var(--ok);font-size:11px;font-weight:700">as shown</span>`;
+}
+function renderCrrtAbxTables() {
+  const sel = document.getElementById("crrt-mode");
+  if (!sel) return;
+  const modeKey = sel.value;
+  const intKey  = document.getElementById("crrt-intensity").value;
+
+  // Mode + intensity note card
+  const noteEl = document.getElementById("crrt-note");
+  noteEl.classList.remove("ok","warn","bad");
+  if (modeKey === "scuf") noteEl.classList.add("bad");
+  else if (intKey === "high") noteEl.classList.add("warn");
+  else if (intKey === "low") noteEl.classList.add("warn");
+  else noteEl.classList.add("ok");
+  noteEl.innerHTML = `<b>${CRRT_MODE_CTX[modeKey].label}</b> at <b>${CRRT_INTENSITY_CTX[intKey].label}</b><br><span style="font-weight:500">${CRRT_MODE_CTX[modeKey].note}</span><br><span style="font-weight:500">${CRRT_INTENSITY_CTX[intKey].note}</span>`;
+
+  // Tables
+  const groupKeys = Object.keys(CRRT_ABX);
+  const html = groupKeys.map((gk, idx) => {
+    const g = CRRT_ABX[gk];
+    const rows = g.rows.map(r => `
+      <tr style="border-top:1px solid var(--line)">
+        <td style="padding:5px 6px;vertical-align:top;white-space:nowrap"><b>${r.drug}</b><br>${crrtAdjustmentBadge(r.profile, modeKey, intKey)}</td>
+        <td style="padding:5px 6px;vertical-align:top">${r.base}${r.note ? `<br><span style="color:var(--muted);font-size:11.5px">${r.note}</span>` : ""}</td>
+      </tr>
+    `).join("");
+    return `
+      <details ${idx === 0 ? "open" : ""} style="margin-top:8px">
+        <summary style="cursor:pointer;color:var(--brand);font-weight:600">${g.label}</summary>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;margin-top:6px"><tbody style="line-height:1.4">${rows}</tbody></table>
+      </details>
+    `;
+  }).join("");
+  document.getElementById("crrt-abx-tables").innerHTML = html;
+}
+function bindCrrtAbx() {
+  const m = document.getElementById("crrt-mode"), i = document.getElementById("crrt-intensity");
+  if (!m || !i) return;
+  m.addEventListener("change", renderCrrtAbxTables);
+  i.addEventListener("change", renderCrrtAbxTables);
+  renderCrrtAbxTables();
 }
 
 function runHemo() {
@@ -5154,6 +5253,7 @@ document.addEventListener("DOMContentLoaded", () => {
     bindTabs();
     renderAwarenessBanner();
     bindThrombolysis();
+    bindCrrtAbx();
     bindInfusionControls();
     bindAntibioticControls();
     bindAntidoteControls();

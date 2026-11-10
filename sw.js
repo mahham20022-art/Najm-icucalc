@@ -7,7 +7,7 @@
      ASSETS    = cache-first for icons/CSS/JS/manifest (stable)
      IMAGES    = cache-first with size cap for user-added images
 */
-const VERSION  = "v39"; // app 1.5.15 — CRRT protocol + antibiotic dosing on CRRT (4 drug-class tables)
+const VERSION  = "v40"; // app 1.5.16 — CRRT abx dosing: mode + intensity aware with per-drug badges
 const PRECACHE = `najm-precache-${VERSION}`;
 const RUNTIME  = `najm-runtime-${VERSION}`;
 const ASSETS   = `najm-assets-${VERSION}`;
