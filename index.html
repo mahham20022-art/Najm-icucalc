@@ -58,7 +58,7 @@
       "applicationSubCategory": "MedicalCalculator",
       "operatingSystem": "Any (PWA, iOS, Android, Windows, macOS, Linux)",
       "browserRequirements": "Modern browser with JavaScript",
-      "softwareVersion": "1.5.19",
+      "softwareVersion": "1.5.20",
       "datePublished": "2026-07-25",
       "dateModified": "2026-10-30",
       "inLanguage": "en",
@@ -1259,7 +1259,7 @@
       <h3 id="onbTrustTitle">Before you use it</h3>
       <p><b>For</b> ICU/CCU doctors, pharmacists and nurses who already know these drugs and scores. It does the arithmetic; the clinical decision stays with you.</p>
       <p><b>Not prospectively validated.</b> Decision support only. Check every result against your protocol and the drug label.</p>
-      <p>Version 1.5.19 · last reviewed 10 November 2026 · what you enter stays in this browser.</p>
+      <p>Version 1.5.20 · last reviewed 10 November 2026 · what you enter stays in this browser.</p>
       <button class="onb-link" type="button" id="onbEvidence">Evidence, limits and data handling</button>
     </div>
 
@@ -1378,6 +1378,10 @@
         <button class="tab" type="button" data-tab="scores">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15V9"/><path d="M12 15V6"/><path d="M17 15v-4"/></svg>
           Scores
+        </button>
+        <button class="tab" type="button" data-tab="practice">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="10"/></svg>
+          Practice
         </button>
         <button class="tab" type="button" data-tab="notes">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-9"/><path d="m19 3-6 6h4V3Z"/></svg>
@@ -2027,6 +2031,68 @@
       </div>
     </section>
 
+    <!-- PRACTICE -->
+    <section class="module" id="m-practice">
+      <div class="module-head">
+        <div>
+          <h2>Practice Questions</h2>
+          <p>Case-based MCQs for ICU and emergency medicine — active recall, immediate explanation + source. Progress saved on this device.</p>
+        </div>
+        <span class="pill info" id="pr-progress-badge">0 / 0</span>
+      </div>
+      <div class="cards">
+        <div class="card" id="pr-controls">
+          <h3>Start a session</h3>
+          <div class="grid-in">
+            <div class="field"><label>Topic</label><div class="input"><select id="pr-topic">
+              <option value="all">All topics</option>
+            </select></div></div>
+            <div class="field"><label>Mode</label><div class="input"><select id="pr-mode">
+              <option value="all">All questions</option>
+              <option value="new">New (unseen)</option>
+              <option value="wrong">Review wrong answers</option>
+              <option value="bookmarked">Bookmarked</option>
+            </select></div></div>
+            <div class="field"><label>Session length</label><div class="input"><select id="pr-len">
+              <option value="5">5 questions</option>
+              <option value="10" selected>10 questions</option>
+              <option value="20">20 questions</option>
+              <option value="all">All available</option>
+            </select></div></div>
+          </div>
+          <div class="row"><span class="k">All-time accuracy</span><span class="v" id="pr-accuracy">—</span></div>
+          <div class="row"><span class="k">Total answered</span><span class="v" id="pr-total-answered">0</span></div>
+          <div class="row"><span class="k">Bookmarked</span><span class="v" id="pr-bookmarked">0</span></div>
+          <div class="note-actions" style="margin-top:12px">
+            <button class="btn primary" type="button" id="pr-start">Start</button>
+            <button class="btn" type="button" id="pr-reset">Reset progress</button>
+          </div>
+          <div class="verdict" id="pr-session-end" style="display:none;margin-top:12px"></div>
+          <div class="sub" style="margin-top:10px;font-size:11.5px">⚠️ For educational purposes only. Always correlate with your institution's protocols and the most current evidence.</div>
+        </div>
+
+        <div class="card" id="pr-question-card" style="display:none">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <span class="sub" id="pr-progress" style="margin:0"></span>
+            <button type="button" id="pr-bookmark-btn" class="btn" style="padding:4px 10px;font-size:12px" aria-label="Bookmark">☆</button>
+          </div>
+          <div style="height:4px;background:var(--line);border-radius:2px;overflow:hidden;margin-bottom:10px"><div id="pr-progress-bar" style="height:100%;background:var(--brand);width:0%;transition:width .3s"></div></div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+            <span class="pill info" id="pr-topic-badge" style="font-size:11px"></span>
+            <span class="pill" id="pr-diff-badge" style="font-size:11px"></span>
+          </div>
+          <div id="pr-stem" style="font-size:14.5px;line-height:1.55;margin-bottom:12px"></div>
+          <div id="pr-options" style="display:flex;flex-direction:column;gap:6px"></div>
+          <div id="pr-feedback" style="display:none;margin-top:12px;padding:10px 12px;border-radius:8px;font-size:13.5px;line-height:1.5"></div>
+          <div class="note-actions" style="margin-top:12px">
+            <button class="btn primary" type="button" id="pr-submit" disabled>Submit answer</button>
+            <button class="btn" type="button" id="pr-next" style="display:none">Next question →</button>
+            <button class="btn" type="button" id="pr-quit">Quit session</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- NOTES -->
     <section class="module" id="m-notes">
       <div class="module-head"><div><h2>Shift Notes</h2><p>Scratchpad, stored unencrypted in this browser only. Don’t write names, MRNs, dates of birth or bed numbers: ward computers are often shared.</p></div></div>
@@ -2165,11 +2231,11 @@
             <li>Not a regulated medical device.</li>
           </ul></dd>
           <dt>Version</dt>
-          <dd>1.5.19 · last reviewed 10 November 2026.</dd>
+          <dd>1.5.20 · last reviewed 10 November 2026.</dd>
           <dt>Report a suspected error</dt>
           <dd>Say what you entered, what the app showed and what you expected, with a source if you have one. Leave out patient identifiers.</dd>
         </dl>
-        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.19&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
+        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.20&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
           <span>Report an error · contact@thetract.org</span>
         </a>
@@ -2186,7 +2252,7 @@
         <div class="row"><span class="k">Website</span><span class="v"><a href="https://thetract.org" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">thetract.org</a></span></div>
         <div class="row"><span class="k">LinkedIn</span><span class="v"><a href="https://www.linkedin.com/in/dr-mohamed-najm-aldeen-aa6452135" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">linkedin.com/in/dr-mohamed-najm-aldeen</a></span></div>
         <div class="row"><span class="k">GitHub</span><span class="v"><a href="https://github.com/mahham20022-art" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">@mahham20022-art</a></span></div>
-        <div class="row"><span class="k">Version</span><span class="v">1.5.19</span></div>
+        <div class="row"><span class="k">Version</span><span class="v">1.5.20</span></div>
         <div class="row"><span class="k">Last reviewed</span><span class="v">10 Nov 2026</span></div>
       </div>
 
@@ -2242,6 +2308,10 @@
 
       <div class="card changelog" id="changelog">
         <h3>Changelog</h3>
+        <h4>1.5.20 <span>· 10 November 2026</span></h4>
+        <ul>
+          <li>🆕 <b>Practice tab</b> — case-based MCQ engine for ICU and emergency medicine. <b>30 starter questions</b> (Phase 1) across RSI/Airway, ABG, Sepsis, ARDS, Hemodynamics, Scores, Toxicology, Neurology, Electrolytes. Each question shows a bedside vignette, 4 options, immediate feedback with teaching explanation and a journal reference. Features: topic filter, mode selector (all / new / wrong-only / bookmarked), session length (5/10/20/all), bookmark toggle on every question, overall accuracy %, per-question seen state. Progress persists on the device (no sign-up, nothing leaves).</li>
+        </ul>
         <h4>1.5.19 <span>· 10 November 2026</span></h4>
         <ul>
           <li>Full-app review fixes:</li>
@@ -2421,7 +2491,7 @@
 
   <footer>
     <div class="fine"><strong>Reference aid — not a medical device.</strong> Always verify against institutional protocols and drug labels.</div>
-    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.19 · last reviewed 10 Nov 2026 · Designed by Dr. Mohamed Najm</div>
+    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.20 · last reviewed 10 Nov 2026 · Designed by Dr. Mohamed Najm</div>
   </footer>
 </div>
 
@@ -3938,6 +4008,427 @@ function bindCrrtAbx() {
   renderCrrtAbxTables();
 }
 
+/* ============================================================
+   PRACTICE — case-based MCQs with explanations + sources
+   State: state.practice = { seen: {id: lastAnsweredCorrect bool},
+                             bookmarks: [ids], total: N, correct: N }
+   ============================================================ */
+const QUESTIONS = [
+  // ── RSI / Airway (5) ─────────────────────────────────────────
+  { id:"rsi-01", topic:"RSI / Airway", difficulty:"easy",
+    stem:"A 70 kg patient in septic shock (BP 85/50, HR 120) needs intubation. Which induction agent is most appropriate?",
+    options:["Propofol 2 mg/kg","Etomidate 0.3 mg/kg","Ketamine 1.5 mg/kg","Midazolam 0.3 mg/kg"],
+    correct:2,
+    explanation:"Ketamine preserves haemodynamics (sympathomimetic). Propofol causes profound vasodilation. Etomidate is haemodynamically neutral but causes adrenal suppression (controversial in sepsis). Midazolam alone is unreliable for induction and causes hypotension.",
+    ref:"Jabre P et al. KETASED. Lancet 2009;374:293-300" },
+
+  { id:"rsi-02", topic:"RSI / Airway", difficulty:"medium",
+    stem:"Which of the following is the single best bedside predictor of difficult bag-mask ventilation?",
+    options:["Mallampati III/IV","Male sex","Bearded face without dentures","Neck circumference > 40 cm"],
+    correct:2,
+    explanation:"BONES / MOANS mnemonic. Mask-seal failure in the bearded, edentulous or obese patient is the dominant factor for difficult BMV. Mallampati predicts difficult laryngoscopy, not BMV.",
+    ref:"Langeron O et al. Prediction of difficult mask ventilation. Anesthesiology 2000;92:1229-36" },
+
+  { id:"rsi-03", topic:"RSI / Airway", difficulty:"medium",
+    stem:"A 90 kg patient needs RSI. You chose rocuronium. What is the optimal dose and reversal plan?",
+    options:["0.6 mg/kg; reverse with neostigmine","1.2 mg/kg; reverse with sugammadex 16 mg/kg","0.9 mg/kg; reverse with glycopyrrolate","1.5 mg/kg; no reversal available"],
+    correct:1,
+    explanation:"RSI dose of rocuronium is 1.0-1.2 mg/kg (faster onset, longer duration). Sugammadex 16 mg/kg immediately reverses even deep rocuronium block (can't-intubate-can't-oxygenate rescue). Neostigmine cannot reverse profound block.",
+    ref:"Jahr JS et al. Sugammadex vs neostigmine. Anesth Analg 2015;121:1573-83" },
+
+  { id:"rsi-04", topic:"RSI / Airway", difficulty:"hard",
+    stem:"During intubation attempt for severe metabolic acidosis (pH 7.10, PaCO₂ 20), bag-mask ventilation is briefly interrupted. Minutes later the patient arrests. The most likely mechanism is:",
+    options:["Hypoxaemia","Vagal response to laryngoscopy","Loss of respiratory compensation → acute acidaemia and cardiovascular collapse","Succinylcholine-induced hyperkalaemia"],
+    correct:2,
+    explanation:"In severe metabolic acidosis the patient is hyperventilating to maintain pH. Any apnoea (induction, laryngoscopy) → PaCO₂ rises sharply → pH falls → myocardial depression + arrest. Match prior minute ventilation on the vent, consider awake intubation.",
+    ref:"Weingart SD, Levitan RM. Preoxygenation and prevention of desaturation during emergency airway management. Ann Emerg Med 2012;59:165-75" },
+
+  { id:"rsi-05", topic:"RSI / Airway", difficulty:"easy",
+    stem:"Correct positioning for direct laryngoscopy in an obese patient is:",
+    options:["Flat supine","Trendelenburg","Ramped (ear-to-sternal-notch level)","Reverse Trendelenburg only"],
+    correct:2,
+    explanation:"'Ramped' position — pillows/towels under shoulders, neck and head so that the external auditory meatus aligns horizontally with the sternal notch. Improves glottic view and functional residual capacity (apnoeic oxygenation).",
+    ref:"Collins JS et al. Laryngoscopy and morbid obesity. Obes Surg 2004;14:1171-5" },
+
+  // ── ABG (4) ──────────────────────────────────────────────────
+  { id:"abg-01", topic:"ABG / Acid-Base", difficulty:"medium",
+    stem:"pH 7.22 · PaCO₂ 20 · HCO₃ 8 · Na 140 · Cl 100 · albumin 4. What is the primary disorder and is compensation appropriate?",
+    options:["Metabolic acidosis, under-compensated","Metabolic acidosis with appropriate respiratory compensation","Mixed metabolic acidosis + respiratory alkalosis","Primary respiratory alkalosis"],
+    correct:2,
+    explanation:"HAGMA (AG = 140 − 100 − 8 = 32). Winters' expected PaCO₂ = 1.5 × 8 + 8 ± 2 = 18-22. Measured 20 fits. But Δ-Δ: ΔAG = 32-12 = 20; ΔHCO₃ = 24-8 = 16. Ratio 1.25 → pure HAGMA. However, pH 7.22 with such low PaCO₂ hints at concurrent process; here compensation is adequate but one must still name the pattern — it is a HAGMA with appropriate compensation, so option 2 is best. (Option 3 would need an abnormal Winters.)",
+    ref:"Winters RW. Ann NY Acad Sci 1966;133:211-24" },
+
+  { id:"abg-02", topic:"ABG / Acid-Base", difficulty:"easy",
+    stem:"Causes of a HIGH anion gap metabolic acidosis include all EXCEPT:",
+    options:["Methanol","Diarrhoea","Diabetic ketoacidosis","Salicylate overdose"],
+    correct:1,
+    explanation:"Diarrhoea causes a NORMAL anion gap (hyperchloraemic) acidosis — loss of bicarbonate replaced by chloride. MUDPILES mnemonic covers the HAGMA causes (Methanol, Uraemia, DKA, Propylene glycol, Iron/INH, Lactate, Ethylene glycol, Salicylates).",
+    ref:"Kraut JA, Madias NE. Treatment of acute metabolic acidosis. Nat Rev Nephrol 2012" },
+
+  { id:"abg-03", topic:"ABG / Acid-Base", difficulty:"medium",
+    stem:"An intubated patient on FiO₂ 60 % and PEEP 10 has PaO₂ 75. What is the P/F ratio and ARDS severity (Berlin)?",
+    options:["P/F 125, moderate ARDS","P/F 125, severe ARDS","P/F 450, no ARDS","P/F 1.25, not calculable"],
+    correct:0,
+    explanation:"P/F = 75 / 0.6 = 125. Berlin: mild 200-300 · moderate 100-200 · severe < 100 (all on PEEP ≥ 5). This patient has moderate ARDS.",
+    ref:"ARDS Definition Task Force. Berlin definition. JAMA 2012;307:2526-33" },
+
+  { id:"abg-04", topic:"ABG / Acid-Base", difficulty:"hard",
+    stem:"A 55-year-old presents after methanol ingestion. ABG: pH 7.20, PaCO₂ 22, HCO₃ 10. Na 142, Cl 100, measured osm 320, calculated osm 290. The best initial antidote is:",
+    options:["Ethanol infusion","Fomepizole 15 mg/kg IV","Pyridoxine 70 mg/kg","Methylene blue"],
+    correct:1,
+    explanation:"HAGMA (AG 32) + osmolal gap (320 − 290 = 30) + consistent history = methanol. Fomepizole 15 mg/kg IV load → 10 mg/kg q12h × 4, then 15 mg/kg q12h. Add folate 50 mg q6h. HD if severe (pH < 7.15, level > 50 mg/dL, visual symptoms). Ethanol is an older alternative; fomepizole is first-line (no CNS depression, no level monitoring).",
+    ref:"Kraut JA, Mullins ME. Toxic alcohols. NEJM 2018;378:270-80" },
+
+  // ── Sepsis (4) ───────────────────────────────────────────────
+  { id:"sep-01", topic:"Sepsis", difficulty:"easy",
+    stem:"Per the Surviving Sepsis Campaign 2021, how quickly should broad-spectrum antibiotics be given in septic shock?",
+    options:["Within 1 hour of recognition","Within 3 hours","Within 6 hours","After cultures only"],
+    correct:0,
+    explanation:"Strong recommendation (SSC 2021): antibiotics within 1 hour of recognition in septic shock and probable sepsis. Every hour of delay in septic shock is associated with ~ 7.6 % increase in mortality (Kumar 2006).",
+    ref:"Evans L et al. Surviving Sepsis Campaign Guidelines 2021. Crit Care Med 2021;49:e1063-e1143" },
+
+  { id:"sep-02", topic:"Sepsis", difficulty:"medium",
+    stem:"A 70 kg patient in septic shock has lactate 6, MAP 55 on 1 L crystalloid. Next best step?",
+    options:["Start vasopressin 0.03 U/min","Start noradrenaline peripheral, titrate to MAP ≥ 65; continue crystalloid to 30 mL/kg total","Start hydrocortisone 200 mg IV","Give 500 mL albumin bolus"],
+    correct:1,
+    explanation:"SSC 2021: give 30 mL/kg crystalloid in the first 3 hours (= 2.1 L for this patient) AND start noradrenaline early if MAP < 65 after initial fluid — do not wait for the full 30 mL/kg. Noradrenaline can be given peripherally short-term through a large IV. Vasopressin is ADD-on when noradrenaline > 0.25-0.5 μg/kg/min.",
+    ref:"Evans L et al. SSC 2021. Crit Care Med 2021" },
+
+  { id:"sep-03", topic:"Sepsis", difficulty:"medium",
+    stem:"The qSOFA criteria include all EXCEPT:",
+    options:["Respiratory rate ≥ 22/min","Altered mental status","SBP ≤ 100 mmHg","Lactate > 2 mmol/L"],
+    correct:3,
+    explanation:"qSOFA is a BEDSIDE screen: RR ≥ 22, altered mental status, SBP ≤ 100. Lactate is part of the SSC bundle but NOT qSOFA. Score ≥ 2 suggests higher in-hospital mortality from sepsis.",
+    ref:"Singer M et al. Sepsis-3. JAMA 2016;315:801-10" },
+
+  { id:"sep-04", topic:"Sepsis", difficulty:"hard",
+    stem:"A septic-shock patient remains on noradrenaline 0.35 μg/kg/min with MAP 62 after full resuscitation. What has the clearest evidence for mortality benefit at this point?",
+    options:["Add hydrocortisone 200 mg/day","Start vasopressin 0.03 U/min","Switch to angiotensin II","Start high-dose vitamin C + thiamine"],
+    correct:0,
+    explanation:"ADRENAL (2018) and APROCCHSS (2018) support hydrocortisone in refractory septic shock on noradrenaline > 0.25 μg/kg/min — faster shock reversal, APROCCHSS showed mortality benefit. Vasopressin reduces catecholamine load (VAAST 2008) but no mortality benefit. Angiotensin II (ATHOS-3) raises MAP without mortality benefit. Vit C bundle (VICTAS, LOVIT) did NOT confirm benefit.",
+    ref:"Annane D et al. APROCCHSS. NEJM 2018;378:809-18" },
+
+  // ── ARDS (4) ─────────────────────────────────────────────────
+  { id:"ards-01", topic:"ARDS", difficulty:"easy",
+    stem:"Which intervention has shown mortality benefit in severe ARDS (P/F < 150)?",
+    options:["Inhaled nitric oxide","Prone positioning ≥ 16 h/day","HFOV","High-dose steroids"],
+    correct:1,
+    explanation:"PROSEVA (NEJM 2013): 28-day mortality 16 % vs 32.8 %; NNT 6. iNO improves oxygenation but no mortality benefit. HFOV harmful (OSCILLATE). Steroids (DEXA-ARDS, RECOVERY) help moderate-to-severe ARDS when started within 14 days.",
+    ref:"Guérin C et al. PROSEVA. NEJM 2013;368:2159-68" },
+
+  { id:"ards-02", topic:"ARDS", difficulty:"easy",
+    stem:"A 70 kg (PBW) ARDS patient needs tidal volume set. What is the target range?",
+    options:["4-8 mL/kg PBW aiming for 6","4-8 mL/kg actual weight aiming for 6","8-10 mL/kg PBW","Any that keeps SpO₂ > 92 %"],
+    correct:0,
+    explanation:"ARDSnet lung-protective: 6 mL/kg PBW (range 4-8) + plateau ≤ 30 + permissive hypercapnia pH ≥ 7.20. For 70 kg PBW that's 420 mL (range 280-560). ALWAYS use predicted (not actual) body weight — lung size scales with height, not fat.",
+    ref:"ARDS Network. NEJM 2000;342:1301-8" },
+
+  { id:"ards-03", topic:"ARDS", difficulty:"medium",
+    stem:"Which single ventilator parameter has the strongest association with ARDS mortality (Amato 2015)?",
+    options:["PEEP level","Tidal volume","Driving pressure (Pplat − PEEP)","Respiratory rate"],
+    correct:2,
+    explanation:"Amato MBP et al. NEJM 2015: driving pressure was the ventilator variable most strongly associated with survival (even more so than TV or Pplat alone). Target driving pressure < 15 cmH₂O.",
+    ref:"Amato MBP et al. NEJM 2015;372:747-55" },
+
+  { id:"ards-04", topic:"ARDS", difficulty:"hard",
+    stem:"A severe ARDS patient has P/F 60 on FiO₂ 100 % + PEEP 18 × 4 hours, pH 7.22, PaCO₂ 65. Which criterion best triggers VV-ECMO referral (EOLIA)?",
+    options:["P/F < 150","P/F < 50 for 3 h or P/F < 80 for 6 h on FiO₂ ≥ 0.8","Any P/F < 100 regardless of settings","Only after 7 days of mechanical ventilation"],
+    correct:1,
+    explanation:"EOLIA (NEJM 2018): referral when P/F < 50 for ≥ 3 h on FiO₂ ≥ 0.8, OR P/F < 80 for ≥ 6 h on FiO₂ ≥ 0.8, OR pH < 7.25 + PaCO₂ ≥ 60 for ≥ 6 h with RR 35 and Pplat ≤ 32. Refer EARLY (< 7 days of MV).",
+    ref:"Combes A et al. EOLIA. NEJM 2018;378:1965-75" },
+
+  // ── Hemodynamics (3) ─────────────────────────────────────────
+  { id:"hd-01", topic:"Hemodynamics", difficulty:"easy",
+    stem:"SBP 90, DBP 60. Calculate the MAP:",
+    options:["60","70","75","80"],
+    correct:1,
+    explanation:"MAP ≈ DBP + (SBP − DBP)/3 = 60 + 30/3 = 70. Alternative: (SBP + 2×DBP)/3 = (90 + 120)/3 = 70.",
+    ref:"Standard arterial pressure physiology" },
+
+  { id:"hd-02", topic:"Hemodynamics", difficulty:"medium",
+    stem:"Adult traumatic brain injury: what is the TARGET cerebral perfusion pressure (CPP)?",
+    options:["40-50 mmHg","50-60","60-70","80-100"],
+    correct:2,
+    explanation:"Brain Trauma Foundation 4th ed: CPP target 60-70 mmHg (Level IIB). CPP < 50 risks ischaemia; > 90 risks ARDS and brain oedema. CPP = MAP − ICP. Treat ↓ CPP by ↑ MAP (vasopressor) or ↓ ICP.",
+    ref:"Brain Trauma Foundation Guidelines 2017" },
+
+  { id:"hd-03", topic:"Hemodynamics", difficulty:"medium",
+    stem:"The HR / SBP ratio (shock index) > 1.0 suggests:",
+    options:["Normal volume status","Occult hypovolaemia / compensated shock","Sepsis only","Cardiac tamponade only"],
+    correct:1,
+    explanation:"Normal SI 0.5-0.7. SI > 0.9-1.0 is an early marker of circulatory compromise — often before SBP falls. Modified SI = HR/MAP; > 1.3 is sensitive for occult shock in trauma and sepsis.",
+    ref:"Allgöwer M, Buri C. Schockindex. Dtsch Med Wochenschr 1967" },
+
+  // ── Scores (3) ───────────────────────────────────────────────
+  { id:"sc-01", topic:"Scores", difficulty:"easy",
+    stem:"A patient with CHA₂DS₂-VASc = 3 and HAS-BLED = 2. Best management of atrial fibrillation?",
+    options:["Aspirin alone","No antithrombotic","Oral anticoagulation (DOAC preferred)","Dual antiplatelet"],
+    correct:2,
+    explanation:"CHA₂DS₂-VASc ≥ 2 in men (≥ 3 in women) → oral anticoagulation recommended (ESC 2020). DOAC preferred over warfarin in non-valvular AF (RE-LY, ROCKET, ARISTOTLE, ENGAGE). HAS-BLED 2 is modifiable, not a contraindication.",
+    ref:"Hindricks G et al. 2020 ESC AF Guidelines. Eur Heart J 2021" },
+
+  { id:"sc-02", topic:"Scores", difficulty:"medium",
+    stem:"A 72-year-old presents with chest pain. HEART score components. Which component carries the HEAVIEST weight?",
+    options:["History","ECG","Age","Troponin and other components are equally weighted 0-2 each"],
+    correct:3,
+    explanation:"HEART = History, ECG, Age, Risk factors, Troponin — each scored 0, 1 or 2 (max 10). Score ≤ 3 → low risk (~ 1.7 % 6-wk MACE) · 4-6 moderate · ≥ 7 high. No single component dominates.",
+    ref:"Six AJ et al. HEART score. Neth Heart J 2008;16:191-6" },
+
+  { id:"sc-03", topic:"Scores", difficulty:"medium",
+    stem:"CURB-65 score of 3 in community-acquired pneumonia suggests:",
+    options:["Outpatient treatment","Short hospital admission","Severe pneumonia — consider ICU","Very mild, no antibiotics needed"],
+    correct:2,
+    explanation:"CURB-65: 0-1 outpatient (mortality < 3 %), 2 short inpatient (~ 9 %), ≥ 3 severe (~ 22 %) — admit, consider ICU. Add clinical judgement — IDSA/ATS also use CRB-65 and minor criteria for ICU.",
+    ref:"Lim WS et al. CURB-65. Thorax 2003;58:377-82" },
+
+  // ── Toxicology / Antidotes (3) ───────────────────────────────
+  { id:"tox-01", topic:"Toxicology", difficulty:"easy",
+    stem:"The antidote for acetaminophen (paracetamol) overdose is:",
+    options:["Flumazenil","N-acetylcysteine","Fomepizole","Naloxone"],
+    correct:1,
+    explanation:"N-acetylcysteine (NAC) replenishes glutathione and prevents hepatic injury from NAPQI. Give within 8-10 h ideally; still effective beyond 24 h in massive overdose or late presentation. IV regimen: 150 mg/kg over 60 min → 50 mg/kg over 4 h → 100 mg/kg over 16 h.",
+    ref:"Prescott LF. NAC for paracetamol poisoning. BMJ 1979;2:1097-100" },
+
+  { id:"tox-02", topic:"Toxicology", difficulty:"medium",
+    stem:"A patient with calcium-channel-blocker overdose has refractory shock despite calcium, glucagon, and high-dose insulin + dextrose. Next step?",
+    options:["Lipid emulsion 20 % 1.5 mL/kg bolus then 0.25 mL/kg/min","Methylene blue","Haemodialysis","Vasopressin only"],
+    correct:0,
+    explanation:"Intravenous lipid emulsion (ILE) is recommended for severe lipophilic drug toxicity refractory to standard measures: CCB, local anaesthetic, TCA, bupropion. Dose: 1.5 mL/kg of 20 % bolus → 0.25 mL/kg/min for 30-60 min. Also consider VA-ECMO.",
+    ref:"Gosselin S et al. Evidence-based recommendations on ILE therapy. Clin Toxicol 2016" },
+
+  { id:"tox-03", topic:"Toxicology", difficulty:"hard",
+    stem:"A patient on heparin develops major bleeding. Which agent FULLY reverses UFH?",
+    options:["Vitamin K 10 mg IV","Protamine sulphate 1 mg per 100 units heparin given in past 2-3 h","Andexanet alpha","Idarucizumab"],
+    correct:1,
+    explanation:"Protamine fully reverses UFH (1 mg per 100 units given in prior 2-3 h; max ~ 50 mg). Partial reversal of LMWH (~ 60 %). Vitamin K reverses warfarin. Idarucizumab reverses dabigatran. Andexanet reverses apixaban/rivaroxaban.",
+    ref:"Hirsh J et al. ACCP Guidelines. Chest 2008;133:141S-59S" },
+
+  // ── Neuro (2) ────────────────────────────────────────────────
+  { id:"neu-01", topic:"Neurology", difficulty:"medium",
+    stem:"A patient has a convulsive seizure that has lasted 7 minutes. First-line pharmacotherapy is:",
+    options:["Phenytoin 20 mg/kg IV","Levetiracetam 60 mg/kg IV","Benzodiazepine (lorazepam 0.1 mg/kg IV or midazolam 10 mg IM)","Propofol infusion"],
+    correct:2,
+    explanation:"Convulsive status epilepticus (≥ 5 min): BENZODIAZEPINE first. IV access: lorazepam 0.1 mg/kg (max 4 mg). No IV: midazolam 10 mg IM (RAMPART trial). Under-dosing is the commonest error. Second-line (levetiracetam/fosphenytoin/valproate) if seizure continues after 20 min.",
+    ref:"Glauser T et al. AES Guideline. Epilepsy Curr 2016;16:48-61" },
+
+  { id:"neu-02", topic:"Neurology", difficulty:"medium",
+    stem:"Which of the following is NOT a component of the ICH Score?",
+    options:["GCS","ICH volume","Intraventricular haemorrhage","Serum glucose"],
+    correct:3,
+    explanation:"ICH Score (Hemphill 2001): GCS (0/1/2), volume ≥ 30 cm³ (0/1), IVH (0/1), infratentorial origin (0/1), age ≥ 80 (0/1). 30-day mortality rises with score: 0→0%, 1→13%, 2→26%, 3→72%, 4→97%, 5-6→100%.",
+    ref:"Hemphill JC et al. ICH Score. Stroke 2001;32:891-7" },
+
+  // ── Electrolytes (2) ─────────────────────────────────────────
+  { id:"el-01", topic:"Electrolytes", difficulty:"easy",
+    stem:"A patient has K⁺ 7.0 with ECG showing peaked T waves and widened QRS. First action is:",
+    options:["Insulin + dextrose","IV calcium gluconate 10 % 10-30 mL","Salbutamol nebuliser","Furosemide IV"],
+    correct:1,
+    explanation:"CARDIAC MEMBRANE STABILISATION FIRST: Calcium gluconate 10 % 30 mL (or Ca chloride 10 mL via central) over 10 min — onset 1-3 min. Does not lower K⁺ but protects the heart. Then SHIFT (insulin + dextrose, salbutamol) and REMOVE (furosemide, SZC/patiromer, dialysis).",
+    ref:"Kraft MD et al. Treatment of electrolyte disorders. AJHP 2005" },
+
+  { id:"el-02", topic:"Electrolytes", difficulty:"hard",
+    stem:"A chronic alcoholic has serum Na 112 with severe lethargy and seizures. Over what rate should sodium be corrected in the first 24 hours to minimise osmotic demyelination?",
+    options:["Correct to 135 in 6 h","4-6 mEq/L rise in first 4-6 h, total ≤ 8 mEq/L in 24 h","15 mEq/L in 24 h","Rapid 3% saline bolus until Na ≥ 130"],
+    correct:1,
+    explanation:"Severe symptomatic hyponatraemia: give 150 mL 3 % NaCl bolus × 2-3 to achieve a 4-6 mEq/L rise (resolves severe symptoms) within hours, then limit total rise to ≤ 8 mEq/L per 24 h (≤ 6 in high-risk — alcoholic, malnourished, liver disease). Over-rapid correction → osmotic demyelination.",
+    ref:"Sterns RH. Disorders of plasma sodium. NEJM 2015;372:55-65" },
+];
+
+/* ── Practice engine ──────────────────────────────────────────── */
+function initPracticeState() {
+  state.practice = state.practice || { seen:{}, bookmarks:[], total:0, correct:0 };
+  if (!state.practice.seen) state.practice.seen = {};
+  if (!state.practice.bookmarks) state.practice.bookmarks = [];
+  if (typeof state.practice.total !== "number") state.practice.total = 0;
+  if (typeof state.practice.correct !== "number") state.practice.correct = 0;
+}
+function practiceTopics() {
+  return Array.from(new Set(QUESTIONS.map(q => q.topic))).sort();
+}
+function renderPracticeStats() {
+  initPracticeState();
+  const total = state.practice.total;
+  const correct = state.practice.correct;
+  const pct = total > 0 ? Math.round((correct/total)*100) : 0;
+  document.getElementById("pr-accuracy").textContent = total > 0 ? `${pct} % (${correct}/${total})` : "—";
+  document.getElementById("pr-total-answered").textContent = Object.keys(state.practice.seen).length;
+  document.getElementById("pr-bookmarked").textContent = state.practice.bookmarks.length;
+  document.getElementById("pr-progress-badge").textContent = `${Object.keys(state.practice.seen).length} / ${QUESTIONS.length}`;
+}
+function populatePracticeTopics() {
+  const sel = document.getElementById("pr-topic");
+  if (!sel) return;
+  const existing = new Set(Array.from(sel.options).map(o => o.value));
+  practiceTopics().forEach(t => {
+    if (!existing.has(t)) {
+      const o = document.createElement("option");
+      o.value = t; o.textContent = t;
+      sel.appendChild(o);
+    }
+  });
+}
+// Session state (not persisted — single run)
+let PR_SESSION = null;
+function filterQuestions(topic, mode) {
+  let pool = QUESTIONS.slice();
+  if (topic && topic !== "all") pool = pool.filter(q => q.topic === topic);
+  if (mode === "new") pool = pool.filter(q => !state.practice.seen[q.id]);
+  else if (mode === "wrong") pool = pool.filter(q => state.practice.seen[q.id] === false);
+  else if (mode === "bookmarked") pool = pool.filter(q => state.practice.bookmarks.includes(q.id));
+  return pool;
+}
+function shuffle(a) {
+  const arr = a.slice();
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+function startPracticeSession() {
+  initPracticeState();
+  const topic = document.getElementById("pr-topic").value;
+  const mode  = document.getElementById("pr-mode").value;
+  const lenVal = document.getElementById("pr-len").value;
+  const pool = filterQuestions(topic, mode);
+  if (!pool.length) {
+    const end = document.getElementById("pr-session-end");
+    end.className = "verdict warn"; end.style.display = "block";
+    end.textContent = "No questions match that filter. Try different options.";
+    return;
+  }
+  const len = lenVal === "all" ? pool.length : Math.min(Number(lenVal), pool.length);
+  PR_SESSION = { queue: shuffle(pool).slice(0, len), index: 0, correct: 0, wrong: 0, picked: null, answered: false };
+  document.getElementById("pr-controls").style.display = "none";
+  document.getElementById("pr-question-card").style.display = "block";
+  document.getElementById("pr-session-end").style.display = "none";
+  renderCurrentQuestion();
+}
+function renderCurrentQuestion() {
+  if (!PR_SESSION) return;
+  const { queue, index } = PR_SESSION;
+  const q = queue[index];
+  PR_SESSION.picked = null; PR_SESSION.answered = false;
+  document.getElementById("pr-progress").textContent = `Question ${index + 1} of ${queue.length}`;
+  document.getElementById("pr-progress-bar").style.width = `${((index)/queue.length)*100}%`;
+  document.getElementById("pr-topic-badge").textContent = q.topic;
+  const diffEl = document.getElementById("pr-diff-badge");
+  diffEl.textContent = q.difficulty;
+  diffEl.className = "pill " + (q.difficulty === "easy" ? "ok" : q.difficulty === "medium" ? "warn" : "bad");
+  document.getElementById("pr-stem").textContent = q.stem;
+  const bm = document.getElementById("pr-bookmark-btn");
+  bm.textContent = state.practice.bookmarks.includes(q.id) ? "★" : "☆";
+  bm.onclick = () => {
+    const i = state.practice.bookmarks.indexOf(q.id);
+    if (i >= 0) state.practice.bookmarks.splice(i, 1);
+    else state.practice.bookmarks.push(q.id);
+    bm.textContent = state.practice.bookmarks.includes(q.id) ? "★" : "☆";
+    saveState(); renderPracticeStats();
+  };
+  const opts = document.getElementById("pr-options");
+  opts.innerHTML = "";
+  q.options.forEach((text, i) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "btn";
+    btn.style.cssText = "text-align:left;padding:10px 12px;font-size:13.5px;line-height:1.4;white-space:normal;justify-content:flex-start;background:transparent;border:1px solid var(--line);color:var(--text)";
+    btn.textContent = String.fromCharCode(65 + i) + ". " + text;
+    btn.onclick = () => {
+      if (PR_SESSION.answered) return;
+      PR_SESSION.picked = i;
+      Array.from(opts.children).forEach(b => b.style.borderColor = "var(--line)");
+      btn.style.borderColor = "var(--brand)";
+      btn.style.background = "rgba(34,211,238,.08)";
+      document.getElementById("pr-submit").disabled = false;
+    };
+    opts.appendChild(btn);
+  });
+  document.getElementById("pr-feedback").style.display = "none";
+  document.getElementById("pr-submit").style.display = "";
+  document.getElementById("pr-submit").disabled = true;
+  document.getElementById("pr-next").style.display = "none";
+}
+function submitPracticeAnswer() {
+  if (!PR_SESSION || PR_SESSION.answered || PR_SESSION.picked == null) return;
+  const q = PR_SESSION.queue[PR_SESSION.index];
+  PR_SESSION.answered = true;
+  const isCorrect = PR_SESSION.picked === q.correct;
+  if (isCorrect) PR_SESSION.correct++;
+  else PR_SESSION.wrong++;
+  // Persistent stats — one "attempt" counted per question, result overwritable
+  initPracticeState();
+  const prior = q.id in state.practice.seen ? state.practice.seen[q.id] : null;
+  if (prior === null) state.practice.total++;
+  // Adjust correct-count delta
+  const priorCredit = prior === true ? 1 : 0;
+  const nowCredit   = isCorrect ? 1 : 0;
+  state.practice.correct += (nowCredit - priorCredit);
+  state.practice.seen[q.id] = isCorrect;
+  saveState();
+  renderPracticeStats();
+  // Colour options
+  const opts = document.getElementById("pr-options");
+  Array.from(opts.children).forEach((b, i) => {
+    b.disabled = true;
+    if (i === q.correct) { b.style.background = "rgba(52,211,153,.15)"; b.style.borderColor = "var(--ok)"; }
+    else if (i === PR_SESSION.picked) { b.style.background = "rgba(248,113,113,.15)"; b.style.borderColor = "var(--danger)"; }
+  });
+  // Feedback
+  const fb = document.getElementById("pr-feedback");
+  fb.style.display = "block";
+  fb.style.background = isCorrect ? "rgba(52,211,153,.10)" : "rgba(248,113,113,.10)";
+  fb.style.borderLeft = "3px solid " + (isCorrect ? "var(--ok)" : "var(--danger)");
+  fb.innerHTML = `<b style="color:${isCorrect ? "var(--ok)" : "var(--danger)"}">${isCorrect ? "✓ Correct" : "✗ Incorrect"}</b><br><br>${q.explanation}<br><br><span style="color:var(--muted);font-size:12px">📚 ${q.ref}</span>`;
+  document.getElementById("pr-submit").style.display = "none";
+  document.getElementById("pr-next").style.display = "";
+  document.getElementById("pr-progress-bar").style.width = `${((PR_SESSION.index+1)/PR_SESSION.queue.length)*100}%`;
+}
+function nextPracticeQuestion() {
+  if (!PR_SESSION) return;
+  PR_SESSION.index++;
+  if (PR_SESSION.index >= PR_SESSION.queue.length) return endPracticeSession();
+  renderCurrentQuestion();
+}
+function endPracticeSession() {
+  if (!PR_SESSION) return;
+  const n = PR_SESSION.queue.length, c = PR_SESSION.correct, pct = Math.round((c/n)*100);
+  document.getElementById("pr-question-card").style.display = "none";
+  document.getElementById("pr-controls").style.display = "block";
+  const end = document.getElementById("pr-session-end");
+  const level = pct >= 80 ? "ok" : pct >= 60 ? "warn" : "bad";
+  end.className = "verdict " + level;
+  end.style.display = "block";
+  end.innerHTML = `<b>Session complete</b> — ${c} / ${n} correct (${pct} %). ${pct >= 80 ? "Excellent." : pct >= 60 ? "Keep practising." : "Review the explanations and try again."}`;
+  PR_SESSION = null;
+  renderPracticeStats();
+}
+function quitPracticeSession() {
+  if (!PR_SESSION) return;
+  if (!confirm("End this session? Your overall progress is already saved.")) return;
+  PR_SESSION = null;
+  document.getElementById("pr-question-card").style.display = "none";
+  document.getElementById("pr-controls").style.display = "block";
+  document.getElementById("pr-session-end").style.display = "none";
+}
+function resetPracticeProgress() {
+  if (!confirm("Delete all practice progress (seen, correct, bookmarks)? This cannot be undone.")) return;
+  state.practice = { seen:{}, bookmarks:[], total:0, correct:0 };
+  saveState();
+  renderPracticeStats();
+}
+function bindPractice() {
+  const root = document.getElementById("m-practice");
+  if (!root) return;
+  populatePracticeTopics();
+  initPracticeState();
+  renderPracticeStats();
+  document.getElementById("pr-start").addEventListener("click", startPracticeSession);
+  document.getElementById("pr-reset").addEventListener("click", resetPracticeProgress);
+  document.getElementById("pr-submit").addEventListener("click", submitPracticeAnswer);
+  document.getElementById("pr-next").addEventListener("click", nextPracticeQuestion);
+  document.getElementById("pr-quit").addEventListener("click", quitPracticeSession);
+}
+
 function runHemo() {
   // Keep thrombolysis dose text in sync with current weight (no checklist re-render)
   const doseEl = document.getElementById("tx-doses");
@@ -5309,6 +5800,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderAwarenessBanner();
     bindThrombolysis();
     bindCrrtAbx();
+    bindPractice();
     bindInfusionControls();
     bindAntibioticControls();
     bindAntidoteControls();

@@ -7,7 +7,7 @@
      ASSETS    = cache-first for icons/CSS/JS/manifest (stable)
      IMAGES    = cache-first with size cap for user-added images
 */
-const VERSION  = "v43"; // app 1.5.19 — Full-app review fixes: per-patient thromb, score tally, tab scroll
+const VERSION  = "v44"; // app 1.5.20 — Practice tab: MCQ engine + 30 starter questions (Phase 1)
 const PRECACHE = `najm-precache-${VERSION}`;
 const RUNTIME  = `najm-runtime-${VERSION}`;
 const ASSETS   = `najm-assets-${VERSION}`;
