@@ -7,7 +7,7 @@
      ASSETS    = cache-first for icons/CSS/JS/manifest (stable)
      IMAGES    = cache-first with size cap for user-added images
 */
-const VERSION  = "v45"; // app 1.5.21 — Practice Phase 2: 107 questions, 23 topics, expanded Why/Why-not/Pearl/Pitfall
+const VERSION  = "v46"; // app 1.5.22 — Practice tab: pulsing purple-pink highlight with NEW badge
 const PRECACHE = `najm-precache-${VERSION}`;
 const RUNTIME  = `najm-runtime-${VERSION}`;
 const ASSETS   = `najm-assets-${VERSION}`;
