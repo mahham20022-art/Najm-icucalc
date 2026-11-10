@@ -58,7 +58,7 @@
       "applicationSubCategory": "MedicalCalculator",
       "operatingSystem": "Any (PWA, iOS, Android, Windows, macOS, Linux)",
       "browserRequirements": "Modern browser with JavaScript",
-      "softwareVersion": "1.5.16",
+      "softwareVersion": "1.5.17",
       "datePublished": "2026-07-25",
       "dateModified": "2026-10-30",
       "inLanguage": "en",
@@ -1259,7 +1259,7 @@
       <h3 id="onbTrustTitle">Before you use it</h3>
       <p><b>For</b> ICU/CCU doctors, pharmacists and nurses who already know these drugs and scores. It does the arithmetic; the clinical decision stays with you.</p>
       <p><b>Not prospectively validated.</b> Decision support only. Check every result against your protocol and the drug label.</p>
-      <p>Version 1.5.16 · last reviewed 10 November 2026 · what you enter stays in this browser.</p>
+      <p>Version 1.5.17 · last reviewed 10 November 2026 · what you enter stays in this browser.</p>
       <button class="onb-link" type="button" id="onbEvidence">Evidence, limits and data handling</button>
     </div>
 
@@ -2165,11 +2165,11 @@
             <li>Not a regulated medical device.</li>
           </ul></dd>
           <dt>Version</dt>
-          <dd>1.5.16 · last reviewed 10 November 2026.</dd>
+          <dd>1.5.17 · last reviewed 10 November 2026.</dd>
           <dt>Report a suspected error</dt>
           <dd>Say what you entered, what the app showed and what you expected, with a source if you have one. Leave out patient identifiers.</dd>
         </dl>
-        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.16&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
+        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.17&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
           <span>Report an error · contact@thetract.org</span>
         </a>
@@ -2186,7 +2186,7 @@
         <div class="row"><span class="k">Website</span><span class="v"><a href="https://thetract.org" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">thetract.org</a></span></div>
         <div class="row"><span class="k">LinkedIn</span><span class="v"><a href="https://www.linkedin.com/in/dr-mohamed-najm-aldeen-aa6452135" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">linkedin.com/in/dr-mohamed-najm-aldeen</a></span></div>
         <div class="row"><span class="k">GitHub</span><span class="v"><a href="https://github.com/mahham20022-art" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">@mahham20022-art</a></span></div>
-        <div class="row"><span class="k">Version</span><span class="v">1.5.16</span></div>
+        <div class="row"><span class="k">Version</span><span class="v">1.5.17</span></div>
         <div class="row"><span class="k">Last reviewed</span><span class="v">10 Nov 2026</span></div>
       </div>
 
@@ -2242,6 +2242,11 @@
 
       <div class="card changelog" id="changelog">
         <h3>Changelog</h3>
+        <h4>1.5.17 <span>· 10 November 2026</span></h4>
+        <ul>
+          <li>Antibiotics tab: added <b>Amphotericin B</b> in all three formulations — liposomal (AmBisome), lipid complex (ABLC/Abelcet), and conventional deoxycholate — with indication-specific doses (incl. 6 mg/kg mucor and 10 mg/kg CNS cryptococcal), premedication reminder for infusion reactions, and the warning to prefer liposomal and avoid conventional in renal dysfunction. Also added <b>Anidulafungin</b> for completeness of the echinocandin class.</li>
+          <li>CRRT antibiotic dosing table: amphotericin B now listed in the three lipid/non-lipid formulations too; all "no change" in any CRRT mode (not cleared by convection or diffusion).</li>
+        </ul>
         <h4>1.5.16 <span>· 10 November 2026</span></h4>
         <ul>
           <li>Antibiotic Dosing on CRRT is now <b>mode-aware + intensity-aware</b>. Two dropdowns at the top of the card (Mode: SCUF / CVVH / CVVHD / CVVHDF · Intensity: Low 20 / Standard 25-30 / High 35-45 mL/kg/hr). Each drug row carries a coloured badge that updates live: "as shown", "↑ dose ~10 – 20 %", "↑ dose ~25 – 40 %", "↓ dose or ↑ interval", or "use CrCl dose" (SCUF). Highly protein-bound or minimally-cleared drugs (ceftriaxone, daptomycin, linezolid, echinocandins, polymyxin B, clindamycin) are tagged "no change" in every mode.</li>
@@ -2402,7 +2407,7 @@
 
   <footer>
     <div class="fine"><strong>Reference aid — not a medical device.</strong> Always verify against institutional protocols and drug labels.</div>
-    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.16 · last reviewed 10 Nov 2026 · Designed by Dr. Mohamed Najm</div>
+    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.17 · last reviewed 10 Nov 2026 · Designed by Dr. Mohamed Najm</div>
   </footer>
 </div>
 
@@ -3048,6 +3053,25 @@ const ABX = [
     std: "100 mg IV q24h (150 mg esophageal)",
     crcl: [[0, 1e9, "No renal adjustment"]],
     ind: "Candidemia, invasive candidiasis" },
+  { id: "anidula", name: "Anidulafungin", cls: "Antifungal (echinocandin)",
+    std: "Load 200 mg, then 100 mg IV q24h",
+    crcl: [[0, 1e9, "No renal adjustment"]],
+    ind: "Candidemia, invasive candidiasis" },
+  { id: "ampho-l", name: "Amphotericin B — liposomal (AmBisome)", cls: "Antifungal (polyene)",
+    std: "3–5 mg/kg IV q24h (6 mg/kg mucor; 10 mg/kg CNS)",
+    crcl: [[0, 1e9, "No dose change for CRRT or renal function"]],
+    ind: "Invasive aspergillosis, mucor, cryptococcal meningitis, visceral leishmaniasis",
+    notes: "Premedicate: paracetamol + diphenhydramine ± hydrocortisone 25 mg if rigors. Infuse over 2 h. Preferred lipid form (less nephrotoxic)." },
+  { id: "ampho-c", name: "Amphotericin B — deoxycholate (conventional)", cls: "Antifungal (polyene)",
+    std: "0.5–1 mg/kg IV q24h (test dose 1 mg first)",
+    crcl: [[50, 1e9, "0.5–1 mg/kg q24h"], [0, 50, "Switch to liposomal — avoid in renal dysfunction"]],
+    ind: "Last-line only when lipid formulation unavailable",
+    notes: "HIGHLY nephrotoxic (80 % develop AKI). K⁺, Mg²⁺ wasting. Infusion rxns common. Prefer liposomal whenever available." },
+  { id: "ampho-abcd", name: "Amphotericin B — lipid complex (ABLC / Abelcet)", cls: "Antifungal (polyene)",
+    std: "5 mg/kg IV q24h over 2 h",
+    crcl: [[0, 1e9, "No renal adjustment; still less nephrotoxic than conventional"]],
+    ind: "Invasive mycoses intolerant / refractory to conventional ampho B",
+    notes: "Intermediate option between conventional and liposomal; usually liposomal preferred." },
   { id: "acyclovir", name: "Acyclovir", cls: "Antiviral",
     std: "10 mg/kg IV q8h",
     crcl: [[50, 1e9, "10 mg/kg q8h"], [25, 50, "10 mg/kg q12h"], [10, 25, "10 mg/kg q24h"], [0, 10, "5 mg/kg q24h"]],
@@ -3821,7 +3845,9 @@ const CRRT_ABX = {
       { drug:"Caspofungin",            base:"LD 70 mg → 50 mg IV q 24 h",              profile:"fixed", note:"No adjustment." },
       { drug:"Micafungin",             base:"100 – 150 mg IV q 24 h",                   profile:"fixed", note:"No adjustment." },
       { drug:"Anidulafungin",          base:"LD 200 mg → 100 mg IV q 24 h",            profile:"fixed", note:"No adjustment." },
-      { drug:"Liposomal amphotericin B",base:"3 – 5 mg/kg IV q 24 h",                   profile:"fixed", note:"No adjustment." },
+      { drug:"Amphotericin B — liposomal (AmBisome)", base:"3 – 5 mg/kg IV q 24 h (6 mg/kg mucor, 10 mg/kg CNS cryptococcal)", profile:"fixed", note:"Preferred lipid form. Premedicate for infusion reactions; still monitor K⁺, Mg²⁺. No CRRT adjustment." },
+      { drug:"Amphotericin B — lipid complex (ABLC / Abelcet)", base:"5 mg/kg IV q 24 h over 2 h", profile:"fixed", note:"Intermediate option; liposomal usually preferred." },
+      { drug:"Amphotericin B — deoxycholate (conventional)", base:"0.5 – 1 mg/kg IV q 24 h (test dose 1 mg first)", profile:"fixed", note:"HIGHLY nephrotoxic; avoid in CRRT if liposomal available. Replete K⁺ &amp; Mg²⁺ aggressively." },
       { drug:"Acyclovir",              base:"5 – 10 mg/kg IV q 24 h (herpes); 10 mg/kg q 12 h (encephalitis / zoster)", profile:"clearedS" },
       { drug:"Ganciclovir",            base:"2.5 mg/kg IV q 24 h",                      profile:"clearedS" },
       { drug:"Oseltamivir",            base:"75 mg PO q 24 h (vs q 12 h normal)",      profile:"clearedS" },
