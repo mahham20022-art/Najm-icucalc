@@ -58,7 +58,7 @@
       "applicationSubCategory": "MedicalCalculator",
       "operatingSystem": "Any (PWA, iOS, Android, Windows, macOS, Linux)",
       "browserRequirements": "Modern browser with JavaScript",
-      "softwareVersion": "1.5.17",
+      "softwareVersion": "1.5.18",
       "datePublished": "2026-07-25",
       "dateModified": "2026-10-30",
       "inLanguage": "en",
@@ -1259,7 +1259,7 @@
       <h3 id="onbTrustTitle">Before you use it</h3>
       <p><b>For</b> ICU/CCU doctors, pharmacists and nurses who already know these drugs and scores. It does the arithmetic; the clinical decision stays with you.</p>
       <p><b>Not prospectively validated.</b> Decision support only. Check every result against your protocol and the drug label.</p>
-      <p>Version 1.5.17 · last reviewed 10 November 2026 · what you enter stays in this browser.</p>
+      <p>Version 1.5.18 · last reviewed 10 November 2026 · what you enter stays in this browser.</p>
       <button class="onb-link" type="button" id="onbEvidence">Evidence, limits and data handling</button>
     </div>
 
@@ -2165,11 +2165,11 @@
             <li>Not a regulated medical device.</li>
           </ul></dd>
           <dt>Version</dt>
-          <dd>1.5.17 · last reviewed 10 November 2026.</dd>
+          <dd>1.5.18 · last reviewed 10 November 2026.</dd>
           <dt>Report a suspected error</dt>
           <dd>Say what you entered, what the app showed and what you expected, with a source if you have one. Leave out patient identifiers.</dd>
         </dl>
-        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.17&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
+        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.18&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
           <span>Report an error · contact@thetract.org</span>
         </a>
@@ -2186,7 +2186,7 @@
         <div class="row"><span class="k">Website</span><span class="v"><a href="https://thetract.org" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">thetract.org</a></span></div>
         <div class="row"><span class="k">LinkedIn</span><span class="v"><a href="https://www.linkedin.com/in/dr-mohamed-najm-aldeen-aa6452135" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">linkedin.com/in/dr-mohamed-najm-aldeen</a></span></div>
         <div class="row"><span class="k">GitHub</span><span class="v"><a href="https://github.com/mahham20022-art" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">@mahham20022-art</a></span></div>
-        <div class="row"><span class="k">Version</span><span class="v">1.5.17</span></div>
+        <div class="row"><span class="k">Version</span><span class="v">1.5.18</span></div>
         <div class="row"><span class="k">Last reviewed</span><span class="v">10 Nov 2026</span></div>
       </div>
 
@@ -2242,6 +2242,10 @@
 
       <div class="card changelog" id="changelog">
         <h3>Changelog</h3>
+        <h4>1.5.18 <span>· 10 November 2026</span></h4>
+        <ul>
+          <li>CRRT antibiotic list redesigned as a stacked mobile-first card layout (drug name + badge on top, dose below, note under). Replaces the two-column table that was truncating the right side on phones when long drug names like "Amphotericin B — liposomal (AmBisome)" forced the first column too wide.</li>
+        </ul>
         <h4>1.5.17 <span>· 10 November 2026</span></h4>
         <ul>
           <li>Antibiotics tab: added <b>Amphotericin B</b> in all three formulations — liposomal (AmBisome), lipid complex (ABLC/Abelcet), and conventional deoxycholate — with indication-specific doses (incl. 6 mg/kg mucor and 10 mg/kg CNS cryptococcal), premedication reminder for infusion reactions, and the warning to prefer liposomal and avoid conventional in renal dysfunction. Also added <b>Anidulafungin</b> for completeness of the echinocandin class.</li>
@@ -2407,7 +2411,7 @@
 
   <footer>
     <div class="fine"><strong>Reference aid — not a medical device.</strong> Always verify against institutional protocols and drug labels.</div>
-    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.17 · last reviewed 10 Nov 2026 · Designed by Dr. Mohamed Najm</div>
+    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.18 · last reviewed 10 Nov 2026 · Designed by Dr. Mohamed Najm</div>
   </footer>
 </div>
 
@@ -3887,20 +3891,25 @@ function renderCrrtAbxTables() {
   else noteEl.classList.add("ok");
   noteEl.innerHTML = `<b>${CRRT_MODE_CTX[modeKey].label}</b> at <b>${CRRT_INTENSITY_CTX[intKey].label}</b><br><span style="font-weight:500">${CRRT_MODE_CTX[modeKey].note}</span><br><span style="font-weight:500">${CRRT_INTENSITY_CTX[intKey].note}</span>`;
 
-  // Tables
+  // Stacked card layout — mobile-first: drug name + badge on one line,
+  // then dose block below, then grey note. No horizontal overflow.
   const groupKeys = Object.keys(CRRT_ABX);
   const html = groupKeys.map((gk, idx) => {
     const g = CRRT_ABX[gk];
-    const rows = g.rows.map(r => `
-      <tr style="border-top:1px solid var(--line)">
-        <td style="padding:5px 6px;vertical-align:top;white-space:nowrap"><b>${r.drug}</b><br>${crrtAdjustmentBadge(r.profile, modeKey, intKey)}</td>
-        <td style="padding:5px 6px;vertical-align:top">${r.base}${r.note ? `<br><span style="color:var(--muted);font-size:11.5px">${r.note}</span>` : ""}</td>
-      </tr>
+    const items = g.rows.map(r => `
+      <div style="padding:10px 0;border-top:1px solid var(--line)">
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;margin-bottom:4px">
+          <b style="font-size:13.5px;line-height:1.3">${r.drug}</b>
+          ${crrtAdjustmentBadge(r.profile, modeKey, intKey)}
+        </div>
+        <div style="font-size:13px;line-height:1.5;color:var(--text)">${r.base}</div>
+        ${r.note ? `<div style="font-size:11.5px;line-height:1.4;color:var(--muted);margin-top:4px">${r.note}</div>` : ""}
+      </div>
     `).join("");
     return `
-      <details ${idx === 0 ? "open" : ""} style="margin-top:8px">
-        <summary style="cursor:pointer;color:var(--brand);font-weight:600">${g.label}</summary>
-        <table style="width:100%;border-collapse:collapse;font-size:13px;margin-top:6px"><tbody style="line-height:1.4">${rows}</tbody></table>
+      <details ${idx === 0 ? "open" : ""} style="margin-top:10px">
+        <summary style="cursor:pointer;color:var(--brand);font-weight:600;padding:4px 0">${g.label}</summary>
+        <div style="margin-top:2px">${items}</div>
       </details>
     `;
   }).join("");
