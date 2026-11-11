@@ -7,7 +7,7 @@
      ASSETS    = cache-first for icons/CSS/JS/manifest (stable)
      IMAGES    = cache-first with size cap for user-added images
 */
-const VERSION  = "v47"; // app 1.5.23 — Practice tab: darker indigo pulse + moved to second-to-last (before About)
+const VERSION  = "v48"; // app 1.5.24 — FACTS & NUMBERS brand on Practice + Question of the Day card
 const PRECACHE = `najm-precache-${VERSION}`;
 const RUNTIME  = `najm-runtime-${VERSION}`;
 const ASSETS   = `najm-assets-${VERSION}`;
