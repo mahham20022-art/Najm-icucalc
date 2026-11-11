@@ -58,7 +58,7 @@
       "applicationSubCategory": "MedicalCalculator",
       "operatingSystem": "Any (PWA, iOS, Android, Windows, macOS, Linux)",
       "browserRequirements": "Modern browser with JavaScript",
-      "softwareVersion": "1.5.24",
+      "softwareVersion": "1.5.25",
       "datePublished": "2026-07-25",
       "dateModified": "2026-10-30",
       "inLanguage": "en",
@@ -1400,7 +1400,7 @@
       <h3 id="onbTrustTitle">Before you use it</h3>
       <p><b>For</b> ICU/CCU doctors, pharmacists and nurses who already know these drugs and scores. It does the arithmetic; the clinical decision stays with you.</p>
       <p><b>Not prospectively validated.</b> Decision support only. Check every result against your protocol and the drug label.</p>
-      <p>Version 1.5.24 · last reviewed 11 November 2026 · what you enter stays in this browser.</p>
+      <p>Version 1.5.25 · last reviewed 11 November 2026 · what you enter stays in this browser.</p>
       <button class="onb-link" type="button" id="onbEvidence">Evidence, limits and data handling</button>
     </div>
 
@@ -2385,11 +2385,11 @@
             <li>Not a regulated medical device.</li>
           </ul></dd>
           <dt>Version</dt>
-          <dd>1.5.24 · last reviewed 11 November 2026.</dd>
+          <dd>1.5.25 · last reviewed 11 November 2026.</dd>
           <dt>Report a suspected error</dt>
           <dd>Say what you entered, what the app showed and what you expected, with a source if you have one. Leave out patient identifiers.</dd>
         </dl>
-        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.24&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
+        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.25&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
           <span>Report an error · contact@thetract.org</span>
         </a>
@@ -2406,7 +2406,7 @@
         <div class="row"><span class="k">Website</span><span class="v"><a href="https://thetract.org" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">thetract.org</a></span></div>
         <div class="row"><span class="k">LinkedIn</span><span class="v"><a href="https://www.linkedin.com/in/dr-mohamed-najm-aldeen-aa6452135" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">linkedin.com/in/dr-mohamed-najm-aldeen</a></span></div>
         <div class="row"><span class="k">GitHub</span><span class="v"><a href="https://github.com/mahham20022-art" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">@mahham20022-art</a></span></div>
-        <div class="row"><span class="k">Version</span><span class="v">1.5.24</span></div>
+        <div class="row"><span class="k">Version</span><span class="v">1.5.25</span></div>
         <div class="row"><span class="k">Last reviewed</span><span class="v">11 Nov 2026</span></div>
       </div>
 
@@ -2462,6 +2462,10 @@
 
       <div class="card changelog" id="changelog">
         <h3>Changelog</h3>
+        <h4>1.5.25 <span>· 11 November 2026</span></h4>
+        <ul>
+          <li>Splash screen for returning users shortened from 1 500 ms to <b>600 ms</b> — the brand still registers, but the calculator opens noticeably faster. First-run onboarding keeps a 1 200 ms splash so the welcome transition still feels intentional.</li>
+        </ul>
         <h4>1.5.24 <span>· 11 November 2026</span></h4>
         <ul>
           <li>🎯 <b>FACTS &amp; NUMBERS</b> — Practice tab rebranded with a premium clinical identity: hero headline "FACTS &amp; NUMBERS" + eyebrow "NAJM ICUCalc presents" + italic tagline "<em>One case. One decision. Then get to work.</em>", in a deep-navy + restrained warm-gold treatment. No gateway, no wall — the branding is applied INSIDE the Practice tab, not as a mandatory entry screen. Clinicians who need the calculator go straight to it; clinicians who want to learn visit this tab.</li>
@@ -2666,7 +2670,7 @@
 
   <footer>
     <div class="fine"><strong>Reference aid — not a medical device.</strong> Always verify against institutional protocols and drug labels.</div>
-    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.24 · last reviewed 11 Nov 2026 · Designed by Dr. Mohamed Najm</div>
+    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.25 · last reviewed 11 Nov 2026 · Designed by Dr. Mohamed Najm</div>
   </footer>
 </div>
 
@@ -6559,7 +6563,11 @@ function renderAwarenessBanner() {
 document.addEventListener("DOMContentLoaded", () => {
   try {
     loadState();
-    // Splash → onboarding (first run) or app (returning)
+    // Splash → onboarding (first run) or app (returning).
+    // Returning users see a short splash (600ms, just enough for the brand
+    // to register); first-run keeps 1200ms so the onboarding transition
+    // feels intentional.
+    const splashMs = state.onboarded ? 600 : 1200;
     setTimeout(() => {
       $("#splash").classList.add("hide");
       if (state.onboarded) {
@@ -6567,7 +6575,7 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         $("#onboarding").classList.remove("hide");
       }
-    }, 1500);
+    }, splashMs);
 
     // Init app
     bindPatient();
