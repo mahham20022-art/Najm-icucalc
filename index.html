@@ -58,7 +58,7 @@
       "applicationSubCategory": "MedicalCalculator",
       "operatingSystem": "Any (PWA, iOS, Android, Windows, macOS, Linux)",
       "browserRequirements": "Modern browser with JavaScript",
-      "softwareVersion": "1.5.22",
+      "softwareVersion": "1.5.23",
       "datePublished": "2026-07-25",
       "dateModified": "2026-10-30",
       "inLanguage": "en",
@@ -874,21 +874,21 @@
   .grid-in .field input,
   .grid-in .field select { padding: 11px 4px; font-size: 15.5px; }
 
-  /* -------- Highlighted / pulsing tab (Practice) -------- */
+  /* -------- Highlighted / pulsing tab (Practice) — deep indigo/violet -------- */
   @keyframes tabPulse {
     0%, 100% {
-      box-shadow: 0 0 0 0 rgba(168,85,247,.6), 0 2px 8px -2px rgba(168,85,247,.3);
-      border-color: rgba(168,85,247,.5);
+      box-shadow: 0 0 0 0 rgba(109,40,217,.65), 0 2px 10px -2px rgba(109,40,217,.45);
+      border-color: rgba(109,40,217,.6);
     }
     50% {
-      box-shadow: 0 0 0 4px rgba(168,85,247,.0), 0 2px 12px -2px rgba(168,85,247,.6);
-      border-color: rgba(168,85,247,.9);
+      box-shadow: 0 0 0 4px rgba(109,40,217,.0), 0 2px 14px -2px rgba(109,40,217,.75);
+      border-color: rgba(124,58,237,.95);
     }
   }
   .tab.tab-highlight {
-    color: #c4b5fd;
-    background: linear-gradient(135deg, rgba(168,85,247,.10), rgba(236,72,153,.08));
-    border-color: rgba(168,85,247,.5);
+    color: #a78bfa;
+    background: linear-gradient(135deg, rgba(76,29,149,.22), rgba(49,46,129,.18));
+    border-color: rgba(109,40,217,.6);
     animation: tabPulse 2.2s ease-in-out infinite;
     position: relative;
   }
@@ -896,7 +896,7 @@
     content: "NEW";
     position: absolute;
     top: -6px; right: -4px;
-    background: linear-gradient(135deg, #a855f7, #ec4899);
+    background: linear-gradient(135deg, #6d28d9, #4c1d95);
     color: #fff;
     font-size: 8.5px;
     font-weight: 800;
@@ -904,17 +904,17 @@
     border-radius: 6px;
     letter-spacing: .3px;
     line-height: 1;
-    box-shadow: 0 1px 4px rgba(168,85,247,.5);
+    box-shadow: 0 1px 4px rgba(76,29,149,.6);
   }
   .tab.tab-highlight:hover {
-    color: #ddd6fe;
-    background: linear-gradient(135deg, rgba(168,85,247,.18), rgba(236,72,153,.14));
-    border-color: rgba(168,85,247,.8);
+    color: #c4b5fd;
+    background: linear-gradient(135deg, rgba(76,29,149,.32), rgba(49,46,129,.26));
+    border-color: rgba(124,58,237,.9);
   }
   .tab.tab-highlight.active {
     color: #ffffff !important;
-    background: linear-gradient(135deg, #a855f7, #ec4899) !important;
-    box-shadow: 0 4px 14px -4px rgba(168,85,247,.7) !important;
+    background: linear-gradient(135deg, #6d28d9, #4c1d95) !important;
+    box-shadow: 0 4px 16px -4px rgba(76,29,149,.8) !important;
     border-color: transparent !important;
     animation: none;
   }
@@ -1308,7 +1308,7 @@
       <h3 id="onbTrustTitle">Before you use it</h3>
       <p><b>For</b> ICU/CCU doctors, pharmacists and nurses who already know these drugs and scores. It does the arithmetic; the clinical decision stays with you.</p>
       <p><b>Not prospectively validated.</b> Decision support only. Check every result against your protocol and the drug label.</p>
-      <p>Version 1.5.22 · last reviewed 10 November 2026 · what you enter stays in this browser.</p>
+      <p>Version 1.5.23 · last reviewed 11 November 2026 · what you enter stays in this browser.</p>
       <button class="onb-link" type="button" id="onbEvidence">Evidence, limits and data handling</button>
     </div>
 
@@ -1428,10 +1428,6 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15V9"/><path d="M12 15V6"/><path d="M17 15v-4"/></svg>
           Scores
         </button>
-        <button class="tab tab-highlight" type="button" data-tab="practice">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="10"/></svg>
-          Practice
-        </button>
         <button class="tab" type="button" data-tab="notes">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-9"/><path d="m19 3-6 6h4V3Z"/></svg>
           Notes
@@ -1451,6 +1447,10 @@
         <button class="tab tab-danger" type="button" data-tab="sepsis">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
           Sepsis
+        </button>
+        <button class="tab tab-highlight" type="button" data-tab="practice">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="10"/></svg>
+          Practice
         </button>
         <button class="tab" type="button" data-tab="about">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 12h1v5h1"/></svg>
@@ -2280,11 +2280,11 @@
             <li>Not a regulated medical device.</li>
           </ul></dd>
           <dt>Version</dt>
-          <dd>1.5.22 · last reviewed 10 November 2026.</dd>
+          <dd>1.5.23 · last reviewed 11 November 2026.</dd>
           <dt>Report a suspected error</dt>
           <dd>Say what you entered, what the app showed and what you expected, with a source if you have one. Leave out patient identifiers.</dd>
         </dl>
-        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.22&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
+        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.23&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
           <span>Report an error · contact@thetract.org</span>
         </a>
@@ -2301,8 +2301,8 @@
         <div class="row"><span class="k">Website</span><span class="v"><a href="https://thetract.org" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">thetract.org</a></span></div>
         <div class="row"><span class="k">LinkedIn</span><span class="v"><a href="https://www.linkedin.com/in/dr-mohamed-najm-aldeen-aa6452135" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">linkedin.com/in/dr-mohamed-najm-aldeen</a></span></div>
         <div class="row"><span class="k">GitHub</span><span class="v"><a href="https://github.com/mahham20022-art" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">@mahham20022-art</a></span></div>
-        <div class="row"><span class="k">Version</span><span class="v">1.5.22</span></div>
-        <div class="row"><span class="k">Last reviewed</span><span class="v">10 Nov 2026</span></div>
+        <div class="row"><span class="k">Version</span><span class="v">1.5.23</span></div>
+        <div class="row"><span class="k">Last reviewed</span><span class="v">11 Nov 2026</span></div>
       </div>
 
       <div class="card">
@@ -2357,6 +2357,11 @@
 
       <div class="card changelog" id="changelog">
         <h3>Changelog</h3>
+        <h4>1.5.23 <span>· 11 November 2026</span></h4>
+        <ul>
+          <li>Practice tab now sits second-to-last (just before <em>About</em>) in the tab bar, so the clinical modules stay grouped at the front and the learning module ends the row like a footer.</li>
+          <li>Darker pulse colour — deep indigo/violet (#4c1d95 → #6d28d9) instead of the lighter pink-magenta; easier on the eyes and reads as a serious study feature rather than a decorative flourish. The pulsing animation, NEW badge and reduced-motion guard all remain.</li>
+        </ul>
         <h4>1.5.22 <span>· 10 November 2026</span></h4>
         <ul>
           <li>Practice tab is now visually highlighted in the tab bar — gentle purple-pink pulse (2.2 s) with a small <b>NEW</b> badge, so clinicians notice the new MCQ feature on first open. Pulse stops when the tab is active or when the user has set <code>prefers-reduced-motion</code>.</li>
@@ -2551,7 +2556,7 @@
 
   <footer>
     <div class="fine"><strong>Reference aid — not a medical device.</strong> Always verify against institutional protocols and drug labels.</div>
-    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.22 · last reviewed 10 Nov 2026 · Designed by Dr. Mohamed Najm</div>
+    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.23 · last reviewed 11 Nov 2026 · Designed by Dr. Mohamed Najm</div>
   </footer>
 </div>
 
