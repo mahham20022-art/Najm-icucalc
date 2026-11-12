@@ -7,7 +7,7 @@
      ASSETS    = cache-first for icons/CSS/JS/manifest (stable)
      IMAGES    = cache-first with size cap for user-added images
 */
-const VERSION  = "v49"; // app 1.5.25 — faster splash (600ms) for returning users
+const VERSION  = "v50"; // app 1.5.26 — Nursing Corner (8 bedside tools + credit: Faisal Alshahrani RN)
 const PRECACHE = `najm-precache-${VERSION}`;
 const RUNTIME  = `najm-runtime-${VERSION}`;
 const ASSETS   = `najm-assets-${VERSION}`;
