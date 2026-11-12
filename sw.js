@@ -7,7 +7,7 @@
      ASSETS    = cache-first for icons/CSS/JS/manifest (stable)
      IMAGES    = cache-first with size cap for user-added images
 */
-const VERSION  = "v51"; // app 1.5.27 — Nursing Corner credit split: Concept Faisal RN · Content Dr Najm
+const VERSION  = "v52"; // app 1.5.28 — Nursing credit reworded as acknowledgement-only (no partnership implication)
 const PRECACHE = `najm-precache-${VERSION}`;
 const RUNTIME  = `najm-runtime-${VERSION}`;
 const ASSETS   = `najm-assets-${VERSION}`;
