@@ -59,7 +59,7 @@
       "applicationSubCategory": "MedicalCalculator",
       "operatingSystem": "Any (PWA, iOS, Android, Windows, macOS, Linux)",
       "browserRequirements": "Modern browser with JavaScript",
-      "softwareVersion": "1.5.9",
+      "softwareVersion": "1.5.10",
       "datePublished": "2026-07-25",
       "dateModified": "2026-10-30",
       "inLanguage": "en",
@@ -1243,7 +1243,7 @@
       <h3 id="onbTrustTitle">Before you use it</h3>
       <p><b>For</b> ICU/CCU doctors, pharmacists and nurses who already know these drugs and scores. It does the arithmetic; the clinical decision stays with you.</p>
       <p><b>Not prospectively validated.</b> Decision support only. Check every result against your protocol and the drug label.</p>
-      <p>Version 1.5.9 · last reviewed 05 November 2026 · what you enter stays in this browser.</p>
+      <p>Version 1.5.10 · last reviewed 13 November 2026 · what you enter stays in this browser.</p>
       <button class="onb-link" type="button" id="onbEvidence">Evidence, limits and data handling</button>
     </div>
 
@@ -2066,11 +2066,11 @@
             <li>Not a regulated medical device.</li>
           </ul></dd>
           <dt>Version</dt>
-          <dd>1.5.9 · last reviewed 05 November 2026.</dd>
+          <dd>1.5.10 · last reviewed 13 November 2026.</dd>
           <dt>Report a suspected error</dt>
           <dd>Say what you entered, what the app showed and what you expected, with a source if you have one. Leave out patient identifiers.</dd>
         </dl>
-        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.9&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
+        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.10&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
           <span>Report an error · contact@thetract.org</span>
         </a>
@@ -2090,8 +2090,8 @@
         <div class="row"><span class="k">Listed on</span><span class="v"><a href="https://apps.litfl.com/" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">LITFL App Store</a></span></div>
         <div class="row"><span class="k">LinkedIn</span><span class="v"><a href="https://www.linkedin.com/in/dr-mohamed-najm-aldeen-aa6452135" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">linkedin.com/in/dr-mohamed-najm-aldeen</a></span></div>
         <div class="row"><span class="k">GitHub</span><span class="v"><a href="https://github.com/mahham20022-art" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">@mahham20022-art</a></span></div>
-        <div class="row"><span class="k">Version</span><span class="v">1.5.9</span></div>
-        <div class="row"><span class="k">Last reviewed</span><span class="v">05 Nov 2026</span></div>
+        <div class="row"><span class="k">Version</span><span class="v">1.5.10</span></div>
+        <div class="row"><span class="k">Last reviewed</span><span class="v">13 Nov 2026</span></div>
       </div>
 
       <div class="card">
@@ -2146,6 +2146,11 @@
 
       <div class="card changelog" id="changelog">
         <h3>Changelog</h3>
+        <h4>1.5.10 <span>· 13 November 2026</span></h4>
+        <ul>
+          <li><b>ROX index fixed.</b> FiO₂ was divided as a percentage instead of a fraction, so every ROX came out 100 times too low and read as high risk. It now follows Roca 2019: (SpO₂ / FiO₂) / RR.</li>
+          <li>About card links the LITFL App Store.</li>
+        </ul>
         <h4>1.5.9 <span>· 05 November 2026</span></h4>
         <ul>
           <li><b>Custom domain</b> — Najm ICUCalc now lives at <code>https://icucalc.thetract.org/</code>. CNAME file + sitemap.xml + robots.txt + canonical + Open Graph all point at the new domain. Old github.io URL continues to work via Pages redirect.</li>
@@ -2276,7 +2281,7 @@
 
   <footer>
     <div class="fine"><strong>Reference aid — not a medical device.</strong> Always verify against institutional protocols and drug labels.</div>
-    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.9 · last reviewed 05 Nov 2026 · Designed by Dr. Mohamed Najm</div>
+    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.10 · last reviewed 13 Nov 2026 · Designed by Dr. Mohamed Najm</div>
   </footer>
 </div>
 
@@ -3538,7 +3543,7 @@ function runVent() {
   const rFi   = fioFraction(num(state.inputs.rox_fio2));
   const rRR   = num(state.inputs.rox_rr);
   if (rSpO2 != null && rFi && rRR) {
-    const rox = (rSpO2 / (rFi * 100)) / rRR; // SpO2% / FiO2% / RR
+    const rox = (rSpO2 / rFi) / rRR; // (SpO2 % / FiO2 as a fraction) / RR — Roca 2019
     $("#rox-val").textContent = fmt(rox, 2);
     const rv = $("#rox-verdict"); rv.classList.remove("ok","warn","bad");
     if (rox >= 4.88) { rv.innerHTML = `<b>ROX ${fmt(rox,2)} ≥ 4.88</b> → low risk of HFNC failure. Continue + reassess.`; rv.classList.add("ok"); }
