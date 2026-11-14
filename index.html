@@ -58,7 +58,7 @@
       "applicationSubCategory": "MedicalCalculator",
       "operatingSystem": "Any (PWA, iOS, Android, Windows, macOS, Linux)",
       "browserRequirements": "Modern browser with JavaScript",
-      "softwareVersion": "1.5.29",
+      "softwareVersion": "1.5.30",
       "datePublished": "2026-07-25",
       "dateModified": "2026-10-30",
       "inLanguage": "en",
@@ -237,10 +237,73 @@
   .splash-ecg {
     position: absolute; left: 0; right: 0; top: 50%;
     height: 60px; transform: translateY(-50%);
-    opacity: .18;
+    opacity: .22;
   }
   .splash-ecg svg { width: 200%; height: 100%; animation: ecg 5s linear infinite; }
   @keyframes ecg { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* Lightning bolts — flash twice per 6s cycle */
+  .splash-bolts { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+  .splash-bolt {
+    position: absolute;
+    width: 2px; height: 220px;
+    background: linear-gradient(180deg, transparent, #67e8f9 20%, #fff 50%, #67e8f9 80%, transparent);
+    filter: blur(.5px) drop-shadow(0 0 8px #22d3ee) drop-shadow(0 0 16px #22d3ee);
+    opacity: 0;
+    transform-origin: top;
+  }
+  .splash-bolt.b1 { top: 0; left: 18%;  animation: boltFlash 6s ease-in-out infinite; transform: rotate(8deg); }
+  .splash-bolt.b2 { top: 0; right: 22%; animation: boltFlash 6s ease-in-out infinite 2.5s; transform: rotate(-10deg); height: 300px; }
+  .splash-bolt.b3 { top: 0; left: 55%;  animation: boltFlash 6s ease-in-out infinite 4.3s; transform: rotate(5deg); height: 180px; opacity: 0; }
+  @keyframes boltFlash {
+    0%, 5%, 100% { opacity: 0; }
+    1%  { opacity: 1; }
+    2%  { opacity: 0.2; }
+    3%  { opacity: 0.9; }
+    4%  { opacity: 0.1; }
+  }
+
+  /* Radar-style scanning pulse ring expanding from behind logo */
+  .splash-pulse {
+    position: absolute; left: 50%; top: 40%;
+    width: 160px; height: 160px; transform: translate(-50%, -50%);
+    border: 2px solid rgba(34,211,238,.6);
+    border-radius: 50%;
+    animation: pulseRing 2.8s ease-out infinite;
+    pointer-events: none;
+  }
+  .splash-pulse.p2 { animation-delay: 1.4s; }
+  @keyframes pulseRing {
+    0%   { width: 120px; height: 120px; opacity: .8; border-width: 3px; }
+    100% { width: 540px; height: 540px; opacity: 0; border-width: 1px; }
+  }
+
+  /* Floating particles — a few small glowing dots drifting up */
+  .splash-particles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+  .splash-particle {
+    position: absolute; bottom: -10px;
+    width: 4px; height: 4px; border-radius: 50%;
+    background: #22d3ee;
+    box-shadow: 0 0 8px #22d3ee, 0 0 16px rgba(34,211,238,.4);
+    opacity: 0;
+    animation: particleFloat 7s linear infinite;
+  }
+  .splash-particle:nth-child(1) { left:  8%; animation-delay:   0s; }
+  .splash-particle:nth-child(2) { left: 24%; animation-delay: 1.2s; width: 3px; height: 3px; }
+  .splash-particle:nth-child(3) { left: 41%; animation-delay: 2.4s; }
+  .splash-particle:nth-child(4) { left: 57%; animation-delay: 3.6s; width: 5px; height: 5px; }
+  .splash-particle:nth-child(5) { left: 72%; animation-delay: 1.8s; }
+  .splash-particle:nth-child(6) { left: 88%; animation-delay: 4.5s; width: 3px; height: 3px; }
+  @keyframes particleFloat {
+    0%   { transform: translateY(0) scale(.7); opacity: 0; }
+    15%  { opacity: .9; }
+    85%  { opacity: .9; }
+    100% { transform: translateY(-110vh) scale(1.2); opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .splash-bolt, .splash-pulse, .splash-particle { animation: none !important; opacity: 0 !important; }
+  }
 
   /* Subtle hexagon grid overlay */
   .splash::before {
@@ -1395,6 +1458,21 @@
 
 <!-- ============== SPLASH ============== -->
 <div class="splash" id="splash">
+  <div class="splash-bolts" aria-hidden="true">
+    <div class="splash-bolt b1"></div>
+    <div class="splash-bolt b2"></div>
+    <div class="splash-bolt b3"></div>
+  </div>
+  <div class="splash-pulse" aria-hidden="true"></div>
+  <div class="splash-pulse p2" aria-hidden="true"></div>
+  <div class="splash-particles" aria-hidden="true">
+    <span class="splash-particle"></span>
+    <span class="splash-particle"></span>
+    <span class="splash-particle"></span>
+    <span class="splash-particle"></span>
+    <span class="splash-particle"></span>
+    <span class="splash-particle"></span>
+  </div>
   <div class="splash-ecg" aria-hidden="true">
     <svg viewBox="0 0 800 60" preserveAspectRatio="none">
       <path d="M0,30 L80,30 L100,30 L110,10 L120,50 L130,5 L140,55 L150,30 L260,30 L280,30 L290,10 L300,50 L310,5 L320,55 L330,30 L460,30 L480,30 L490,10 L500,50 L510,5 L520,55 L530,30 L660,30 L680,30 L690,10 L700,50 L710,5 L720,55 L730,30 L800,30"
@@ -1472,7 +1550,7 @@
       <h3 id="onbTrustTitle">Before you use it</h3>
       <p><b>For</b> ICU/CCU doctors, pharmacists and nurses who already know these drugs and scores. It does the arithmetic; the clinical decision stays with you.</p>
       <p><b>Not prospectively validated.</b> Decision support only. Check every result against your protocol and the drug label.</p>
-      <p>Version 1.5.29 · last reviewed 14 November 2026 · what you enter stays in this browser.</p>
+      <p>Version 1.5.30 · last reviewed 14 November 2026 · what you enter stays in this browser.</p>
       <button class="onb-link" type="button" id="onbEvidence">Evidence, limits and data handling</button>
     </div>
 
@@ -2908,11 +2986,11 @@
             <li>Not a regulated medical device.</li>
           </ul></dd>
           <dt>Version</dt>
-          <dd>1.5.29 · last reviewed 14 November 2026.</dd>
+          <dd>1.5.30 · last reviewed 14 November 2026.</dd>
           <dt>Report a suspected error</dt>
           <dd>Say what you entered, what the app showed and what you expected, with a source if you have one. Leave out patient identifiers.</dd>
         </dl>
-        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.29&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
+        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.30&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
           <span>Report an error · contact@thetract.org</span>
         </a>
@@ -2929,7 +3007,7 @@
         <div class="row"><span class="k">Website</span><span class="v"><a href="https://thetract.org" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">thetract.org</a></span></div>
         <div class="row"><span class="k">LinkedIn</span><span class="v"><a href="https://www.linkedin.com/in/dr-mohamed-najm-aldeen-aa6452135" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">linkedin.com/in/dr-mohamed-najm-aldeen</a></span></div>
         <div class="row"><span class="k">GitHub</span><span class="v"><a href="https://github.com/mahham20022-art" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">@mahham20022-art</a></span></div>
-        <div class="row"><span class="k">Version</span><span class="v">1.5.29</span></div>
+        <div class="row"><span class="k">Version</span><span class="v">1.5.30</span></div>
         <div class="row"><span class="k">Last reviewed</span><span class="v">12 Nov 2026</span></div>
       </div>
 
@@ -2985,6 +3063,10 @@
 
       <div class="card changelog" id="changelog">
         <h3>Changelog</h3>
+        <h4>1.5.30 <span>· 14 November 2026</span></h4>
+        <ul>
+          <li>⚡ <b>Animated splash screen</b> — the welcome screen now has three subtle layers of motion on top of the existing ECG line: cyan <b>lightning bolts</b> flashing from the top on a staggered 6-s cycle, two expanding <b>radar pulse rings</b> emanating from behind the logo, and small <b>glowing particles</b> drifting upwards. All respect <code>prefers-reduced-motion</code>; total visible splash duration unchanged (600 ms returning / 1.2 s first-run).</li>
+        </ul>
         <h4>1.5.29 <span>· 14 November 2026</span></h4>
         <ul>
           <li>🧪 <b>Antidotes tab rebranded and expanded into Toxicology</b> — the original dynamic antidote list is kept as a subsection; four new reference cards added above it and three envenomation cards below it.</li>
@@ -3225,7 +3307,7 @@
 
   <footer>
     <div class="fine"><strong>Reference aid — not a medical device.</strong> Always verify against institutional protocols and drug labels.</div>
-    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.29 · last reviewed 14 Nov 2026 · Designed by Dr. Mohamed Najm</div>
+    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.30 · last reviewed 14 Nov 2026 · Designed by Dr. Mohamed Najm</div>
   </footer>
 </div>
 
