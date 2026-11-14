@@ -7,7 +7,7 @@
      ASSETS    = cache-first for icons/CSS/JS/manifest (stable)
      IMAGES    = cache-first with size cap for user-added images
 */
-const VERSION  = "v52"; // app 1.5.28 — Nursing credit reworded as acknowledgement-only (no partnership implication)
+const VERSION  = "v53"; // app 1.5.29 — Antidotes expanded into full Toxicology tab (toxidromes, enhanced elim, envenomations)
 const PRECACHE = `najm-precache-${VERSION}`;
 const RUNTIME  = `najm-runtime-${VERSION}`;
 const ASSETS   = `najm-assets-${VERSION}`;

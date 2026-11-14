@@ -58,7 +58,7 @@
       "applicationSubCategory": "MedicalCalculator",
       "operatingSystem": "Any (PWA, iOS, Android, Windows, macOS, Linux)",
       "browserRequirements": "Modern browser with JavaScript",
-      "softwareVersion": "1.5.28",
+      "softwareVersion": "1.5.29",
       "datePublished": "2026-07-25",
       "dateModified": "2026-10-30",
       "inLanguage": "en",
@@ -1472,7 +1472,7 @@
       <h3 id="onbTrustTitle">Before you use it</h3>
       <p><b>For</b> ICU/CCU doctors, pharmacists and nurses who already know these drugs and scores. It does the arithmetic; the clinical decision stays with you.</p>
       <p><b>Not prospectively validated.</b> Decision support only. Check every result against your protocol and the drug label.</p>
-      <p>Version 1.5.28 · last reviewed 12 November 2026 · what you enter stays in this browser.</p>
+      <p>Version 1.5.29 · last reviewed 14 November 2026 · what you enter stays in this browser.</p>
       <button class="onb-link" type="button" id="onbEvidence">Evidence, limits and data handling</button>
     </div>
 
@@ -1598,7 +1598,7 @@
         </button>
         <button class="tab" type="button" data-tab="antidotes">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v6"/><path d="M8 8h8"/><path d="M9 8v10a3 3 0 0 0 6 0V8"/><path d="M9 14h6"/></svg>
-          Antidotes
+          Toxicology
         </button>
         <button class="tab tab-danger" type="button" data-tab="rsi">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="M12 18v4"/><path d="m4.9 4.9 2.8 2.8"/><path d="m16.3 16.3 2.8 2.8"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="m4.9 19.1 2.8-2.8"/><path d="m16.3 7.7 2.8-2.8"/></svg>
@@ -2538,16 +2538,265 @@
     <section class="module" id="m-antidotes">
       <div class="module-head">
         <div>
-          <h2>Antidotes</h2>
-          <p>Toxicology reversal · overdose antidotes · NMB reversal.</p>
+          <h2>Toxicology</h2>
+          <p>Toxidromes · approach to the poisoned patient · enhanced elimination · high-stakes poisonings · envenomations · antidotes.</p>
         </div>
       </div>
+
+      <div class="cards">
+
+        <!-- 1. Approach to the poisoned patient -->
+        <div class="card">
+          <h3>🧭 Approach to the Poisoned Patient</h3>
+          <div class="sub">Resuscitate first, decontaminate second, antidote third, enhance elimination fourth.</div>
+          <div style="font-size:13px;line-height:1.55;margin-top:8px">
+            <div style="padding:8px 0;border-top:1px solid var(--line)"><b>1. Resuscitate (ABCDE)</b> — airway, O₂, IV access, cardiac monitor, glucose. Empiric treatments for the comatose poisoned patient: thiamine 100 mg IV → dextrose 25 g IV if hypoglycaemic · naloxone 0.04 – 0.4 mg IV if opioid suspected · oxygen.</div>
+            <div style="padding:8px 0;border-top:1px solid var(--line)"><b>2. GI decontamination</b> — <b>activated charcoal 1 g/kg</b> (max 50 g) within 1 h of ingestion if airway protected and substance adsorbs to charcoal. Charcoal does <em>not</em> bind: iron, lithium, alcohols, heavy metals, acids/alkalis, hydrocarbons. Gastric lavage rarely indicated (massive, life-threatening, &lt; 1 h). Whole-bowel irrigation (PEG-ELS 1 – 2 L/hr) for iron, lithium, SR/EC pills, body-packers.</div>
+            <div style="padding:8px 0;border-top:1px solid var(--line)"><b>3. Enhanced elimination</b> — see next card for indications (MDAC, urinary alkalinisation, haemodialysis, lipid rescue).</div>
+            <div style="padding:8px 0;border-top:1px solid var(--line)"><b>4. Supportive care</b> remains the cornerstone. Call Poison Control for anything uncommon (national centre + regional toxicology).</div>
+            <div style="padding:8px 0;border-top:1px solid var(--line)"><b>Avoid these outdated practices:</b> syrup of ipecac (no longer recommended anywhere) · routine gastric lavage · "coma cocktail" without indication · forced diuresis (saline-overload risk without clearance benefit) · acid or alkali neutralisation in caustic ingestion.</div>
+          </div>
+          <div class="src">Source: Goldfrank's Toxicologic Emergencies 11th ed · AACT/EAPCCT position statements on decontamination.</div>
+        </div>
+
+        <!-- 2. Toxidromes -->
+        <div class="card">
+          <h3>🧪 Toxidromes — Recognise the Pattern</h3>
+          <div class="sub">A toxidrome is a reproducible constellation of vitals + pupils + skin + mental status that points to a drug class.</div>
+          <div style="font-size:13px;line-height:1.5;margin-top:8px">
+            <div style="padding:8px 0;border-top:1px solid var(--line)">
+              <b style="color:#f87171">Sympathomimetic</b> (cocaine, amphetamines, MDMA, cathinones, PCP) — <b>↑HR ↑BP ↑T · mydriasis · diaphoresis · agitated/psychotic · tremor · seizures.</b><br>
+              <span style="color:var(--muted)">Rx: benzodiazepines (first-line for agitation + ↓BP + seizures). Avoid β-blocker alone (unopposed α). Active cooling for hyperthermia.</span>
+            </div>
+            <div style="padding:8px 0;border-top:1px solid var(--line)">
+              <b style="color:#f59e0b">Anticholinergic</b> ("hot as Hades, blind as a bat, dry as a bone, red as a beet, mad as a hatter") — diphenhydramine, TCA, atropine, scopolamine, Datura, antipsychotics — <b>↑HR ↑T · mydriasis · dry skin / mucosa · urinary retention · ileus · agitated delirium.</b><br>
+              <span style="color:var(--muted)">Rx: cooling, benzodiazepines, catheter. <b>Physostigmine</b> 0.5-2 mg IV slow — reserved for severe <em>pure</em> anticholinergic delirium (contraindicated in TCA OD: QRS widening → asystole). Avoid neostigmine (does not cross BBB).</span>
+            </div>
+            <div style="padding:8px 0;border-top:1px solid var(--line)">
+              <b style="color:#10b981">Cholinergic (muscarinic)</b> — "SLUDGE-BBB": <b>S</b>alivation, <b>L</b>acrimation, <b>U</b>rination, <b>D</b>efecation, <b>G</b>I cramps, <b>E</b>mesis + <b>B</b>radycardia, <b>B</b>ronchorrhoea, <b>B</b>ronchospasm. Organophosphate, carbamate, nerve agents.<br>
+              <span style="color:var(--muted)">Rx: decontaminate skin (PPE!) · <b>atropine 1-3 mg IV, double q 5 min until bronchial secretions dry up</b> (may need huge doses, 100s of mg) · <b>pralidoxime 1-2 g IV</b> within 24 h (before enzyme aging).</span>
+            </div>
+            <div style="padding:8px 0;border-top:1px solid var(--line)">
+              <b style="color:#60a5fa">Opioid</b> (heroin, morphine, oxycodone, methadone, fentanyl) — <b>↓RR &lt; 12 · miosis (pinpoint) · ↓GCS · hypothermia.</b><br>
+              <span style="color:var(--muted)">Rx: naloxone 0.04-0.4 mg IV titrated. Watch for recurrence with long-acting agents (methadone t½ &gt; 24 h — naloxone infusion).</span>
+            </div>
+            <div style="padding:8px 0;border-top:1px solid var(--line)">
+              <b style="color:#a78bfa">Sedative-hypnotic</b> (benzodiazepines, barbiturates, GHB, alcohol) — <b>↓RR · normal/small pupils · ↓GCS · hypothermia · normal skin.</b><br>
+              <span style="color:var(--muted)">Rx: supportive airway + ventilation. Flumazenil only for pure, naive BZD overdose (avoid in chronic users, TCA co-ingestion, mixed OD — seizure risk).</span>
+            </div>
+            <div style="padding:8px 0;border-top:1px solid var(--line)">
+              <b style="color:#fb7185">Serotonin syndrome</b> (SSRI + MAOI, tramadol + SSRI, linezolid + serotonergic, MDMA, St John's wort combos) — Hunter criteria: <b>spontaneous clonus, OR inducible clonus + agitation/diaphoresis, OR ocular clonus + agitation/diaphoresis, OR tremor + hyperreflexia, OR hypertonia + T &gt; 38 + ocular/inducible clonus.</b><br>
+              <span style="color:var(--muted)">Rx: stop offending agent · benzodiazepines · cooling · <b>cyproheptadine</b> 12 mg PO → 2 mg q 2 h (max 32 mg/24 h) in moderate-severe · intubation + NMB (non-depolarising) if hyperthermia &gt; 41.<br>Distinguish from NMS (gradual onset, lead-pipe rigidity, normal reflexes, antipsychotic exposure).</span>
+            </div>
+          </div>
+          <div class="src">Sources: Boyer EW, Shannon M. Serotonin syndrome. NEJM 2005;352:1112-20. Dunkley EJ et al. Hunter Serotonin Toxicity Criteria. QJM 2003;96:635-42.</div>
+        </div>
+
+        <!-- 3. Enhanced elimination -->
+        <div class="card">
+          <h3>⚡ Enhanced Elimination Techniques</h3>
+          <div class="sub">Push the drug out when supportive care + antidotes alone are insufficient.</div>
+          <div style="font-size:13px;line-height:1.55;margin-top:8px">
+            <div style="padding:8px 0;border-top:1px solid var(--line)"><b>Multiple-Dose Activated Charcoal (MDAC)</b> — 50 g then 25 g q 4 h × 2 – 4 doses. Interrupts enterohepatic / enteroenteric cycling. Useful: <b>carbamazepine, dapsone, phenobarbitone, quinine, theophylline</b>. Need intact airway + bowel sounds.</div>
+            <div style="padding:8px 0;border-top:1px solid var(--line)"><b>Urinary alkalinisation</b> — NaHCO₃ 150 mEq in 1 L D5W at 150 – 200 mL/hr + KCl supplementation (hypoK impairs alkalinisation). Target urine pH ≥ 7.5. Indications: <b>salicylate (serum level &gt; 50 mg/dL or symptomatic), phenobarbitone, methotrexate, chlorophenoxy herbicides</b>.</div>
+            <div style="padding:8px 0;border-top:1px solid var(--line)"><b>Haemodialysis</b> — small Vd (&lt; 1 L/kg), low protein binding, water-soluble, low molecular weight, few compartments. Mnemonic <b>I-STUMBLE</b>: <b>I</b>sopropanol, <b>S</b>alicylate, <b>T</b>heophylline, <b>U</b>raemia, <b>M</b>ethanol, <b>B</b>arbiturates (phenobarb, long-acting), <b>L</b>ithium, <b>E</b>thylene glycol. Also valproate (severe), carbamazepine, metformin (lactic acidosis), thallium.</div>
+            <div style="padding:8px 0;border-top:1px solid var(--line)"><b>Intravenous Lipid Emulsion (ILE)</b> 20 % — <b>1.5 mL/kg bolus over 2 – 3 min → 0.25 mL/kg/min infusion × 30 – 60 min</b>. Indications: local anaesthetic systemic toxicity (bupivacaine arrest — definitive), severe lipophilic drug OD refractory to standard care (verapamil, diltiazem, TCA, bupropion, propranolol). Max cumulative 10 mL/kg.</div>
+            <div style="padding:8px 0;border-top:1px solid var(--line)"><b>Extracorporeal (VA-ECMO)</b> — bridge for refractory cardiogenic shock in massive OD (CCB, β-blocker, TCA) while drug is metabolised / removed. Early referral.</div>
+            <div style="padding:8px 0;border-top:1px solid var(--line)"><b>What does NOT work:</b> forced diuresis (volume-overload without elimination gain), charcoal haemoperfusion (replaced by HD in most cases), cholestyramine (anecdotal).</div>
+          </div>
+          <div class="src">Sources: EXTRIP Workgroup recommendations (Semin Dial 2014-2024). Gosselin S et al. ILE therapy. Clin Toxicol 2016.</div>
+        </div>
+
+        <!-- 4. Specific high-stakes poisonings -->
+        <div class="card">
+          <h3>💊 Specific High-Stakes Poisonings</h3>
+          <div class="sub">Cases where the right action in the first hour decides the outcome.</div>
+          <div style="font-size:13px;line-height:1.55;margin-top:8px">
+
+            <div style="padding:8px 0;border-top:1px solid var(--line)"><b>Paracetamol (acetaminophen)</b> — Rumack-Matthew nomogram at 4 h for known single acute ingestion. NAC 21-hour IV regimen: <b>150 mg/kg over 60 min → 50 mg/kg over 4 h → 100 mg/kg over 16 h</b>. For massive OD (&gt; 32 g or level &gt; 300 mg/L at 4 h) consider <b>continuous NAC + HD</b>. Treat empirically if timing unknown or staggered.</div>
+
+            <div style="padding:8px 0;border-top:1px solid var(--line)"><b>Toxic alcohols (methanol, ethylene glycol)</b> — HAGMA + osmolal gap + consistent history. <b>Fomepizole 15 mg/kg IV load → 10 mg/kg q 12 h × 4 → 15 mg/kg q 12 h</b> until methanol/EG &lt; 20 mg/dL. Add <b>folate 50 mg q 6 h</b> (methanol) and <b>thiamine 100 mg + pyridoxine 50 mg</b> (ethylene glycol) — redirect metabolism away from toxic products. <b>HD</b> for severe acidosis (pH &lt; 7.15), level &gt; 50, visual symptoms, renal failure, or &gt; 30 mL ingested.</div>
+
+            <div style="padding:8px 0;border-top:1px solid var(--line)"><b>Salicylate</b> — HAGMA + respiratory alkalosis (mixed), tinnitus, tachypnoea, hyperthermia, non-cardiogenic pulmonary oedema. Target: <b>MDAC + aggressive alkalinisation</b> (serum pH 7.45 – 7.55, urine pH ≥ 7.5) + repleting K. <b>HD indication</b>: level &gt; 100 mg/dL acute (or &gt; 60 chronic), AMS, pulmonary oedema, renal failure, severe acidosis. <b>Danger:</b> intubating → sudden fall in minute vent → acute acidaemia + arrest. Match prior MV, avoid intubation if possible.</div>
+
+            <div style="padding:8px 0;border-top:1px solid var(--line)"><b>Calcium-channel blocker / β-blocker</b> — bradycardia + hypotension refractory to fluids. Sequence: <b>Ca gluconate 10 % 30 mL (or Ca chloride 10 mL via central)</b> → <b>glucagon 5 – 10 mg IV</b> (preferred β-blocker) → <b>high-dose insulin</b> euglycaemia: 1 U/kg IV bolus → <b>0.5 – 1 U/kg/hr</b> infusion (may need 10 U/kg/hr) + dextrose titrated to normoglycaemia → <b>ILE 20 %</b> → vasopressors → <b>VA-ECMO</b> as bridge.</div>
+
+            <div style="padding:8px 0;border-top:1px solid var(--line)"><b>TCA (tricyclic antidepressant)</b> — QRS &gt; 100 ms predicts seizures, &gt; 160 ms predicts dysrhythmia. <b>NaHCO₃ 1 – 2 mEq/kg IV bolus</b> every 5 min until QRS &lt; 100 ms + target pH 7.45 – 7.55 → infusion. Avoid class Ia/Ic/III antiarrhythmics, physostigmine, flumazenil. Hypotension: NS bolus → <b>noradrenaline</b> (avoid dopamine). Seizure: benzo → bicarb. Avoid phenytoin.</div>
+
+            <div style="padding:8px 0;border-top:1px solid var(--line)"><b>Digoxin</b> — <b>DigiFab (digoxin immune Fab)</b>. Acute: 10 – 20 vials empirically if unknown amount; 1 vial per 0.5 mg ingested. Chronic: 1 – 2 vials empirically or by level × weight. Indications: K &gt; 5 in acute OD, life-threatening arrhythmia (VT, bradyarrhythmia with hypotension), haemodynamic instability, level &gt; 15 ng/mL acute or &gt; 4 chronic, ingestion &gt; 10 mg adult or &gt; 4 mg child. Avoid calcium (debated — may cause "stone heart"). Treat hyperkalaemia with insulin-glucose, NOT with Ca.</div>
+
+            <div style="padding:8px 0;border-top:1px solid var(--line)"><b>Opioid</b> — naloxone 0.04 – 0.4 mg IV titrated to RR ≥ 12 (not full wakefulness → avoid withdrawal + pulmonary oedema). Infusion = 2/3 of effective bolus per hour for long-acting (methadone, ER fentanyl patch).</div>
+
+            <div style="padding:8px 0;border-top:1px solid var(--line)"><b>Iron</b> — &gt; 60 mg/kg elemental = severe. 4 h level &gt; 500 μg/dL predicts systemic toxicity. <b>Deferoxamine 15 mg/kg/hr IV</b> continuous (max 6 g/day) if symptomatic / level &gt; 500 / HAGMA / shock. Watch for pulmonary toxicity if &gt; 24 h infusion. WBI with PEG for radiopaque tablets in GI.</div>
+
+            <div style="padding:8px 0;border-top:1px solid var(--line)"><b>Lithium</b> — chronic toxicity more dangerous than acute. <b>HD</b> if level &gt; 4 mEq/L acute, &gt; 2.5 chronic with symptoms, renal failure, neurologic signs. Normal saline (not loop diuretic). Avoid NSAIDs, ACEi, thiazides. Expect post-HD rebound → repeat levels.</div>
+
+            <div style="padding:8px 0;border-top:1px solid var(--line)"><b>Cyanide</b> (smoke inhalation, industrial, laetrile) — lactate &gt; 10 after fire, metabolic acidosis unresponsive to O₂, "arterialised" venous blood. <b>Hydroxocobalamin 5 g IV over 15 min</b> (may repeat) — safer than nitrite kit in smoke victims (CO co-exposure makes methaemoglobin dangerous). Alternative: sodium nitrite 300 mg + sodium thiosulphate 12.5 g IV. Expect urine + skin red for 48 h.</div>
+
+            <div style="padding:8px 0;border-top:1px solid var(--line)"><b>Carbon monoxide</b> — headache, dizziness, confusion, syncope; COHb &gt; 10 % symptomatic, &gt; 25 % severe, &gt; 40 % life-threatening. <b>100 % O₂ non-rebreather</b> (t½ 320 min room air → 80 min on 100 %). <b>Hyperbaric O₂ (HBO)</b> considered for: LOC at any time, neurologic deficit, cardiac ischaemia, COHb &gt; 25 % (&gt; 15 % pregnant), persistent symptoms after 4 h NB-O₂. Watch for delayed neuropsychiatric syndrome (days–weeks).</div>
+
+            <div style="padding:8px 0;border-top:1px solid var(--line)"><b>Organophosphate / nerve agent</b> — SLUDGE + muscle fasciculation + seizures. PPE first. <b>Atropine 1 – 3 mg IV, double q 5 min</b> until bronchial secretions dry (may need hundreds of mg). <b>Pralidoxime 1 – 2 g IV loading → 500 mg/hr</b> within 24 h (before aging). Benzos for seizures.</div>
+
+            <div style="padding:8px 0;border-top:1px solid var(--line)"><b>Local anaesthetic systemic toxicity (LAST)</b> — bupivacaine arrest is the classic indication for <b>ILE 20 %</b> (1.5 mL/kg bolus → 0.25 mL/kg/min). Lipid rescue has saved arrested patients. Call code, continue CPR, lipid, ACLS without lidocaine.</div>
+
+          </div>
+          <div class="src">Sources: Goldfrank's Toxicologic Emergencies 11th ed (2019) · Hoffman RS et al. Nat Rev Dis Primers 2019 (Paracetamol) · Kraut JA, Mullins ME. NEJM 2018 (Toxic alcohols) · Chan YC et al. DigiFab. Clin Toxicol 2013 · ASRA ILE for LAST 2020.</div>
+        </div>
+
+      </div>
+
+      <h3 style="margin:24px 0 8px;color:var(--brand);font-size:16px">💉 Antidotes — Quick Reference</h3>
+      <div class="sub" style="margin-bottom:10px">Searchable list of reversal agents with doses and notes.</div>
       <div class="search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
         <input id="antSearch" type="search" placeholder="Search antidote or toxin (e.g. sugammadex, opioid)…" autocomplete="off" />
       </div>
       <div class="chips" id="antClassChips"></div>
       <div class="cards" id="antCards" aria-live="polite"></div>
+
+      <h3 style="margin:24px 0 8px;color:var(--brand);font-size:16px">🐍 Envenomations</h3>
+      <div class="sub" style="margin-bottom:10px">Species, syndrome and the key treatment decision for each bite or sting. Antivenom availability is regional — always check your local guidelines.</div>
+
+      <div class="cards">
+
+        <!-- 5. Snake bites -->
+        <div class="card">
+          <h3>🐍 Snake Bites — General Principles + Regional Antivenom</h3>
+          <div class="sub">Two main syndromes: NEUROTOXIC (elapids — cobras, mambas, kraits, coral, sea snakes) and HAEMO-/CYTOTOXIC (viperids — vipers, rattlesnakes, Echis, Cerastes).</div>
+          <div style="font-size:13px;line-height:1.55;margin-top:8px">
+            <div style="padding:8px 0;border-top:1px solid var(--line)">
+              <b style="color:var(--ok)">DO:</b> immobilise the limb at heart level in a loose splint · remove rings, watches, tight clothing · mark the leading edge of swelling with time · transport to a facility with antivenom · supportive care (O₂, IV access, airway).
+            </div>
+            <div style="padding:8px 0;border-top:1px solid var(--line)">
+              <b style="color:var(--danger)">DO NOT:</b> incise or suck the wound · apply a tourniquet (increases local tissue damage) · apply ice · use electric shock · give alcohol · delay transport to use folk remedies. <em>Exception</em>: pressure-immobilisation bandage (Australian-style) may be used for confirmed neurotoxic elapid bites in Australia + sea snake bites — do NOT use for viperid bites.
+            </div>
+            <div style="padding:8px 0;border-top:1px solid var(--line)">
+              <b>Antivenom — region-specific:</b>
+              <ul style="margin:4px 0 0 18px;padding:0">
+                <li><b>Middle East / Arabian Peninsula:</b> SAVP / NAVPC polyvalent covers <em>Echis carinatus</em> (saw-scaled viper), <em>Cerastes cerastes</em> (horned viper), <em>Walterinnesia aegyptia</em>, <em>Naja arabica/haje</em>.</li>
+                <li><b>USA:</b> CroFab (Crotalidae polyvalent immune Fab) for pit vipers (rattlesnake, copperhead, cottonmouth); AnaVip (F(ab')₂) alternative.</li>
+                <li><b>India / South Asia:</b> ASVS polyvalent (Big Four: cobra, krait, Russell's viper, saw-scaled viper).</li>
+                <li><b>Sub-Saharan Africa:</b> SAIMR polyvalent · EchiTAb · Fav-Afrique.</li>
+                <li><b>Australia:</b> Monovalent / polyvalent CSL antivenom (brown, tiger, death adder, taipan, sea snake).</li>
+              </ul>
+              <b>Dosing:</b> antivenom is titrated to <em>clinical and lab response</em> (resolution of coagulopathy, neurologic recovery, stop of local progression) — <em>not</em> patient weight. Expect 4-20 vials in moderate-severe envenomation. Monitor for anaphylaxis + serum sickness.
+            </div>
+            <div style="padding:8px 0;border-top:1px solid var(--line)">
+              <b>Neurotoxic (elapid) support:</b> early intubation if ptosis, dysphagia, dyspnoea · anticholinesterase trial (edrophonium or neostigmine + atropine) for post-synaptic neurotoxins like <em>Naja</em> (less effective for pre-synaptic like krait).
+            </div>
+            <div style="padding:8px 0;border-top:1px solid var(--line)">
+              <b>Viper (haemotoxic) support:</b> serial coags (PT/INR, fibrinogen, platelets) — repeat q 6-12 h × 48 h. Consumption coagulopathy — antivenom is the fibrinogen replacement (FFP/cryo rapidly consumed if antivenom not given). Monitor for compartment syndrome → fasciotomy only if compartment pressure &gt; 30-40 mmHg AFTER adequate antivenom.
+            </div>
+            <div style="padding:8px 0;border-top:1px solid var(--line)">
+              <b>Do NOT:</b> prophylactic steroids for all · prophylactic antibiotics · FFP / platelets as first-line (replace only if antivenom failed to correct and bleeding is active) · heparin.
+            </div>
+          </div>
+          <div class="src">Sources: WHO. Guidelines for the Management of Snakebites 2nd ed 2016. Warrell DA. Snake bite. Lancet 2010;375:77-88. Saudi Food &amp; Drug Authority — SAVP antivenom bulletin.</div>
+        </div>
+
+        <!-- 6. Spider + scorpion -->
+        <div class="card">
+          <h3>🕷️ Spiders &amp; Scorpions — Evidence-Based Management</h3>
+          <div class="sub">Species identification (even approximate) changes management. Bring the spider if possible, photograph if not.</div>
+          <div style="font-size:13px;line-height:1.55;margin-top:8px">
+
+            <div style="padding:10px 0;border-top:1px solid var(--line)">
+              <b style="color:#f87171">🕷️ Black widow (Latrodectus mactans / hesperus / tredecimguttatus)</b> — α-latrotoxin causes massive pre-synaptic release of ACh, NA + dopamine → <b>latrodectism</b>: severe muscle cramps, rigid board-like abdomen (mimicking acute surgical abdomen), diaphoresis, hypertension, tachycardia, autonomic lability, "facies latrodectismica" (grimacing + eyelid oedema).<br>
+              <b>Treatment:</b>
+              <ul style="margin:4px 0 0 18px;padding:0">
+                <li><b>First-line:</b> IV opioids + benzodiazepines for cramps / pain (muscle relaxation + analgesia).</li>
+                <li><b>Calcium gluconate:</b> no longer recommended (historical use, limited evidence, placebo-equivalent in trials).</li>
+                <li><b>Latrodectus antivenom</b> (equine whole-IgG, e.g. Merck USA L. mactans antivenom; CSL Red-back Spider antivenom in Australia for <em>L. hasselti</em>): reserve for <b>severe envenomation</b> (refractory pain, uncontrolled HTN, pregnancy with threatened abortion, young children, elderly). Risk of anaphylaxis + serum sickness — premedicate, ICU-capable setting.</li>
+                <li>F(ab')₂ fragment antivenom (Argentinian, Analatro) has a better safety profile and is under evaluation in the US; not yet widely available.</li>
+                <li>Supportive: antihypertensives for severe HTN, ICU admission if autonomic storm.</li>
+              </ul>
+              <b>Mortality &lt; 1 %</b> with supportive care. Pain may last 3 – 7 days.
+            </div>
+
+            <div style="padding:10px 0;border-top:1px solid var(--line)">
+              <b style="color:#fb7185">🕸️ Brown recluse (Loxosceles reclusa and 10+ relatives)</b> — sphingomyelinase-D → <b>necrotic skin ulcer</b> (dermonecrosis, 7 – 14 days to demarcate) ± <b>systemic loxoscelism</b> (haemolysis, haemoglobinuria, AKI, DIC — &lt; 5 % of bites, mostly children).<br>
+              <b>Treatment:</b>
+              <ul style="margin:4px 0 0 18px;padding:0">
+                <li>Wound care — clean, elevate, tetanus prophylaxis, mark leading edge.</li>
+                <li>Antibiotics only for secondary bacterial infection (not prophylactic).</li>
+                <li><b>Dapsone:</b> historical use for dermonecrosis — <em>evidence is weak</em>, risk of methaemoglobinaemia, haemolysis in G6PD deficiency. <b>Not routinely recommended</b> per current US toxicology practice.</li>
+                <li>Hyperbaric O₂, steroids, surgical excision — all controversial, limited evidence.</li>
+                <li><b>Surgical debridement:</b> delay until the wound has fully demarcated (usually 4 – 8 weeks). Early excision worsens outcome.</li>
+                <li>Systemic loxoscelism: supportive, transfuse if severe haemolysis, dialysis if AKI. <b>Loxosceles-specific antivenom</b> exists in Brazil (Soro Antiaracnídico) — not widely available in the US / Middle East.</li>
+              </ul>
+            </div>
+
+            <div style="padding:10px 0;border-top:1px solid var(--line)">
+              <b style="color:#fbbf24">🦂 Scorpion stings</b> — danger is species-specific. Dangerous families worldwide: <em>Androctonus crassicauda</em> (Middle East), <em>Leiurus quinquestriatus</em> ("death-stalker", Middle East + N Africa), <em>Mesobuthus tamulus</em> (India), <em>Centruroides sculpturatus</em> (SW USA, Mexico), <em>Tityus serrulatus</em> (Brazil). Mechanism: Na-channel toxins → massive sympathetic + parasympathetic surge.<br>
+              <b>Clinical grading:</b>
+              <ul style="margin:4px 0 0 18px;padding:0">
+                <li>Grade I — local pain / paraesthesia only.</li>
+                <li>Grade II — systemic symptoms (nausea, sweating, tachycardia) without end-organ dysfunction.</li>
+                <li>Grade III — autonomic storm, pulmonary oedema (acute LV failure), shock, seizures, altered mental status. Life-threatening.</li>
+              </ul>
+              <b>Treatment:</b>
+              <ul style="margin:4px 0 0 18px;padding:0">
+                <li>Grade I: cold compress, local anaesthetic, analgesia (paracetamol ± opioid), observe 6 – 12 h.</li>
+                <li>Grade II – III: <b>scorpion antivenom</b> (species-specific, where available — Saudi SAVP, Centruroides Anascorp in USA, SAIMR, Brazilian Butantan Antiarachnid). Antivenom + supportive &gt; antivenom alone.</li>
+                <li><b>Prazosin 30 μg/kg PO</b> q 3 – 6 h — α1 blockade, strong evidence in <em>Mesobuthus tamulus</em> (India), reverses pulmonary oedema + reduces mortality. Also used in Middle East.</li>
+                <li>Pulmonary oedema / cardiomyopathy: <b>dobutamine</b> (inotrope + mild vasodilator), nitrates, mechanical ventilation if respiratory failure.</li>
+                <li>Hypertensive storm: short-acting agents (nicardipine, sodium nitroprusside) — <b>AVOID β-blocker alone</b> (unopposed α worsens).</li>
+                <li>Seizures / agitation: benzodiazepines.</li>
+                <li>Hypersalivation / bradycardia (muscarinic): atropine IV titrated.</li>
+              </ul>
+            </div>
+
+          </div>
+          <div class="src">Sources: Isbister GK, Fan HW. Spider bite. Lancet 2011;378:2039-47. Bawaskar HS, Bawaskar PH. Scorpion sting: update. J Assoc Physicians India 2012;60:46-55. Chippaux JP. Emerging options for scorpion sting treatment. Expert Opin Pharmacother 2012;13:1935-44.</div>
+        </div>
+
+        <!-- 7. Marine envenomations -->
+        <div class="card">
+          <h3>🌊 Marine Envenomations &amp; Toxins</h3>
+          <div class="sub">Jellyfish treatment is species-dependent and the wrong first-aid can discharge more nematocysts.</div>
+          <div style="font-size:13px;line-height:1.55;margin-top:8px">
+
+            <div style="padding:8px 0;border-top:1px solid var(--line)">
+              <b>Box jellyfish (Chironex fleckeri, Indo-Pacific)</b> — can cause death within minutes from cardiotoxicity / respiratory arrest. First-aid: <b>flood with vinegar (5 % acetic acid) for 30 s</b> (inactivates undischarged nematocysts) → remove tentacles with forceps/gloved hand → CPR/ACLS if arrest → <b>box jellyfish antivenom (CSL) IV</b> early. Hot-water immersion (45 °C × 20-45 min) for retained pain.
+            </div>
+
+            <div style="padding:8px 0;border-top:1px solid var(--line)">
+              <b>Irukandji syndrome (Carukia barnesi + related cubozoans, N Australia)</b> — small sting → 20-30 min delay → <b>massive catecholamine surge</b>: severe generalised pain, hypertensive crisis, cardiomyopathy, pulmonary oedema. Treatment: analgesia (fentanyl), magnesium IV (adjunct), BP control (phentolamine for crisis), ICU monitoring.
+            </div>
+
+            <div style="padding:8px 0;border-top:1px solid var(--line)">
+              <b>Portuguese Man-of-War (Physalia physalis)</b> — long tentacles, severe painful sting. First-aid: <b>remove tentacles mechanically</b> (seawater rinse — NOT fresh water or alcohol, which trigger discharge). <b>Hot water immersion 45 °C × 20 min</b> for pain. <b>Vinegar is controversial in Physalia</b> — Atlantic species respond better to hot water; Pacific species data mixed. If unsure of species, hot water is safer first-line.
+            </div>
+
+            <div style="padding:8px 0;border-top:1px solid var(--line)">
+              <b>Other jellyfish</b> — hot water immersion (42 – 45 °C × 20 – 45 min). <b>Never:</b> fresh water, alcohol, urine, ice, meat tenderiser — all may trigger nematocyst discharge.
+            </div>
+
+            <div style="padding:8px 0;border-top:1px solid var(--line)">
+              <b>Stonefish (Synanceia) and other venomous fish (lionfish, scorpionfish, stingray)</b> — thermolabile protein toxins. <b>Hot water immersion 42 – 45 °C × 30 – 90 min</b> is both analgesic and antidotal. Stonefish antivenom for severe systemic envenomation. Tetanus prophylaxis. Remove retained spine under imaging.
+            </div>
+
+            <div style="padding:8px 0;border-top:1px solid var(--line)">
+              <b>Sea snake (Hydrophiidae)</b> — mostly neurotoxic + myotoxic (rhabdomyolysis). Pressure-immobilisation bandage. Polyvalent sea-snake antivenom (CSL). Most land-elapid polyvalents have some cross-reactivity. Monitor K⁺, CK, renal function.
+            </div>
+
+            <div style="padding:8px 0;border-top:1px solid var(--line)">
+              <b>Tetrodotoxin (pufferfish, blue-ringed octopus)</b> — potent Na-channel blocker → paraesthesiae → ascending paralysis → respiratory failure. <b>No antidote — supportive mechanical ventilation 24 – 72 h</b> is life-saving; recovery is typically complete if ventilated.
+            </div>
+
+            <div style="padding:8px 0;border-top:1px solid var(--line)">
+              <b>Ciguatera fish poisoning</b> (reef fish) — GI symptoms → neurologic cold allodynia ("hot feels cold") lasting weeks-months. Supportive. Mannitol has <em>limited evidence</em>, no longer routinely recommended.
+            </div>
+
+            <div style="padding:8px 0;border-top:1px solid var(--line)">
+              <b>Scombroid (histamine fish poisoning)</b> — oily fish (tuna, mackerel) improperly stored → histamine-like reaction (flushing, headache, abdominal cramps). <b>Antihistamines</b> (H1 + H2) resolve quickly. Not a true allergy.
+            </div>
+
+          </div>
+          <div class="src">Sources: Isbister GK. Marine envenomation. Clin Toxicol 2018. Berling I, Isbister GK. Marine envenomations. Aust Fam Physician 2015;44(1-2):28-32. Currie BJ. Marine antivenoms. J Toxicol Clin Toxicol 2003;41:301-8.</div>
+        </div>
+
+      </div>
     </section>
 
     <!-- RSI -->
@@ -2659,11 +2908,11 @@
             <li>Not a regulated medical device.</li>
           </ul></dd>
           <dt>Version</dt>
-          <dd>1.5.28 · last reviewed 12 November 2026.</dd>
+          <dd>1.5.29 · last reviewed 14 November 2026.</dd>
           <dt>Report a suspected error</dt>
           <dd>Say what you entered, what the app showed and what you expected, with a source if you have one. Leave out patient identifiers.</dd>
         </dl>
-        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.28&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
+        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.29&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
           <span>Report an error · contact@thetract.org</span>
         </a>
@@ -2680,7 +2929,7 @@
         <div class="row"><span class="k">Website</span><span class="v"><a href="https://thetract.org" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">thetract.org</a></span></div>
         <div class="row"><span class="k">LinkedIn</span><span class="v"><a href="https://www.linkedin.com/in/dr-mohamed-najm-aldeen-aa6452135" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">linkedin.com/in/dr-mohamed-najm-aldeen</a></span></div>
         <div class="row"><span class="k">GitHub</span><span class="v"><a href="https://github.com/mahham20022-art" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">@mahham20022-art</a></span></div>
-        <div class="row"><span class="k">Version</span><span class="v">1.5.28</span></div>
+        <div class="row"><span class="k">Version</span><span class="v">1.5.29</span></div>
         <div class="row"><span class="k">Last reviewed</span><span class="v">12 Nov 2026</span></div>
       </div>
 
@@ -2736,6 +2985,21 @@
 
       <div class="card changelog" id="changelog">
         <h3>Changelog</h3>
+        <h4>1.5.29 <span>· 14 November 2026</span></h4>
+        <ul>
+          <li>🧪 <b>Antidotes tab rebranded and expanded into Toxicology</b> — the original dynamic antidote list is kept as a subsection; four new reference cards added above it and three envenomation cards below it.</li>
+          <li><b>Approach to the Poisoned Patient</b> — resuscitate-first ABCDE, decontamination (activated charcoal 1 g/kg within 1 h; what charcoal does NOT bind: iron, lithium, alcohols, metals, acids/alkalis, hydrocarbons; whole-bowel irrigation indications), and outdated practices to avoid (ipecac, routine gastric lavage, forced diuresis, acid-alkali neutralisation of caustics).</li>
+          <li><b>Toxidromes</b> — six colour-coded syndromes with the full clinical pattern and treatment: sympathomimetic, anticholinergic ("hot/blind/dry/red/mad"), cholinergic (SLUDGE-BBB), opioid, sedative-hypnotic, and serotonin syndrome (Hunter criteria).</li>
+          <li><b>Enhanced Elimination</b> — MDAC (carbamazepine, dapsone, phenobarb, quinine, theophylline) · urinary alkalinisation (salicylate, phenobarb, MTX, chlorophenoxy herbicides) · haemodialysis I-STUMBLE mnemonic · intravenous lipid emulsion for LAST and lipophilic drug OD · VA-ECMO bridge.</li>
+          <li><b>Specific High-Stakes Poisonings</b> — current evidence-based treatment for paracetamol (21-h NAC + massive-OD NAC + HD), toxic alcohols (fomepizole + folate/thiamine-pyridoxine + HD thresholds), salicylate (MDAC + alkalinisation + HD; intubation trap), CCB/β-blocker escalation (Ca → glucagon → high-dose insulin → ILE → ECMO), TCA (NaHCO₃ by QRS), digoxin (DigiFab indications), opioid, iron (deferoxamine), lithium (HD thresholds), cyanide (hydroxocobalamin), CO (HBO indications), organophosphate (atropine + pralidoxime), LAST (ILE).</li>
+          <li>🐍 <b>Envenomations</b> — three dedicated cards, evidence-based and species-specific:
+            <ul>
+              <li><b>Snake bites</b> — do's/don'ts, regional antivenoms (SAVP for Arabian peninsula, CroFab/AnaVip for USA, ASVS India, SAIMR Africa, CSL Australia), neurotoxic vs haemotoxic support, when NOT to replace FFP/platelets, pressure-immobilisation only for elapid envenomation.</li>
+              <li><b>Spiders &amp; scorpions</b> — black widow latrodectism (opioid + benzo first-line; calcium gluconate NO LONGER recommended; antivenom reserved for severe); brown recluse loxoscelism (wound care; dapsone NOT routine; antivenom only in Brazil; delay surgical debridement until demarcation at 4-8 wk); scorpion sting (species-specific antivenom; <b>prazosin 30 μg/kg</b> for Mesobuthus, dobutamine for cardiomyopathy, avoid β-blocker alone).</li>
+              <li><b>Marine envenomations</b> — box jellyfish (vinegar + CSL antivenom), Irukandji syndrome (catecholamine surge, magnesium), Portuguese Man-of-War (hot water NOT vinegar), other jellyfish (hot water 42-45 °C), stonefish/lionfish (hot water + antivenom), sea snake (polyvalent), tetrodotoxin (supportive ventilation — no antidote), ciguatera (supportive — mannitol no longer routine), scombroid (antihistamines).</li>
+            </ul>
+          </li>
+        </ul>
         <h4>1.5.28 <span>· 12 November 2026</span></h4>
         <ul>
           <li>Nursing Corner credit pill reworded to a simple acknowledgement: "With thanks to <b>Faisal Ayed Saeed Alshahrani, RN</b> for suggesting this section." — thanks for the idea, no implied co-authorship or ownership.</li>
@@ -2961,7 +3225,7 @@
 
   <footer>
     <div class="fine"><strong>Reference aid — not a medical device.</strong> Always verify against institutional protocols and drug labels.</div>
-    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.28 · last reviewed 12 Nov 2026 · Designed by Dr. Mohamed Najm</div>
+    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.29 · last reviewed 14 Nov 2026 · Designed by Dr. Mohamed Najm</div>
   </footer>
 </div>
 
