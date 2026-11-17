@@ -7,7 +7,7 @@
      ASSETS    = cache-first for icons/CSS/JS/manifest (stable)
      IMAGES    = cache-first with size cap for user-added images
 */
-const VERSION  = "v41"; // app 1.5.13 — sourced, dated protocols; SSC 2026; DKA 2024
+const VERSION  = "v56"; // app 1.6.0 — merged feature and clinical-review lines; Practice moved out
 const PRECACHE = `najm-precache-${VERSION}`;
 const RUNTIME  = `najm-runtime-${VERSION}`;
 const ASSETS   = `najm-assets-${VERSION}`;
@@ -15,11 +15,16 @@ const IMAGES   = `najm-images-${VERSION}`;
 const ALL_CACHES = [PRECACHE, RUNTIME, ASSETS, IMAGES];
 
 // App shell — loaded on first install so the app opens offline immediately.
+// SEO files (sitemap, robots) included so that search crawlers can read them
+// even if the user has a service-worker-served page; CNAME is server-only
+// and never requested by the browser.
 const APP_SHELL = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
   "./privacy-policy.html",
+  "./sitemap.xml",
+  "./robots.txt",
   "./icons/favicon.ico",
   "./icons/favicon-32.png",
   "./icons/apple-touch.png",

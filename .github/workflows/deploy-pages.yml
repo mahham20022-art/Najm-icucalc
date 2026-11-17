@@ -3,7 +3,6 @@ name: Deploy Najm ICUCalc to GitHub Pages
 on:
   push:
     branches:
-      - claude/fix-app-links-Sp24p
       - main
   workflow_dispatch:
 
