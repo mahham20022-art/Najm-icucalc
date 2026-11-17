@@ -7,7 +7,7 @@
      ASSETS    = cache-first for icons/CSS/JS/manifest (stable)
      IMAGES    = cache-first with size cap for user-added images
 */
-const VERSION  = "v56"; // app 1.6.0 — merged feature and clinical-review lines; Practice moved out
+const VERSION  = "v57"; // app 1.6.0 — merged lines (incl. 1.5.32 splash); Practice moved out
 const PRECACHE = `najm-precache-${VERSION}`;
 const RUNTIME  = `najm-runtime-${VERSION}`;
 const ASSETS   = `najm-assets-${VERSION}`;
