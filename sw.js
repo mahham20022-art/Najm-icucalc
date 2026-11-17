@@ -7,7 +7,7 @@
      ASSETS    = cache-first for icons/CSS/JS/manifest (stable)
      IMAGES    = cache-first with size cap for user-added images
 */
-const VERSION  = "v55"; // app 1.5.31 — Splash rebuilt: "the monitor comes alive" (canvas warp + live ECG + HUD)
+const VERSION  = "v56"; // app 1.5.32 — Splash: "the heartbeat writes the N" (SVG + CSS, aurora + grain)
 const PRECACHE = `najm-precache-${VERSION}`;
 const RUNTIME  = `najm-runtime-${VERSION}`;
 const ASSETS   = `najm-assets-${VERSION}`;
