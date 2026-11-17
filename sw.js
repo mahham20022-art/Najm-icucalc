@@ -7,7 +7,7 @@
      ASSETS    = cache-first for icons/CSS/JS/manifest (stable)
      IMAGES    = cache-first with size cap for user-added images
 */
-const VERSION  = "v40"; // app 1.5.12 — Duke-ISCVID, AABB 2023, MELD 3.0
+const VERSION  = "v41"; // app 1.5.13 — sourced, dated protocols; SSC 2026; DKA 2024
 const PRECACHE = `najm-precache-${VERSION}`;
 const RUNTIME  = `najm-runtime-${VERSION}`;
 const ASSETS   = `najm-assets-${VERSION}`;

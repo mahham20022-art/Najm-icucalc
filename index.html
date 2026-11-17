@@ -59,7 +59,7 @@
       "applicationSubCategory": "MedicalCalculator",
       "operatingSystem": "Any (PWA, iOS, Android, Windows, macOS, Linux)",
       "browserRequirements": "Modern browser with JavaScript",
-      "softwareVersion": "1.5.12",
+      "softwareVersion": "1.5.13",
       "datePublished": "2026-07-25",
       "dateModified": "2026-10-30",
       "inLanguage": "en",
@@ -899,6 +899,7 @@
 
   /* -------- Source lines + evidence panel -------- */
   .src { margin-top: var(--s-2); font-size: 11px; color: var(--muted); line-height: 1.45; }
+  .src.rev, .module-src.rev { font-style: italic; }
   .module-src { margin: calc(-1 * var(--s-2)) 0 var(--s-3); font-size: 11.5px; color: var(--muted); line-height: 1.45; }
   .trust dl { margin: 0; }
   .trust dt { margin-top: var(--s-3); font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--brand-3); }
@@ -1243,7 +1244,7 @@
       <h3 id="onbTrustTitle">Before you use it</h3>
       <p><b>For</b> ICU/CCU doctors, pharmacists and nurses who already know these drugs and scores. It does the arithmetic; the clinical decision stays with you.</p>
       <p><b>Not prospectively validated.</b> Decision support only. Check every result against your protocol and the drug label.</p>
-      <p>Version 1.5.12 · last reviewed 14 November 2026 · what you enter stays in this browser.</p>
+      <p>Version 1.5.13 · last reviewed 17 November 2026 · what you enter stays in this browser.</p>
       <button class="onb-link" type="button" id="onbEvidence">Evidence, limits and data handling</button>
     </div>
 
@@ -1563,7 +1564,7 @@
       <div class="cards" style="margin-top:16px">
         <div class="card rsi-protocol-card">
           <h3 class="rsi-protocol-title">🫁 ARDS Management Bundle</h3>
-          <div class="sub">Berlin 2012 definition — acute (≤ 1 wk) hypoxaemia + bilateral opacities on CXR/CT + not fully explained by cardiac failure/fluid overload. Severity by P/F on PEEP ≥ 5: <b>mild 200 – 300 · moderate 100 – 200 · severe ≤ 100</b>.</div>
+          <div class="sub">Berlin 2012 definition — acute (≤ 1 wk) hypoxaemia + bilateral opacities on CXR/CT + not fully explained by cardiac failure/fluid overload. Severity by P/F on PEEP ≥ 5: <b>mild 200 – 300 · moderate 100 – 200 · severe ≤ 100</b>. The 2024 global definition also admits HFNC ≥ 30 L/min and SpO₂/FiO₂ ≤ 315 when no ABG is available.</div>
 
           <div class="rsi-step"><h4>1. Lung-protective ventilation (every patient)</h4><p><b>TV 6 mL/kg PBW</b> (range 4 – 8 if needed). Use the PBW card above — <em>never</em> actual body weight.<br><b>Plateau pressure ≤ 30 cmH₂O</b> (measure 0.5 s inspiratory hold, no spontaneous effort).<br><b>Driving pressure (Pplat − PEEP) &lt; 15 cmH₂O</b> — strongest single predictor of mortality (Amato NEJM 2015).<br><b>RR 20 – 35</b> to maintain minute ventilation; permissive hypercapnia OK down to <b>pH ≥ 7.20</b>.<br>SpO₂ target <b>88 – 95 %</b>; PaO₂ 55 – 80 (ARDSnet) — avoid hyperoxia.</p></div>
 
@@ -1582,7 +1583,8 @@
           <div class="rsi-step"><h4>8. VV-ECMO — EOLIA criteria</h4><p>Refer early (ideally &lt; 7 d of mechanical ventilation):<br>• <b>P/F &lt; 50</b> on FiO₂ ≥ 0.8 × 3 h, OR<br>• <b>P/F &lt; 80</b> on FiO₂ ≥ 0.8 × 6 h, OR<br>• <b>pH &lt; 7.25 with PaCO₂ ≥ 60</b> for &gt; 6 h despite RR 35 and Pplat ≤ 32.<br>EOLIA (NEJM 2018) + post-hoc Bayesian analysis (Goligher JAMA 2018): mortality 35 % vs 46 %. Contraindications: terminal disease, severe comorbidities, intracranial bleed, prolonged (&gt; 7 d) high-pressure/FiO₂ ventilation.<br>Use the <b>Murray Lung Injury Score</b> card below to objectively grade severity.</p></div>
 
           <div class="rsi-step"><h4>9. Monitoring + weaning</h4><p>Daily: SBT / spontaneous awakening (SAT) once pressors off, FiO₂ ≤ 0.5, PEEP ≤ 8, Pplat ≤ 25, pH ≥ 7.30, mental status adequate.<br>Early mobilisation when safe (ABCDEF bundle). Nutrition: enteral &lt; 48 h, trophic feeds initially acceptable (EDEN trial).</p></div>
-          <div class="src">Sources: ARDS Definition Task Force (Berlin), JAMA 2012. ARDSnet, NEJM 2000. Guérin PROSEVA, NEJM 2013. Papazian ACURASYS, NEJM 2010 + NHLBI PETAL ROSE, NEJM 2019. Wiedemann FACTT, NEJM 2006. Villar DEXA-ARDS, Lancet Resp Med 2020. Combes EOLIA, NEJM 2018.</div>
+          <div class="src">Sources: ARDS Definition Task Force (Berlin), JAMA 2012. ARDSnet, NEJM 2000. Guérin PROSEVA, NEJM 2013. Papazian ACURASYS, NEJM 2010 + NHLBI PETAL ROSE, NEJM 2019. Wiedemann FACTT, NEJM 2006. Villar DEXA-ARDS, Lancet Resp Med 2020. Combes EOLIA, NEJM 2018. Matthay MA et al. Global definition of ARDS. AJRCCM 2024;209:37–47. Grasselli G et al. ESICM guidelines on ARDS. Intensive Care Med 2023;49:727–59. Qadir N et al. ATS guideline update on ARDS (corticosteroids, PEEP, prone, ECMO, NMB). AJRCCM 2024;209:24–36.</div>
+          <div class="src rev">Content reviewed 17 Nov 2026 against the sources above. Check it against your unit's protocol.</div>
         </div>
       </div>
     </section>
@@ -1701,23 +1703,26 @@
         </div>
 
         <div class="card rsi-protocol-card">
-          <h3 class="rsi-protocol-title">⚡ Hyperkalemia Emergency Protocol</h3>
-          <div class="sub">K⁺ &gt; 6.0 with ECG changes, or K⁺ &gt; 6.5 regardless.</div>
-          <div class="rsi-step"><h4>1. Stabilise cardiac membrane (within minutes)</h4><p><b>Calcium gluconate 10%</b> 30 mL IV over 10 min (or Ca chloride 10% 10 mL via central). Repeat q10 min if ECG changes persist. Onset 1–3 min, duration 30–60 min.</p></div>
-          <div class="rsi-step"><h4>2. Shift K⁺ intracellularly</h4><p><b>Insulin</b> 10 units IV + <b>Dextrose 25 g IV</b> (50 mL D50W). Check glucose q1h × 6 — hypoglycaemia common.<br><b>Salbutamol</b> 10–20 mg nebulised. Avoid in tachyarrhythmia.<br><b>Sodium bicarbonate</b> only if co-existing metabolic acidosis (not routine).</p></div>
-          <div class="rsi-step"><h4>3. Remove K⁺ from body</h4><p><b>Furosemide</b> 20–80 mg IV if volume replete + urine output.<br><b>Patiromer</b> 8.4 g PO (or <b>SZC/Lokelma</b> 10 g PO) — slow onset.<br><b>Haemodialysis</b> if refractory, severe (K &gt; 6.5 unresponsive), AKI with oliguria, or symptomatic.</p></div>
-          <div class="rsi-step"><h4>4. Monitor + root-cause</h4><p>Continuous ECG; recheck K⁺ at 1 h and q2h. Stop ACEi/ARB/K-sparing diuretics/trimethoprim. Treat AKI, acidosis, rhabdo, tumour lysis.</p></div>
+          <h3 class="rsi-protocol-title">⚡ Hyperkalaemia Emergency Protocol</h3>
+          <div class="sub">Severity (K⁺ mmol/L): mild 5.5–5.9 · moderate 6.0–6.4 · <b>severe ≥ 6.5</b>. 12-lead ECG for K⁺ ≥ 6.0; continuous monitoring for K⁺ ≥ 6.5.</div>
+          <div class="rsi-step"><h4>1. Protect the heart (ECG changes)</h4><p><b>Calcium gluconate 10% 30 mL IV over 10 min</b>, or <b>calcium chloride 10% 10 mL over 5 min</b> (preferred in cardiac arrest or peri-arrest). Same calcium dose (6.8 mmol). Repeat the ECG; give further calcium if changes persist. Give calcium even if dialysis is immediately available.</p></div>
+          <div class="rsi-step"><h4>2. Shift K⁺ into cells</h4><p><b>Insulin 10 units soluble + glucose 25 g IV</b> (severe: recommended; moderate: suggested).<br>If pre-treatment glucose &lt; 7.0 mmol/L (126 mg/dL): start <b>10% glucose 50 mL/h for 5 h</b>.<br>Check glucose at 0, 30, 60, 90, 120, 180, 240, 300 and 360 min: hypoglycaemia can occur for up to 6 h.<br><b>Salbutamol 10–20 mg nebulised</b> as an adjunct; never alone for severe hyperkalaemia.<br><b>Sodium bicarbonate</b> is not routinely recommended.</p></div>
+          <div class="rsi-step"><h4>3. Remove K⁺ from the body</h4><p><b>Sodium zirconium cyclosilicate 10 g PO three times daily</b> for up to 72 h (severe; consider in moderate), or <b>patiromer 8.4 g PO</b> for K⁺ ≥ 6.0. Calcium resonium is no longer routine.<br><b>Haemodialysis patients with K⁺ ≥ 6.5: urgent dialysis.</b> Treatment-resistant or life-threatening hyperkalaemia: urgent nephrology or critical-care decision on RRT.</p></div>
+          <div class="rsi-step"><h4>4. Monitor and find the cause</h4><p>K⁺ at 1, 2, 4, 6 and 24 h (rebound is common). Stop or review ACE inhibitors, ARBs, MRAs, K⁺-sparing diuretics, trimethoprim, NSAIDs and K⁺ supplements. Treat AKI, acidosis, rhabdomyolysis, tumour lysis.</p></div>
+          <div class="src">Source: UK Kidney Association. Clinical practice guideline: management of hyperkalaemia in adults (Alfonzo A et al.), updated July 2026.</div>
+          <div class="src rev">Content reviewed 17 Nov 2026 against the sources above. Check it against your unit's protocol.</div>
         </div>
 
         <div class="card rsi-protocol-card">
           <h3 class="rsi-protocol-title">🩸 DKA / HHS Protocol</h3>
-          <div class="sub">Adult diabetic ketoacidosis / hyperosmolar hyperglycaemic state.</div>
-          <div class="rsi-step"><h4>1. Fluids (first hour)</h4><p><b>0.9% NaCl 15–20 mL/kg</b> IV over 1 h (1–1.5 L adult). Then 250–500 mL/hr adjusted to haemodynamics. Switch to <b>0.45% NaCl</b> once corrected Na is normal/high.<br>Add <b>D5 ½ NS</b> when glucose &lt; 250 mg/dL (14 mmol/L) to allow insulin continuation.</p></div>
-          <div class="rsi-step"><h4>2. Insulin</h4><p>Check K⁺ FIRST. If K⁺ &lt; 3.3 → <b>hold insulin</b>, replace K⁺ first.<br>Regular insulin <b>0.1 U/kg IV bolus</b>, then <b>0.1 U/kg/hr infusion</b>. Target glucose fall 50–75 mg/dL/hr.<br>When glucose ≤ 200 (DKA) or ≤ 300 (HHS) → cut infusion in half (0.02–0.05 U/kg/hr) and add dextrose.<br>Transition to subcutaneous when AG closed + patient eating.</p></div>
-          <div class="rsi-step"><h4>3. Potassium (always deplete!)</h4><p>K⁺ &gt; 5.2 → no replacement, recheck q2h<br>K⁺ 3.3–5.2 → 20–30 mEq KCl in each litre of IVF<br>K⁺ &lt; 3.3 → HOLD insulin, give 20–30 mEq/hr (central line, cardiac monitor) until &gt; 3.3</p></div>
-          <div class="rsi-step"><h4>4. Bicarbonate (rarely)</h4><p>Only if pH &lt; 6.9: 100 mEq NaHCO₃ in 400 mL water + 20 mEq KCl, over 2 h. Not routine — may worsen hypokalaemia + cerebral acidosis.</p></div>
-          <div class="rsi-step"><h4>5. Monitoring + resolution</h4><p>q1–2h: glucose, electrolytes (K, Mg, Phos), AG, pH. Resolution: AG &lt; 12, HCO₃ &gt; 15, pH &gt; 7.3, glucose &lt; 200. Treat precipitant (infection, missed insulin, MI, pancreatitis).</p></div>
-          <div class="src">Source: Kitabchi AE et al. Hyperglycemic crises in adult patients with diabetes (ADA consensus). Diabetes Care 2009;32(7):1335–43. Umpierrez GE et al. ADA/EASD/JBDS/AACE/DTS consensus report. Diabetes Care 2024;47(8):1257–75.</div>
+          <div class="sub"><b>DKA</b> = glucose ≥ 200 mg/dL (11.1 mmol/L) or known diabetes + β-hydroxybutyrate ≥ 3.0 mmol/L (or urine ketones ≥ 2+) + pH &lt; 7.3 and/or HCO₃ &lt; 18. Euglycaemic DKA exists (SGLT2 inhibitors, pregnancy).<br><b>HHS</b> = glucose ≥ 600 mg/dL (33.3 mmol/L) + effective osmolality &gt; 300 (or total &gt; 320) mOsm/kg + β-OHB &lt; 3.0 + pH ≥ 7.3 and HCO₃ ≥ 15. Mixed DKA/HHS: treat as DKA.</div>
+          <div class="rsi-step"><h4>1. Fluids</h4><p><b>0.9% saline or a balanced crystalloid</b> 500–1000 mL/h for the first 2–4 h (smaller 250 mL boluses if elderly, heart or kidney failure). Replace about half the deficit in 8–12 h, the rest over 24–48 h.<br>Add <b>dextrose 5–10%</b> once glucose &lt; 250 mg/dL (13.9 mmol/L), in DKA and HHS.<br>HHS: glucose fall ≤ 90–120 mg/dL/h, Na fall ≤ 10 mmol/L per 24 h, osmolality fall 3–8 mOsm/kg/h.</p></div>
+          <div class="rsi-step"><h4>2. Insulin</h4><p>Check K⁺ first: <b>K⁺ &lt; 3.5 → hold insulin</b> and replace K⁺ first.<br><b>Moderate–severe DKA:</b> fixed-rate IV infusion <b>0.1 U/kg/h</b>; a 0.1 U/kg bolus only if IV access is delayed. When dextrose starts, reduce to <b>0.05 U/kg/h</b>. Keep glucose 150–200 mg/dL until resolution.<br><b>HHS:</b> 0.05 U/kg/h; keep glucose 200–250 mg/dL.<br><b>Mild DKA</b> (β-OHB ≤ 6, pH &gt; 7.25, HCO₃ ≥ 15, alert): SC rapid-acting analogue 0.1 U/kg q1h or 0.2 U/kg q2h is an alternative.</p></div>
+          <div class="rsi-step"><h4>3. Potassium</h4><p>K⁺ &gt; 5.0 → none; recheck in 2 h.<br>K⁺ 3.5–5.0 → <b>10–20 mmol in each litre</b> of fluid, aiming for 4–5.<br>K⁺ &lt; 3.5 → <b>10–20 mmol/h</b> (cardiac monitor) and hold insulin until &gt; 3.5.<br>Check K⁺ at baseline, 2 h after insulin starts, then every 4 h.</p></div>
+          <div class="rsi-step"><h4>4. Bicarbonate and phosphate</h4><p>Bicarbonate is not routine; consider only if <b>pH &lt; 7.0</b>. Phosphate if &lt; 1.0 mmol/L, especially with weakness or cardiorespiratory compromise.</p></div>
+          <div class="rsi-step"><h4>5. Resolution and transition</h4><p><b>DKA resolved:</b> β-OHB &lt; 0.6 mmol/L AND venous pH ≥ 7.3 or HCO₃ ≥ 18.<br><b>HHS resolved:</b> osmolality &lt; 300, glucose &lt; 250 mg/dL, urine output &gt; 0.5 mL/kg/h, cognition improved.<br>Start <b>basal insulin at least 1–2 h before stopping the infusion</b>; basal-bolus regimen, often 0.3–0.6 U/kg/day. Treat the precipitant (infection, missed insulin, MI, pancreatitis, SGLT2 inhibitor).</p></div>
+          <div class="src">Source: Umpierrez GE et al. Hyperglycemic crises in adults with diabetes: a consensus report (ADA/EASD/JBDS/AACE/DTS). Diabetes Care 2024;47(8):1257–75.</div>
+          <div class="src rev">Content reviewed 17 Nov 2026 against the sources above. Check it against your unit's protocol.</div>
         </div>
       </div>
     </section>
@@ -1863,12 +1868,14 @@
 
         <div class="card rsi-protocol-card">
           <h3 class="rsi-protocol-title">🩸 Massive Transfusion Protocol (MTP)</h3>
-          <div class="sub">Trigger: ABC score ≥ 2, SI &gt; 1 with ongoing bleeding, &gt; 10 units PRBC/24 h anticipated, or &gt; 4 units in 1 h.</div>
-          <div class="rsi-step"><h4>1. Ratio-based resuscitation (1 : 1 : 1)</h4><p>For every <b>6 units PRBC</b> → <b>6 units FFP</b> → <b>1 adult dose platelets</b> (= 1 apheresis unit or 6-pack).<br>Order by MTP pack. Resist crystalloid &gt; 1 L (dilutes clotting factors).</p></div>
-          <div class="rsi-step"><h4>2. Adjunctive haemostatic drugs</h4><p><b>Tranexamic acid</b> 1 g IV over 10 min, then 1 g over 8 h — give <b>within 3 h</b> of trauma (CRASH-2).<br><b>Fibrinogen</b> replacement: cryoprecipitate 10 units (adult) or fibrinogen concentrate 2–4 g if fibrinogen &lt; 1.5 g/L.<br><b>Prothrombin complex (PCC)</b> 25–50 U/kg for warfarin / Xa reversal + major haemorrhage.<br><b>DDAVP</b> 0.3 mcg/kg IV if uraemic bleeding / aspirin.</p></div>
-          <div class="rsi-step"><h4>3. Correct the lethal triad</h4><p><b>Hypothermia:</b> warm all fluids (37 °C), forced-air warmer, cover head.<br><b>Acidosis:</b> treat shock first; bicarbonate only if pH &lt; 7.1 persisting.<br><b>Coagulopathy:</b> see ratio above; add TXA + fibrinogen + Ca.</p></div>
-          <div class="rsi-step"><h4>4. Monitor + endpoints</h4><p>q 30 min: TEG/ROTEM if available, INR, fibrinogen, ionised Ca (target &gt; 1.1 — give <b>1 g Ca gluconate</b> per 4 units blood), K⁺, lactate, temp.<br><b>Stop MTP</b> when haemodynamically stable, SBP &gt; 90 for 30 min, HR &lt; 110, no further transfusion requirement in 30 min, source controlled.</p></div>
-          <div class="rsi-step"><h4>5. Target values</h4><p>Hb 7–9 · platelets &gt; 50 (&gt; 100 if head injury / ongoing haemorrhage) · fibrinogen &gt; 1.5–2 · INR &lt; 1.5 · ionised Ca &gt; 1.1 · temp &gt; 36 °C · pH &gt; 7.2 · base deficit &lt; 6.</p></div>
+          <div class="sub">Trigger: ABC score ≥ 2, shock index &gt; 1 with ongoing bleeding, &gt; 10 units PRBC in 24 h anticipated, or &gt; 4 units in 1 h. Local MTP packs and thresholds take precedence.</div>
+          <div class="rsi-step"><h4>1. Ratio-based resuscitation</h4><p>Give plasma with red cells from the start: <b>1 : 1 : 1</b> (PRBC : plasma : platelets, PROPPR), and at least <b>1 : 2</b> plasma : PRBC (European guideline).<br>Limit crystalloid. Until bleeding is controlled: target <b>SBP 80–90 mmHg</b> (permissive hypotension), but <b>MAP ≥ 80</b> with severe TBI.</p></div>
+          <div class="rsi-step"><h4>2. Haemostatic drugs</h4><p><b>Tranexamic acid</b> 1 g IV over 10 min, then 1 g over 8 h, <b>within 3 h</b> of injury (CRASH-2); not after 3 h.<br><b>Fibrinogen</b> &lt; 1.5 g/L (or functional deficit on viscoelastic test): <b>fibrinogen concentrate 3–4 g</b> or <b>cryoprecipitate 15–20 single-donor units</b>.<br><b>PCC</b> 25–50 U/kg for vitamin K antagonist reversal; for factor Xa inhibitors, follow your local reversal protocol.<br><b>Desmopressin</b> 0.3 µg/kg for antiplatelet-related bleeding or von Willebrand disease.</p></div>
+          <div class="rsi-step"><h4>3. Correct the lethal triad</h4><p><b>Hypothermia:</b> warm all fluids and products, forced-air warming; target normothermia.<br><b>Acidosis:</b> treat shock and bleeding; bicarbonate does not correct coagulopathy.<br><b>Hypocalcaemia:</b> keep ionised Ca in the normal range (&gt; 1.1 mmol/L) with calcium chloride or gluconate.</p></div>
+          <div class="rsi-step"><h4>4. Monitor and stop</h4><p>Every 30–60 min: viscoelastic test (TEG/ROTEM) if available, INR, fibrinogen, platelets, ionised Ca, K⁺, lactate, temperature.<br><b>Stand down the MTP</b> once bleeding is controlled and the patient is haemodynamically stable without ongoing transfusion; return unused products.</p></div>
+          <div class="rsi-step"><h4>5. Targets</h4><p>Hb 7–9 g/dL · platelets &gt; 50 × 10⁹/L (&gt; 100 with ongoing bleeding or TBI) · fibrinogen ≥ 1.5 g/L · ionised Ca normal · temperature normal.</p></div>
+          <div class="src">Sources: Rossaint R et al. European guideline on management of major bleeding and coagulopathy following trauma, 6th ed. Crit Care 2023;27:80. Holcomb JB et al. PROPPR. JAMA 2015;313(5):471–82. CRASH-2 collaborators. Lancet 2010;376:23–32. Nunez TC et al. ABC score. J Trauma 2009;66:346–52.</div>
+          <div class="src rev">Content reviewed 17 Nov 2026 against the sources above. Check it against your unit's protocol.</div>
         </div>
       </div>
     </section>
@@ -1878,7 +1885,7 @@
       <div class="module-head"><div><h2>Clinical Scores</h2><p>Live scoring with interpretation.</p></div></div>
       <div class="cards">
         <div class="card"><h3>GCS</h3><div class="sub">Glasgow Coma Scale (3–15)</div><div id="score-gcs"></div><div class="src">Source: Teasdale G &amp; Jennett B. Lancet 1974;2(7872):81–4.</div></div>
-        <div class="card"><h3>qSOFA</h3><div class="sub">≥ 2 → higher sepsis mortality risk.</div><div id="score-qsofa"></div><div class="src">Source: Singer M et al. Sepsis-3. JAMA 2016;315(8):801–10.</div></div>
+        <div class="card"><h3>qSOFA</h3><div class="sub">≥ 2 → higher sepsis mortality risk. Prognostic only: SSC 2026 advises NEWS, MEWS or SIRS, not qSOFA, for screening.</div><div id="score-qsofa"></div><div class="src">Source: Singer M et al. Sepsis-3. JAMA 2016;315(8):801–10.</div></div>
         <div class="card"><h3>SOFA</h3><div class="sub">Organ dysfunction (0–24).</div><div id="score-sofa"></div><div class="src">Source: Vincent et al., Intensive Care Med 1996</div></div>
         <div class="card"><h3>CHA₂DS₂-VASc</h3><div class="sub">Stroke risk in AF.</div><div id="score-chads"></div><div class="src">Source: ESC AF guidelines, 2020</div></div>
         <div class="card"><h3>HAS-BLED</h3><div class="sub">Bleeding risk on anticoagulation.</div><div id="score-hasbled"></div><div class="src">Source: ESC AF guidelines, 2020</div></div>
@@ -1962,6 +1969,8 @@
       </div>
       <div class="chips" id="antClassChips"></div>
       <div class="cards" id="antCards" aria-live="polite"></div>
+      <div class="module-src" style="margin-top:10px">Sources: Nelson LS et al. Goldfrank's Toxicologic Emergencies, 11th ed. McGraw-Hill, 2019. Current product labels (US FDA / EMA SmPC). Connolly SJ et al. ANNEXA-I. NEJM 2024;390:1745–55. Neal JM, Neal EJ, Weinberg GL. ASRA local anesthetic systemic toxicity checklist: 2020 version. Reg Anesth Pain Med 2021;46:81–2. Doses are for adults unless stated; involve your poison centre.</div>
+      <div class="module-src rev">Content reviewed 17 Nov 2026 against the sources above. Check it against your unit's protocol.</div>
     </section>
 
     <!-- RSI -->
@@ -1977,6 +1986,8 @@
       <div class="card rsi-protocol-card">
         <h3 class="rsi-protocol-title">The 7 P's</h3>
         <div id="rsiProtocol"></div>
+        <div class="src">Sources: Acquisto NM et al. SCCM clinical practice guidelines for rapid sequence intubation in the critically ill adult. Crit Care Med 2023;51(10):1411–30. Higgs A et al. DAS/ICS/FICM/RCoA guidelines for tracheal intubation in critically ill adults. Br J Anaesth 2018;120(2):323–52. Gibbs KW et al. PREOXI: noninvasive ventilation for preoxygenation. NEJM 2024;390:2165–77.</div>
+        <div class="src rev">Content reviewed 17 Nov 2026 against the sources above. Check it against your unit's protocol.</div>
       </div>
 
       <!-- Quick drug reference -->
@@ -1999,6 +2010,8 @@
         </div>
       </div>
       <div class="cards" id="neuroCards"></div>
+      <div class="module-src" style="margin-top:10px">Sources: Brain Trauma Foundation, 4th ed. Neurosurgery 2017;80:6–15. Hawryluk GWJ et al. SIBICC. Intensive Care Med 2019;45:1783–94. Powers WJ et al. AHA/ASA acute ischaemic stroke. Stroke 2018;49:e46–e110. Prabhakaran S et al. AHA/ASA acute ischaemic stroke 2026. Stroke 2026 (doi 10.1161/STR.0000000000000513). Greenberg SM et al. AHA/ASA spontaneous ICH. Stroke 2022;53:e282–e361. Hoh BL et al. AHA/ASA aneurysmal SAH. Stroke 2023;54:e314–e370. Nolan JP et al. ERC-ESICM post-resuscitation care. Intensive Care Med 2021;47:369–421.</div>
+      <div class="module-src rev">Content reviewed 17 Nov 2026 against the sources above. Check it against your unit's protocol.</div>
 
       <div class="cards" style="margin-top:16px">
         <div class="card rsi-protocol-card">
@@ -2017,24 +2030,26 @@
 
           <div class="rsi-step"><h4>Monitoring + special situations</h4><p>Continuous EEG mandatory in refractory + after convulsions stop (after convulsive SE was controlled, 14 % were in non-convulsive SE on EEG — DeLorenzo, Epilepsia 1998).<br><b>Eclampsia:</b> MgSO₄ 4 – 6 g IV loading → 1 – 2 g/hr; deliver fetus.<br><b>Alcohol withdrawal:</b> benzodiazepines + thiamine; avoid phenytoin (ineffective).<br><b>Toxic:</b> INH → pyridoxine · TCA → NaHCO₃ · theophylline → HD · cocaine → benzos.</p></div>
           <div class="src">Source: Glauser T et al. Evidence-based guideline: treatment of convulsive status epilepticus in children and adults (American Epilepsy Society). Epilepsy Curr 2016;16(1):48–61. ESETT investigators, NEJM 2019;381(22):2103–13. RAMPART (Silbergleit), NEJM 2012;366(7):591–600.</div>
+          <div class="src rev">Content reviewed 17 Nov 2026 against the sources above. Check it against your unit's protocol.</div>
         </div>
 
         <div class="card rsi-protocol-card">
           <h3 class="rsi-protocol-title">🧠 ABCDEF ICU Liberation Bundle</h3>
-          <div class="sub">SCCM ICU Liberation / PADIS 2018. In the ICU Liberation Collaborative, complete bundle performance was associated with lower 7-day mortality (HR 0.32), less delirium (OR 0.60), coma, restraint use and ICU readmission. Round on <em>every</em> element every shift.</div>
+          <div class="sub">SCCM ICU Liberation / PADIS 2018 and its 2025 focused update. In the ICU Liberation Collaborative, complete bundle performance was associated with lower 7-day mortality (HR 0.32), less delirium (OR 0.60), coma, restraint use and ICU readmission. Round on <em>every</em> element every shift.</div>
 
           <div class="rsi-step"><h4>A · Assess, prevent and manage PAIN</h4><p>Tool: <b>CPOT ≥ 3</b> (non-verbal) OR <b>NRS ≥ 4</b> (verbal) = pain.<br>Treat pain FIRST before adding sedation (analgo-sedation).<br>First-line: <b>fentanyl 25 – 100 μg/hr</b> infusion, titrate to CPOT &lt; 3. Avoid morphine in renal failure (metabolite accumulation).<br>Adjuncts: paracetamol 1 g IV q 6 h · ketamine 0.1 – 0.5 mg/kg/hr for opioid-sparing · gabapentin / regional blocks if appropriate. Avoid long-term NSAIDs in critical illness.</p></div>
 
           <div class="rsi-step"><h4>B · BOTH Spontaneous Awakening (SAT) + Spontaneous Breathing Trial (SBT)</h4><p><b>SAT safety:</b> no active seizures, no alcohol withdrawal, no neuromuscular blockade, no agitation on current sedation, no myocardial ischaemia in prior 24 h, no ↑ICP.<br>SAT = stop sedation (± opioid continued for pain). If RASS ≥ − 1 within 4 h → go to SBT.<br><b>SBT:</b> see the Weaning Readiness card in Ventilator tab for criteria + RSBI.<br>Awake Breathing Controlled trial (ABC, Girard Lancet 2008): more vent-free days (14.7 vs 11.6), lower 1-yr mortality (44 vs 58 %).</p></div>
 
-          <div class="rsi-step"><h4>C · Choice of analgesia and sedation</h4><p>Target light sedation: <b>RASS 0 to − 2</b> unless specific indication for deeper (ARDS prone, severe asynchrony, ↑ICP, status epilepticus).<br>Prefer <b>non-benzodiazepines</b>:<br>• <b>Propofol</b> 5 – 50 μg/kg/min (watch PRIS &gt; 80 μg/kg/min &gt; 48 h)<br>• <b>Dexmedetomidine</b> 0.2 – 1.5 μg/kg/hr (SPICE-III, MENDS2: non-inferior to propofol, less delirium in some trials)<br>Avoid benzodiazepine infusions (midazolam, lorazepam) unless alcohol/benzo withdrawal or refractory status.<br>Reassess sedation level + need q 4 h.</p></div>
+          <div class="rsi-step"><h4>C · Choice of analgesia and sedation</h4><p>Target light sedation: <b>RASS 0 to − 2</b> unless specific indication for deeper (ARDS prone, severe asynchrony, ↑ICP, status epilepticus).<br>Prefer <b>non-benzodiazepines</b>:<br>• <b>Propofol</b> 5 – 50 μg/kg/min (watch PRIS &gt; 80 μg/kg/min &gt; 48 h)<br>• <b>Dexmedetomidine</b> 0.2 – 1.5 μg/kg/hr — PADIS 2025 suggests it over propofol when light sedation or less delirium is the priority (conditional). Watch bradycardia and hypotension.<br>Avoid benzodiazepine infusions (midazolam, lorazepam) unless alcohol/benzo withdrawal or refractory status.<br>Reassess sedation level + need q 4 h.</p></div>
 
-          <div class="rsi-step"><h4>D · Delirium — assess, prevent, manage</h4><p><b>Assess:</b> CAM-ICU each shift (see Scores tab) + RASS first.<br><b>Prevent:</b> re-orientate, open blinds in day / dim at night, hearing aids / glasses on, early mobility, family at bedside, pain + sedation per above, avoid tethers.<br><b>Manage (DELIRIUMS mnemonic — find a cause):</b> <b>D</b>rugs (anticholinergics, steroids, opioids, benzos) · <b>E</b>lectrolytes / endocrine (Na, Ca, Mg, glucose, thyroid) · <b>L</b>ow O₂ (hypoxia, hypoperfusion, anaemia, MI) · <b>I</b>nfection / sepsis · <b>R</b>etention (urinary, faecal) · <b>I</b>ctal / post-ictal · <b>U</b>nder-hydration / under-nutrition · <b>M</b>etabolic (uraemia, hepatic encephalopathy, acid-base) · <b>S</b>ubdural / stroke / CNS.<br><b>Pharmacology:</b> antipsychotics (haloperidol 2 – 5 mg IV q 4 – 6 h, olanzapine, quetiapine 25 – 100 mg BID) only for severe agitation / safety — <em>no mortality benefit</em> (MIND-USA). Dexmedetomidine for hyperactive delirium at night.</p></div>
+          <div class="rsi-step"><h4>D · Delirium — assess, prevent, manage</h4><p><b>Assess:</b> CAM-ICU each shift (see Scores tab) + RASS first.<br><b>Prevent:</b> re-orientate, open blinds in day / dim at night, hearing aids / glasses on, early mobility, family at bedside, pain + sedation per above, avoid tethers.<br><b>Manage (DELIRIUMS mnemonic — find a cause):</b> <b>D</b>rugs (anticholinergics, steroids, opioids, benzos) · <b>E</b>lectrolytes / endocrine (Na, Ca, Mg, glucose, thyroid) · <b>L</b>ow O₂ (hypoxia, hypoperfusion, anaemia, MI) · <b>I</b>nfection / sepsis · <b>R</b>etention (urinary, faecal) · <b>I</b>ctal / post-ictal · <b>U</b>nder-hydration / under-nutrition · <b>M</b>etabolic (uraemia, hepatic encephalopathy, acid-base) · <b>S</b>ubdural / stroke / CNS.<br><b>Pharmacology:</b> antipsychotics (haloperidol 2 – 5 mg IV q 4 – 6 h, olanzapine, quetiapine 25 – 100 mg BID) only for severe agitation / safety — <em>no mortality benefit</em> (MIND-USA); PADIS 2025 makes no recommendation for or against antipsychotics. <b>Melatonin</b> at night is suggested (conditional). Dexmedetomidine for hyperactive delirium at night.</p></div>
 
-          <div class="rsi-step"><h4>E · Early mobility and exercise</h4><p>Begin ROM within 24 – 48 h of ICU admit when haemodynamically stable (MAP ≥ 65 off escalating pressors, FiO₂ ≤ 0.6, PEEP ≤ 10, no active ischaemia / arrhythmia).<br>Progression: passive ROM → active ROM → sitting edge of bed → standing → marching → walking in room → walking in corridor.<br>Needs 2 – 3 staff + physio + RT; portable ventilator OK. Early therapy doubled return to independent function at discharge (59 % vs 35 %) and halved delirium days (Schweickert, Lancet 2009); ICU stay was not shorter.</p></div>
+          <div class="rsi-step"><h4>E · Early mobility and exercise</h4><p>PADIS 2025 suggests <b>enhanced</b> mobilisation over usual care (more, earlier or longer sessions, cycling, protocolised). Begin ROM within 24 – 48 h of ICU admit when haemodynamically stable (MAP ≥ 65 off escalating pressors, FiO₂ ≤ 0.6, PEEP ≤ 10, no active ischaemia / arrhythmia).<br>Progression: passive ROM → active ROM → sitting edge of bed → standing → marching → walking in room → walking in corridor.<br>Needs 2 – 3 staff + physio + RT; portable ventilator OK. Early therapy doubled return to independent function at discharge (59 % vs 35 %) and halved delirium days (Schweickert, Lancet 2009); ICU stay was not shorter.</p></div>
 
           <div class="rsi-step"><h4>F · Family engagement + empowerment</h4><p>Open / flexible visitation. Involve family in rounds, delirium prevention (orientation, familiar objects, voice recordings), SAT/SBT coaching.<br>Daily communication: diagnosis, prognosis, goals of care, estimated LOS. Document family meetings. Offer palliative care consult when prognosis guarded.<br>ICU diary, follow-up clinic reduces PTSD (RACHEL, Jones et al.).</p></div>
-          <div class="src">Sources: Devlin JW et al. PADIS Guidelines — Pain, Agitation/Sedation, Delirium, Immobility, Sleep. Crit Care Med 2018;46(9):e825–73. Pun BT et al. Caring for critically ill patients with the ABCDEF bundle — ICU Liberation Collaborative. Crit Care Med 2019;47(1):3–14. Girard TD et al. ABC trial. Lancet 2008;371(9607):126–34. Schweickert WD et al. Early physical and occupational therapy. Lancet 2009;373(9678):1874–82. Girard TD et al. MIND-USA — haloperidol/ziprasidone for delirium in ICU. NEJM 2018;379(26):2506–16.</div>
+          <div class="src">Sources: Devlin JW et al. PADIS Guidelines — Pain, Agitation/Sedation, Delirium, Immobility, Sleep. Crit Care Med 2018;46(9):e825–73. Pun BT et al. Caring for critically ill patients with the ABCDEF bundle — ICU Liberation Collaborative. Crit Care Med 2019;47(1):3–14. Girard TD et al. ABC trial. Lancet 2008;371(9607):126–34. Schweickert WD et al. Early physical and occupational therapy. Lancet 2009;373(9678):1874–82. Girard TD et al. MIND-USA — haloperidol/ziprasidone for delirium in ICU. NEJM 2018;379(26):2506–16. Lewis K et al. Focused update to the PADIS guidelines. Crit Care Med 2025;53(3):e711–27.</div>
+          <div class="src rev">Content reviewed 17 Nov 2026 against the sources above. Check it against your unit's protocol.</div>
         </div>
       </div>
     </section>
@@ -2044,10 +2059,12 @@
       <div class="module-head">
         <div>
           <h2>Sepsis &amp; Septic Shock</h2>
-          <p>Surviving Sepsis Campaign 2021 — bedside bundle, resuscitation, pressors, source control, adjuncts.</p>
+          <p>Surviving Sepsis Campaign 2026 — recognition, resuscitation, pressors, antimicrobials, source control, adjuncts.</p>
         </div>
       </div>
       <div class="cards" id="sepsisCards"></div>
+      <div class="module-src" style="margin-top:10px">Source: Prescott HC, Antonelli M, Alhazzani W et al. Surviving Sepsis Campaign: international guidelines for management of sepsis and septic shock 2026. Crit Care Med 2026 (doi 10.1097/CCM.0000000000007075). Trials named in the cards: TRISS (NEJM 2014), NICE-SUGAR (NEJM 2009), ADRENAL and APROCCHSS (NEJM 2018), STARRT-AKI (NEJM 2020), IDEAL-ICU (NEJM 2018).</div>
+      <div class="module-src rev">Content reviewed 17 Nov 2026 against the sources above. Check it against your unit's protocol.</div>
     </section>
 
     <!-- ABOUT -->
@@ -2073,11 +2090,11 @@
             <li>Not a regulated medical device.</li>
           </ul></dd>
           <dt>Version</dt>
-          <dd>1.5.12 · last reviewed 14 November 2026.</dd>
+          <dd>1.5.13 · last reviewed 17 November 2026.</dd>
           <dt>Report a suspected error</dt>
           <dd>Say what you entered, what the app showed and what you expected, with a source if you have one. Leave out patient identifiers.</dd>
         </dl>
-        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.12&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
+        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.5.13&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
           <span>Report an error · contact@thetract.org</span>
         </a>
@@ -2097,7 +2114,7 @@
         <div class="row"><span class="k">Listed on</span><span class="v"><a href="https://apps.litfl.com/" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">LITFL App Store</a></span></div>
         <div class="row"><span class="k">LinkedIn</span><span class="v"><a href="https://www.linkedin.com/in/dr-mohamed-najm-aldeen-aa6452135" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">linkedin.com/in/dr-mohamed-najm-aldeen</a></span></div>
         <div class="row"><span class="k">GitHub</span><span class="v"><a href="https://github.com/mahham20022-art" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">@mahham20022-art</a></span></div>
-        <div class="row"><span class="k">Version</span><span class="v">1.5.12</span></div>
+        <div class="row"><span class="k">Version</span><span class="v">1.5.13</span></div>
         <div class="row"><span class="k">Last reviewed</span><span class="v">13 Nov 2026</span></div>
       </div>
 
@@ -2153,6 +2170,16 @@
 
       <div class="card changelog" id="changelog">
         <h3>Changelog</h3>
+        <h4>1.5.13 <span>· 17 November 2026</span></h4>
+        <ul>
+          <li>Every protocol card now names its sources and carries a review date.</li>
+          <li>Sepsis: rewritten to the Surviving Sepsis Campaign 2026 guideline (screening with NEWS/MEWS/SIRS rather than qSOFA, antimicrobial timing by likelihood, peripheral vasopressors, MAP 60–65 at age ≥ 65, prolonged β-lactam infusion, no routine anaerobic or antifungal cover, no routine albumin).</li>
+          <li>DKA/HHS: rewritten to the 2024 ADA/EASD/JBDS/AACE/DTS consensus (ketone-based diagnosis and resolution, dextrose below 250 mg/dL with insulin 0.05 U/kg/h, hold insulin for K⁺ &lt; 3.5, bicarbonate only below pH 7.0, SC insulin for mild DKA, HHS resolution criteria).</li>
+          <li>Hyperkalaemia: follows the UK Kidney Association guideline (updated July 2026): 10% glucose infusion if pre-treatment glucose &lt; 7 mmol/L, a 6-hour glucose schedule, SZC 10 g three times daily, K⁺ checks at 1, 2, 4, 6 and 24 h.</li>
+          <li>Massive transfusion: European trauma guideline 2023 (plasma : red cells at least 1 : 2, fibrinogen concentrate 3–4 g or cryoprecipitate 15–20 units, permissive hypotension, ionised calcium in the normal range).</li>
+          <li>RSI: SCCM 2023 guideline (NIV pre-oxygenation when P/F &lt; 200, HFNO for expected difficult laryngoscopy, ketamine to allow pre-oxygenation). ICU Liberation bundle: PADIS 2025 focused update (dexmedetomidine, enhanced mobilisation, melatonin). ARDS: 2024 global definition, ESICM 2023 and ATS 2024 guidelines added.</li>
+          <li>Labetalol infusion range now shows its source (AHA/ASA stroke BP table). Vancomycin AUC calculator no longer refers to trough monitoring. Andexanet card adds the ANNEXA-I thrombotic signal. Neuro bundle: ICH VTE prophylaxis from 24–48 h; no SBP lowering below 140 after thrombectomy (AHA/ASA 2026).</li>
+        </ul>
         <h4>1.5.12 <span>· 14 November 2026</span></h4>
         <ul>
           <li>Endocarditis: the Duke card now uses the 2023 Duke-ISCVID criteria (Fowler 2023): PCR and cardiac CT / FDG-PET/CT in the major criteria, a surgical major criterion, and the wider minor criteria.</li>
@@ -2302,7 +2329,7 @@
 
   <footer>
     <div class="fine"><strong>Reference aid — not a medical device.</strong> Always verify against institutional protocols and drug labels.</div>
-    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.12 · last reviewed 14 Nov 2026 · Designed by Dr. Mohamed Najm</div>
+    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.5.13 · last reviewed 17 Nov 2026 · Designed by Dr. Mohamed Najm</div>
   </footer>
 </div>
 
@@ -2748,7 +2775,8 @@ const DRUGS = [
   { id: "milri",     name: "Milrinone",       cat: "Inotrope",        min: 0.25, max: 0.75, unit: "mcg/kg/min", conc: "200 mcg/mL",  concVal: 200,   concUnit: "mcg/mL" },
   { id: "esmo",      name: "Esmolol",         cat: "Antihypertensive",min: 50,   max: 300,  unit: "mcg/kg/min", conc: "10 mg/mL",    concVal: 10000, concUnit: "mcg/mL" },
   { id: "nicar",     name: "Nicardipine",     cat: "Antihypertensive",min: 5,    max: 15,   unit: "mg/hr",      conc: "0.1 mg/mL",   concVal: 0.1,   concUnit: "mg/mL",  weightless: true },
-  { id: "labet",     name: "Labetalol",       cat: "Antihypertensive",min: 2,    max: 8,    unit: "mg/min",     conc: "1 mg/mL",     concVal: 1,     concUnit: "mg/mL",  weightless: true },
+  { id: "labet",     name: "Labetalol",       cat: "Antihypertensive",min: 2,    max: 8,    unit: "mg/min",     conc: "1 mg/mL",     concVal: 1,     concUnit: "mg/mL",  weightless: true,
+    src: "Range: AHA/ASA acute ischaemic stroke BP table, 10 mg IV then 2–8 mg/min (Powers WJ et al., Stroke 2018;49:e46–e110). Product label: 2 mg/min, adjusted to response." },
   { id: "ntg",       name: "Nitroglycerin",   cat: "Antihypertensive",min: 5,    max: 200,  unit: "mcg/min",    conc: "100 mcg/mL",  concVal: 100,   concUnit: "mcg/mL", weightless: true },
   { id: "snp",       name: "Nitroprusside",   cat: "Antihypertensive",min: 0.25, max: 10,   unit: "mcg/kg/min", conc: "200 mcg/mL",  concVal: 200,   concUnit: "mcg/mL" },
   { id: "amio",      name: "Amiodarone",      cat: "Antiarrhythmic",  min: 0.5,  max: 1,    unit: "mg/min",     conc: "1.8 mg/mL",   concVal: 1.8,   concUnit: "mg/mL",  weightless: true },
@@ -2836,6 +2864,7 @@ function renderInfusions() {
         <div class="sub">${d.weightless ? "Fixed-rate" : "Weight-based"} · ${d.conc}</div>
         ${perLine}${absLine}${mgHrLine}${rateLine}
         ${loadLine}${prepLine}${safetyLine}
+        ${d.src ? `<div class="src">${d.src}</div>` : ""}
       </div>`;
   }).join("");
 }
@@ -3063,7 +3092,7 @@ const ANTIDOTES = [
   { id: "andexanet", name: "Andexanet alfa (Andexxa)", cls: "Xa inhibitor antidote",
     toxin: "Life-threatening bleeding on apixaban / rivaroxaban",
     dose: "Low dose: 400 mg IV bolus (30 mg/min) + 480 mg over 2 h — if last dose was ≥ 8 h ago, or apixaban ≤ 5 mg / rivaroxaban ≤ 10 mg. High dose: 800 mg + 960 mg over 2 h — apixaban > 5 mg or rivaroxaban > 10 mg (or unknown) within 8 h.",
-    notes: "Thrombosis risk 10 %. Very expensive — 4F-PCC 50 U/kg is a reasonable alternative if not available." },
+    notes: "ANNEXA-I (factor Xa inhibitor-associated ICH, NEJM 2024): better haemostatic efficacy than usual care, but more thrombotic events, including ischaemic stroke. Availability varies by country; 4F-PCC 50 U/kg is the usual alternative." },
   { id: "fomepizole", name: "Fomepizole", cls: "Toxic alcohol antidote",
     toxin: "Methanol / ethylene glycol poisoning",
     dose: "15 mg/kg IV load over 30 min → 10 mg/kg q12h × 4 doses → 15 mg/kg q12h until levels < 20 mg/dL and pH normal.",
@@ -3183,11 +3212,11 @@ const RSI_PROTOCOL = [
   { p: "1. Preparation (SOAP-ME)",
     body: "<b>S</b>uction ready · <b>O</b>xygen source · <b>A</b>irway equipment (ETT + backup + LMA + BVM + video laryngoscope) · <b>P</b>harmacology drawn up + labeled · <b>M</b>onitoring (SpO₂, ETCO₂, cardiac, BP q1 min) · <b>E</b>quipment tested. Position patient, IV × 2, team roles assigned, difficult-airway plan verbalized." },
   { p: "2. Pre-oxygenation",
-    body: "100 % O₂ by NRB or BiPAP for <b>3 min</b> of tidal breathing, or 8 vital-capacity breaths in cooperative patient. Add apneic oxygenation (NC at 15 L/min) during the paralytic phase to extend safe apnea time." },
+    body: "Head-up (semi-upright) position. 100 % O₂ for <b>3 min</b> of tidal breathing, or 8 vital-capacity breaths if cooperative.<br><b>P/F &lt; 200: use NIV</b> (SCCM 2023; less hypoxaemia than face mask in PREOXI). <b>HFNO</b> if difficult laryngoscopy is expected, and keep it on during attempts. Add apnoeic oxygenation (nasal cannula 15 L/min).<br>Agitated and unable to tolerate pre-oxygenation: <b>ketamine 1–1.5 mg/kg</b> to allow it (delayed sequence)." },
   { p: "3. Pre-treatment (optional, situational)",
     body: "<b>Fentanyl 3 mcg/kg IV</b> 3 min pre-intubation — CHD, aortic dissection, high ICP.<br><b>Lidocaine 1.5 mg/kg IV</b> — controversial for raised ICP.<br><b>Atropine 0.02 mg/kg IV</b> — infants; repeat sux; bradycardia risk." },
   { p: "4. Paralysis with induction",
-    body: "<b>Induction:</b> Etomidate 0.3 mg/kg (hemodynamic neutral) · Ketamine 1–2 mg/kg (shock, bronchospasm) · Propofol 1.5–2.5 mg/kg (stable) · Midazolam 0.1–0.3 mg/kg (fallback).<br><b>Paralytic:</b> Succinylcholine 1–1.5 mg/kg (fastest, no HyperK/burns/NMD) · Rocuronium 1.2 mg/kg (reversible with sugammadex 16 mg/kg)." },
+    body: "No induction agent is preferred over another by the SCCM guideline; choose for the haemodynamics and reduce the dose in shock. A neuromuscular blocker is strongly recommended.<br><b>Induction:</b> Etomidate 0.3 mg/kg (hemodynamic neutral) · Ketamine 1–2 mg/kg (shock, bronchospasm) · Propofol 1.5–2.5 mg/kg (stable) · Midazolam 0.1–0.3 mg/kg (fallback).<br><b>Paralytic:</b> Succinylcholine 1–1.5 mg/kg (fastest, no HyperK/burns/NMD) · Rocuronium 1.2 mg/kg (reversible with sugammadex 16 mg/kg)." },
   { p: "5. Positioning + Passage (intubation)",
     body: "Sniffing position (unless C-spine precautions). BURP if needed. Confirm tube passing cords. Wait for full paralysis (fasciculations stop for sux, 45–60 s for roc 1.2 mg/kg) before laryngoscopy." },
   { p: "6. Post-intubation care (Placement confirmation)",
@@ -3211,7 +3240,7 @@ const NEURO_BUNDLE = [
   { icon: "🌬️", title: "PaCO₂ targets",
     body: "<b>35–40 mmHg</b> = normocapnia (default). Brief 30–35 for acute herniation only (temporary, bridge to definitive Rx). AVOID PaCO₂ < 30 sustained → vasoconstriction ischemia. Avoid PaCO₂ > 45 → vasodilation, ↑ICP." },
   { icon: "🩺", title: "Blood pressure targets",
-    body: "<b>TBI:</b> SBP ≥ 100 (age 50–69), SBP ≥ 110 (age &lt;50 or ≥70).<br><b>Ischemic stroke (no tPA):</b> permit up to 220/120.<br><b>Post-tPA:</b> &lt; 180/105 × 24 h.<br><b>ICH:</b> SBP 140 (range 130–150), avoid &lt; 130 and large drops (AHA/ASA 2022).<br><b>SAH:</b> SBP &lt; 160 pre-securing; for symptomatic vasospasm, induced hypertension with euvolaemia. Hypervolaemia (triple-H) is no longer recommended (AHA/ASA 2023)." },
+    body: "<b>TBI:</b> SBP ≥ 100 (age 50–69), SBP ≥ 110 (age &lt;50 or ≥70).<br><b>Ischemic stroke (no tPA):</b> permit up to 220/120.<br><b>Post-thrombolysis:</b> &lt; 180/105 × 24 h. After thrombectomy, do not lower SBP below 140 (harm; AHA/ASA 2026).<br><b>ICH:</b> SBP 140 (range 130–150), avoid &lt; 130 and large drops (AHA/ASA 2022).<br><b>SAH:</b> SBP &lt; 160 pre-securing; for symptomatic vasospasm, induced hypertension with euvolaemia. Hypervolaemia (triple-H) is no longer recommended (AHA/ASA 2023)." },
   { icon: "🧠", title: "CPP targets",
     body: "CPP = MAP − ICP. Adult target <b>60–70 mmHg</b> (guided by autoregulation status). Avoid CPP &lt; 50 (ischaemia) and pushing it above 70 with fluids and pressors (ARDS risk, BTF 2017). Use norepinephrine as first-line pressor." },
   { icon: "📈", title: "ICP management",
@@ -3235,7 +3264,7 @@ const NEURO_BUNDLE = [
   { icon: "🍽️", title: "Nutrition",
     body: "Start enteral nutrition within <b>24–48 h</b> (ASPEN/ESICM). Target 25–30 kcal/kg/day + 1.2–2 g protein/kg/day. Post-pyloric tube if gastric intolerance. Semi-recumbent 30–45° to prevent VAP." },
   { icon: "🩸", title: "DVT prophylaxis",
-    body: "IPCs from admission. Chemical prophylaxis:<br>• Non-hemorrhagic: LMWH 40 mg SC daily from day 1<br>• TBI: LMWH 24–48 h after stable CT<br>• ICH: LMWH 24–72 h if bleed stable on imaging<br>• SAH: LMWH after aneurysm secured (~ 24 h post)" },
+    body: "IPCs from admission. Chemical prophylaxis:<br>• Non-hemorrhagic: LMWH 40 mg SC daily from day 1<br>• TBI: LMWH 24–48 h after stable CT<br>• ICH: LMWH or UFH from 24–48 h after onset if not ambulatory (AHA/ASA 2022)<br>• SAH: LMWH after aneurysm secured (~ 24 h post)" },
   { icon: "🛡️", title: "Stress ulcer prophylaxis",
     body: "PPI (Pantoprazole 40 mg IV/PO daily) OR H₂ blocker (Famotidine 20 mg IV BD). Indications: mechanical ventilation ≥ 48 h, coagulopathy (Plt &lt; 50 or INR &gt; 1.5), TBI/SAH, burns, transplant. De-escalate when enteral feeds tolerated + risk resolved." },
 ];
@@ -3256,36 +3285,36 @@ function renderNeuro() {
    SEPSIS & SEPTIC SHOCK — Surviving Sepsis Campaign 2021
    ============================================================ */
 const SEPSIS_BUNDLE = [
-  { icon: "⏰", title: "Hour-1 Bundle (SSC 2021)", verdict: "bad",
-    body: "Start every intervention within the first hour of recognition:<br>• <b>Lactate</b> — measure; re-check if initial > 2 mmol/L<br>• <b>Blood cultures ×2</b> BEFORE antibiotics (do not delay abx &gt; 45 min)<br>• <b>Broad-spectrum antibiotics</b> within 1 hour of recognition<br>• <b>30 mL/kg crystalloid</b> for hypotension OR lactate ≥ 4 mmol/L — give in 3 h<br>• <b>Vasopressors</b> for MAP &lt; 65 mmHg if still hypotensive after fluids" },
-  { icon: "🔍", title: "Recognise septic shock",
-    body: "<b>Sepsis</b> = suspected infection + ΔSOFA ≥ 2 (new organ dysfunction).<br><b>Septic shock</b> = sepsis + persisting hypotension requiring vasopressor to maintain MAP ≥ 65 + lactate &gt; 2 mmol/L despite adequate fluid.<br><b>qSOFA</b> at bedside (≥ 2 of RR ≥ 22, altered mental status, SBP ≤ 100) → trigger workup; not a diagnostic rule." },
+  { icon: "⏰", title: "First hour (septic shock or probable sepsis)", verdict: "bad",
+    body: "• <b>Antimicrobials immediately</b>, ideally within 1 h of recognition (strong)<br>• <b>Blood cultures</b> as early as possible, ideally before antibiotics, without delaying them<br>• <b>Lactate</b> — measure; serial values can guide resuscitation, but don't chase normalisation<br>• <b>Crystalloid ≥ 30 mL/kg</b> within 3 h for hypoperfusion or shock (use adjusted or ideal weight if BMI &gt; 30)<br>• <b>Vasopressors</b> for MAP &lt; 65 — start peripherally rather than wait for a central line<br><b>Possible sepsis without shock:</b> rapid, time-limited work-up; antimicrobials within 3 h if infection is still a concern." },
+  { icon: "🔍", title: "Recognise sepsis and septic shock",
+    body: "<b>Sepsis</b> = suspected infection + ΔSOFA ≥ 2 (new organ dysfunction).<br><b>Septic shock</b> = sepsis + vasopressor needed to keep MAP ≥ 65 + lactate &gt; 2 mmol/L despite adequate fluid.<br><b>Screening:</b> use NEWS/NEWS2, MEWS or SIRS rather than qSOFA (SSC 2026). Sepsis is a clinical diagnosis: no single biomarker rules it in or out." },
   { icon: "💧", title: "Fluid resuscitation",
-    body: "<b>30 mL/kg balanced crystalloid</b> within 3 h (SSC 2021 suggests 30 mL/kg; reassess after each bolus).<br>Preferred: <b>Lactated Ringer / Plasmalyte</b> (balanced) over 0.9 % NS (SMART, SALT-ED).<br>After initial bolus → <b>dynamic reassessment</b>: PLR, SV/PP variation, IVC collapsibility, cardiac echo, lactate trend. Avoid routine CVP.<br>Consider <b>albumin</b> in patients who have received large volumes of crystalloid (SSC 2021, weak; ALBIOS)." },
-  { icon: "💉", title: "Vasopressor ladder",
-    body: "<b>1st · Norepinephrine</b> 0.05–1 mcg/kg/min — target MAP ≥ 65.<br><b>2nd · Vasopressin</b> 0.03 U/min fixed — add when NE 0.25–0.5 (spares catecholamine, improves renal flow).<br><b>3rd · Epinephrine</b> 0.05–0.5 mcg/kg/min — if still inadequate.<br><b>4th · Angiotensin II</b> 10–40 ng/kg/min — refractory shock (ATHOS-3).<br><b>Dobutamine</b> 2.5–20 mcg/kg/min — add for low cardiac output + ongoing hypoperfusion despite MAP target." },
-  { icon: "💊", title: "Empiric antibiotics (ICU septic shock)",
-    body: "Cover: <b>MRSA + Pseudomonas + ESBL</b> based on local antibiogram.<br>• <b>Vancomycin</b> 25–30 mg/kg load, then AUC-guided (400–600) <b>+</b><br>• <b>Piperacillin-tazobactam</b> 4.5 g q6h (extended infusion) <b>OR Cefepime</b> 2 g q8h<br>• <b>Carbapenem</b> (meropenem 1 g q8h) if prior ESBL/high local resistance<br>• Add <b>metronidazole / clindamycin</b> for intra-abdominal / necrotising fasciitis<br>• Add <b>micafungin 100 mg qD</b> if candidaemia risk<br>De-escalate within 48–72 h based on cultures + procalcitonin trend." },
+    body: "<b>Crystalloids first-line</b> (strong); <b>balanced</b> (Ringer's lactate, Plasma-Lyte) over 0.9 % saline — but use <b>0.9 % saline with TBI</b>.<br>No starches; avoid gelatin; no routine albumin added to crystalloids.<br>After the first bolus, guide further fluid with <b>dynamic measures</b> (passive leg raise, response to a bolus), not examination alone.<br>Once resuscitated, start <b>active fluid removal</b> to limit overload." },
+  { icon: "💉", title: "Vasopressors and MAP",
+    body: "<b>MAP 65 mmHg</b>, titrated within a narrow band; <b>60–65 if aged ≥ 65</b> (conditional).<br><b>1st · Norepinephrine</b> 0.05–1 mcg/kg/min (strong).<br><b>2nd · Vasopressin</b> 0.03 U/min — add as norepinephrine doses escalate.<br><b>3rd · Epinephrine</b> 0.05–0.5 mcg/kg/min if MAP still inadequate. With cardiac dysfunction, epinephrine or norepinephrine may be first-line.<br><b>Dobutamine</b> 2.5–20 mcg/kg/min for low cardiac output with ongoing hypoperfusion.<br>Avoid terlipressin. Arterial line for higher or multiple vasopressors." },
+  { icon: "💊", title: "Empiric antimicrobials (ICU septic shock)",
+    body: "Choose by source, local antibiogram and the patient's own resistance history. Typical ICU regimen:<br>• <b>Vancomycin</b> 25–30 mg/kg load, then AUC-guided (400–600) if MRSA risk <b>+</b><br>• <b>Piperacillin-tazobactam</b> 4.5 g q6h <b>OR cefepime</b> 2 g q8h — <b>prolonged infusion after a loading dose</b> (strong)<br>• <b>Meropenem</b> 1 g q8h if prior ESBL or high local resistance<br>• <b>Anaerobic cover</b> only with a clear indication (bowel perforation, necrotising soft-tissue infection) — not for most pneumonia or UTI<br>• <b>No routine empiric antifungal</b>; reserve for specific risk factors<br><b>De-escalate</b> once microbiology is known (strong); shorter courses when source control is adequate." },
   { icon: "🔪", title: "Source control",
-    body: "<b>Within 6–12 h</b> of recognition where feasible. Common missed sources: abscess, cholangitis, necrotising skin/soft-tissue, prosthetic infection, infected catheter.<br>• <b>Remove</b> infected intravascular catheters without delay once another access is secured.<br>• <b>Drain</b> abscesses percutaneously or surgically.<br>• <b>Debride</b> necrotising fasciitis immediately — survival drops with each hour." },
+    body: "<b>Early — ideally within 6 h</b> where feasible. Common missed sources: abscess, cholangitis, necrotising soft-tissue infection, prosthetic infection, infected catheter.<br>• <b>Remove</b> infected intravascular catheters once other access is secured.<br>• <b>Drain</b> abscesses percutaneously or surgically.<br>• <b>Debride</b> necrotising fasciitis immediately." },
   { icon: "🌞", title: "Corticosteroids",
-    body: "<b>Hydrocortisone 200 mg/day IV</b> (50 mg q6h or 200 mg continuous infusion) when septic shock requires NE ≥ 0.25 mcg/kg/min for ≥ 4 h (SSC weak recommendation; ADRENAL/APROCCHSS supportive). Taper when vasopressor weaned.<br>No role for sepsis without shock." },
-  { icon: "🫁", title: "Mechanical ventilation",
-    body: "<b>Low TV 6 mL/kg PBW</b> · plateau ≤ 30 · driving pressure &lt; 15 cmH₂O.<br>Target SpO₂ 94–98 % (avoid hyperoxia).<br><b>Prone position ≥ 12–16 h/day</b> if P/F &lt; 150 (PROSEVA — 50 % mortality reduction).<br>Conservative fluid strategy once resuscitated (FACTT)." },
+    body: "IV corticosteroids are suggested in septic shock (conditional, low certainty). Usual regimen: <b>hydrocortisone 200 mg/day</b> (50 mg q6h or continuous infusion) for patients on ongoing vasopressor therapy, as in ADRENAL and APROCCHSS. Taper when vasopressors are weaned. No role in sepsis without shock." },
+  { icon: "🫁", title: "Respiratory support",
+    body: "<b>Non-ARDS hypoxaemia:</b> HFNC over conventional oxygen or NIV; awake proning suggested.<br><b>ARDS:</b> TV 6 mL/kg PBW, plateau ≤ 30 (strong). Moderate–severe: higher PEEP, <b>prone &gt; 12 h/day</b>; no incremental PEEP recruitment manoeuvres (strong against).<br>VV-ECMO for refractory sepsis-related ARDS in experienced centres." },
   { icon: "🍬", title: "Glycaemic control",
-    body: "Start insulin when BG > 180 mg/dL (10 mmol/L). Target 140–180 mg/dL. Check q1–2 h on infusion. Avoid tight control (NICE-SUGAR: 80–110 harmful)." },
-  { icon: "🩸", title: "Transfusion thresholds",
-    body: "<b>Hb 7 g/dL</b> for most septic patients (TRISS).<br><b>Hb 8 g/dL</b> if active ACS, chronic cardiac disease. <br>Platelets &lt; 10 (prophylactic) or &lt; 20 (bleeding risk) or &lt; 50 (active bleeding / procedure).<br>FFP only for active bleeding + coagulopathy (not prophylactic for lab abnormalities)." },
+    body: "Start insulin when glucose ≥ 180 mg/dL (10 mmol/L) (strong). Target 144–180 mg/dL. Check q1–2 h on infusion. Avoid tight control (NICE-SUGAR: 80–110 harmful)." },
+  { icon: "🩸", title: "Transfusion",
+    body: "<b>Restrictive strategy</b> (strong): Hb 7 g/dL for most (TRISS).<br>Higher thresholds for active myocardial ischaemia, severe hypoxaemia or acute haemorrhage.<br>Platelets &lt; 10 prophylactically, &lt; 20 with bleeding risk, &lt; 50 for active bleeding or procedures. Plasma only for bleeding or procedures with coagulopathy." },
   { icon: "💧", title: "Renal replacement therapy",
-    body: "Standard indications only (K+ > 6.5, pH < 7.1 refractory, severe azotaemia, volume overload refractory). Do NOT start RRT just for creatinine rise in septic AKI (STARRT-AKI, IDEAL-ICU). Continuous RRT if hemodynamically unstable; intermittent if stable." },
+    body: "No RRT without a definite indication (K⁺ &gt; 6.5 refractory, severe acidaemia, uraemic complications, refractory overload) (STARRT-AKI, IDEAL-ICU). <b>Sodium bicarbonate</b>: not for haemodynamics, but suggested for severe metabolic acidaemia with AKI (pH ≤ 7.2 in BICAR-ICU). CRRT if haemodynamically unstable." },
   { icon: "🍽️", title: "Nutrition",
-    body: "Start <b>enteral feeds within 72 h</b> (SSC 2021). Trophic 10–20 mL/h first 24–48 h in shock, advance as perfusion improves. Target 25–30 kcal/kg + 1.2–2 g protein/kg once stable. Avoid parenteral &lt; 7 d unless EN not possible." },
-  { icon: "🧊", title: "DVT & stress-ulcer prophylaxis",
-    body: "<b>DVT:</b> LMWH (enoxaparin 40 mg SC daily) preferred over UFH; add IPCs if bleed risk. Weight-adjust LMWH if BMI > 40 or renal.<br><b>Stress ulcer:</b> PPI or H₂-blocker only if risk factors (mechanical ventilation ≥ 48 h, coagulopathy, GI bleed hx). De-escalate when feeding." },
-  { icon: "🧪", title: "Procalcitonin — not for diagnosis, use for de-escalation",
-    body: "PCT trend can shorten antibiotic duration safely in ICU sepsis (SAPS, PRORATA). Stop antibiotics when PCT falls > 80 % from peak OR &lt; 0.5 ng/mL AND clinical improvement + source controlled. Do not withhold empiric abx based on a low PCT." },
-  { icon: "📞", title: "When to call for help",
-    body: "• Lactate not clearing by 2–4 h → re-assess source + fluids + pressors<br>• MAP &lt; 65 on NE &gt; 0.5 mcg/kg/min — add vasopressin + consider steroids + angio II / epinephrine<br>• Rising lactate + oliguria + rising Cr → consider RRT, imaging for missed source<br>• Still hypoxic despite 100 % FiO₂ → prone, consider ECMO (P/F &lt; 80 refractory)" },
+    body: "Start <b>enteral feeding within 72 h</b>. Trophic feeds in the first 24–48 h of shock, advance as perfusion improves. Avoid early parenteral nutrition unless enteral feeding is impossible." },
+  { icon: "🧊", title: "VTE and stress-ulcer prophylaxis",
+    body: "<b>VTE:</b> pharmacological prophylaxis, <b>LMWH preferred</b> over UFH (strong); add IPCs if bleeding risk. Adjust for BMI &gt; 40 or renal failure.<br><b>Stress ulcer:</b> PPI only with GI-bleeding risk factors (mechanical ventilation ≥ 48 h, coagulopathy, shock)." },
+  { icon: "🧪", title: "Procalcitonin and adjuncts",
+    body: "Decide on <b>starting</b> antibiotics clinically, not by procalcitonin. Procalcitonin plus clinical assessment may help decide when to <b>stop</b>.<br>Not recommended: IV vitamin C, IV immunoglobulin, vitamin D, probiotics, blood purification. No routine antipyretics for outcome benefit." },
+  { icon: "📞", title: "Escalate and plan",
+    body: "• Lactate not falling or worsening perfusion → reassess source, fluids, pressors, cardiac function (echo)<br>• Norepinephrine &gt; 0.25–0.5 mcg/kg/min → add vasopressin, consider steroids and epinephrine<br>• Refractory hypoxaemia → prone, consider ECMO referral<br>• <b>Goals-of-care discussion within 72 h</b>; plan for survivorship (physical, cognitive, psychological follow-up)." },
 ];
 
 function renderSepsis() {
@@ -3974,9 +4003,9 @@ function runScoreCalcs() {
       const auc = daily / (0.045 * crcl);         // simplified: CL ≈ 0.045 × CrCl (L/hr per mL/min of CrCl)
       $("#vanco-auc").textContent = fmt(auc, 0) + " mg·h/L";
       if (vv) {
-        if (auc < 400) { vv.textContent = `AUC ${fmt(auc,0)} — SUBTHERAPEUTIC. Increase total daily dose or shorten interval; confirm with trough + repeat level.`; vv.classList.add("bad"); }
-        else if (auc <= 600) { vv.textContent = `AUC ${fmt(auc,0)} — TARGET range (400 – 600). Monitor trough + renal function.`; vv.classList.add("ok"); }
-        else { vv.textContent = `AUC ${fmt(auc,0)} — TOXIC risk (nephrotoxicity rises). Hold or reduce dose; recheck trough + Cr.`; vv.classList.add("bad"); }
+        if (auc < 400) { vv.textContent = `AUC ${fmt(auc,0)} — SUBTHERAPEUTIC. Increase the total daily dose or shorten the interval; confirm the AUC with two measured levels or Bayesian software.`; vv.classList.add("bad"); }
+        else if (auc <= 600) { vv.textContent = `AUC ${fmt(auc,0)} — TARGET range (400 – 600). Confirm with measured levels (two levels or Bayesian software) and follow renal function. Trough-only monitoring is not recommended.`; vv.classList.add("ok"); }
+        else { vv.textContent = `AUC ${fmt(auc,0)} — TOXIC risk (nephrotoxicity rises). Hold or reduce the dose; recheck levels and creatinine.`; vv.classList.add("bad"); }
       }
     } else {
       $("#vanco-crcl-used").textContent = "—"; $("#vanco-auc").textContent = "—";
@@ -4527,6 +4556,17 @@ const REFERENCES = [
   // Nephrology
   "__H__ Nephrology & fluids",
   "KDIGO. Clinical Practice Guideline for Acute Kidney Injury. Kidney Int Suppl 2012;2(1):1–138.",
+  "Prescott HC, Antonelli M, Alhazzani W et al. Surviving Sepsis Campaign: international guidelines for management of sepsis and septic shock 2026. Crit Care Med 2026. doi:10.1097/CCM.0000000000007075.",
+  "Umpierrez GE et al. Hyperglycemic crises in adults with diabetes: a consensus report. Diabetes Care 2024;47(8):1257–75.",
+  "UK Kidney Association. Clinical practice guideline: management of hyperkalaemia in adults. Updated July 2026.",
+  "Rossaint R et al. The European guideline on management of major bleeding and coagulopathy following trauma, 6th ed. Crit Care 2023;27:80.",
+  "Acquisto NM et al. SCCM clinical practice guidelines for rapid sequence intubation in the critically ill adult patient. Crit Care Med 2023;51(10):1411–30.",
+  "Gibbs KW et al. Noninvasive ventilation for preoxygenation during emergency intubation (PREOXI). NEJM 2024;390:2165–77.",
+  "Lewis K et al. A focused update to the PADIS clinical practice guidelines. Crit Care Med 2025;53(3):e711–27.",
+  "Matthay MA et al. A new global definition of acute respiratory distress syndrome. AJRCCM 2024;209:37–47.",
+  "Qadir N et al. An update on management of adult patients with ARDS: an official ATS clinical practice guideline. AJRCCM 2024;209:24–36.",
+  "Connolly SJ et al. Andexanet for factor Xa inhibitor-associated acute intracerebral hemorrhage (ANNEXA-I). NEJM 2024;390:1745–55.",
+  "Prabhakaran S et al. 2026 guideline for the early management of patients with acute ischemic stroke. Stroke 2026. doi:10.1161/STR.0000000000000513."
 ];
 function renderAbout() {
   const list = $("#ref-list");
