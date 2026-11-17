@@ -3046,7 +3046,7 @@
           <li>Hyperkalaemia: follows the UK Kidney Association guideline (updated July 2026): 10% glucose infusion if pre-treatment glucose &lt; 7 mmol/L, a 6-hour glucose schedule, SZC 10 g three times daily, K⁺ checks at 1, 2, 4, 6 and 24 h.</li>
           <li>Massive transfusion: European trauma guideline 2023 (plasma : red cells at least 1 : 2, fibrinogen concentrate 3–4 g or cryoprecipitate 15–20 units, permissive hypotension, ionised calcium in the normal range).</li>
           <li>RSI: SCCM 2023 guideline (NIV pre-oxygenation when P/F &lt; 200, HFNO for expected difficult laryngoscopy, ketamine to allow pre-oxygenation). ICU Liberation bundle: PADIS 2025 focused update (dexmedetomidine, enhanced mobilisation, melatonin). ARDS: 2024 global definition, ESICM 2023 and ATS 2024 guidelines added.</li>
-          <li>Labetalol infusion range now shows its source (AHA/ASA stroke BP table). Vancomycin AUC calculator no longer refers to trough monitoring. Andexanet card adds the ANNEXA-I thrombotic signal. Neuro bundle: ICH VTE prophylaxis from 24–48 h; no SBP lowering below 140 after thrombectomy (AHA/ASA 2026).</li>
+          <li>Labetalol infusion: the 2–8 mg/min range is labelled as the stroke regimen, with the ACC/AHA 2017 rate for other hypertensive emergencies (0.4–1 mg/kg/h, up to 3) and the label maximum of 300 mg. Vancomycin AUC calculator no longer refers to trough monitoring. Andexanet card adds the ANNEXA-I thrombotic signal. Neuro bundle: ICH VTE prophylaxis from 24–48 h; no SBP lowering below 140 after thrombectomy (AHA/ASA 2026).</li>
         </ul>
         <h4>Clinical review 3 <span>· 14 November 2026</span></h4>
         <ul>
@@ -3768,7 +3768,7 @@ const DRUGS = [
   { id: "esmo",      name: "Esmolol",         cat: "Antihypertensive",min: 50,   max: 300,  unit: "mcg/kg/min", conc: "10 mg/mL",    concVal: 10000, concUnit: "mcg/mL" },
   { id: "nicar",     name: "Nicardipine",     cat: "Antihypertensive",min: 5,    max: 15,   unit: "mg/hr",      conc: "0.1 mg/mL",   concVal: 0.1,   concUnit: "mg/mL",  weightless: true },
   { id: "labet",     name: "Labetalol",       cat: "Antihypertensive",min: 2,    max: 8,    unit: "mg/min",     conc: "1 mg/mL",     concVal: 1,     concUnit: "mg/mL",  weightless: true,
-    src: "Range: AHA/ASA acute ischaemic stroke BP table, 10 mg IV then 2–8 mg/min (Powers WJ et al., Stroke 2018;49:e46–e110). Product label: 2 mg/min, adjusted to response." },
+    src: "Range shown is the acute ischaemic stroke regimen: 10 mg IV, then 2–8 mg/min (AHA/ASA, Powers WJ et al., Stroke 2018;49:e46–e110). Other hypertensive emergencies: 0.4–1 mg/kg/h, up to 3 mg/kg/h (ACC/AHA 2017, Whelton PK et al., Hypertension 2018;71:e13–e115). Product label: start about 2 mg/min, adjust to BP; usual total 50–200 mg, maximum 300 mg." },
   { id: "ntg",       name: "Nitroglycerin",   cat: "Antihypertensive",min: 5,    max: 200,  unit: "mcg/min",    conc: "100 mcg/mL",  concVal: 100,   concUnit: "mcg/mL", weightless: true },
   { id: "snp",       name: "Nitroprusside",   cat: "Antihypertensive",min: 0.25, max: 10,   unit: "mcg/kg/min", conc: "200 mcg/mL",  concVal: 200,   concUnit: "mcg/mL" },
   { id: "amio",      name: "Amiodarone",      cat: "Antiarrhythmic",  min: 0.5,  max: 1,    unit: "mg/min",     conc: "1.8 mg/mL",   concVal: 1.8,   concUnit: "mg/mL",  weightless: true },
