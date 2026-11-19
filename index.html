@@ -3003,6 +3003,7 @@
 
       <div class="card trust" id="install">
         <h3>Install and offline use</h3>
+        <button type="button" class="btn" id="installBtn" onclick="window.TractInstall&&TractInstall.show()" style="width:100%;min-height:48px;margin:6px 0 14px;font-weight:800">Add ICUCalc to your home screen</button>
         <dl>
           <dt>iPhone or iPad (Safari)</dt>
           <dd>Tap Share, then “Add to Home Screen”.</dd>
@@ -6444,6 +6445,7 @@ if ("serviceWorker" in navigator && location.protocol !== "file:") {
     });
   })();
 </script>
+<script>addEventListener("load",function(){var b=document.getElementById("installBtn");if(b&&(navigator.standalone||matchMedia("(display-mode: standalone)").matches))b.hidden=true;});</script>
 <script src="install.js?v=1" defer data-name="ICUCalc" data-delay="20000" data-accent="#22d3ee" data-on="#001018" data-icon="icons/icon-192.png" data-offline="1" data-theme="dark"></script>
 </body>
 </html>
