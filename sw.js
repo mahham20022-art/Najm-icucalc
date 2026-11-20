@@ -7,7 +7,7 @@
      ASSETS    = cache-first for icons/CSS/JS/manifest (stable)
      IMAGES    = cache-first with size cap for user-added images
 */
-const VERSION  = "v63"; // app 1.6.1 — LITFL review 2
+const VERSION  = "v64"; // app 1.6.1 — larger labels and touch targets
 const PRECACHE = `najm-precache-${VERSION}`;
 const RUNTIME  = `najm-runtime-${VERSION}`;
 const ASSETS   = `najm-assets-${VERSION}`;
@@ -22,7 +22,7 @@ const APP_SHELL = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
-  "./install.js?v=1",
+  "./install.js?v=2",
   "./privacy-policy.html",
   "./sitemap.xml",
   "./robots.txt",

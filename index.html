@@ -1445,6 +1445,21 @@
     *, *::before, *::after { animation: none !important; transition: none !important; }
     html { scroll-behavior: auto; }
   }
+
+  /* ---- screen sizes and display settings (Nov 2026 audit) ---- */
+  html { text-size-adjust: 100%; }
+  .field label { font-size: 11px; letter-spacing: 0.05em; }
+  .pill { font-size: 11.5px; }
+  .field .unit { font-size: 11px; }
+  .reset-btn { font-size: 12px; }
+  @media (max-width: 640px) { .field label { font-size: 11px; } .field .unit { font-size: 11px; } .reset-btn { font-size: 12px; } }
+  button.unit-cycle { position: relative; }
+  button.unit-cycle::after { content: ""; position: absolute; inset: -12px -8px; }
+  .units-toggle { min-height: 36px; }
+  .aware-close { min-width: 36px; min-height: 36px; }
+  .patient-chip .pc-edit, .patient-chip .pc-x { min-width: 30px; min-height: 30px; }
+  .patient-chip, .patient-chip-add { min-height: 36px; }
+  @media (orientation: landscape) and (max-height: 500px) { .ti { max-height: calc(100vh - 20px); overflow: auto; } }
 </style>
 </head>
 <body>
@@ -6454,6 +6469,6 @@ if ("serviceWorker" in navigator && location.protocol !== "file:") {
   })();
 </script>
 <script>addEventListener("load",function(){var b=document.getElementById("installBtn");if(b&&(navigator.standalone||matchMedia("(display-mode: standalone)").matches))b.hidden=true;});</script>
-<script src="install.js?v=1" defer data-name="ICUCalc" data-delay="20000" data-accent="#22d3ee" data-on="#001018" data-icon="icons/icon-192.png" data-offline="1" data-theme="dark"></script>
+<script src="install.js?v=2" defer data-name="ICUCalc" data-delay="20000" data-accent="#22d3ee" data-on="#001018" data-icon="icons/icon-192.png" data-offline="1" data-theme="dark"></script>
 </body>
 </html>
