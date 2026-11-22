@@ -6445,7 +6445,7 @@ if ("serviceWorker" in navigator && location.protocol !== "file:") {
 
     // One dashboard for The Tract and its apps; ICUCalc pages are prefixed "icucalc/" (until Nov 2026 they went to najmsd.goatcounter.com).
     window.goatcounter = { endpoint: "https://naaajm.goatcounter.com/count", no_onload: true,
-                           path: function (p) { return "icucalc" + (p === "/" ? "/" : p); } };
+                           path: function (p) { p = (p || "/").split("?")[0].split("#")[0]; return "icucalc" + (p === "/" ? "/" : p); } }; // one row per page, not per ?v= / ?ref= link
 
     var g = document.createElement("script");
     g.async = true;
