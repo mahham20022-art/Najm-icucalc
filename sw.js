@@ -7,7 +7,7 @@
      ASSETS    = cache-first for icons/CSS/JS/manifest (stable)
      IMAGES    = cache-first with size cap for user-added images
 */
-const VERSION  = "v68"; // app 1.6.1 — LITFL card in About
+const VERSION  = "v69"; // app 1.6.1 — publisher strip in About
 const PRECACHE = `najm-precache-${VERSION}`;
 const RUNTIME  = `najm-runtime-${VERSION}`;
 const ASSETS   = `najm-assets-${VERSION}`;

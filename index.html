@@ -1460,6 +1460,16 @@
   .patient-chip .pc-edit, .patient-chip .pc-x { min-width: 30px; min-height: 30px; }
   .patient-chip, .patient-chip-add { min-height: 36px; }
   @media (orientation: landscape) and (max-height: 500px) { .ti { max-height: calc(100vh - 20px); overflow: auto; } }
+  .pub-strip{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px;padding:14px;margin:-2px 0 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}
+  .pub-strip a{text-decoration:none;color:inherit;min-width:0}
+  .pub-tract{grid-column:1/-1;display:flex;align-items:center;gap:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.1)}
+  .pub-tract svg{flex:0 0 auto;display:block;width:48px;height:48px}
+  .pub-tract span,.pub-p{display:flex;flex-direction:column;line-height:1.15;min-width:0}
+  .pub-tract b{font-family:var(--f-sans);font-size:17px;letter-spacing:.14em;font-weight:800}
+  .pub-tract small{font-family:var(--f-sans);font-size:10px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:4px}
+  .pub-p + .pub-p{border-left:1px solid rgba(255,255,255,.1);padding-left:14px}
+  .pub-p small{font-family:var(--f-sans);font-size:10px;letter-spacing:.08em;text-transform:uppercase;opacity:.65}
+  .pub-p b{font-family:var(--f-sans);font-size:14px;font-weight:700;margin-top:3px}
 </style>
 </head>
 <body>
@@ -2976,6 +2986,12 @@
       </div>
 
       <div class="card" id="litflCard" style="border:1px solid rgba(212,58,58,.35)">
+        <div class="pub-strip" aria-label="The Tract, listed in the LITFL App Store, powered by Medmastery">
+          <a class="pub-tract" href="https://thetract.org" target="_blank" rel="noopener"><svg width="44" height="44" viewBox="0 0 100 100" aria-hidden="true"><rect x="1.5" y="1.5" width="97" height="97" rx="14" fill="#1B2636" stroke="#F4F0E7" stroke-opacity=".35" stroke-width="3"/><path d="M18 27H82M44 27V64a14 14 0 0 0 14 14H70" stroke="#F4F0E7" stroke-width="7" fill="none"/><circle cx="75" cy="78" r="5.5" fill="#B66C4E"/></svg><span><b>THE TRACT</b><small>Independent Neurology Press</small></span></a>
+                    <!-- Official LITFL / Medmastery badges go here once LITFL sends them (do not redraw their logos) -->
+          <a class="pub-p" href="https://apps.litfl.com/najm-icucalc" target="_blank" rel="noopener"><small>Listed in</small><b>LITFL App Store</b></a>
+          <a class="pub-p" href="https://www.medmastery.com/?utm_source=litfl-appstore&amp;utm_medium=builder&amp;utm_campaign=najm-icucalc" target="_blank" rel="noopener"><small>Powered by</small><b>Medmastery</b></a>
+        </div>
         <h3>In the LITFL App Store</h3>
         <div class="sub">Reviewed and approved by LITFL's editors</div>
         <div style="font-family:var(--f-sans);font-size:13.5px;line-height:1.55;margin:8px 0 10px">Najm ICUCalc was reviewed by the editors of Life in the Fastlane (LITFL) and is listed in the LITFL App Store. LITFL, powered by Medmastery, is one of the best-known free education resources in emergency medicine and critical care, home of the ECG Library and the Critical Care Compendium.</div>
