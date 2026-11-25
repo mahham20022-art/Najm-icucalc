@@ -84,6 +84,11 @@ const head = (title, desc, path, ld) => `<!doctype html><html lang="en"><head><m
 <header><a class="brand" href="/scores/">Najm <b>ICUCalc</b></a><a class="cta" href="/#scores">Open the full app</a></header><main>`;
 const foot = `</main><footer>Najm ICUCalc is a free bedside calculator by Dr Mohamed Najm, published by <a href="https://thetract.org/">The Tract</a> and listed in the LITFL App Store. Decision support only: check every result against the patient and your local protocols.</footer></body></html>`;
 
+// Quiet pointer to the ICU practice questions that moved to Med100 (one line, no banner).
+const M100 = 'https://med100.thetract.org/?ref=icucalc#/icu';
+const ICU_TOPIC = { gcs: 'neurology', nihss: 'neurology', 'hunt-hess': 'neurology', 'ich-score': 'neurology', 'modified-fisher': 'neurology',
+  'cam-icu': 'delirium-sedation', rass: 'delirium-sedation', 'heart-score': 'cardiac', timi: 'cardiac', 'cha2ds2-vasc': 'cardiac',
+  'murray-lung-injury-score': 'ards', 'curb-65': 'antibiotics', 'duke-iscvid-2023': 'antibiotics', 'candida-score': 'antibiotics' };
 rmSync('scores', { recursive: true, force: true });
 const pages = [];
 for (const [key, sc] of Object.entries(SCORES)) {
@@ -109,6 +114,7 @@ for (const [key, sc] of Object.entries(SCORES)) {
 ${table}${pts}
 <h2>Source</h2><p class="src">${E(card.src)}</p>
 <p class="note">Scores support judgement; they do not replace it. <a href="/#scores">All ICUCalc scores</a> · <a href="/">Drip rates, ventilation, ABG and protocols</a></p>
+<p class="note">Test yourself: <a href="${M100}/${ICU_TOPIC[slug] || 'scores'}">ICU practice questions on Med100</a>, free.</p>
 <script>${interp}const f=document.getElementById('f'),out=document.getElementById('tot'),n=${sc.items.length};
 f.addEventListener('change',()=>{let t=0,c=0;const vals={};for(let i=0;i<n;i++){const v=f.querySelector('input[name=i'+i+']:checked');if(v){t+=+v.value;c++;vals[i]=+v.value}else vals[i]=''}
 let r=null;try{r=I(t,vals,ITEMS)}catch(e){}const done=c===n;out.className='total '+(r&&(done||${NO_BANDS.has(key) ? 'true' : 'false'})?r[1]:'');
