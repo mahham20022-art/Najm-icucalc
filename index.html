@@ -5834,7 +5834,8 @@ const SCORES = {
     const f2 = vals && vals[1] === 1;
     const f3 = vals && vals[2] === 1;
     const f4 = vals && vals[3] === 1;
-    if (!f1 && !f2 && !f3 && !f4) return ["Select each feature to screen.","ok"];
+    const answered = vals && [0, 1, 2, 3].every((i) => vals[i] === 0 || vals[i] === 1);
+    if (!f1 && !f2 && !f3 && !f4) return [answered ? "CAM-ICU negative: no delirium on this screen. Repeat each shift." : "Select each feature to screen.", "ok"];
     const positive = f1 && f2 && (f3 || f4);
     if (positive) return ["CAM-ICU POSITIVE — delirium present. Address causes (DELIRIUM mnemonic), treat pain, review sedation, mobilise, re-orient.", "bad"];
     return ["CAM-ICU negative — no delirium at this assessment. Re-screen each shift / with any change.", "ok"];
