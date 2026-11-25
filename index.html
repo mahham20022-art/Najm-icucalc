@@ -59,7 +59,7 @@
       "applicationSubCategory": "MedicalCalculator",
       "operatingSystem": "Any (PWA, iOS, Android, Windows, macOS, Linux)",
       "browserRequirements": "Modern browser with JavaScript",
-      "softwareVersion": "1.6.1",
+      "softwareVersion": "1.6.2",
       "datePublished": "2026-07-25",
       "dateModified": "2026-10-30",
       "inLanguage": "en",
@@ -1612,7 +1612,7 @@
       <h3 id="onbTrustTitle">Before you use it</h3>
       <p><b>For</b> ICU/CCU doctors, pharmacists and nurses who already know these drugs and scores. It does the arithmetic; the clinical decision stays with you.</p>
       <p><b>Not prospectively validated.</b> Decision support only. Check every result against your protocol and the drug label.</p>
-      <p>Version 1.6.1 · last reviewed 19 November 2026 · what you enter stays in this browser.</p>
+      <p>Version 1.6.2 · last reviewed 19 November 2026 · what you enter stays in this browser.</p>
       <button class="onb-link" type="button" id="onbEvidence">Evidence, limits and data handling</button>
     </div>
 
@@ -3005,11 +3005,11 @@
             <li>Not a regulated medical device.</li>
           </ul></dd>
           <dt>Version</dt>
-          <dd>1.6.1 · last reviewed 19 November 2026.</dd>
+          <dd>1.6.2 · last reviewed 19 November 2026.</dd>
           <dt>Report a suspected error</dt>
           <dd>Say what you entered, what the app showed and what you expected, with a source if you have one. Leave out patient identifiers.</dd>
         </dl>
-        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.6.1&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
+        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.6.2&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
           <span>Report an error · contact@thetract.org</span>
         </a>
@@ -3043,7 +3043,7 @@
         <div class="row"><span class="k">Learn more</span><span class="v"><a href="https://www.medmastery.com/?utm_source=litfl-appstore&amp;utm_medium=builder&amp;utm_campaign=najm-icucalc" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">Medmastery</a>, the clinical courses behind LITFL</span></div>
         <div class="row"><span class="k">LinkedIn</span><span class="v"><a href="https://www.linkedin.com/in/dr-mohamed-najm-aldeen-aa6452135" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">linkedin.com/in/dr-mohamed-najm-aldeen</a></span></div>
         <div class="row"><span class="k">GitHub</span><span class="v"><a href="https://github.com/mahham20022-art" target="_blank" rel="noopener" style="color:var(--brand-3);text-decoration:none">@mahham20022-art</a></span></div>
-        <div class="row"><span class="k">Version</span><span class="v">1.6.1</span></div>
+        <div class="row"><span class="k">Version</span><span class="v">1.6.2</span></div>
         <div class="row"><span class="k">Last reviewed</span><span class="v">17 Nov 2026</span></div>
       </div>
 
@@ -3100,6 +3100,10 @@
 
       <div class="card changelog" id="changelog">
         <h3>Changelog</h3>
+        <h4>1.6.2 <span>· 26 November 2026</span></h4>
+        <ul>
+          <li>Antibiotics: added teicoplanin (Targocid SmPC), tigecycline (FDA label; high-dose regimen for CRAB/CRE from IDSA 2024) and IV fosfomycin (Fomicyt SmPC), with renal dosing and safety notes.</li>
+        </ul>
         <h4>1.6.1 <span>· 19 November 2026</span></h4>
         <ul>
           <li>Nursing · Lab panic values: vancomycin is flagged by AUC₂₄ above 600 mg·h/L, with a trough above 20 mg/L only where the lab still reports troughs (ASHP/IDSA 2020).</li>
@@ -3394,7 +3398,7 @@
 
   <footer>
     <div class="fine"><strong>Reference aid — not a medical device.</strong> Always verify against institutional protocols and drug labels.</div>
-    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.6.1 · last reviewed 19 Nov 2026 · Designed by Dr. Mohamed Najm</div>
+    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.6.2 · last reviewed 19 Nov 2026 · Designed by Dr. Mohamed Najm</div>
   </footer>
 </div>
 
@@ -3994,6 +3998,11 @@ const ABX = [
     crcl: [[80, 1e9, "15–20 mg/kg q8–12h (AUC 400–600)"], [50, 80, "15–20 mg/kg q12h"], [20, 50, "15 mg/kg q24h"], [0, 20, "By levels only"]],
     ind: "MRSA, empiric coverage in septic shock",
     notes: "AUC-guided dosing (AUC24 400–600); trough-only monitoring is no longer recommended (ASHP/IDSA 2020)." },
+  { id: "teicoplanin", name: "Teicoplanin", cls: "Anti-MRSA glycopeptide",
+    std: "Load 6 mg/kg IV q12h × 3, then 6 mg/kg q24h (bone/joint, endocarditis: 12 mg/kg q12h × 3–5, then 12 mg/kg q24h)",
+    crcl: [[80, 1e9, "No adjustment"], [30, 80, "From day 4: half the maintenance dose daily (or full dose q48h)"], [0, 30, "From day 4: one-third of the dose daily (or full dose q72h); same on haemodialysis"]],
+    ind: "MRSA: cSSTI, pneumonia, cUTI, bone and joint infection, endocarditis",
+    notes: "No renal adjustment for the first 3 days. Trough >15 mg/L by FPIA (≥10 mg/L by HPLC); bone/joint >20; endocarditis 30–40 at day 3–5, then >30. Not removed by haemodialysis. Earlier red-man syndrome with vancomycin is not a contraindication (Targocid SmPC)." },
   { id: "linezolid", name: "Linezolid", cls: "Oxazolidinone",
     std: "600 mg IV / PO q12h",
     crcl: [[0, 1e9, "No renal adjustment"]],
@@ -4034,6 +4043,16 @@ const ABX = [
     crcl: [[80, 1e9, "4.5 MIU q12h"], [50, 80, "3.5 MIU q12h"], [30, 50, "2.5 MIU q12h"], [0, 30, "1.5–2 MIU q12h"]],
     ind: "MDR/XDR Acinetobacter, Pseudomonas",
     notes: "Nephrotoxic — monitor creatinine daily." },
+  { id: "tigecycline", name: "Tigecycline", cls: "Glycylcycline",
+    std: "Load 100 mg, then 50 mg IV q12h (label) · CRAB/CRE: 200 mg, then 100 mg q12h, in combination (off-label, IDSA)",
+    crcl: [[0, 1e9, "No renal adjustment"]],
+    ind: "cIAI, cSSTI; CRAB/CRE only as part of combination therapy when alternatives are unsuitable",
+    notes: "Boxed warning: higher all-cause mortality (risk difference 0.6%), greatest in VAP; not indicated for HAP/VAP. Child-Pugh C: 100 mg, then 25 mg q12h. Low serum levels: avoid as monotherapy for bacteraemia. Monitor fibrinogen and coagulation, LFTs; pancreatitis reported. Maltose-containing generics can falsely raise point-of-care glucose (FDA label; IDSA 2024)." },
+  { id: "fosfomycinIV", name: "Fosfomycin (IV)", cls: "Phosphonic acid",
+    std: "12–24 g/day IV in 2–3 divided doses (max 8 g per dose); first dose +100%, max 8 g",
+    crcl: [[40, 1e9, "12–24 g/day in 2–3 doses (no adjustment at CrCl 40–80)"], [30, 40, "60–70% of the daily dose in 2–3 doses"], [20, 30, "40–60% in 2–3 doses"], [10, 20, "20–40% in 1–3 doses"], [0, 10, "No SmPC dose below CrCl 10 · IHD q48h: 2 g after each session"]],
+    ind: "MDR Gram-negative (e.g. CRE) and other serious infections when alternatives fail, always in combination",
+    notes: "14 mmol sodium per gram (8 g ≈ 112 mmol): watch hypernatraemia and fluid overload. Hypokalaemia: monitor K⁺ and replace. Resistance emerges on monotherapy. Post-dilution CVVHF: no adjustment (Fomicyt SmPC)." },
   { id: "fluconazole", name: "Fluconazole", cls: "Antifungal (azole)",
     std: "Load 800 mg, then 400 mg IV q24h",
     crcl: [[50, 1e9, "400–800 mg q24h"], [0, 50, "50% of dose q24h"]],
