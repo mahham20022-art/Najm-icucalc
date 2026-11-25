@@ -341,10 +341,36 @@
     animation: spRise .6s ease-out 1.05s both;
   }
   @keyframes spRise { from { opacity: 0; transform: translateY(6px); } }
+  /* LITFL badge: the last thing that lands, and the one that stays longest */
+  .sp-litfl {
+    position: relative; overflow: hidden; display: inline-flex; align-items: center; gap: 12px; margin-top: 26px;
+    padding: 11px 18px 11px 12px; border-radius: 999px; text-align: left;
+    background: linear-gradient(135deg, rgba(20,184,166,.22), rgba(37,99,235,.18));
+    border: 1px solid rgba(94,234,212,.55);
+    box-shadow: 0 0 0 1px rgba(255,255,255,.04) inset, 0 12px 34px -10px rgba(20,184,166,.6);
+    animation: spBadge .7s cubic-bezier(.2,1.3,.4,1) 1.05s both;
+  }
+  .sp-litfl::after {
+    content: ""; position: absolute; top: 0; bottom: 0; left: -60%; width: 45%;
+    background: linear-gradient(100deg, transparent, rgba(255,255,255,.35), transparent);
+    transform: skewX(-18deg); animation: spBadgeShine .9s ease-out 1.55s both;
+  }
+  .sp-seal {
+    flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
+    background: linear-gradient(160deg, #5eead4, #14b8a6); color: #04201d;
+    box-shadow: 0 0 0 4px rgba(94,234,212,.18), 0 0 18px rgba(94,234,212,.7);
+  }
+  .sp-seal svg { width: 17px; height: 17px; }
+  .sp-litfl-txt { display: flex; flex-direction: column; line-height: 1.2; }
+  .sp-litfl-txt b { font-size: 15px; font-weight: 800; color: #fff; letter-spacing: .01em; }
+  .sp-litfl-txt small { margin-top: 3px; font-size: 12px; font-weight: 600; color: #99f6e4; letter-spacing: .02em; }
+  @keyframes spBadge { from { opacity: 0; transform: translateY(10px) scale(.9); } }
+  @keyframes spBadgeShine { from { left: -60%; } to { left: 130%; } }
+  @media (max-width: 340px) { .sp-litfl-txt b { font-size: 13.5px; } .sp-litfl { padding-right: 14px; } }
   @keyframes spFade { from { opacity: 0; } }
 
   @media (prefers-reduced-motion: reduce) {
-    .sp-head, .sp-bloom { display: none; }
+    .sp-head, .sp-bloom, .sp-litfl::after { display: none; }
   }
 
   /* ============================================================
@@ -1517,6 +1543,10 @@
     </svg>
     <h1 class="sp-word"><span>N</span><span>A</span><span>J</span><span>M</span></h1>
     <p class="sp-sub">ICU CALCULATOR</p>
+    <div class="sp-litfl">
+      <span class="sp-seal" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.2 4.2L19 7"/></svg></span>
+      <span class="sp-litfl-txt"><b>Reviewed &amp; approved by LITFL</b><small>Now in the LITFL App Store</small></span>
+    </div>
   </div>
   <p class="sp-foot" aria-hidden="true">FAST · OFFLINE · SOURCED</p>
 </div>
@@ -6366,7 +6396,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadState();
     // Splash → onboarding (first run) or app (returning). The animation's
     // signature beat lands by ~1.1 s; tap anywhere skips immediately.
-    const splashMs = state.onboarded ? 1350 : 2000;
+    const splashMs = state.onboarded ? 2100 : 2600;  // long enough to read the LITFL badge; tap skips
     let splashDone = false;
     const hideSplash = () => {
       if (splashDone) return;
