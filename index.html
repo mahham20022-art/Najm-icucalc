@@ -6473,7 +6473,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadState();
     // Splash → onboarding (first run) or app (returning). The animation's
     // signature beat lands by ~1.1 s; tap anywhere skips immediately.
-    const splashMs = state.onboarded ? 2400 : 2900;  // long enough to read the LITFL badge and reach line; tap skips
+    const splashMs = state.onboarded ? 3200 : 3700;  // long enough to read the LITFL badge and reach line; tap skips
     let splashDone = false;
     const hideSplash = () => {
       if (splashDone) return;
