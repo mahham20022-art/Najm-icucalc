@@ -7,7 +7,7 @@
      ASSETS    = cache-first for icons/CSS/JS/manifest (stable)
      IMAGES    = cache-first with size cap for user-added images
 */
-const VERSION  = "v87"; // author books in About
+const VERSION  = "v88"; // utm on sign-up forms
 const PRECACHE = `najm-precache-${VERSION}`;
 const RUNTIME  = `najm-runtime-${VERSION}`;
 const ASSETS   = `najm-assets-${VERSION}`;
