@@ -2193,7 +2193,7 @@
       <div class="cards">
         <div class="card">
           <h3>Creatinine Clearance</h3>
-          <div class="sub">Cockcroft–Gault: (140 − age) × W / (72 × Cr); × 0.85 (F).</div>
+          <div class="sub">Cockcroft–Gault: (140 − age) × W / (72 × Cr); × 0.85 (F). Uses actual weight: in obesity it overestimates (consider adjusted weight), and it is unreliable while creatinine is changing.</div>
           <div class="row"><span class="k">CrCl</span><span class="v" id="rn-crcl">—</span></div>
           <div class="verdict" id="rn-crclv">Set age, weight, sex, creatinine in the patient bar.</div>
           <div class="src">Source: Cockcroft &amp; Gault, Nephron 1976</div>
@@ -2213,7 +2213,7 @@
 
         <div class="card">
           <h3>Sepsis Fluid Bolus</h3>
-          <div class="sub">30 mL/kg crystalloid for sepsis-induced hypoperfusion. After it, SSC 2026 suggests a liberal or restrictive strategy chosen by patient factors, guided by dynamic measures.</div>
+          <div class="sub">30 mL/kg crystalloid for sepsis-induced hypoperfusion (calculated on actual weight; if BMI &gt; 30 use ideal or adjusted weight). After it, SSC 2026 suggests a liberal or restrictive strategy chosen by patient factors, guided by dynamic measures.</div>
           <div class="row"><span class="k">Target volume</span><span class="v" id="sep-vol">—</span></div>
           <div class="row"><span class="k">¼ bolus (250 mL)</span><span class="v" id="sep-quarter">—</span></div>
           <div class="verdict">Reassess after each bolus (passive leg raise, response to fluid) — avoid over-resuscitation.</div>
@@ -2246,7 +2246,7 @@
               <tr><td style="padding:4px 6px">Platelets — active bleeding</td><td>Keep &gt; 50 (&gt; 100 if CNS)</td><td>same</td></tr>
               <tr><td style="padding:4px 6px">FFP — INR &gt; 1.5 + bleeding / pre-procedure</td><td>INR &gt; 1.5 – 1.7</td><td>10 – 15 mL/kg</td></tr>
               <tr><td style="padding:4px 6px">Cryoprecipitate</td><td>Fibrinogen &lt; 1.5 g/L (bleeding) OR &lt; 2 g/L (obstetric)</td><td>10 units adult → ↑ fib ~ 0.5 g/L</td></tr>
-              <tr><td style="padding:4px 6px">PCC (4-factor)</td><td>Warfarin / factor Xa reversal + major bleed</td><td>25 – 50 U/kg + vit K 10 mg IV</td></tr>
+              <tr><td style="padding:4px 6px">PCC (4-factor)</td><td>Warfarin / factor Xa reversal + major bleed</td><td>25 – 50 U/kg; add vitamin K 10 mg IV for warfarin only</td></tr>
             </tbody>
           </table>
           <details style="margin-top:10px">
@@ -2396,7 +2396,7 @@
         <div class="card"><h3>GCS</h3><div class="sub">Glasgow Coma Scale (3–15)</div><div id="score-gcs"></div><div class="src">Source: Teasdale G &amp; Jennett B. Lancet 1974;2(7872):81–4.</div></div>
         <div class="card"><h3>qSOFA</h3><div class="sub">≥ 2 → higher sepsis mortality risk. Prognostic only: SSC 2026 advises NEWS, MEWS or SIRS, not qSOFA, for screening.</div><div id="score-qsofa"></div><div class="src">Source: Singer M et al. Sepsis-3. JAMA 2016;315(8):801–10.</div></div>
         <div class="card"><h3>SOFA</h3><div class="sub">Organ dysfunction (0–24).</div><div id="score-sofa"></div><div class="src">Source: Vincent et al., Intensive Care Med 1996</div></div>
-        <div class="card"><h3>CHA₂DS₂-VASc</h3><div class="sub">Stroke risk in AF.</div><div id="score-chads"></div><div class="src">Source: ESC AF guidelines, 2020</div></div>
+        <div class="card"><h3>CHA₂DS₂-VASc</h3><div class="sub">Stroke risk in AF. The verdict uses CHA₂DS₂-VA (sex removed, ESC 2024): ≥ 2 recommend, 1 consider. ACC/AHA 2023 still uses CHA₂DS₂-VASc (≥ 2 men, ≥ 3 women).</div><div id="score-chads"></div><div class="src">Source: Van Gelder IC et al. 2024 ESC Guidelines for the management of atrial fibrillation. Eur Heart J 2024;45:3314–414. Joglar JA et al. 2023 ACC/AHA/ACCP/HRS AF guideline. Circulation 2024;149:e1–e156.</div></div>
         <div class="card"><h3>HAS-BLED</h3><div class="sub">Bleeding risk on anticoagulation.</div><div id="score-hasbled"></div><div class="src">Source: ESC AF guidelines, 2020</div></div>
         <div class="card"><h3>Wells (PE)</h3><div class="sub">Pretest probability of PE.</div><div id="score-wells"></div><div class="src">Source: ESC PE guidelines, 2019</div></div>
         <div class="card"><h3>RASS</h3><div class="sub">Richmond Agitation–Sedation Scale.</div><div id="score-rass"></div><div class="src">Source: Sessler et al., Am J Respir Crit Care Med 2002</div></div>
@@ -3061,7 +3061,7 @@
           <dt>Report a suspected error</dt>
           <dd>Say what you entered, what the app showed and what you expected, with a source if you have one. Leave out patient identifiers.</dd>
         </dl>
-        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.6.9&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
+        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.7.0&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
           <span>Report an error · contact@thetract.org</span>
         </a>
@@ -3155,6 +3155,11 @@
       <div class="card"><section class="tract-family" aria-label="More from The Tract" style="margin:28px auto 10px;max-width:760px;padding:0 16px;text-align:center;color:inherit"><p style="margin:0 0 14px;font:700 11px/1.2 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;letter-spacing:.18em;text-transform:uppercase;opacity:.72">More from The Tract · free</p><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:14px 8px"><a href="https://learneeg.thetract.org/?utm_source=icucalc&amp;utm_medium=app&amp;utm_campaign=family" target="_blank" rel="noopener"  style="display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:inherit;padding:6px 2px"><img src="https://learneeg.thetract.org/icon-192.png" width="52" height="52" alt="" loading="lazy" style="width:52px;height:52px;border-radius:13px;display:block;box-shadow:0 0 0 1px rgba(255,255,255,.12),0 6px 16px rgba(0,0,0,.35)"><b style="font:650 13px/1.2 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif">Montage</b><span style="font:400 11.5px/1.3 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;opacity:.66">Learn to read EEG</span></a><a href="https://compass.thetract.org/?utm_source=icucalc&amp;utm_medium=app&amp;utm_campaign=family" target="_blank" rel="noopener"  style="display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:inherit;padding:6px 2px"><img src="https://compass.thetract.org/icons/Icon-192.png" width="52" height="52" alt="" loading="lazy" style="width:52px;height:52px;border-radius:13px;display:block;box-shadow:0 0 0 1px rgba(255,255,255,.12),0 6px 16px rgba(0,0,0,.35)"><b style="font:650 13px/1.2 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif">Seizure Compass</b><span style="font:400 11.5px/1.3 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;opacity:.66">Seizure or mimic?</span></a><a href="https://neuromaze.thetract.org/?utm_source=icucalc&amp;utm_medium=app&amp;utm_campaign=family" target="_blank" rel="noopener"  style="display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:inherit;padding:6px 2px"><img src="https://neuromaze.thetract.org/logo-192.png" width="52" height="52" alt="" loading="lazy" style="width:52px;height:52px;border-radius:13px;display:block;box-shadow:0 0 0 1px rgba(255,255,255,.12),0 6px 16px rgba(0,0,0,.35)"><b style="font:650 13px/1.2 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif">NeuroMaze</b><span style="font:400 11.5px/1.3 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;opacity:.66">Neuroanatomy game</span></a><a href="https://med100.thetract.org/?utm_source=icucalc&amp;utm_medium=app&amp;utm_campaign=family" target="_blank" rel="noopener"  style="display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:inherit;padding:6px 2px"><img src="https://med100.thetract.org/icons/Icon-192.png" width="52" height="52" alt="" loading="lazy" style="width:52px;height:52px;border-radius:13px;display:block;box-shadow:0 0 0 1px rgba(255,255,255,.12),0 6px 16px rgba(0,0,0,.35)"><b style="font:650 13px/1.2 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif">Med100</b><span style="font:400 11.5px/1.3 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;opacity:.66">100 days of medicine</span></a><a href="https://thermind.thetract.org/?utm_source=icucalc&amp;utm_medium=app&amp;utm_campaign=family" target="_blank" rel="noopener"  style="display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:inherit;padding:6px 2px"><img src="https://thermind.thetract.org/icon-192.png" width="52" height="52" alt="" loading="lazy" style="width:52px;height:52px;border-radius:13px;display:block;box-shadow:0 0 0 1px rgba(255,255,255,.12),0 6px 16px rgba(0,0,0,.35)"><b style="font:650 13px/1.2 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif">THERMIND</b><span style="font:400 11.5px/1.3 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;opacity:.66">Fever after brain injury</span></a></div></section></div>
       <div class="card changelog" id="changelog">
         <h3>Changelog</h3>
+        <h4>1.7.0 <span>· 26 November 2026</span></h4>
+        <ul>
+          <li>Full content audit of every tab against current sources. Fixed: APACHE II now scores doubled creatinine points in acute renal failure; the AF score verdict follows CHA₂DS₂-VA (ESC 2024); the potassium card flags hyperkalaemia instead of "no replacement needed"; the Murray note now gives the CESAR criterion correctly.</li>
+          <li>Andexanet: US withdrawal (Dec 2025) noted. Gentamicin: synergy dosing separated from extended-interval dosing. Methylene blue: serotonin syndrome warning. Stroke thrombolysis: GI bleeding or GI malignancy and recent intracranial or spinal surgery moved to absolute contraindications; tenecteplase per the 2026 AHA/ASA guideline. SAH seizure prophylaxis reworded to the 2023 guideline.</li>
+        </ul>
         <h4>1.6.9 <span>· 26 November 2026</span></h4>
         <ul>
           <li>About: direct free downloads of The Book of Seizures and the Neurocritical Guide.</li>
@@ -3484,7 +3489,7 @@
 
   <footer>
     <div class="fine"><strong>Reference aid — not a medical device.</strong> Always verify against institutional protocols and drug labels.</div>
-    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.6.9 · last reviewed 26 Nov 2026 · Designed by Dr. Mohamed Najm · <a href="https://apps.litfl.com/najm-icucalc" target="_blank" rel="noopener" data-rev="footer" style="color:var(--brand-3)">★ Write a review</a></div>
+    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.7.0 · last reviewed 26 Nov 2026 · Designed by Dr. Mohamed Najm · <a href="https://apps.litfl.com/najm-icucalc" target="_blank" rel="noopener" data-rev="footer" style="color:var(--brand-3)">★ Write a review</a></div>
   </footer>
 </div>
 
@@ -4123,7 +4128,8 @@ const ABX = [
   { id: "gent", name: "Gentamicin", cls: "Aminoglycoside",
     std: "5–7 mg/kg IV q24h",
     crcl: [[60, 1e9, "5–7 mg/kg q24h"], [40, 60, "5 mg/kg q36h"], [20, 40, "5 mg/kg q48h"], [0, 20, "By levels only"]],
-    ind: "Enterococcal synergy, gram-negative augmentation" },
+    ind: "Gram-negative augmentation (extended-interval dose shown)",
+    notes: "Enterococcal or streptococcal endocarditis synergy uses a different regimen: 3 mg/kg/day (1 mg/kg q8h or once daily for streptococci), targeting low peaks; do not use 5–7 mg/kg once daily for synergy (AHA 2015 IE statement)." },
   { id: "colistin", name: "Colistin (CBA)", cls: "Polymyxin",
     std: "Load 300 mg CBA (~9 MIU), then 300–360 mg/day ÷ q12h",
     crcl: [[90, 1e9, "360 mg CBA/day (~10.9 MIU), ÷ q12h"], [80, 90, "340 mg/day (~10.3 MIU), ÷ q12h"], [70, 80, "300 mg/day (~9.1 MIU), ÷ q12h"],
@@ -4293,7 +4299,7 @@ const ANTIDOTES = [
   { id: "andexanet", name: "Andexanet alfa (Andexxa)", cls: "Xa inhibitor antidote",
     toxin: "Life-threatening bleeding on apixaban / rivaroxaban",
     dose: "Low dose: 400 mg IV bolus (30 mg/min) + 480 mg over 2 h — if last dose was ≥ 8 h ago, or apixaban ≤ 5 mg / rivaroxaban ≤ 10 mg. High dose: 800 mg + 960 mg over 2 h — apixaban > 5 mg or rivaroxaban > 10 mg (or unknown) within 8 h.",
-    notes: "ANNEXA-I (factor Xa inhibitor-associated ICH, NEJM 2024): better haemostatic efficacy than usual care, but more thrombotic events, including ischaemic stroke. Availability varies by country; 4F-PCC 50 U/kg is the usual alternative." },
+    notes: "Withdrawn from the US market on 22 Dec 2025 (FDA safety communication: thrombosis 14.6 % vs 6.9 % and more thrombosis-related deaths with andexanet in ANNEXA-I). Still licensed in some countries (Ondexxya). ANNEXA-I (factor Xa inhibitor-associated ICH, NEJM 2024): better haemostatic efficacy than usual care, but more thrombotic events, including ischaemic stroke. 4F-PCC 50 U/kg is the usual reversal where andexanet is unavailable." },
   { id: "fomepizole", name: "Fomepizole", cls: "Toxic alcohol antidote",
     toxin: "Methanol / ethylene glycol poisoning",
     dose: "15 mg/kg IV load over 30 min → 10 mg/kg q12h × 4 doses → 15 mg/kg q12h until levels < 20 mg/dL and pH normal.",
@@ -4317,7 +4323,7 @@ const ANTIDOTES = [
   { id: "dantrolene", name: "Dantrolene", cls: "Muscle relaxant (RyR)",
     toxin: "Malignant hyperthermia; NMS refractory to supportive care",
     dose: "2.5 mg/kg IV bolus, repeat q5–10 min until MH signs resolve (max 10 mg/kg). Then 1 mg/kg q4–6h × 24–48 h.",
-    notes: "Reconstitute rapidly — call for extra hands. Also stop trigger, cool, treat hyperK⁺, invert vent." },
+    notes: "Reconstitute rapidly — call for extra hands. Also stop the trigger, hyperventilate with 100 % O₂ at high fresh-gas flow, cool, treat hyperK⁺." },
   { id: "deferoxamine", name: "Deferoxamine", cls: "Iron chelator",
     toxin: "Acute iron poisoning (level > 500 mcg/dL, shock, metabolic acidosis)",
     dose: "15 mg/kg/hr IV infusion (max 6 g/day). Continue until asymptomatic + normal AG + urine not red-brown (\"vin rosé\").",
@@ -4325,7 +4331,7 @@ const ANTIDOTES = [
   { id: "methyleneblue", name: "Methylene blue", cls: "Methemoglobinemia antidote",
     toxin: "Symptomatic methemoglobinemia (MetHb > 20 %, or > 10 % with symptoms)",
     dose: "1–2 mg/kg IV over 5 min. May repeat once at 1 h (max 7 mg/kg cumulative).",
-    notes: "Contraindicated in G6PD deficiency (hemolysis). Interferes with pulse oximetry (falsely low SpO₂)." },
+    notes: "Contraindicated in G6PD deficiency (hemolysis). MAO inhibitor: serotonin syndrome risk with SSRIs, SNRIs, clomipramine and other serotonergic drugs (FDA warning). Interferes with pulse oximetry (falsely low SpO₂)." },
   { id: "physo", name: "Physostigmine", cls: "Anticholinergic antidote",
     toxin: "Severe anticholinergic toxicity (agitation, seizures)",
     dose: "0.5–2 mg IV slowly over 5 min. May repeat q10–30 min.",
@@ -4459,7 +4465,7 @@ const NEURO_BUNDLE = [
   { icon: "💊", title: "Analgesia",
     body: "Fentanyl 25–200 mcg/hr (short half-life, exam-friendly). Ketamine acceptable in TBI (updated evidence — no ICP rise). Avoid morphine in AKI (accumulation). Treat pain BEFORE agitation — pain worsens ICP." },
   { icon: "⚡", title: "Seizure prevention",
-    body: "<b>TBI (severe):</b> 7 days of prophylaxis for early seizures (BTF Level IIA, shown for phenytoin; levetiracetam 500–1000 mg BD is widely used with weaker evidence).<br><b>SAH:</b> Levetiracetam 1 g IV BD until aneurysm secured.<br><b>ICH:</b> Only if clinical seizure — no routine prophylaxis.<br><b>Post-craniotomy:</b> Case-by-case, usually 7 d." },
+    body: "<b>TBI (severe):</b> 7 days of prophylaxis for early seizures (BTF Level IIA, shown for phenytoin; levetiracetam 500–1000 mg BD is widely used with weaker evidence).<br><b>SAH:</b> a short course of prophylaxis may be considered until the aneurysm is secured; avoid phenytoin (AHA/ASA 2023). Levetiracetam is commonly used.<br><b>ICH:</b> Only if clinical seizure — no routine prophylaxis.<br><b>Post-craniotomy:</b> Case-by-case, usually 7 d." },
   { icon: "🧪", title: "Hyperosmolar therapy",
     body: "<b>Mannitol</b> 0.25–1 g/kg IV over 15 min. Monitor: serum osm target &lt; 320, osmolar gap &lt; 20, urine output, Na. Renal caution.<br><b>Hypertonic saline 3 %</b> 250 mL IV bolus, or continuous 30–150 mL/hr for Na 145–155.<br><b>23.4 % NaCl</b> 30 mL over 5–10 min via central line — fastest ICP drop." },
   { icon: "🍽️", title: "Nutrition",
@@ -4724,12 +4730,14 @@ const THROMBO = {
       <br>
       <b>Tenecteplase (TNK)</b> — <b>0.25 mg/kg single IV bolus over 5 s (max 25 mg)</b>.
       ${w ? `→ For ${w} kg: <b>${fmt(Math.min(w*0.25,25),1)} mg single bolus</b>.` : ""}<br>
-      Non-inferior to alteplase (ACT, AcT Lancet 2022). Superior reperfusion pre-thrombectomy in LVO (EXTEND-IA TNK NEJM 2018). Growing first-line use.
+      The 2026 AHA/ASA guideline accepts either alteplase or tenecteplase 0.25 mg/kg in the 4.5-h window (AcT, Lancet 2022; ORIGINAL; TRACE-2). Better reperfusion before thrombectomy in LVO (EXTEND-IA TNK, NEJM 2018). Do not use the 0.4 mg/kg dose.
     `,
     abs: [
       "Prior intracranial haemorrhage",
       "Ischaemic stroke or head trauma in prior 3 months",
       "Intra-axial brain tumour",
+      "Intracranial or intraspinal surgery in prior 3 months",
+      "Structural GI malignancy, or GI bleeding in prior 21 days",
       "Active internal bleeding",
       "Suspected aortic dissection or endocarditis",
       "Platelets < 100 ×10⁹/L",
@@ -4740,12 +4748,12 @@ const THROMBO = {
             "CT shows hypodensity > ⅓ MCA territory or acute haemorrhage",
     ],
     rel: [
-      "Mild, non-disabling deficit (NIHSS 0–5): thrombolysis not recommended (PRISMS); dual antiplatelet therapy instead",
+      "Minor non-disabling deficit (usually NIHSS 0–5): thrombolysis not recommended (PRISMS, ARAMIS); dual antiplatelet therapy instead. A disabling deficit qualifies whatever the NIHSS",
     "Blood glucose < 50 mg/dL (2.7 mmol/L): correct it and reassess — possible mimic",
     "Unruptured, unsecured intracranial aneurysm < 10 mm: thrombolysis reasonable; AVM: uncertain benefit",
       "Seizure at onset with postictal residual deficit",
       "Major surgery / serious trauma in prior 14 days",
-      "GI or GU haemorrhage in prior 21 days",
+      "Genitourinary haemorrhage in prior 21 days",
       "Recent MI (prior 3 months)",
       "Pregnancy",
       "Age > 80 (still eligible 0 – 4.5 h; evidence slightly weaker)",
@@ -5513,7 +5521,10 @@ function runLytes() {
   const k = num(state.inputs.k_k);
   if (k != null) {
     let msg;
-    if (k >= 4.0) msg = "No replacement needed";
+    if (k >= 6.5) msg = "SEVERE HYPERKALAEMIA — do not give K. ECG now; see the Hyperkalaemia protocol below";
+    else if (k >= 6.0) msg = "Moderate hyperkalaemia — no K. 12-lead ECG; see the Hyperkalaemia protocol";
+    else if (k >= 5.5) msg = "Mild hyperkalaemia — no K. Review drugs and repeat";
+    else if (k >= 4.0) msg = "No replacement needed";
     else if (k >= 3.5) msg = "10 mEq KCl PO/IV";
     else if (k >= 3.0) msg = "20–40 mEq KCl IV (split)";
     else if (k >= 2.5) msg = "40–60 mEq KCl IV + check Mg";
@@ -5712,7 +5723,7 @@ const SCORES = {
     { k:"Vascular", opts:[["No",0],["Yes",1]] },
     { k:"Age 65–74", opts:[["No",0],["Yes",1]] },
     { k:"Female", opts:[["No",0],["Yes",1]] },
-  ], i: (t, vals) => { const s = t - ((vals && vals[7] === 1) ? 1 : 0); return s >= 2 ? ["Score " + t + ": anticoagulation recommended (ESC 2020: ≥ 2 men, ≥ 3 women).","bad"] : s === 1 ? ["Score " + t + ": consider anticoagulation.","warn"] : ["Score " + t + ": anticoagulation not indicated on this score.","ok"]; } },
+  ], i: (t, vals) => { const s = t - ((vals && vals[7] === 1) ? 1 : 0); const tail = " (CHA₂DS₂-VASc " + t + ")"; return s >= 2 ? ["CHA₂DS₂-VA " + s + ": oral anticoagulation recommended (ESC 2024)" + tail + ".","bad"] : s === 1 ? ["CHA₂DS₂-VA 1: oral anticoagulation should be considered (ESC 2024)" + tail + ".","warn"] : ["CHA₂DS₂-VA 0: anticoagulation not indicated on this score" + tail + ".","ok"]; } },
   hasbled: { items: [
     { k:"Hypertension (uncontrolled)", opts:[["No",0],["Yes",1]] },
     { k:"Abnormal renal", opts:[["No",0],["Yes",1]] },
@@ -5794,7 +5805,8 @@ const SCORES = {
       ["≥ 7 or < 2.5",4],["6–6.9",3],["2.5–2.9",2],
       ["5.5–5.9 or 3–3.4",1],["3.5–5.4 (normal)",0]
     ]},
-    { k:"Creatinine (mg/dL) — ×2 if ARF", opts:[
+    { k:"Creatinine (mg/dL) — points double in acute renal failure", opts:[
+      ["≥ 3.5 with ARF (8)",8],["2–3.4 with ARF (6)",6],["1.5–1.9 with ARF (4)",4],
       ["≥ 3.5",4],["2–3.4",3],["1.5–1.9 or < 0.6",2],["0.6–1.4 (normal)",0]
     ]},
     { k:"Hematocrit (%)", opts:[
@@ -5961,7 +5973,7 @@ const SCORES = {
     const n = Object.values(vals || {}).filter(v => v !== "" && v !== undefined && v !== null).length || 1, avg = t / n;
     if (avg === 0) return [`Total ${t} over ${n} item${n > 1 ? 's' : ''}  ·  average 0 — no lung injury`, "ok"];
     if (avg <= 2.5) return [`Total ${t} over ${n} items  ·  average ${avg.toFixed(2)} — mild-to-moderate lung injury`, "warn"];
-    return [`Total ${t} over ${n} items  ·  average ${avg.toFixed(2)} — severe lung injury (> 2.5) → VV-ECMO criterion per EOLIA / CESAR`, "bad"];
+    return [`Total ${t} over ${n} items  ·  average ${avg.toFixed(2)} — severe lung injury (> 2.5). A Murray score ≥ 3 (or pH < 7.20 from uncompensated hypercapnia) was the CESAR referral criterion for ECMO; EOLIA used P/F and pH criteria instead (see the ARDS card)`, "bad"];
   }},
   candida: { items: [
     { k:"Total parenteral nutrition — Day 1 to Day assessed (yes if any)", opts:[["No",0],["Yes (+1)",1]] },
