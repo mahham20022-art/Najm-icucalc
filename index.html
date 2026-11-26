@@ -1839,6 +1839,16 @@
         <input id="abxSearch" type="search" placeholder="Search antibiotic…" autocomplete="off" />
       </div>
       <div class="module-src">Sources: Sanford Guide to Antimicrobial Therapy, 2024; IDSA/ATS HAP/VAP guideline, 2016; product labels (FDA, EMA SmPC); Tsuji BT et al. International consensus guidelines for the polymyxins, Pharmacotherapy 2019;39:10–39; Nation RL et al. Clin Infect Dis 2017;64:565–71.</div>
+      <div class="abx-card" id="abxCard">
+        <div class="abx-card-h"><span class="abx-card-ic" aria-hidden="true">PDF</span><div><b>ICU Antibiotic Dosing Card</b><small>4 printable A4 pages: renal dosing by CrCl, last-line agents, antifungals, CRRT doses.</small></div></div>
+        <form class="abx-card-f" action="https://buttondown.com/api/emails/embed-subscribe/afferent" method="post" target="_blank">
+          <input type="email" name="email" required autocomplete="email" placeholder="you@hospital.org" aria-label="Email">
+          <input type="hidden" name="tag" value="icucalc-abx-card"><input type="hidden" name="embed" value="1">
+          <button type="submit">Get the card</button>
+        </form>
+        <small class="abx-card-s">Free. You will also get Afferent, our two-minute monthly brief; unsubscribe from any issue.</small>
+        <a class="abx-card-dl" href="abx-card.pdf" download hidden>Download the card (PDF) →</a>
+      </div>
       <div class="chips" id="abxClassChips"></div>
       <div class="cards" id="abxCards" aria-live="polite"></div>
     </section>
@@ -3051,7 +3061,7 @@
           <dt>Report a suspected error</dt>
           <dd>Say what you entered, what the app showed and what you expected, with a source if you have one. Leave out patient identifiers.</dd>
         </dl>
-        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.6.6&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
+        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.6.7&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
           <span>Report an error · contact@thetract.org</span>
         </a>
@@ -3144,6 +3154,10 @@
       <div class="card"><section class="tract-family" aria-label="More from The Tract" style="margin:28px auto 10px;max-width:760px;padding:0 16px;text-align:center;color:inherit"><p style="margin:0 0 14px;font:700 11px/1.2 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;letter-spacing:.18em;text-transform:uppercase;opacity:.72">More from The Tract · free</p><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:14px 8px"><a href="https://learneeg.thetract.org/?utm_source=icucalc&amp;utm_medium=app&amp;utm_campaign=family" target="_blank" rel="noopener"  style="display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:inherit;padding:6px 2px"><img src="https://learneeg.thetract.org/icon-192.png" width="52" height="52" alt="" loading="lazy" style="width:52px;height:52px;border-radius:13px;display:block;box-shadow:0 0 0 1px rgba(255,255,255,.12),0 6px 16px rgba(0,0,0,.35)"><b style="font:650 13px/1.2 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif">Montage</b><span style="font:400 11.5px/1.3 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;opacity:.66">Learn to read EEG</span></a><a href="https://compass.thetract.org/?utm_source=icucalc&amp;utm_medium=app&amp;utm_campaign=family" target="_blank" rel="noopener"  style="display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:inherit;padding:6px 2px"><img src="https://compass.thetract.org/icons/Icon-192.png" width="52" height="52" alt="" loading="lazy" style="width:52px;height:52px;border-radius:13px;display:block;box-shadow:0 0 0 1px rgba(255,255,255,.12),0 6px 16px rgba(0,0,0,.35)"><b style="font:650 13px/1.2 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif">Seizure Compass</b><span style="font:400 11.5px/1.3 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;opacity:.66">Seizure or mimic?</span></a><a href="https://neuromaze.thetract.org/?utm_source=icucalc&amp;utm_medium=app&amp;utm_campaign=family" target="_blank" rel="noopener"  style="display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:inherit;padding:6px 2px"><img src="https://neuromaze.thetract.org/logo-192.png" width="52" height="52" alt="" loading="lazy" style="width:52px;height:52px;border-radius:13px;display:block;box-shadow:0 0 0 1px rgba(255,255,255,.12),0 6px 16px rgba(0,0,0,.35)"><b style="font:650 13px/1.2 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif">NeuroMaze</b><span style="font:400 11.5px/1.3 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;opacity:.66">Neuroanatomy game</span></a><a href="https://med100.thetract.org/?utm_source=icucalc&amp;utm_medium=app&amp;utm_campaign=family" target="_blank" rel="noopener"  style="display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:inherit;padding:6px 2px"><img src="https://med100.thetract.org/icons/Icon-192.png" width="52" height="52" alt="" loading="lazy" style="width:52px;height:52px;border-radius:13px;display:block;box-shadow:0 0 0 1px rgba(255,255,255,.12),0 6px 16px rgba(0,0,0,.35)"><b style="font:650 13px/1.2 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif">Med100</b><span style="font:400 11.5px/1.3 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;opacity:.66">100 days of medicine</span></a><a href="https://fever.thetract.org/?utm_source=icucalc&amp;utm_medium=app&amp;utm_campaign=family" target="_blank" rel="noopener"  style="display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:inherit;padding:6px 2px"><img src="https://fever.thetract.org/icon-192.png" width="52" height="52" alt="" loading="lazy" style="width:52px;height:52px;border-radius:13px;display:block;box-shadow:0 0 0 1px rgba(255,255,255,.12),0 6px 16px rgba(0,0,0,.35)"><b style="font:650 13px/1.2 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif">Fever Compass</b><span style="font:400 11.5px/1.3 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;opacity:.66">The cause of a fever</span></a><a href="https://thermind.thetract.org/?utm_source=icucalc&amp;utm_medium=app&amp;utm_campaign=family" target="_blank" rel="noopener"  style="display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:inherit;padding:6px 2px"><img src="https://thermind.thetract.org/icon-192.png" width="52" height="52" alt="" loading="lazy" style="width:52px;height:52px;border-radius:13px;display:block;box-shadow:0 0 0 1px rgba(255,255,255,.12),0 6px 16px rgba(0,0,0,.35)"><b style="font:650 13px/1.2 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif">THERMIND</b><span style="font:400 11.5px/1.3 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;opacity:.66">Fever after brain injury</span></a></div></section></div>
       <div class="card changelog" id="changelog">
         <h3>Changelog</h3>
+        <h4>1.6.7 <span>· 26 November 2026</span></h4>
+        <ul>
+          <li>ICU Antibiotic Dosing Card: a printable 4-page A4 PDF of the antibiotic and CRRT tables, from the Antibiotics tab.</li>
+        </ul>
         <h4>1.6.6 <span>· 26 November 2026</span></h4>
         <ul>
           <li><b>Colistin:</b> renal dosing now follows the international polymyxin consensus (Tsuji 2019; Nation 2017): 300 mg CBA load, then a daily dose by CrCl in 11 bands (360 mg CBA/day at CrCl ≥ 90 down to 130 mg/day), shown in mg CBA and MIU, with intermittent-HD supplements. The previous bands were lower than the consensus at most levels of renal function. Now consistent with the CRRT card (440 mg CBA/day).</li>
@@ -3461,7 +3475,7 @@
 
   <footer>
     <div class="fine"><strong>Reference aid — not a medical device.</strong> Always verify against institutional protocols and drug labels.</div>
-    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.6.6 · last reviewed 26 Nov 2026 · Designed by Dr. Mohamed Najm · <a href="https://apps.litfl.com/najm-icucalc" target="_blank" rel="noopener" data-rev="footer" style="color:var(--brand-3)">★ Write a review</a></div>
+    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.6.7 · last reviewed 26 Nov 2026 · Designed by Dr. Mohamed Najm · <a href="https://apps.litfl.com/najm-icucalc" target="_blank" rel="noopener" data-rev="footer" style="color:var(--brand-3)">★ Write a review</a></div>
   </footer>
 </div>
 
@@ -6664,6 +6678,20 @@ if ("serviceWorker" in navigator && location.protocol !== "file:") {
 .aff-invite button[type=submit]{font:inherit;font-weight:700;border:0;border-radius:10px;padding:9px 14px;background:#22d3ee;color:#001018;cursor:pointer}
 .aff-invite small{color:#7f92ae;font-size:12.5px}.aff-x{position:absolute;top:6px;right:8px;width:30px;height:30px;border:0;background:none;color:#7f92ae;font-size:22px;cursor:pointer}
 </style>
+<!-- Antibiotic card: email for the printable PDF (Buttondown tag icucalc-abx-card); the link appears on submit and stays. -->
+<script>
+(function () {
+  var box = document.getElementById("abxCard"); if (!box) return;
+  var K = "icucalc_abxcard", dl = box.querySelector(".abx-card-dl");
+  function ev(p) { try { window.goatcounter && window.goatcounter.count && window.goatcounter.count({ path: "icucalc/abx-card/" + p, event: true }); } catch (e) {} }
+  function got() { box.classList.add("got"); dl.hidden = false; }
+  try { if (localStorage.getItem(K)) got(); } catch (e) {}
+  box.querySelector("form").addEventListener("submit", function () { try { localStorage.setItem(K, "1"); localStorage.setItem("icucalc_aff", "subscribed"); } catch (e) {} ev("subscribed"); setTimeout(got, 300); });
+  dl.addEventListener("click", function () { ev("download"); });
+  var seen = false;
+  new IntersectionObserver(function (es) { if (!seen && es[0].isIntersecting) { seen = true; ev("shown"); } }).observe(box);
+})();
+</script>
 <!-- Review invitation: from the third visit, after real use; once more after "Later", never after a tap. -->
 <script>
 (function () {
@@ -6714,6 +6742,13 @@ if ("serviceWorker" in navigator && location.protocol !== "file:") {
 .rev-stars{color:#fbbf24;letter-spacing:2px;font-size:15px;line-height:1}
 .rev-acts{display:flex;gap:8px}.rev-acts a{flex:1;text-align:center;font-weight:700;border-radius:10px;padding:10px 14px;background:#22d3ee;color:#001018;text-decoration:none}
 .rev-acts button{font:inherit;border:1px solid #26406b;border-radius:10px;padding:10px 14px;background:none;color:#9fb0c8;cursor:pointer}
+.abx-card{margin:10px 0 12px;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,rgba(34,211,238,.10),rgba(37,99,235,.08));border:1px solid rgba(34,211,238,.35)}
+.abx-card-h{display:flex;gap:12px;align-items:center}.abx-card-h b{display:block;font-size:15px}.abx-card-h small{display:block;opacity:.8;font-size:12.5px;line-height:1.4;margin-top:2px}
+.abx-card-ic{flex:none;display:grid;place-items:center;width:38px;height:46px;border-radius:6px;background:#22d3ee;color:#001018;font:800 10.5px/1 system-ui,sans-serif;letter-spacing:.06em}
+.abx-card-f{display:flex;gap:8px;margin:10px 0 6px}.abx-card-f input[type=email]{flex:1;min-width:0;font:inherit;padding:9px 11px;border-radius:10px;border:1px solid #26406b;background:#060d19;color:#eaf1fb}
+.abx-card-f button{font:inherit;font-weight:700;border:0;border-radius:10px;padding:9px 14px;background:#22d3ee;color:#001018;cursor:pointer}
+.abx-card-s{display:block;color:#7f92ae;font-size:12px;line-height:1.4}.abx-card-dl{display:block;margin-top:8px;font-weight:700;color:#22d3ee;text-decoration:none}
+.abx-card-dl[hidden],.abx-card.got .abx-card-f,.abx-card.got .abx-card-s{display:none}
 .rev-btn{display:flex;gap:12px;align-items:center;margin:10px 0 4px;padding:12px 14px;border-radius:12px;background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.35);color:inherit;text-decoration:none}
 .rev-btn .rev-stars{font-size:14px;flex:none}.rev-btn b{display:block;color:var(--brand-3);font-size:15px}.rev-btn small{display:block;opacity:.8;font-size:12.5px;line-height:1.45;margin-top:2px}
 </style>
