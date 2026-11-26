@@ -7,7 +7,7 @@
      ASSETS    = cache-first for icons/CSS/JS/manifest (stable)
      IMAGES    = cache-first with size cap for user-added images
 */
-const VERSION  = "v80"; // longer splash
+const VERSION  = "v81"; // daily splash, one ask per visit
 const PRECACHE = `najm-precache-${VERSION}`;
 const RUNTIME  = `najm-runtime-${VERSION}`;
 const ASSETS   = `najm-assets-${VERSION}`;
@@ -22,7 +22,7 @@ const APP_SHELL = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
-  "./install.js?v=2",
+  "./install.js?v=3",
   "./privacy-policy.html",
   "./sitemap.xml",
   "./robots.txt",

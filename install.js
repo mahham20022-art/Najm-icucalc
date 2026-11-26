@@ -91,6 +91,7 @@
   }
   function show() {
     if (el || standalone()) return; css();
+    try { sessionStorage.setItem('tract_nudge', 'install'); } catch (e) {}  // one ask per visit: review/newsletter invitations stand down
     const sc = document.createElement('div'); sc.className = 'ti-scrim'; sc.dataset.ti = 'no';
     el = document.createElement('div'); el.className = 'ti'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-labelledby', 'ti-h');
     render(); document.body.appendChild(sc); document.body.appendChild(el);
