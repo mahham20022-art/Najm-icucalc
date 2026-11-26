@@ -127,9 +127,4 @@ async def render():
                      header_template=HDR, footer_template=FTR, margin={"top": "17mm", "bottom": "16mm", "left": "11mm", "right": "11mm"})
         await br.close()
 asyncio.run(render())
-# Preview shown above the offer in the Antibiotics tab: top of page 1.
-subprocess.run(["pdftoppm", "-r", "110", "-f", "1", "-l", "1", "-png", str(ROOT / "abx-card.pdf"), "/tmp/abx_pv"], check=True, capture_output=True)
-from PIL import Image
-im = Image.open("/tmp/abx_pv-1.png").convert("RGB"); w = im.width
-im.crop((0, 0, w, int(w * .63))).resize((600, 378), Image.LANCZOS).save(ROOT / "abx-card-preview.jpg", quality=82, optimize=True)
 print("CRRT-only drugs:", crrt_only)
