@@ -1842,8 +1842,7 @@
       <div class="chips" id="abxClassChips"></div>
       <div class="cards" id="abxCards" aria-live="polite"></div>
       <div class="abx-card" id="abxCard">
-        <img class="abx-card-pv" src="abx-card-preview.jpg" alt="Preview: first page of the ICU Antibiotic Dosing Card" loading="lazy" width="600" height="380">
-        <div class="abx-card-h"><div><b>Take all of this with you</b><small>Every antibiotic above, plus CRRT doses, on 4 printable A4 pages: the ICU Antibiotic Dosing Card (PDF).</small></div></div>
+        <div class="abx-card-h"><span class="abx-card-ic" aria-hidden="true">PDF</span><div><b>ICU Antibiotic Dosing Card</b><small>4 printable A4 pages: renal dosing by CrCl, last-line agents, antifungals, CRRT doses.</small></div></div>
         <form class="abx-card-f" action="https://buttondown.com/api/emails/embed-subscribe/afferent" method="post" target="_blank">
           <input type="email" name="email" required autocomplete="email" placeholder="you@hospital.org" aria-label="Email">
           <input type="hidden" name="tag" value="icucalc-abx-card"><input type="hidden" name="embed" value="1">
@@ -3157,7 +3156,7 @@
         <h3>Changelog</h3>
         <h4>1.6.8 <span>· 26 November 2026</span></h4>
         <ul>
-          <li>The Antibiotic Dosing Card offer now sits below the antibiotic list, with a preview of the first page.</li>
+          <li>The Antibiotic Dosing Card offer now sits below the antibiotic list.</li>
         </ul>
         <h4>1.6.7 <span>· 26 November 2026</span></h4>
         <ul>
@@ -6752,7 +6751,6 @@ if ("serviceWorker" in navigator && location.protocol !== "file:") {
 .abx-card-ic{flex:none;display:grid;place-items:center;width:38px;height:46px;border-radius:6px;background:#22d3ee;color:#001018;font:800 10.5px/1 system-ui,sans-serif;letter-spacing:.06em}
 .abx-card-f{display:flex;gap:8px;margin:10px 0 6px}.abx-card-f input[type=email]{flex:1;min-width:0;font:inherit;padding:9px 11px;border-radius:10px;border:1px solid #26406b;background:#060d19;color:#eaf1fb}
 .abx-card-f button{font:inherit;font-weight:700;border:0;border-radius:10px;padding:9px 14px;background:#22d3ee;color:#001018;cursor:pointer}
-.abx-card-pv{display:block;width:100%;height:auto;max-height:230px;object-fit:cover;object-position:top;border-radius:8px;margin:0 0 12px;box-shadow:0 10px 24px -14px rgba(0,0,0,.8)}
 .abx-card-s{display:block;color:#7f92ae;font-size:12px;line-height:1.4}.abx-card-dl{display:block;margin-top:8px;font-weight:700;color:#22d3ee;text-decoration:none}
 .abx-card-dl[hidden],.abx-card.got .abx-card-f,.abx-card.got .abx-card-s{display:none}
 .rev-btn{display:flex;gap:12px;align-items:center;margin:10px 0 4px;padding:12px 14px;border-radius:12px;background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.35);color:inherit;text-decoration:none}
