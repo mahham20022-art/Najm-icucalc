@@ -33,7 +33,10 @@
 <meta name="msapplication-navbutton-color" content="#071A2F" />
 <meta property="og:title" content="Najm ICUCalc — free ICU calculator by Dr Mohamed Najm" />
 <meta property="og:description" content="APACHE II · HEART · TIMI · CURB-65 · ICH · QTc · ROX · drug drip rates (mcg/kg/min → mL/hr) · Surviving Sepsis bundle · hyperkalaemia, DKA, MTP protocols · RSI · antidotes · neuroprotection. Bedside reference for ICU & ED clinicians. Offline. Free." />
-<meta property="og:image" content="icons/icon-512.png" />
+<meta property="og:image" content="https://icucalc.thetract.org/icons/og-1200x630.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Najm ICUCalc, ICU calculator. Reviewed and approved by LITFL." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://icucalc.thetract.org/" />
 <meta property="og:site_name" content="Najm ICUCalc" />
@@ -41,7 +44,8 @@
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Najm ICUCalc — free ICU calculator" />
 <meta name="twitter:description" content="APACHE II · HEART · TIMI · QTc · ROX · drip rates · Sepsis / Hyperkalaemia / DKA / MTP protocols. Bedside reference for ICU/ED. Offline. Free." />
-<meta name="twitter:image" content="icons/icon-512.png" />
+<meta name="twitter:image" content="https://icucalc.thetract.org/icons/og-1200x630.jpg" />
+<meta name="twitter:image:alt" content="Najm ICUCalc, ICU calculator. Reviewed and approved by LITFL." />
 
 <!-- Rich structured data for Google — tells crawlers this is a Medical Web Page + Medical Calculator app -->
 <script type="application/ld+json">
@@ -340,6 +344,7 @@
   }
   @keyframes spPbIn { from { opacity: 0; transform: translateY(6px); } }
   @media (prefers-reduced-motion: reduce) { .sp-pb { animation: none; } }
+  @media (max-height: 700px) { .sp-pb, .sp-foot { display: none; } }
   .sp-foot {
     position: absolute; z-index: 4; left: 0; right: 0;
     bottom: calc(env(safe-area-inset-bottom, 0px) + 28px);
