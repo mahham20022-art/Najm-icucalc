@@ -3117,7 +3117,7 @@
         <h3>Changelog</h3>
         <h4>1.6.3 <span>· 26 November 2026</span></h4>
         <ul>
-          <li>Reviews: a clear "Write a review" button in About and the footer, and one short invitation after real use from the third visit (Arabic on Arabic phones). Tap "Later" and it asks once more, then never.</li>
+          <li>Reviews: a clear "Write a review" button in About and the footer, and one short invitation after real use from the third visit. Tap "Later" and it asks once more, then never.</li>
         </ul>
         <h4>1.6.2 <span>· 26 November 2026</span></h4>
         <ul>
@@ -6626,15 +6626,12 @@ if ("serviceWorker" in navigator && location.protocol !== "file:") {
     if (st.indexOf("later:") === 0 && visits < +st.slice(6)) return;
     if (st === "later2") return;
   } catch (e) { return; }
-  var ar = /^ar\b/i.test(navigator.language || "");
-  var T = ar ? { t: "هل استخدمت ICUCalc في مناوبتك؟", b: "تقييمك في 30 ثانية على LITFL يساعد فرق العناية الأخرى في الوصول إلى أداة موثوقة.", go: "اكتب تقييماً", no: "لاحقاً" }
-             : { t: "Used ICUCalc on shift?", b: "A 30-second review on LITFL helps other ICU teams find a tool they can trust.", go: "Write a review", no: "Later" };
+  var T = { t: "Used ICUCalc on shift?", b: "A 30-second review on LITFL helps other ICU teams find a tool they can trust.", go: "Write a review", no: "Later" };
   var changes = 0, shown = false, t0 = Date.now();
   function show() {
     if (shown || document.querySelector(".aff-invite")) return; shown = true;
     var d = document.createElement("aside");
     d.className = "rev-invite"; d.setAttribute("role", "dialog"); d.setAttribute("aria-label", T.t);
-    if (ar) d.dir = "rtl";
     d.innerHTML = '<div class="rev-stars" aria-hidden="true">★★★★★</div><b>' + T.t + '</b><p>' + T.b + '</p>' +
       '<div class="rev-acts"><a href="' + URL + '" target="_blank" rel="noopener" data-rev="toast">' + T.go + '</a><button type="button">' + T.no + '</button></div>';
     document.body.appendChild(d);
