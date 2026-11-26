@@ -378,6 +378,14 @@
   .sp-litfl-txt small { margin-top: 3px; font-size: 12px; font-weight: 600; color: #99f6e4; letter-spacing: .02em; }
   @keyframes spBadge { from { opacity: 0; transform: translateY(10px) scale(.9); } }
   @keyframes spBadgeShine { from { left: -60%; } to { left: 130%; } }
+  /* Reach line: live figures from thetract.org/reach/icucalc.json, last cached copy shown first */
+  .sp-reach { margin-top: 18px; display: flex; flex-direction: column; align-items: center; gap: 8px; animation: spRise .6s ease-out 1.3s both; }
+  .sp-reach b { font-size: 13.5px; font-weight: 700; color: #e2e8f0; letter-spacing: .02em; }
+  .sp-top { display: flex; align-items: center; gap: 10px; }
+  .sp-top small { font-size: 9.5px; font-weight: 700; letter-spacing: .28em; color: rgba(148,163,184,.75); }
+  .sp-flags { display: flex; gap: 6px; font-size: 20px; line-height: 1; }
+  .sp-flags span { animation: spRise .45s ease-out both; }
+  @media (prefers-reduced-motion: reduce) { .sp-reach, .sp-flags span { animation: none; } }
   @media (max-width: 340px) { .sp-litfl-txt b { font-size: 13.5px; } .sp-litfl { padding-right: 14px; } }
   @keyframes spFade { from { opacity: 0; } }
 
@@ -1559,6 +1567,27 @@
       <span class="sp-seal" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.2 4.2L19 7"/></svg></span>
       <span class="sp-litfl-txt"><b>Reviewed &amp; approved by LITFL</b><small>Now in the LITFL App Store</small></span>
     </div>
+    <div class="sp-reach" id="spReach"><b id="spReachTxt">2,200+ visits · 65 countries</b><span class="sp-top"><small>TOP VISITORS</small><span class="sp-flags" id="spFlags"></span></span></div>
+    <script>
+    (function () {
+      var K = "icucalc_reach", D = { visits: 2200, countries: 65, top: ["SA", "EG", "SD", "IN", "US"] };
+      function flag(c) { return String.fromCodePoint.apply(null, c.toUpperCase().split("").map(function (x) { return 0x1F1A5 + x.charCodeAt(0); })); }
+      function paint(r) {
+        if (!r || !r.visits || !r.countries || !r.top) return;
+        document.getElementById("spReachTxt").textContent = r.visits.toLocaleString("en-US") + "+ visits · " + r.countries + " countries";
+        document.getElementById("spFlags").innerHTML = r.top.slice(0, 5).map(function (c, i) {
+          return '<span title="' + c + '" style="animation-delay:' + (1.45 + i * .07).toFixed(2) + 's">' + flag(c) + "</span>";
+        }).join("");
+      }
+      var r = D; try { r = JSON.parse(localStorage.getItem(K)) || D; } catch (e) {}
+      paint(r);
+      try {
+        fetch("https://thetract.org/reach/icucalc.json").then(function (x) { return x.ok ? x.json() : null; }).then(function (j) {
+          if (j && j.visits) { try { localStorage.setItem(K, JSON.stringify(j)); } catch (e) {} }
+        }).catch(function () {});
+      } catch (e) {}
+    })();
+    </script>
   </div>
   <div class="sp-pb" aria-hidden="true"><span class="tract-pb" style="display:inline-flex;flex-direction:column;align-items:center;gap:7px;text-decoration:none;color:inherit;font:600 10.5px/1.2 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;letter-spacing:.16em;text-transform:uppercase;opacity:.85;color:rgba(215,240,245,.85);opacity:1"><svg width="30" height="30" viewBox="0 0 100 100" aria-hidden="true" style="display:block;border-radius:7px;box-shadow:0 0 0 1px rgba(255,255,255,.22)"><rect width="100" height="100" fill="#14212E"/><path d="M18 27H82M44 27V64a14 14 0 0 0 14 14H70" stroke="#F5F6F3" stroke-width="7" fill="none"/><circle cx="75" cy="78" r="5.5" fill="#B66C4E"/></svg><span>Powered by The Tract</span></span></div>
   <p class="sp-foot" aria-hidden="true">FAST · OFFLINE · SOURCED</p>
@@ -3022,7 +3051,7 @@
           <dt>Report a suspected error</dt>
           <dd>Say what you entered, what the app showed and what you expected, with a source if you have one. Leave out patient identifiers.</dd>
         </dl>
-        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.6.3&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
+        <a class="contact-mail" href="mailto:contact@thetract.org?subject=ICUCalc%20error%20report%20v1.6.4&amp;body=Calculator%20or%20tab%3A%0AValues%20entered%3A%0AResult%20shown%3A%0AWhat%20you%20expected%2C%20and%20the%20source%3A%0ADevice%20and%20browser%3A%0A%0A%28Please%20leave%20out%20patient%20identifiers.%29">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
           <span>Report an error · contact@thetract.org</span>
         </a>
@@ -3115,6 +3144,10 @@
       <div class="card"><section class="tract-family" aria-label="More from The Tract" style="margin:28px auto 10px;max-width:760px;padding:0 16px;text-align:center;color:inherit"><p style="margin:0 0 14px;font:700 11px/1.2 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;letter-spacing:.18em;text-transform:uppercase;opacity:.72">More from The Tract · free</p><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:14px 8px"><a href="https://learneeg.thetract.org/?utm_source=icucalc&amp;utm_medium=app&amp;utm_campaign=family" target="_blank" rel="noopener"  style="display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:inherit;padding:6px 2px"><img src="https://learneeg.thetract.org/icon-192.png" width="52" height="52" alt="" loading="lazy" style="width:52px;height:52px;border-radius:13px;display:block;box-shadow:0 0 0 1px rgba(255,255,255,.12),0 6px 16px rgba(0,0,0,.35)"><b style="font:650 13px/1.2 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif">Montage</b><span style="font:400 11.5px/1.3 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;opacity:.66">Learn to read EEG</span></a><a href="https://compass.thetract.org/?utm_source=icucalc&amp;utm_medium=app&amp;utm_campaign=family" target="_blank" rel="noopener"  style="display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:inherit;padding:6px 2px"><img src="https://compass.thetract.org/icons/Icon-192.png" width="52" height="52" alt="" loading="lazy" style="width:52px;height:52px;border-radius:13px;display:block;box-shadow:0 0 0 1px rgba(255,255,255,.12),0 6px 16px rgba(0,0,0,.35)"><b style="font:650 13px/1.2 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif">Seizure Compass</b><span style="font:400 11.5px/1.3 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;opacity:.66">Seizure or mimic?</span></a><a href="https://neuromaze.thetract.org/?utm_source=icucalc&amp;utm_medium=app&amp;utm_campaign=family" target="_blank" rel="noopener"  style="display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:inherit;padding:6px 2px"><img src="https://neuromaze.thetract.org/logo-192.png" width="52" height="52" alt="" loading="lazy" style="width:52px;height:52px;border-radius:13px;display:block;box-shadow:0 0 0 1px rgba(255,255,255,.12),0 6px 16px rgba(0,0,0,.35)"><b style="font:650 13px/1.2 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif">NeuroMaze</b><span style="font:400 11.5px/1.3 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;opacity:.66">Neuroanatomy game</span></a><a href="https://med100.thetract.org/?utm_source=icucalc&amp;utm_medium=app&amp;utm_campaign=family" target="_blank" rel="noopener"  style="display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:inherit;padding:6px 2px"><img src="https://med100.thetract.org/icons/Icon-192.png" width="52" height="52" alt="" loading="lazy" style="width:52px;height:52px;border-radius:13px;display:block;box-shadow:0 0 0 1px rgba(255,255,255,.12),0 6px 16px rgba(0,0,0,.35)"><b style="font:650 13px/1.2 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif">Med100</b><span style="font:400 11.5px/1.3 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;opacity:.66">100 days of medicine</span></a><a href="https://fever.thetract.org/?utm_source=icucalc&amp;utm_medium=app&amp;utm_campaign=family" target="_blank" rel="noopener"  style="display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:inherit;padding:6px 2px"><img src="https://fever.thetract.org/icon-192.png" width="52" height="52" alt="" loading="lazy" style="width:52px;height:52px;border-radius:13px;display:block;box-shadow:0 0 0 1px rgba(255,255,255,.12),0 6px 16px rgba(0,0,0,.35)"><b style="font:650 13px/1.2 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif">Fever Compass</b><span style="font:400 11.5px/1.3 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;opacity:.66">The cause of a fever</span></a><a href="https://thermind.thetract.org/?utm_source=icucalc&amp;utm_medium=app&amp;utm_campaign=family" target="_blank" rel="noopener"  style="display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:inherit;padding:6px 2px"><img src="https://thermind.thetract.org/icon-192.png" width="52" height="52" alt="" loading="lazy" style="width:52px;height:52px;border-radius:13px;display:block;box-shadow:0 0 0 1px rgba(255,255,255,.12),0 6px 16px rgba(0,0,0,.35)"><b style="font:650 13px/1.2 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif">THERMIND</b><span style="font:400 11.5px/1.3 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;opacity:.66">Fever after brain injury</span></a></div></section></div>
       <div class="card changelog" id="changelog">
         <h3>Changelog</h3>
+        <h4>1.6.4 <span>· 26 November 2026</span></h4>
+        <ul>
+          <li>Splash: visits and countries so far, with the five countries that use ICUCalc most. Figures update automatically from the site's analytics.</li>
+        </ul>
         <h4>1.6.3 <span>· 26 November 2026</span></h4>
         <ul>
           <li>Reviews: a clear "Write a review" button in About and the footer, and one short invitation after real use from the third visit. Tap "Later" and it asks once more, then never.</li>
@@ -3418,7 +3451,7 @@
 
   <footer>
     <div class="fine"><strong>Reference aid — not a medical device.</strong> Always verify against institutional protocols and drug labels.</div>
-    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.6.3 · last reviewed 26 Nov 2026 · Designed by Dr. Mohamed Najm · <a href="https://apps.litfl.com/najm-icucalc" target="_blank" rel="noopener" data-rev="footer" style="color:var(--brand-3)">★ Write a review</a></div>
+    <div style="margin-top:8px">© <span id="year"></span> Najm ICUCalc v1.6.4 · last reviewed 26 Nov 2026 · Designed by Dr. Mohamed Najm · <a href="https://apps.litfl.com/najm-icucalc" target="_blank" rel="noopener" data-rev="footer" style="color:var(--brand-3)">★ Write a review</a></div>
   </footer>
 </div>
 
@@ -6440,7 +6473,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadState();
     // Splash → onboarding (first run) or app (returning). The animation's
     // signature beat lands by ~1.1 s; tap anywhere skips immediately.
-    const splashMs = state.onboarded ? 2100 : 2600;  // long enough to read the LITFL badge; tap skips
+    const splashMs = state.onboarded ? 2400 : 2900;  // long enough to read the LITFL badge and reach line; tap skips
     let splashDone = false;
     const hideSplash = () => {
       if (splashDone) return;
