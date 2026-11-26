@@ -29,7 +29,7 @@ const slugify = (s) => s.toLowerCase().normalize('NFKD').replace(/[₀-₉]/g, (
 
 // What each score is for, in the words people search with.
 const ABOUT = {
-  gcs: 'Glasgow Coma Scale', qsofa: 'quick SOFA (qSOFA)', sofa: 'SOFA score', chads: 'CHA₂DS₂-VASc score', hasbled: 'HAS-BLED score',
+  gcs: 'Glasgow Coma Scale', qsofa: 'quick SOFA (qSOFA)', sofa: 'SOFA score', sofa2: 'SOFA-2 score (2025 update of SOFA)', chads: 'CHA₂DS₂-VASc score', hasbled: 'HAS-BLED score',
   wells: 'Wells score for pulmonary embolism', rass: 'Richmond Agitation–Sedation Scale (RASS)', duke: 'Duke-ISCVID 2023 criteria for infective endocarditis',
   apache2: 'APACHE II score', heart: 'HEART score for chest pain', timi: 'TIMI risk score for UA/NSTEMI', curb65: 'CURB-65 score for pneumonia',
   ich: 'ICH score for intracerebral haemorrhage', nihss: 'NIH Stroke Scale (NIHSS)', hunthess: 'Hunt and Hess grade for subarachnoid haemorrhage',

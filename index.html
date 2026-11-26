@@ -2300,8 +2300,8 @@
         </div>
 
         <div class="card">
-          <h3>Parkland Formula (burns)</h3>
-          <div class="sub"><b>4 mL × kg × %TBSA</b> of Lactated Ringer's over 24 h — ½ in first 8 h (from time of burn), ½ over next 16 h. Count only 2nd + 3rd degree burns.</div>
+          <h3>Burn resuscitation (ABA 2023 · Parkland)</h3>
+          <div class="sub">Adults with burns ≥ 20 % TBSA: start at <b>2 mL × kg × %TBSA</b> over 24 h (ABA 2023), ½ in the first 8 h from the time of burn, ½ over the next 16 h, then titrate hourly to urine output. Parkland's 4 mL/kg/%TBSA is shown for comparison: it is linked to fluid creep. Count only partial- and full-thickness burns.</div>
           <div class="grid-in">
             <div class="field"><label>Burn %TBSA</label><div class="input"><input id="pk-tbsa" type="number" step="1" inputmode="numeric" /><span class="unit">%</span></div></div>
           </div>
@@ -2323,7 +2323,7 @@
             </ul>
             <div class="sub" style="margin-top:8px">Transfer-to-burn-centre criteria (ABA): partial-thickness &gt; 10 % TBSA · any face / hands / feet / genitalia / perineum / major joints · 3rd degree in any age group · electrical / chemical / inhalation injury · burn with trauma / co-morbidity / child in a non-paediatric centre.</div>
           </details>
-          <div class="src">Source: Baxter CR &amp; Shires GT, Ann NY Acad Sci 1968;150:874–94 (Parkland); ABA criteria 2016.</div>
+          <div class="src">Source: Cartotto R et al. American Burn Association clinical practice guidelines on burn shock resuscitation. J Burn Care Res 2024;45:565–89. Baxter CR &amp; Shires GT, Ann NY Acad Sci 1968;150:874–94 (Parkland); ABA criteria 2016.</div>
         </div>
 
         <div class="card rsi-protocol-card">
@@ -2395,7 +2395,8 @@
       <div class="cards">
         <div class="card"><h3>GCS</h3><div class="sub">Glasgow Coma Scale (3–15)</div><div id="score-gcs"></div><div class="src">Source: Teasdale G &amp; Jennett B. Lancet 1974;2(7872):81–4.</div></div>
         <div class="card"><h3>qSOFA</h3><div class="sub">≥ 2 → higher sepsis mortality risk. Prognostic only: SSC 2026 advises NEWS, MEWS or SIRS, not qSOFA, for screening.</div><div id="score-qsofa"></div><div class="src">Source: Singer M et al. Sepsis-3. JAMA 2016;315(8):801–10.</div></div>
-        <div class="card"><h3>SOFA</h3><div class="sub">Organ dysfunction (0–24).</div><div id="score-sofa"></div><div class="src">Source: Vincent et al., Intensive Care Med 1996</div></div>
+        <div class="card"><h3>SOFA</h3><div class="sub">Original SOFA (1996), still the basis of the Sepsis-3 definition (ΔSOFA ≥ 2). For the 2025 update see SOFA-2 below.</div><div id="score-sofa"></div><div class="src">Source: Vincent et al., Intensive Care Med 1996</div></div>
+        <div class="card"><h3>SOFA-2</h3><div class="sub">Updated organ dysfunction score (0–24), worst value in 24 h. Respiratory 3–4 need advanced ventilatory support (HFNO, CPAP/NIV or invasive). Vasoactive drugs count only as infusions ≥ 1 h; NE as base. Patients on delirium drugs score ≥ 1 for brain.</div><div id="score-sofa2"></div><div class="src">Source: Ranzani OT et al. Development and validation of the SOFA-2 score. JAMA 2025;334(23):2090–103. Moreno R et al. JAMA Netw Open 2025;8(10):e2545040.</div></div>
         <div class="card"><h3>CHA₂DS₂-VASc</h3><div class="sub">Stroke risk in AF. The verdict uses CHA₂DS₂-VA (sex removed, ESC 2024): ≥ 2 recommend, 1 consider. ACC/AHA 2023 still uses CHA₂DS₂-VASc (≥ 2 men, ≥ 3 women).</div><div id="score-chads"></div><div class="src">Source: Van Gelder IC et al. 2024 ESC Guidelines for the management of atrial fibrillation. Eur Heart J 2024;45:3314–414. Joglar JA et al. 2023 ACC/AHA/ACCP/HRS AF guideline. Circulation 2024;149:e1–e156.</div></div>
         <div class="card"><h3>HAS-BLED</h3><div class="sub">Bleeding risk on anticoagulation.</div><div id="score-hasbled"></div><div class="src">Source: ESC AF guidelines, 2020</div></div>
         <div class="card"><h3>Wells (PE)</h3><div class="sub">Pretest probability of PE.</div><div id="score-wells"></div><div class="src">Source: ESC PE guidelines, 2019</div></div>
@@ -3158,6 +3159,7 @@
         <h4>1.7.0 <span>· 26 November 2026</span></h4>
         <ul>
           <li>Full content audit of every tab against current sources. Fixed: APACHE II now scores doubled creatinine points in acute renal failure; the AF score verdict follows CHA₂DS₂-VA (ESC 2024); the potassium card flags hyperkalaemia instead of "no replacement needed"; the Murray note now gives the CESAR criterion correctly.</li>
+          <li>New: SOFA-2 (JAMA 2025) beside the original SOFA. Burn resuscitation now starts at 2 mL/kg/%TBSA (ABA 2023) with Parkland shown for comparison. Morphine infusion range per PADIS (2–30 mg/h).</li>
           <li>Andexanet: US withdrawal (Dec 2025) noted. Gentamicin: synergy dosing separated from extended-interval dosing. Methylene blue: serotonin syndrome warning. Stroke thrombolysis: GI bleeding or GI malignancy and recent intracranial or spinal surgery moved to absolute contraindications; tenecteplase per the 2026 AHA/ASA guideline. SAH seizure prophylaxis reworded to the 2023 guideline.</li>
         </ul>
         <h4>1.6.9 <span>· 26 November 2026</span></h4>
@@ -3934,7 +3936,8 @@ const DRUGS = [
   { id: "midaz",     name: "Midazolam",       cat: "Sedation",        min: 0.02, max: 0.1,  unit: "mg/kg/hr",   conc: "1 mg/mL",     concVal: 1,     concUnit: "mg/mL" },
   { id: "dex",       name: "Dexmedetomidine", cat: "Sedation",        min: 0.2,  max: 1.4,  unit: "mcg/kg/hr",  conc: "4 mcg/mL",    concVal: 4,     concUnit: "mcg/mL" },
   { id: "ketamine",  name: "Ketamine",        cat: "Sedation",        min: 0.1,  max: 2,    unit: "mg/kg/hr",   conc: "1 mg/mL",     concVal: 1,     concUnit: "mg/mL" },
-  { id: "morphine",  name: "Morphine",        cat: "Sedation",        min: 0.01, max: 0.05, unit: "mg/kg/hr",   conc: "1 mg/mL",     concVal: 1,     concUnit: "mg/mL" },
+  { id: "morphine",  name: "Morphine",        cat: "Sedation",        min: 2,    max: 30,   unit: "mg/hr",      conc: "1 mg/mL",     concVal: 1,     concUnit: "mg/mL",  weightless: true,
+    src: "PADIS 2018 infusion range 2–30 mg/h (Devlin JW et al., Crit Care Med 2018;46:e825–73). Start low and titrate to CPOT/NRS; active metabolites accumulate in kidney failure — prefer fentanyl." },
   { id: "norepi",    name: "Norepinephrine",  cat: "Vasopressor",     min: 0.01, max: 1,    unit: "mcg/kg/min", conc: "16 mcg/mL",   concVal: 16,    concUnit: "mcg/mL" },
   { id: "epi",       name: "Epinephrine",     cat: "Vasopressor",     min: 0.01, max: 1,    unit: "mcg/kg/min", conc: "16 mcg/mL",   concVal: 16,    concUnit: "mcg/mL" },
   { id: "phenyl",    name: "Phenylephrine",   cat: "Vasopressor",     min: 0.1,  max: 5,    unit: "mcg/kg/min", conc: "100 mcg/mL",  concVal: 100,   concUnit: "mcg/mL" },
@@ -5573,20 +5576,19 @@ function runRenal() {
   // Parkland (burns) — needs weight + TBSA%
   const tbsa = num(state.inputs.pk_tbsa);
   if (w && tbsa != null && tbsa > 0) {
-    const total24 = 4 * w * tbsa;              // mL LR over 24 h
+    const total24 = 2 * w * tbsa;              // ABA 2023 starting volume (mL/24 h); Parkland = 2×
     const first8  = total24 / 2;               // first half in 8 h
     const next16  = total24 / 2;
     const rate8   = first8 / 8;
     const rate16  = next16 / 16;
-    $("#pk-total").textContent = fmt(total24, 0) + " mL LR / 24 h";
+    $("#pk-total").textContent = fmt(total24, 0) + " mL / 24 h (Parkland 4 mL: " + fmt(total24 * 2, 0) + ")";
     $("#pk-first8").textContent = fmt(first8, 0) + " mL  (≈ " + fmt(rate8, 0) + " mL/hr)";
     $("#pk-next16").textContent = fmt(next16, 0) + " mL  (≈ " + fmt(rate16, 0) + " mL/hr)";
     const uo = w * 0.5;
     $("#pk-uo").textContent = fmt(uo, 0) + " – " + fmt(uo*2, 0) + " mL/hr (0.5 – 1 mL/kg/hr)";
     const pv = $("#pk-verdict"); pv.classList.remove("ok","warn","bad");
-    if (tbsa < 15) { pv.textContent = "TBSA < 15 % in adults rarely needs full Parkland resuscitation — oral + maintenance may suffice. Treat pain, tetanus, transfer criteria."; pv.classList.add("ok"); }
-    else if (tbsa >= 20) { pv.textContent = "Major burn — admit burn centre. Titrate rate to UO 0.5 – 1 mL/kg/hr (1 – 1.5 if myoglobinuria / electrical). Beware fluid creep."; pv.classList.add("bad"); }
-    else { pv.textContent = "Moderate burn — start Parkland, reassess hourly."; pv.classList.add("warn"); }
+    if (tbsa < 20) { pv.textContent = "TBSA < 20 % in adults: formal burn resuscitation is usually not needed (the ABA guideline covers ≥ 20 %). Oral or maintenance fluids, pain, tetanus, transfer criteria."; pv.classList.add("ok"); }
+    else { pv.textContent = "Major burn — burn centre. Titrate hourly to UO 0.5 – 1 mL/kg/hr (1 – 1.5 if myoglobinuria / electrical). Consider albumin to limit volume (ABA 2023). Beware fluid creep."; pv.classList.add("bad"); }
   } else { $("#pk-total").textContent = "—"; $("#pk-first8").textContent = "—"; $("#pk-next16").textContent = "—"; $("#pk-uo").textContent = "—"; }
 }
 
@@ -5714,6 +5716,14 @@ const SCORES = {
     { k:"GCS", opts:[["15 (0)",0],["13–14 (1)",1],["10–12 (2)",2],["6–9 (3)",3],["<6 (4)",4]] },
     { k:"Cr / UO", opts:[["<1.2 (0)",0],["1.2–1.9 (1)",1],["2–3.4 (2)",2],["3.5–4.9 / <500 mL (3)",3],["≥5 / <200 mL (4)",4]] },
   ], i: t => t >= 11 ? ["Very high mortality.","bad"] : t >= 7 ? ["High mortality.","bad"] : t >= 4 ? ["Moderate.","warn"] : ["Low.","ok"] },
+  sofa2: { items: [
+    { k:"Brain (GCS; if sedated, last GCS before sedation)", opts:[["15 (0)",0],["13–14, or on delirium drugs (1)",1],["9–12 (2)",2],["6–8 (3)",3],["3–5, or generalised myoclonus (4)",4]] },
+    { k:"Respiratory (PaO₂/FiO₂)", opts:[["> 300 (0)",0],["≤ 300 (1)",1],["≤ 225 (2)",2],["≤ 150 with advanced ventilatory support (3)",3],["≤ 75 with advanced support, or ECMO for respiratory failure (4)",4]] },
+    { k:"Cardiovascular (NE + epinephrine, µg/kg/min)", opts:[["MAP ≥ 70, no vasoactive (0)",0],["MAP < 70, no vasoactive (1)",1],["NE+epi ≤ 0.2, or any dose of another agent (2)",2],["NE+epi > 0.2–0.4, or ≤ 0.2 plus another agent (3)",3],["NE+epi > 0.4, or > 0.2–0.4 plus another agent, or mechanical circulatory support (4)",4]] },
+    { k:"Liver (bilirubin, mg/dL)", opts:[["≤ 1.2 (0)",0],["≤ 3.0 (1)",1],["≤ 6.0 (2)",2],["≤ 12.0 (3)",3],["> 12.0 (4)",4]] },
+    { k:"Kidney (creatinine mg/dL, urine output, RRT)", opts:[["Cr ≤ 1.2 (0)",0],["Cr ≤ 2.0, or UO < 0.5 mL/kg/h for 6–12 h (1)",1],["Cr ≤ 3.5, or UO < 0.5 mL/kg/h ≥ 12 h (2)",2],["Cr > 3.5, or UO < 0.3 mL/kg/h ≥ 24 h, or anuria ≥ 12 h (3)",3],["On RRT or meeting RRT criteria (4)",4]] },
+    { k:"Hemostasis (platelets ×10³/µL)", opts:[["> 150 (0)",0],["≤ 150 (1)",1],["≤ 100 (2)",2],["≤ 80 (3)",3],["≤ 50 (4)",4]] },
+  ], i: t => t >= 11 ? ["Severe multi-organ dysfunction.","bad"] : t >= 7 ? ["Marked organ dysfunction.","bad"] : t >= 2 ? ["Organ dysfunction present; track the change over days.","warn"] : ["Little or no organ dysfunction.","ok"] },
   chads: { items: [
     { k:"CHF", opts:[["No",0],["Yes",1]] },
     { k:"Hypertension", opts:[["No",0],["Yes",1]] },
