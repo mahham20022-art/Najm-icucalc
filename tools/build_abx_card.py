@@ -5,7 +5,7 @@ Body text is kept at 10 px (7.5 pt) or larger; rows never split across pages; he
 import re, json, subprocess, html, sys, pathlib, asyncio
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 FONTS = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else ROOT.parent / "the-tract/assets/fonts")
-TITLE, VERSION, REVIEWED, APPV = "ICU Antibiotic Dosing Card", "1.0", "26 November 2026", "1.6.7"
+TITLE, VERSION, REVIEWED, APPV = "ICU Antibiotic Dosing Card", "1.1", "27 November 2026", "1.7.1"
 
 s = (ROOT / "index.html").read_text(encoding="utf-8")
 a, b = s.index("const ABX = ["), s.index("const ABX_CLASSES")
